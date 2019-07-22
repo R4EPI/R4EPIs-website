@@ -8,12 +8,13 @@ metaDataFormat = "yaml"
 defaultContentLanguageInSubdir= true
 
 [params]
-  editURL = "https://github.com/matcornic/hugo-theme-learn/edit/master/exampleSite/content/"
+  editURL = "https://github.com/R4EPI/training/edit/master/content/"
   description = "Documentation for Hugo Learn Theme"
   author = "Mathieu Cornic"
   showVisitedLinks = true
   disableBreadcrumb = false
   disableNextPrev = false
+  disableLanguageSwitchingButton = true
   themeVariant = "mine"
 
 [outputs]
