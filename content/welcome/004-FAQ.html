@@ -1,0 +1,85 @@
+---
+title: "Frequently Asked Questions"
+categories: ["R"]
+tags: ["wiki"]
+weight: 4
+---
+
+
+
+<p>Here are some commonly asked questions.</p>
+<div id="installation" class="section level1">
+<h1>Installation</h1>
+<div id="i-get-the-error-package-is-not-available-for-my-current-r-version" class="section level2">
+<h2>I get the error: package is not available for my current R version</h2>
+<p>This might be because you have an unstable internet connection.
+Either try again when there are less people using the internet connection, use a different connection,
+or contact one of the maintainers for alternative offline options.</p>
+</div>
+<div id="i-installed-without-errorsbut-cannot-see-the-templates" class="section level2">
+<h2>I installed without errors—but cannot see the templates</h2>
+<p>You will need to restart your R session.
+You can do this by clicking on “Session” in the menu up top and then choosing
+“Restart R”. Alternatively, you can use a keyboard shortcut: CTRL+SHIFT+F10</p>
+<p>If this does not work, try restarting your computer and opening R-Studio again.</p>
+<p>If this they still do not appear, then please take a look at this <a href="https://github.com/R4EPI/sitrep/issues/35">GitHub post</a>.</p>
+</div>
+<div id="i-am-unsure-if-i-have-the-mran-or-cran-version-of-r-installed." class="section level2">
+<h2>I am unsure if I have the MRAN or CRAN version of R installed.</h2>
+<p>If you click tools &gt; global options… Then under the general tab you can see the R version.
+If you click on change… then the different versions will pop up.
+MRAN will be in a microsoft folder whereas CRAN will be in an R folder.
+See this <a href="https://revolution-computing.typepad.com/.a/6a010534b1db25970b01bb08b57b47970d-pi">picture</a> for an example.</p>
+</div>
+</div>
+<div id="data-analysis-coding" class="section level1">
+<h1>Data analysis / Coding</h1>
+<div id="basic-introductory-course" class="section level2">
+<h2>Basic introductory course</h2>
+<p><a href="http://swcarpentry.github.io/r-novice-gapminder/" class="uri">http://swcarpentry.github.io/r-novice-gapminder/</a></p>
+</div>
+<div id="i-have-a-date-column-and-a-time-column-how-do-i-combine-the-two" class="section level2">
+<h2>I have a date column and a time column, how do I combine the two?</h2>
+<p>You can use <code>paste()</code> to combine the columns and <a href="https://lubridate.tidyverse.org/reference/ymd_hms.html"><code>lubridate::ymd_hm()</code></a> to convert them into a datetime. For example, here’s how you would combine the columns <code>date_of_x</code> and <code>time_of_y</code> (this assumes that the dates are formatted like yyyy-mm-dd and the times are formatted like hh:mm) in the data frame <code>my_data</code></p>
+<pre class="r"><code>library(dplyr)
+library(lubridate)
+my_data %&gt;%
+  mutate(date_time = ymd_hm(paste(date_of_x, time_of_y), tz = &quot;UTC&quot;)</code></pre>
+</div>
+<div id="my-summary-table-is-wrong.-there-are-missing-values-where-there-should-be-none." class="section level2">
+<h2>My summary table is wrong. There are missing values where there should be none.</h2>
+<p>This may be because you need to specify <code>na.rm = TRUE</code>, which indicates that missing values should be discarded before calculation:</p>
+<pre class="r"><code>sum(c(1:10, NA))
+## [1] NA
+sum(c(1:10, NA), na.rm = TRUE)
+## [1] 55</code></pre>
+</div>
+<div id="how-do-i-prevent-results-from-my-exploratory-analysis-from-showing-up-in-the-word-document" class="section level2">
+<h2>How do I prevent results from my exploratory analysis from showing up in the word document</h2>
+<p>You can add <code>include = FALSE</code> in the chunk header:</p>
+</div>
+<div id="searching-for-commas-is-driving-me-nuts" class="section level2">
+<h2>Searching for commas is driving me nuts!</h2>
+<p>Turn on code diagnostics, it will show up with helpful messages
+<a href="https://support.rstudio.com/hc/en-us/articles/205753617-Code-Diagnostics" class="uri">https://support.rstudio.com/hc/en-us/articles/205753617-Code-Diagnostics</a></p>
+</div>
+</div>
+<div id="general-statistical-methodologies" class="section level1">
+<h1>General statistical methodologies</h1>
+<div id="i-am-not-sure-what-statistical-test-to-use" class="section level2">
+<h2>I am not sure what statistical test to use</h2>
+<p>Take a look at this table from the UCLA statistics department
+<a href="https://stats.idre.ucla.edu/other/mult-pkg/whatstat/" class="uri">https://stats.idre.ucla.edu/other/mult-pkg/whatstat/</a></p>
+</div>
+<div id="i-am-not-sure-what-plot-to-use-for-visualising-my-data" class="section level2">
+<h2>I am not sure what plot to use for visualising my data</h2>
+<p>Take a look at this book
+<a href="https://serialmentor.com/dataviz/" class="uri">https://serialmentor.com/dataviz/</a></p>
+<p><a href="https://www.data-to-viz.com" class="uri">https://www.data-to-viz.com</a></p>
+</div>
+<div id="need-some-more-background-info-on-survey-methods" class="section level2">
+<h2>Need some more background info on survey methods</h2>
+<p>LSHTM epidemiology in crises material: <a href="http://conflict.lshtm.ac.uk/page_02.htm" class="uri">http://conflict.lshtm.ac.uk/page_02.htm</a>
+WHO nutritional survey standards: <a href="https://www.who.int/nutrition/publications/anthropometry-data-quality-report/en/" class="uri">https://www.who.int/nutrition/publications/anthropometry-data-quality-report/en/</a></p>
+</div>
+</div>

@@ -1,0 +1,109 @@
+---
+title: "Outbreak Templates"
+categories: ["R"]
+tags: ["wiki"]
+weight: 2
+---
+
+
+
+<p>These instructions refer to the generic outbreak template (so lines do not necessarily correspond to the disease specific templates (e.g. “Cholera Outbreak Template”).
+This is a template that can be used to create an automated outbreak situation report based on the standard MSF-OCA outbreak linelists that are used to collect data during these situations.</p>
+<p>All of the R4epis templates are written in R markdown.</p>
+<p>Some important points to note about the outbreak templates:</p>
+<ul>
+<li>The first section addresses some housekeeping rules that should facilitate that R/R studio work fine during this process</li>
+<li>The second section addresses some common aspects around data cleaning and formatting of your data, to ensure that things are correctly formatted before you start your analysis</li>
+<li>The third section has the coding to be able to do analysis in terms of time, place and person (organised in this order)</li>
+</ul>
+<p>Some important points around the R markdowns:</p>
+<ul>
+<li>You can type normal text in white spaces</li>
+<li>You can type R-code in the grey spaces (denoted by three backticks and r) “[e.g.<code>```{r}</code>]”
+(see <a href="https://rmarkdown.rstudio.com/articles_intro.html">Rmarkdown introduction</a> and
+<a href="https://rmarkdown.rstudio.com/authoring_basics.html">Markdown basics</a>)</li>
+<li>Introductions and contents of sections are within square brackets “[…]” and
+can be deleted as appropriate</li>
+<li>Examples of inline code (to automate updating numbers, e.g. in the “Person” section of the report), can
+similarly be removed/updated</li>
+<li>Code itself can be deleted, but as a word of caution: make sure you aren’t
+deleting bits where variables are created/manipulated, or at least update
+them appropriately</li>
+</ul>
+<p>If you ever have difficulties understanding how a piece of code is working, an easy way to rapidly understand the code is to either run the individual chunk of code (run by pressing the triangle on the top right of each grey box of code) or each line of the chunk and check how the output appears.</p>
+<div id="packages-used-in-this-template" class="section level2">
+<h2>Packages used in this template</h2>
+<div id="generic-packages" class="section level3">
+<h3>Generic packages</h3>
+<ul>
+<li><strong>knitr</strong> used to create the output document (pdf, doc, html)</li>
+<li><strong>dplyr</strong> used to clean and shape the data</li>
+<li><strong>epitrix</strong> used for data cleaning and variable standardisation</li>
+<li><strong>ggplot2</strong> used to visualise your data using different plotting methods</li>
+</ul>
+</div>
+<div id="more-epidemiology-specific-packages" class="section level3">
+<h3>More epidemiology-specific packages</h3>
+<ul>
+<li><strong>sitrep</strong> includes a variety of useful field epidemiology functions</li>
+<li><strong>incidence</strong> used for creating epicurves</li>
+<li><strong>ISOweek</strong> used for creating epiweeks</li>
+<li><strong>epitools</strong> used for creating 2by2 tables</li>
+</ul>
+</div>
+<div id="mapping-packages" class="section level3">
+<h3>Mapping packages</h3>
+<p>There are a number of mapping packages highlighted in this template that you could use</p>
+<ul>
+<li><strong>ggspatial</strong> used for selecting basemap tiles</li>
+<li><strong>sf</strong> used for manipulating spatial objects (e.g. polygons) easily</li>
+</ul>
+</div>
+</div>
+<div id="overview-of-actions-performed-in-the-template" class="section level2">
+<h2>Overview of actions performed in the template</h2>
+<ol style="list-style-type: decimal">
+<li>Import data and perform an initial cleaning step on variable names using RECON’s <strong>epitrix</strong> package.
+To decide which code chunk to use for reading and cleaning data, use the following decision tree.</li>
+</ol>
+<p>ADD AN OVERVIEW OF THE DATA DICTIONARY!</p>
+<p>ADD AN EXAMPLE TABLE OF HOW THE POPULATION DATA SHOULD BE FORMATTED IF READ IN FROM EXCEL!</p>
+<p>ADD DECISION TREE DIAGRAM FOR CHOOSING WHICH CODECHUNK TO USE BASED ON DATA AVAILABLE (DHIS/nonDHIS etc)
+ALSO MENTION THAT THESE SCRIPTS ARE BUILT TO SERVICE THE DHIS COMPATIBLE DATASETS - SO IF YOU ARE USING
+OTHERS YOU WILL NEED TO GO BACK AND COMMENT OUT THE WHOLE READ-DHIS2 SECTION!
+ADD NOTE ON SUPRESSION OF WARNINGS AND MESSAGES IN CHUNK HEADERS</p>
+<ol start="2" style="list-style-type: decimal">
+<li><p>Browse your data using functions such as <strong>str</strong> and <strong>summary</strong></p></li>
+<li>Initial preparation of data for analysis including creating:
+<ul>
+<li>age groups</li>
+<li>case definitions</li>
+<li>epiweeks</li>
+</ul></li>
+<li>Analysis by person
+<ul>
+<li>number of cases*</li>
+<li>cases by sex and age group and combinations thereof</li>
+<li>age sex pyramid</li>
+<li>case fatality rate, by sex, age group and case definition</li>
+<li>attack rate</li>
+<li>mortality rate</li>
+<li>two*two tables</li>
+</ul></li>
+</ol>
+<p>*You may notice in the “Person”section that there is R code in white spaces. Here you are able to take information from your data set, by using <code>your code</code> and incorporate it directly in the text part of your output e.g. <code>nrow(linelist_cleaned)</code> will let us know the total number of cases in the dataset.</p>
+<ol start="5" style="list-style-type: decimal">
+<li>Analysis by time
+<ul>
+<li>epicurve by date of onset (using the <strong>incidence</strong> package)</li>
+<li>epicurve by date of onset and sex, or case definition or other categorical variable of interest</li>
+</ul></li>
+<li>Analysis by place<br />
+The template guides you through obtaining a basemap for your area of interest, selecting shapefiles for provinces/districts/regions of interest and code is provided to enable you to create:
+<ul>
+<li>tables showing attack rate by region/district/village (depending on what is available)</li>
+<li>dot maps by case definition</li>
+<li>choropleth maps showing attack rate and mortality rate per district</li>
+</ul></li>
+</ol>
+</div>
