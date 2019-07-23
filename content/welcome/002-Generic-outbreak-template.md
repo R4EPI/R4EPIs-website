@@ -19,7 +19,7 @@ Some important points to note about the outbreak templates:
 Some important points around the R markdowns:
 
 - You can type normal text in white spaces
-- You can type R-code in the grey spaces (denoted by three backticks and r) "[e.g.` ```{r} `]"
+- You can type R-code in the grey spaces (denoted by three backticks and r) "[e.g.````` ```{r} ``````]"
 (see [Rmarkdown introduction](https://rmarkdown.rstudio.com/articles_intro.html) and
     [Markdown basics](https://rmarkdown.rstudio.com/authoring_basics.html))
 - Introductions and contents of sections are within square brackets "[...]" and
@@ -81,15 +81,19 @@ ADD NOTE ON SUPRESSION OF WARNINGS AND MESSAGES IN CHUNK HEADERS
     + epiweeks
 
 4.  Analysis by person
-    + number of cases*
+    + number of cases\*
     + cases by sex and age group and combinations thereof
     + age sex pyramid
     + case fatality rate, by sex, age group and case definition
     + attack rate
     + mortality rate
-    + two*two tables
+    + two by two tables
 
-*You may notice in the "Person"section that there is R code in white spaces. Here you are able to take information from your data set, by using `` `r "your code"` `` and incorporate it directly in the text part of your output e.g. `` `r "nrow(linelist_cleaned)"` `` will let us know the total number of cases in the dataset.
+\*You may notice in the "Person"section that there is R code in white spaces.
+Here you are able to take information from your data set, by using 
+`` `r your code` `` and incorporate it directly in the text part of your output
+e.g. `` `r "nrow(linelist_cleaned)"` `` will let us know the total number of
+cases in the dataset.
 
 5. Analysis by time
     + epicurve by date of onset (using the **incidence** package)
