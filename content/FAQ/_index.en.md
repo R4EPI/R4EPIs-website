@@ -1,8 +1,9 @@
 ---
+chapter: true
 title: "Frequently Asked Questions"
 categories: ["R"]
 tags: ["wiki"]
-weight: 4
+weight: 10
 ---
 
 Here are some commonly asked questions.
