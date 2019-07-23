@@ -1,6 +1,6 @@
 ---
 chapter: true
-title: "Frequently Asked Questions"
+title: "<i class='fas fa-fw fa-question-circle'></i>Frequently Asked Questions"
 categories: ["R"]
 tags: ["wiki"]
 weight: 10
