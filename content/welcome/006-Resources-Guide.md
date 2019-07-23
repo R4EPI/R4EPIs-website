@@ -9,4 +9,4 @@ weight: 5
 
 ### Online manuals
 
-stuff listed in [FAQ section](<https://github.com/R4EPI/sitrep/wiki/4)-FAQ#general>)
+stuff listed in [FAQ section](../../faq/)
