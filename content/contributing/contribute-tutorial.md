@@ -1,5 +1,5 @@
 ---
-title: "Contributing to this website"
+title: "Contributing to This Website"
 description: >
   How to contribute new content to this website, including tutorials, FAQs,
   use-cases, and more.
