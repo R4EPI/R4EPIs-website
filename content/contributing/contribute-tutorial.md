@@ -16,7 +16,7 @@ different types of content.
 # Structure of this site
 
 This website is based off of the [learn hugo theme] and lives at
-https://github.com/R4EPI/training. Inside that repository, you will see the
+https://github.com/R4EPI/r4epis-website. Inside that repository, you will see the
 following:
 
 .    
@@ -69,7 +69,7 @@ functionalities of the [sitrep] package).
 This has a slightly different process than contributing markdown documents
 because [Netlify] cannot run R code, so you must do this on your own computer.
 To contribute an RMarkdown document, first fork and clone the repository to your
-computer with `usethis::create_from_github('R4EPI/training', fork = TRUE)`. This
+computer with `usethis::create_from_github('R4EPI/r4epis-website', fork = TRUE)`. This
 should open a new RStudio project with this website inside.
 
 Next, make sure you have the [blogdown] package installed with:

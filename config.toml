@@ -8,7 +8,7 @@ metaDataFormat = "yaml"
 defaultContentLanguageInSubdir= true
 
 [params]
-  editURL = "https://github.com/R4EPI/training/edit/master/content/"
+  editURL = "https://github.com/R4EPI/r4epis-website/edit/master/content/"
   description = "Training material for the R4EPIs project"
   author = "The R4EPIs developement team"
   showVisitedLinks = true
