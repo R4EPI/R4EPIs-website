@@ -3,8 +3,8 @@ chapter: true
 categories: ["R"]
 tags: ["wiki"]
 weight: 5
-pre: <b>1. </b>
-title: WELCOME
+# pre: <b>1. </b>
+title: Introduction
 ---
 
 Welcome to the sitrep wiki!

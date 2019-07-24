@@ -31,12 +31,12 @@ It's important to start R every time with a clean working session. To do this, y
 
 Your Global Options window should look like this:
 
-<img src="https://imgur.com/LXsbqPT.png" width = "60%" align="middle" alt="RStudio global options window showing a setting optimal for reproducibility">
+<img src="https://imgur.com/LXsbqPT.png" width = "50%" align="middle" alt="RStudio global options window showing a setting optimal for reproducibility">
 
 When writing RMarkdown and code, it's common to wrap your text at 80 characters. You can add a reference line for this in RStudio:
 
 
-<img src="https://imgur.com/FWJ7lER.png" width = "60%" align="middle" alt="Margin line setting in RStudio global options">
+<img src="https://imgur.com/FWJ7lER.png" width = "50%" align="middle" alt="Margin line setting in RStudio global options">
 
 ## Setting the default R repository
 
@@ -105,7 +105,7 @@ If you are getting errors, check the FAQ section of this wiki.
 Once the packages have been installed you can use the R-markdown templates
 provided to create automated reports. 
 
-![Example of how to open and save the cholera template](https://imgur.com/0n4wigA.gif)
+<img src="https://imgur.com/0n4wigA.gif" align="middle" alt="Example of how to open and save the cholera template">
 
 To access the templates:
 

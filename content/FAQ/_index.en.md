@@ -3,7 +3,7 @@ pre: <i class='fas fa-fw fa-question-circle'></i>&nbsp;
 title: "Frequently Asked Questions"
 categories: ["R"]
 tags: ["wiki"]
-weight: 10
+weight: 100 
 ---
 
 Here are some commonly asked questions.

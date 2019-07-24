@@ -2,8 +2,17 @@
 title: "Outbreak Templates"
 categories: ["R"]
 tags: ["wiki"]
-weight: 2
+weight: 10
 ---
+
+# Available Templates
+
+There are four available outbreak templates:
+
+1. Cholera
+2. Measels
+3. Meningitis
+4. Acute Jaundice Syndrome
 
 These instructions refer to the generic outbreak template (so lines do not necessarily correspond to the disease specific templates (e.g. "Cholera Outbreak Template"). 
 This is a template that can be used to create an automated outbreak situation report based on the standard MSF-OCA outbreak linelists that are used to collect data during these situations.

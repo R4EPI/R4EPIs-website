@@ -3,7 +3,7 @@ pre: <i class='fas fa-fw fa-handshake'></i>&nbsp;
 title: "Contributing to R4EPIs"
 categories: ["contributing"]
 tags: ["wiki"]
-weight: 15
+weight: 20 
 ---
 
 # Contribute to the R4EPIs project!
