@@ -4,19 +4,29 @@ title: Introduction to RMarkdown
 weight: 6
 ---
 ## What is a script?  
-It is very helpful to organize a sequence of commands within a "script". While it is possible to enter and run commands directly from the R Console, scripts allow you to record and organize commands in a logical manner, run many commands in rapid succession, and reproduce and share your work with others.
+Scripts are files that:  
+
+* Record and organize a sequence of commands in a logical manner  
+
+* Facilitate running many commands in rapid succession  
+
+* Help to reproduce and share your work with others  
+
+While it is possible to enter and run commands directly from the R Console, scripts will be the default way to work.
 
 
 **Remember to save your script as you work!** 
 
 
 ## What is a RMarkdown?  
-**The outbreak and survey templates are a type of script called a RMarkdown**. RMarkdown scripts can contain commands for data cleaning *and* are themselves the outlines of an automatically-generated document that contains text, tables, and plots produced by your code. The idea is that using RMarkdown templates will make the process of producing epidemiological reports easier and more efficient.  
+**The outbreak and survey templates are a type of script called a RMarkdown**.  
+RMarkdown scripts can contain commands for data cleaning *and are themselves the outlines of an automatically-generated document* containing text, tables, and plots produced by your code.
 
 You can read more about RMarkdowns here **[need link]** 
 
 ![](/images/RMarkdown_transformation.png)
 
+*In the above RMarkdown template script, the white and gray code chunks produce text and R-generated graphics, respectively, in the Word document output.*  
 
 ### Understand a RMarkdown  
 
@@ -24,13 +34,13 @@ You can read more about RMarkdowns here **[need link]**
 
 While the RMarkdown may at first look like a wall of code, notice how "chunks" of code are differentiated by their background color:  
 
-* In chunks with WHITE background, code text will appear as text in the document. This can have *italics*, **bold**, and other formating, and can display parameters derived from your data (such as epi week of outbreak peak, as in the example above).  
+* **In chunks with WHITE background, code text will appear as text in the document.** These lines can have *italics*, **bold**, or other formating, and can display parameters derived from your data (such as epi week of outbreak peak, as in the example above).  
 
-* In chunks with GRAY background, RMarkdown is running R commands. The commands could perform data processing and cleaning steps, or could produce visual outputs in the document.    
+* **In chunks with GRAY background, RMarkdown is running R commands.** The commands perform data processing and cleaning steps, or could produce visual outputs in the document.    
 
 #### Commented code  
 
-Every script should include help text that organizes commands and explains their rationale to collaborators. The **# (hash or comment) symbol** ensures that any text *after the # and on the same line* will not be executed by R as it runs the script. "Commented" text will appear a different color than the code.  
+Every script should include helpful text that organizes commands and explains their rationale to collaborators. The **# (hash or comment) symbol** ensures that any text *after the # and on the same line* will not be executed by R as it runs the script. "Commented" text will appear a different color than the code.  
 
 In the templates, you will see # serving two purposes:  
 
