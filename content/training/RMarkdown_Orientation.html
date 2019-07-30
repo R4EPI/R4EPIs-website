@@ -40,14 +40,14 @@ RMarkdown scripts can contain commands for data cleaning <em>and are themselves 
 <div id="commented-code" class="section level4">
 <h4>Commented code</h4>
 <p>Every script should include helpful text that organizes commands and explains their rationale to collaborators. The <strong># (hash or comment) symbol</strong> ensures that any text <em>after the # and on the same line</em> will not be executed by R as it runs the script. “Commented” text will appear a different color than the code.</p>
-<p>In the templates, you will see # serving two purposes:</p>
+<p>In the templates, you will see <strong>#</strong> serving two purposes:</p>
 <ul>
-<li><strong>Explanatory text or section headers.</strong> This commented text can be placed after code, or in the line above.</li>
+<li><strong># Explanatory text or section headers.</strong> This commented text can be placed after code, or in the line above.</li>
 </ul>
 <pre class="r"><code># An example of commented text  
 linelist_raw &lt;- gen_data(&quot;AJS&quot;) # generates a fake dataset for use in this template</code></pre>
 <ul>
-<li><strong>Optional commands that can be uncommented as needed.</strong> For example, you can uncomment and run the last command below if your dataset meets the relevant criteria.</li>
+<li><strong># Optional commands that can be uncommented as needed.</strong> For example, you can uncomment and run the last command below if your dataset meets the relevant criteria.</li>
 </ul>
 <pre class="r"><code># If your linelist is a csv export of data from DHIS2 use this code chunk
 # This assumes your data fits the standardised MSF data dictionary for this disease
@@ -55,7 +55,7 @@ linelist_raw &lt;- gen_data(&quot;AJS&quot;) # generates a fake dataset for use 
 ## Read data ------------------------------------------------------
 # CSV file
 # linelist_raw &lt;- rio::import(&quot;linelist.csv&quot;)</code></pre>
-<p>Tip: Multiple lines of code can be commented/uncommented by highlighting the lines and pressing the keys Ctrl, Shift, and C at the same time (Ctrl+Shift+C).</p>
+<p><em>Tip</em>: Multiple lines of code can be commented/uncommented by highlighting the lines and pressing the keys Ctrl, Shift, and C at the same time (Ctrl+Shift+C).</p>
 </div>
 </div>
 </div>

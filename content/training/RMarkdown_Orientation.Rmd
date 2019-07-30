@@ -42,14 +42,14 @@ While the RMarkdown may at first look like a wall of code, notice how "chunks" o
 
 Every script should include helpful text that organizes commands and explains their rationale to collaborators. The **# (hash or comment) symbol** ensures that any text *after the # and on the same line* will not be executed by R as it runs the script. "Commented" text will appear a different color than the code.  
 
-In the templates, you will see # serving two purposes:  
+In the templates, you will see **#** serving two purposes:  
 
-* **Explanatory text or section headers.** This commented text can be placed after code, or in the line above.
+* **# Explanatory text or section headers.** This commented text can be placed after code, or in the line above.
 ```{r eval = FALSE}
 # An example of commented text  
 linelist_raw <- gen_data("AJS") # generates a fake dataset for use in this template
 ```
-* **Optional commands that can be uncommented as needed.** For example, you can uncomment and run the last command below if your dataset meets the relevant criteria. 
+* **# Optional commands that can be uncommented as needed.** For example, you can uncomment and run the last command below if your dataset meets the relevant criteria. 
 ``` {r eval = FALSE}
 # If your linelist is a csv export of data from DHIS2 use this code chunk
 # This assumes your data fits the standardised MSF data dictionary for this disease
@@ -59,4 +59,4 @@ linelist_raw <- gen_data("AJS") # generates a fake dataset for use in this templ
 # linelist_raw <- rio::import("linelist.csv")
 ```
 
-Tip: Multiple lines of code can be commented/uncommented by highlighting the lines and pressing the keys Ctrl, Shift, and C at the same time (Ctrl+Shift+C).
+*Tip*: Multiple lines of code can be commented/uncommented by highlighting the lines and pressing the keys Ctrl, Shift, and C at the same time (Ctrl+Shift+C).
