@@ -1,0 +1,51 @@
+---
+date: "2019-07-30T13:30:45+02:00"
+title: Introduction to RMarkdown
+weight: 6
+---
+
+
+
+<div id="what-is-a-script" class="section level2">
+<h2>What is a script? </h2>
+<p>It is very helpful to organize a sequence of commands within a “script”. While it is possible to enter and run commands directly from the R Console, scripts allow you to record and organize commands in a logical manner, run many commands in rapid succession, and reproduce and share your work with others.<br />
+<strong>Remember to save your script as you work!</strong></p>
+</div>
+<div id="what-is-a-rmarkdown" class="section level2">
+<h2>What is a RMarkdown? </h2>
+<p><strong>The outbreak and survey templates are a type of script called a RMarkdown</strong>. RMarkdown scripts can contain commands for data cleaning <em>and</em> are themselves the outlines of an automatically-generated document that contains text, tables, and plots produced by your code. The idea is that using RMarkdown templates will make the process of producing epidemiological reports easier and more efficient. </p>
+<p>You can read more about RMarkdowns here <strong>[need link]</strong><br />
+<img src="/images/RMarkdown_transformation.png" /><br />
+</p>
+<div id="understand-a-rmarkdown" class="section level3">
+<h3>Understand a RMarkdown </h3>
+<div id="code-chunks" class="section level4">
+<h4>Code chunks</h4>
+<p>While the RMarkdown may at first look like a wall of code, notice how “chunks” of code are differentiated by their background color:</p>
+<ul>
+<li><p>In chunks with WHITE background, code text will appear as text in the document. This can have <em>italics</em>, <strong>bold</strong>, and other formating, and can display parameters derived from your data (such as epi week of outbreak peak, as in the example above). </p></li>
+<li><p>In chunks with GRAY background, RMarkdown is running R commands. The commands could perform data processing and cleaning steps, or could produce visual outputs in the document.  </p></li>
+</ul>
+</div>
+<div id="commented-code" class="section level4">
+<h4>Commented code </h4>
+<p>Every script should include help text that organizes commands and explains their rationale to collaborators. The <strong># (hash or comment) symbol</strong> ensures that any text <em>after the # and on the same line</em> will not be executed by R as it runs the script. “Commented” text will appear a different color than the code. </p>
+<p>In the templates, you will see # serving two purposes: </p>
+<ul>
+<li>Explanatory text or section headers</li>
+</ul>
+<pre class="r"><code># An example of commented text  
+linelist_raw &lt;- gen_data(&quot;AJS&quot;) # generates a fake dataset for use in this template</code></pre>
+<ul>
+<li>Optional commands that can be uncommented as needed. For example, you can uncomment and run the last command below if your dataset meets the relevant criteria.</li>
+</ul>
+<pre class="r"><code># If your linelist is a csv export of data from DHIS2 use this code chunk
+# This assumes your data fits the standardised MSF data dictionary for this disease
+
+## Read data ------------------------------------------------------
+# CSV file
+# linelist_raw &lt;- rio::import(&quot;linelist.csv&quot;)</code></pre>
+<p>Tip: Multiple lines of code can be commented/uncommented by highlighting the lines and pressing the keys Ctrl, Shift, and C at the same time (Ctrl+Shift+C).</p>
+</div>
+</div>
+</div>
