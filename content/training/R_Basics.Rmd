@@ -69,7 +69,7 @@ A quick note on naming of objects:
 
 ## Objects can have Structure  
 
-Objects can be a single piece of data (e.g. my_number <- 24), or they can consist of structures of data. The graphic below shows some common data structures and their names.  
+Objects can be a single piece of data (e.g. my_number <- 24), or they can consist of structured data. The graphic below shows some common data structures and their names. Not included in this image is spatial data, which is discussed in another page.  
 
 ![](/images/r_data_structures.png)  
 
