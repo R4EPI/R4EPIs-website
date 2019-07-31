@@ -22,7 +22,7 @@ While it is possible to enter and run commands directly from the R Console, scri
 
 RMarkdown scripts can contain commands such as for data import, cleaning, etc. **and are themselves the outline of an automatically-generated document** containing text, tables, and plots produced by your code.
 
-You can read more about RMarkdowns here (need link) 
+You can learn more about RMarkdowns [here](https://rmarkdown.rstudio.com/lesson-1.html) and reference this [cheatsheet](https://www.rstudio.com/wp-content/uploads/2016/03/rmarkdown-cheatsheet-2.0.pdf)  
 
 ![](/images/RMarkdown_transformation.png)
 
