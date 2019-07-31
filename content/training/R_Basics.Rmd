@@ -1,0 +1,162 @@
+---
+date: "2019-07-31T11:05:34+02:00"
+title: R Basics
+weight: 7
+---
+
+```{r include=FALSE, results='hide', message=FALSE, warning=FALSE}
+# Silently read AJS example dataset
+linelist_raw <- read.csv("linelist_raw.csv")
+linelist_cleaned <- linelist_raw
+```
+
+## Everything is an object
+Everything you store in R - datasets, variables, a list of village names, a total population number, even outputs such as graphs - are **objects** which are **assigned a name** and **can be referenced** in later commands.  
+
+An object exists when you have assigned it a value (see the assignment section below). When it is assigned a value, the object appears in the Environment (see the upper right pane of RStudio). It can then be operated upon, manipulated, changed, and re-defined.
+
+## Creating objects with <-
+**You create objects *by assigning them a value* with the <- operator.** Assignment commands generally follow a standard order:  
+  
+ 
+**object_name**  <-  **value** (or process/calculation that produce a value)
+
+> **As an example:** When using an outbreak template you want to record the current reporting week for later reference. The object reporting_week is created when it is assigned the character value "2018-W10". reporting_week will appear in the R Environment (upper-right pane) and can be referenced in later commands.
+
+> See the commands and their output in the boxes below. Note the [1] in the output is simply indicating that you are viewing the first (and only) item of the output
+
+```{r}
+reporting_week <- "2018-W10"   # creates the object reporting_week by assigning a value
+
+print(reporting_week)          # prints the current value of reporting_week
+```
+*IMPORTANT: **An object's value can be over-written** at any time by running an assignment command to re-define its value. Thus, the **order of the commands run is very important**.*
+```{r}
+reporting_week <- "2018-W51"   # assigns a NEW value to the object reporting_week
+
+print(reporting_week)          # prints the current value of reporting_week
+```
+
+**Datasets are also assigned names as objects when they are imported.** In the code below:  
+
+1) The object linelist_raw is created and assigned the value of an imported CSV file  
+
+2) The object linelist_cleaned is created and assigned the value of linelist_raw  
+
+3) linelist_cleaned is re-defined as itself, but mutated to include a new variable, obs_days, representing the number of days between patient admission and exit
+
+```{r eval=FALSE}
+# linelist_raw is created and assigned the value of the imported CSV file
+linelist_raw <- rio::import("linelist.csv")
+
+# linelist_cleaned is created and assigned the value of linelist_raw
+linelist_cleaned <- linelist_raw
+
+# linelist_cleaned is RE-defined as itself, but modified to include a new variable
+linelist_cleaned <- mutate(linelist_cleaned, 
+                           obs_days = as.numeric(date_of_exit - date_of_admission))
+
+
+```
+
+A quick note on naming of objects:
+
+  * Object names must not contain spaces, but you should use underscore (_) or a period (.) instead of a space.  
+  * Object names are case-sensitive (meaning that Dataset_A is different from dataset_A). 
+  * Object names must begin with a letter (cannot begin with a number like 1, 2 or 3).  
+
+## Objects have Classes
+All the objects stored in R have a *class* which tells R how to handle the object. There are many possible classes, but common ones include:
+
+Class |	Explanation | Examples
+------ | ------------------------------------------ |  ------------------
+character	| These are text/words/sentences **"within quotation marks"**. Math cannot be done on these objects.	| "Character objects are in quotation marks"  
+numeric	| These are numbers, either integer (whole) or decimal. These must **not be in quotation marks**. Math can be done on these objects. | 23.1 or 14  
+Factor | These are variables that have a specified hierarchy or order | Variable msf_involvement with ordered values N, S, SUB, and U.  
+Date | **Once R is told that certain data are Dates**, these data can be manipulated and displayed in special ways. See the page on Dates for more information. | 2018-04-12 or 15/3/1954 or Wed 4 Jan 1980  
+data.frame | A dataframe is how R stores a typical dataset. It consists of columns of data bound together, that all have the same number of rows. When a dataset is imported, it is given the class "data.frame". | The example AJS dataset named linelist_raw contains 68 variables with 300 observations (rows) each.  
+
+**You can test the class of an object by writing it within the function class()**. Note: you can reference a specific column within a dataset using the $ notation to separate the name of the dataset and the name of the column.
+
+```{r echo=TRUE}
+class(linelist_raw$age_years)
+class(linelist_raw$patient_origin)
+```
+
+You can convert objects between class types using the following functions:  
+
+Function | Action  
+-------- | ------    
+as.character() | Converts to character class  
+as.numeric() | Converts to numeric class  
+as.Date() | Converts to Date class - NOTE: See separate section on dates  
+
+## Functions
+### Simple Functions
+Many tasks in R are performed through functions. A function is like a machine that receives inputs, does some action with those inputs, and produces an output. What the output is depends on the function.  
+  
+  
+On installation, R contains "base" functions that perform common tasks. Specialized functions have been created by R users, verified by the R community, and can be downloaded within "packages" to your RStudio for use. One of the more challenging aspects of R is that there are often many functions to choose from to complete a given task.  
+  
+  
+Functions typically operate upon some object placed within the function's parentheses. For example, when the function summary() is used on a variable of class numeric, the output is a summary of the variable's numeric and missing values.
+
+```{r}
+summary(linelist_raw$age_years)
+```
+
+### Functions with Multiple Arguments
+Functions often ask for several inputs. **Each piece of information needed is called an argument**. Some arguments are required for the function to work correctly, some are optional. Some have default settings. Arguments are all located within the parentheses of the function, separated by commas.  
+  
+  
+> **As an example:** The hist() function requires a numeric variable as input, and the output is a histogram.   
+
+For example, a simple command using hist() might look like this:  
+
+```{r, fig.width=4, fig.height=4, fig.align='center'}
+hist(linelist_cleaned$age_years)
+```
+  
+  
+A more complex command would use optional arguments to define the main title, axis labels, and bar color. As long as you define the value for each optional argument with an equals symbol (e.g. xlab = ...), the order of the arguments, (*separated by commas!*), is not important. 
+
+```{r, fig.width=4, fig.height=4, fig.align='center'}
+hist(linelist_cleaned$age_years, main = "Distribution of Patient Age", xlab = "Age", ylab = "Counts", col = "light blue")
+```
+
+### Installing Additional Functions
+R comes with "base" functions, but the R community has created and verified many other functions that you can use. These *functions* are contained within **packages** that can be downloaded to your computer. Once downloaded, you access the functions within a package by calling the package with the library() command at the beginning of each R session.  
+
+Think of R as your personal library: When you download a package your library has gained a book of functions, but each time you want to read/use a function in the book, you must check the book out from your library.
+
+
+## Calculations
+Mathematical operators are often used to perform addition, division, to create new columns, etc. Below are how to use mathematical operators in R. Whether you put spaces around the operators is not important.  
+
+Objective	      | Example in R
+--------------  | -------------
+addition	      | 2+3    
+subtraction	    | 2-3    
+multiplication	| 2*3
+division	      | 30/5
+exponent	      | 2^3 or 2**3   
+order of operations | ( )
+
+
+## General Syntax
+A few things to remember when writing commands in R:  
+
+* Always close parentheses
+* Avoid spaces - in column and object names, etc. Use underscore ( _ ) or periods ( . ) instead
+* Keep track of and do not forget to separate a function's arguments with commas
+* R is case-sensitive, meaning "Variable A" is *different* from "variable A"
+
+## Errors and Warnings
+When a command is run, the R Console may show you warning or error messages in red text.  
+
+* A **warning** means that R has completed your command, but had to take additional steps that you may want to be aware of (e.g. remove rows from a calculation that had missing values).  
+
+* An **error** means that R was not able to complete your command.  
+
+[section on using Google, Stack Exchange, etc.]
+

@@ -1,0 +1,215 @@
+---
+date: "2019-07-31T11:05:34+02:00"
+title: R Basics
+weight: 7
+---
+
+
+
+<div id="everything-is-an-object" class="section level2">
+<h2>Everything is an object</h2>
+<p>Everything you store in R - datasets, variables, a list of village names, a total population number, even outputs such as graphs - are <strong>objects</strong> which are <strong>assigned a name</strong> and <strong>can be referenced</strong> in later commands.</p>
+<p>An object exists when you have assigned it a value (see the assignment section below). When it is assigned a value, the object appears in the Environment (see the upper right pane of RStudio). It can then be operated upon, manipulated, changed, and re-defined.</p>
+</div>
+<div id="creating-objects-with--" class="section level2">
+<h2>Creating objects with &lt;-</h2>
+<p><strong>You create objects <em>by assigning them a value</em> with the &lt;- operator.</strong> Assignment commands generally follow a standard order:</p>
+<p><strong>object_name</strong> &lt;- <strong>value</strong> (or process/calculation that produce a value)</p>
+<blockquote>
+<p><strong>As an example:</strong> When using an outbreak template you want to record the current reporting week for later reference. The object reporting_week is created when it is assigned the character value “2018-W10”. reporting_week will appear in the R Environment (upper-right pane) and can be referenced in later commands.</p>
+</blockquote>
+<blockquote>
+<p>See the commands and their output in the boxes below. Note the [1] in the output is simply indicating that you are viewing the first (and only) item of the output</p>
+</blockquote>
+<pre class="r"><code>reporting_week &lt;- &quot;2018-W10&quot;   # creates the object reporting_week by assigning a value
+
+print(reporting_week)          # prints the current value of reporting_week</code></pre>
+<pre><code>## [1] &quot;2018-W10&quot;</code></pre>
+<p><em>IMPORTANT: <strong>An object’s value can be over-written</strong> at any time by running an assignment command to re-define its value. Thus, the <strong>order of the commands run is very important</strong>.</em></p>
+<pre class="r"><code>reporting_week &lt;- &quot;2018-W51&quot;   # assigns a NEW value to the object reporting_week
+
+print(reporting_week)          # prints the current value of reporting_week</code></pre>
+<pre><code>## [1] &quot;2018-W51&quot;</code></pre>
+<p><strong>Datasets are also assigned names as objects when they are imported.</strong> In the code below:</p>
+<ol style="list-style-type: decimal">
+<li><p>The object linelist_raw is created and assigned the value of an imported CSV file</p></li>
+<li><p>The object linelist_cleaned is created and assigned the value of linelist_raw</p></li>
+<li><p>linelist_cleaned is re-defined as itself, but mutated to include a new variable, obs_days, representing the number of days between patient admission and exit</p></li>
+</ol>
+<pre class="r"><code># linelist_raw is created and assigned the value of the imported CSV file
+linelist_raw &lt;- rio::import(&quot;linelist.csv&quot;)
+
+# linelist_cleaned is created and assigned the value of linelist_raw
+linelist_cleaned &lt;- linelist_raw
+
+# linelist_cleaned is RE-defined as itself, but modified to include a new variable
+linelist_cleaned &lt;- mutate(linelist_cleaned, 
+                           obs_days = as.numeric(date_of_exit - date_of_admission))</code></pre>
+<p>A quick note on naming of objects:</p>
+<ul>
+<li>Object names must not contain spaces, but you should use underscore (_) or a period (.) instead of a space.<br />
+</li>
+<li>Object names are case-sensitive (meaning that Dataset_A is different from dataset_A).</li>
+<li>Object names must begin with a letter (cannot begin with a number like 1, 2 or 3).</li>
+</ul>
+</div>
+<div id="objects-have-classes" class="section level2">
+<h2>Objects have Classes</h2>
+<p>All the objects stored in R have a <em>class</em> which tells R how to handle the object. There are many possible classes, but common ones include:</p>
+<table style="width:96%;">
+<colgroup>
+<col width="9%" />
+<col width="59%" />
+<col width="26%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Class</th>
+<th>Explanation</th>
+<th>Examples</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>character</td>
+<td>These are text/words/sentences <strong>“within quotation marks”</strong>. Math cannot be done on these objects.</td>
+<td>“Character objects are in quotation marks”</td>
+</tr>
+<tr class="even">
+<td>numeric</td>
+<td>These are numbers, either integer (whole) or decimal. These must <strong>not be in quotation marks</strong>. Math can be done on these objects.</td>
+<td>23.1 or 14</td>
+</tr>
+<tr class="odd">
+<td>Factor</td>
+<td>These are variables that have a specified hierarchy or order</td>
+<td>Variable msf_involvement with ordered values N, S, SUB, and U.</td>
+</tr>
+<tr class="even">
+<td>Date</td>
+<td><strong>Once R is told that certain data are Dates</strong>, these data can be manipulated and displayed in special ways. See the page on Dates for more information.</td>
+<td>2018-04-12 or 15/3/1954 or Wed 4 Jan 1980</td>
+</tr>
+<tr class="odd">
+<td>data.frame</td>
+<td>A dataframe is how R stores a typical dataset. It consists of columns of data bound together, that all have the same number of rows. When a dataset is imported, it is given the class “data.frame”.</td>
+<td>The example AJS dataset named linelist_raw contains 68 variables with 300 observations (rows) each.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>You can test the class of an object by writing it within the function class()</strong>. Note: you can reference a specific column within a dataset using the $ notation to separate the name of the dataset and the name of the column.</p>
+<pre class="r"><code>class(linelist_raw$age_years)</code></pre>
+<pre><code>## [1] &quot;integer&quot;</code></pre>
+<pre class="r"><code>class(linelist_raw$patient_origin)</code></pre>
+<pre><code>## [1] &quot;factor&quot;</code></pre>
+<p>You can convert objects between class types using the following functions:</p>
+<table>
+<thead>
+<tr class="header">
+<th>Function</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>as.character()</td>
+<td>Converts to character class</td>
+</tr>
+<tr class="even">
+<td>as.numeric()</td>
+<td>Converts to numeric class</td>
+</tr>
+<tr class="odd">
+<td>as.Date()</td>
+<td>Converts to Date class - NOTE: See separate section on dates</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="functions" class="section level2">
+<h2>Functions</h2>
+<div id="simple-functions" class="section level3">
+<h3>Simple Functions</h3>
+<p>Many tasks in R are performed through functions. A function is like a machine that receives inputs, does some action with those inputs, and produces an output. What the output is depends on the function.</p>
+<p>On installation, R contains “base” functions that perform common tasks. Specialized functions have been created by R users, verified by the R community, and can be downloaded within “packages” to your RStudio for use. One of the more challenging aspects of R is that there are often many functions to choose from to complete a given task.</p>
+<p>Functions typically operate upon some object placed within the function’s parentheses. For example, when the function summary() is used on a variable of class numeric, the output is a summary of the variable’s numeric and missing values.</p>
+<pre class="r"><code>summary(linelist_raw$age_years)</code></pre>
+<pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA&#39;s 
+##    3.00   32.00   57.00   59.27   86.00  120.00      11</code></pre>
+</div>
+<div id="functions-with-multiple-arguments" class="section level3">
+<h3>Functions with Multiple Arguments</h3>
+<p>Functions often ask for several inputs. <strong>Each piece of information needed is called an argument</strong>. Some arguments are required for the function to work correctly, some are optional. Some have default settings. Arguments are all located within the parentheses of the function, separated by commas.</p>
+<blockquote>
+<p><strong>As an example:</strong> The hist() function requires a numeric variable as input, and the output is a histogram.</p>
+</blockquote>
+<p>For example, a simple command using hist() might look like this:</p>
+<pre class="r"><code>hist(linelist_cleaned$age_years)</code></pre>
+<p><img src="/training/R_Basics_files/figure-html/unnamed-chunk-7-1.png" width="384" style="display: block; margin: auto;" /></p>
+<p>A more complex command would use optional arguments to define the main title, axis labels, and bar color. As long as you define the value for each optional argument with an equals symbol (e.g. xlab = …), the order of the arguments, (<em>separated by commas!</em>), is not important.</p>
+<pre class="r"><code>hist(linelist_cleaned$age_years, main = &quot;Distribution of Patient Age&quot;, xlab = &quot;Age&quot;, ylab = &quot;Counts&quot;, col = &quot;light blue&quot;)</code></pre>
+<p><img src="/training/R_Basics_files/figure-html/unnamed-chunk-8-1.png" width="384" style="display: block; margin: auto;" /></p>
+</div>
+<div id="installing-additional-functions" class="section level3">
+<h3>Installing Additional Functions</h3>
+<p>R comes with “base” functions, but the R community has created and verified many other functions that you can use. These <em>functions</em> are contained within <strong>packages</strong> that can be downloaded to your computer. Once downloaded, you access the functions within a package by calling the package with the library() command at the beginning of each R session.</p>
+<p>Think of R as your personal library: When you download a package your library has gained a book of functions, but each time you want to read/use a function in the book, you must check the book out from your library.</p>
+</div>
+</div>
+<div id="calculations" class="section level2">
+<h2>Calculations</h2>
+<p>Mathematical operators are often used to perform addition, division, to create new columns, etc. Below are how to use mathematical operators in R. Whether you put spaces around the operators is not important.</p>
+<table>
+<thead>
+<tr class="header">
+<th>Objective</th>
+<th>Example in R</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>addition</td>
+<td>2+3</td>
+</tr>
+<tr class="even">
+<td>subtraction</td>
+<td>2-3</td>
+</tr>
+<tr class="odd">
+<td>multiplication</td>
+<td>2*3</td>
+</tr>
+<tr class="even">
+<td>division</td>
+<td>30/5</td>
+</tr>
+<tr class="odd">
+<td>exponent</td>
+<td>2^3 or 2**3</td>
+</tr>
+<tr class="even">
+<td>order of operations</td>
+<td>( )</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="general-syntax" class="section level2">
+<h2>General Syntax</h2>
+<p>A few things to remember when writing commands in R:</p>
+<ul>
+<li>Always close parentheses</li>
+<li>Avoid spaces - in column and object names, etc. Use underscore ( _ ) or periods ( . ) instead</li>
+<li>Keep track of and do not forget to separate a function’s arguments with commas</li>
+<li>R is case-sensitive, meaning “Variable A” is <em>different</em> from “variable A”</li>
+</ul>
+</div>
+<div id="errors-and-warnings" class="section level2">
+<h2>Errors and Warnings</h2>
+<p>When a command is run, the R Console may show you warning or error messages in red text.</p>
+<ul>
+<li><p>A <strong>warning</strong> means that R has completed your command, but had to take additional steps that you may want to be aware of (e.g. remove rows from a calculation that had missing values).</p></li>
+<li><p>An <strong>error</strong> means that R was not able to complete your command.</p></li>
+</ul>
+<p>[section on using Google, Stack Exchange, etc.]</p>
+</div>
