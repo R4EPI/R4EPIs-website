@@ -5,7 +5,7 @@ weight: 8
 ---
 
 ## Overview of this page
-This page will demonstrate the steps to use the Acute Jaundice Syndrome (AJS) outbreak template, data from an outbreak in Am Timan, Chad.
+This page will demonstrate the steps to use the Acute Jaundice Syndrome (AJS) outbreak template, using data from an outbreak in Am Timan, Chad.
 
 [Rmarkdown introduction](https://rmarkdown.rstudio.com/articles_intro.html)
 [Rmarkdown authoring basics](https://rmarkdown.rstudio.com/authoring_basics.html)
@@ -29,3 +29,12 @@ In the code chunk the commands do the following:
 3) Creates a vector of names of packages required for the template to run. Then each package is installed if it is not already installed, and each package is loaded for use in the current R session.
 
 4) Default plot theme text size and epidemiological weeks are set to begin on Mondays.  
+
+
+
+## Reading in your data
+
+**In this template section you choose from three code chunks for importing your dataset, depending on the type of dataset you have.**  
+
+If you have a dataset that originated as an export from MSF's DHIS2 system and is standardized to the MSF data dictionary for the template's disease, you use one of the first two code chunks, either:
+- either the code chunk for a DHIS2 CSV (.csv) file, or a DHIS2  or  

@@ -8,7 +8,7 @@ weight: 8
 
 <div id="overview-of-this-page" class="section level2">
 <h2>Overview of this page</h2>
-<p>This page will demonstrate the steps to use the Acute Jaundice Syndrome (AJS) outbreak template, data from an outbreak in Am Timan, Chad.</p>
+<p>This page will demonstrate the steps to use the Acute Jaundice Syndrome (AJS) outbreak template, using data from an outbreak in Am Timan, Chad.</p>
 <p><a href="https://rmarkdown.rstudio.com/articles_intro.html">Rmarkdown introduction</a> <a href="https://rmarkdown.rstudio.com/authoring_basics.html">Rmarkdown authoring basics</a></p>
 </div>
 <div id="header-and-introduction" class="section level2">
@@ -29,4 +29,27 @@ weight: 8
 <li><p>Creates a vector of names of packages required for the template to run. Then each package is installed if it is not already installed, and each package is loaded for use in the current R session.</p></li>
 <li><p>Default plot theme text size and epidemiological weeks are set to begin on Mondays.</p></li>
 </ol>
+</div>
+<div id="reading-in-your-data" class="section level2">
+<h2>Reading in your data</h2>
+<p><strong>In this template section you choose the appropriate code chunk to importing your dataset.</strong></p>
+<div class="figure">
+<img src="/images/Data_Import.png" alt="Data Import" />
+<p class="caption">Data Import</p>
+</div>
+<p>For this exercise we are using a dataset from MSF’s response an outbreak of suspected hepatitis E in Chad. We suspect that this dataset is not standardized to the MSF Data Dictionary for AJS.</p>
+<p>We can view the data dictionary for AJS using this command (which is also found in your template)</p>
+<pre><code>## # A tibble: 6 x 11
+##   option_code option_name data_element_uid data_element_na~
+##   &lt;chr&gt;       &lt;chr&gt;       &lt;lgl&gt;            &lt;chr&gt;           
+## 1 C           Core        NA               egen_044_event_~
+## 2 R           Routine     NA               egen_044_event_~
+## 3 E           Extended    NA               egen_044_event_~
+## 4 &lt;NA&gt;        &lt;NA&gt;        NA               egen_001_patien~
+## 5 &lt;NA&gt;        &lt;NA&gt;        NA               egen_004_egen_0~
+## 6 CL          Clinic      NA               egen_022_detect~
+## # ... with 7 more variables: data_element_shortname &lt;chr&gt;,
+## #   data_element_description &lt;chr&gt;, data_element_valuetype &lt;chr&gt;,
+## #   data_element_formname &lt;chr&gt;, used_optionset_uid &lt;chr&gt;,
+## #   option_uid &lt;chr&gt;, option_order_in_set &lt;dbl&gt;</code></pre>
 </div>
