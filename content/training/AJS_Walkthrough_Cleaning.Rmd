@@ -4,6 +4,51 @@ title: Template Walk-through
 weight: 8
 ---
 
+
+```{r setup, include=FALSE, results='hide', message=FALSE, warning=FALSE}
+# hide all code chunks in the output, but show errors
+knitr::opts_chunk$set(echo = FALSE,       # hide all code chunks in output
+                      error = TRUE,       # show errors if they appear, but don't stop
+                      fig.width = 6*1.25, # Figure width
+                      fig.height = 6      # Figure height
+                     )
+# set default NA to - in output, define figure width/height
+options(knitr.kable.NA = "-")
+
+# Installing required packages for this template
+required_packages <- c("knitr",       # create output docs
+                       "dplyr",       # clean/shape data
+                       "forcats",     # clean/shape data
+                       "ggplot2",     # create plots and charts
+                       "sitrep",      # MSF field epi functions
+                       "linelist",    # Functions for cleaning/standardising data
+                       "incidence",   # create epicurves
+                       "aweek",       # define epi weeks
+                       "epitools",    # 2x2 tables and other epi goodness
+                       "sf",          # encode spatial vector data
+                       "ggspatial")   # plot maps
+
+for (pkg in required_packages) {
+  # install packages if not already present
+  if (!pkg %in% rownames(installed.packages())) {
+    install.packages(pkg)
+  }
+  
+  # load packages to this current session 
+  library(pkg, character.only = TRUE)
+}
+
+
+# set default text size to 16 for plots
+# give classic black/white axes for plots
+ggplot2::theme_set(theme_classic(base_size = 18))
+
+# Set the day that defines the beginning of your epiweek.
+# you can start the week on any day of the week
+# (the ISO standard is to start on Monday) 
+aweek::set_week_start("Monday")
+```
+
 ## Overview of this page
 This page will demonstrate the steps to use the Acute Jaundice Syndrome (AJS) outbreak template, using data from an outbreak in Am Timan, Chad.
 
@@ -34,7 +79,35 @@ In the code chunk the commands do the following:
 
 ## Reading in your data
 
-**In this template section you choose from three code chunks for importing your dataset, depending on the type of dataset you have.**  
+**In this template section you choose the appropriate code chunk to importing your dataset.** 
 
-If you have a dataset that originated as an export from MSF's DHIS2 system and is standardized to the MSF data dictionary for the template's disease, you use one of the first two code chunks, either:
-- either the code chunk for a DHIS2 CSV (.csv) file, or a DHIS2  or  
+![Data Import](/images/Data_Import.png)
+
+For this exercise we are using a dataset from MSF's response an outbreak of suspected hepatitis E in Am Timan, Chad. We suspect that this dataset is not standardized to the MSF Data Dictionary for AJS.  
+
+We can view the data dictionary for AJS using this command (which is also found in your template)
+
+**[FIX to be scrolling version of the dataset]**
+
+```{r}
+# creates object linelist_dict using the msf_dict function from the sitrep package
+# View the data dictionary by using the View() command as below, or by clicking it in your Environment (upper-right RStudio pane)
+linelist_dict <- msf_dict("AJS", compact = FALSE) %>%
+  select(option_code, option_name, everything())
+
+head(linelist_dict)
+```
+
+Compare that to a snapshot of our dataset:
+
+```{r include=FALSE, results='hide', message=FALSE, warning=FALSE}
+## Read data ------------------------------------
+# Excel file
+# to read in a specific sheet use "which"
+linelist_raw <- rio::import("/data/AJS_AmTiman.xlsx")
+```
+
+```{r}
+head(linelist_raw)
+```
+We can see that 
