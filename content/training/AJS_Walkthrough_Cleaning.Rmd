@@ -1,0 +1,31 @@
+---
+date: "2019-08-05T14:07:44+02:00"
+title: Template Walk-through
+weight: 8
+---
+
+## Overview of this page
+This page will demonstrate the steps to use the Acute Jaundice Syndrome (AJS) outbreak template, data from an outbreak in Am Timan, Chad.
+
+[Rmarkdown introduction](https://rmarkdown.rstudio.com/articles_intro.html)
+[Rmarkdown authoring basics](https://rmarkdown.rstudio.com/authoring_basics.html)
+
+## Header and introduction
+
+![](/images/AJS_Intro.png)
+
+The very top of the template consists of a header surrounded by `---`. Here you may want to edit the title of your document. The other settings in the header define the default document type produced (Microsoft Word) when the RMarkdown is "knit".
+
+The Introduction section is for your information and may be deleted before knitting the document.
+
+## Package installation
+This section begins with text (with white background) which explains the purpose of the following code chunk. **For your final report you may delete the text, but you must keep the code chunk!** The code will run without producing any output in your report, but is required to load packages necessary to produce the report.
+
+In the code chunk the commands do the following:
+1) Sets default settings for the RMarkdown such as figure size, and handling of errors  
+
+2) Sets the default way of displaying missing values in tables as "-"  
+
+3) Creates a vector of names of packages required for the template to run. Then each package is installed if it is not already installed, and each package is loaded for use in the current R session.
+
+4) Default plot theme text size and epidemiological weeks are set to begin on Mondays.  

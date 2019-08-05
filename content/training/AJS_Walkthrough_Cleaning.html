@@ -1,0 +1,32 @@
+---
+date: "2019-08-05T14:07:44+02:00"
+title: Template Walk-through
+weight: 8
+---
+
+
+
+<div id="overview-of-this-page" class="section level2">
+<h2>Overview of this page</h2>
+<p>This page will demonstrate the steps to use the Acute Jaundice Syndrome (AJS) outbreak template, data from an outbreak in Am Timan, Chad.</p>
+<p><a href="https://rmarkdown.rstudio.com/articles_intro.html">Rmarkdown introduction</a> <a href="https://rmarkdown.rstudio.com/authoring_basics.html">Rmarkdown authoring basics</a></p>
+</div>
+<div id="header-and-introduction" class="section level2">
+<h2>Header and introduction</h2>
+<div class="figure">
+<img src="/images/AJS_Intro.png" />
+
+</div>
+<p>The very top of the template consists of a header surrounded by <code>---</code>. Here you may want to edit the title of your document. The other settings in the header define the default document type produced (Microsoft Word) when the RMarkdown is “knit”.</p>
+<p>The Introduction section is for your information and may be deleted before knitting the document.</p>
+</div>
+<div id="package-installation" class="section level2">
+<h2>Package installation</h2>
+<p>This section begins with text (with white background) which explains the purpose of the following code chunk. <strong>For your final report you may delete the text, but you must keep the code chunk!</strong> The code will run without producing any output in your report, but is required to load packages necessary to produce the report.</p>
+<p>In the code chunk the commands do the following: 1) Sets default settings for the RMarkdown such as figure size, and handling of errors</p>
+<ol start="2" style="list-style-type: decimal">
+<li><p>Sets the default way of displaying missing values in tables as “-”</p></li>
+<li><p>Creates a vector of names of packages required for the template to run. Then each package is installed if it is not already installed, and each package is loaded for use in the current R session.</p></li>
+<li><p>Default plot theme text size and epidemiological weeks are set to begin on Mondays.</p></li>
+</ol>
+</div>
