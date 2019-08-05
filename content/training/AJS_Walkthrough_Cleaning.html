@@ -37,8 +37,9 @@ weight: 8
 <img src="/images/Data_Import.png" alt="Data Import" />
 <p class="caption">Data Import</p>
 </div>
-<p>For this exercise we are using a dataset from MSF’s response an outbreak of suspected hepatitis E in Chad. We suspect that this dataset is not standardized to the MSF Data Dictionary for AJS.</p>
+<p>For this exercise we are using a dataset from MSF’s response an outbreak of suspected hepatitis E in Am Timan, Chad. We suspect that this dataset is not standardized to the MSF Data Dictionary for AJS.</p>
 <p>We can view the data dictionary for AJS using this command (which is also found in your template)</p>
+<p><strong>[FIX to be scrolling version of the dataset]</strong></p>
 <pre><code>## # A tibble: 6 x 11
 ##   option_code option_name data_element_uid data_element_na~
 ##   &lt;chr&gt;       &lt;chr&gt;       &lt;lgl&gt;            &lt;chr&gt;           
@@ -52,4 +53,146 @@ weight: 8
 ## #   data_element_description &lt;chr&gt;, data_element_valuetype &lt;chr&gt;,
 ## #   data_element_formname &lt;chr&gt;, used_optionset_uid &lt;chr&gt;,
 ## #   option_uid &lt;chr&gt;, option_order_in_set &lt;dbl&gt;</code></pre>
+<p>Compare that to a snapshot of our dataset:</p>
+<pre><code>##   Number HEVID Sex Age Agegroup  dateentry epiquestdate team chw block hh
+## 1      1  1001   F  35        3 2016-09-01            .    .   .     .  .
+## 2      2  1002   F  21        3 2016-09-06            .    .   .     .  .
+## 3      3  1003   F  18        3 2016-09-09            .    .   .     .  .
+## 4      4  1004   F  25        3 2016-09-12   2016-09-12    .   .     .  .
+## 5      5  1005   F  20        3 2016-09-19   2016-09-27    .   .     .  .
+## 6      6  1006   M   8        2 2016-09-19            .    .   .     .  .
+##   referredby   quartier interviewee hhpers hhmale hhfemale hhu5 hpreferral
+## 1          .  Rassalfil           .      .      .        .    .          .
+## 2          .  Anfandock           .      .      .        .    .          .
+## 3          .  Al-Hougna           .      .      .        .    .          .
+## 4          .   Dinguess      Parent      .      .        .    .          .
+## 5          . Taradona 2     Patient      3      2        1    1          .
+## 6          .   Albayadi           .      .      .        .    .          .
+##   hprefpos patientpresent ptjaundice ptvomit mtmental ptpregnant ptu1
+## 1        .              .          .       .        .          .    .
+## 2        .              .          .       .        .          .    .
+## 3        .              .          .       .        .          .    .
+## 4        .              .          .       .        .          .    .
+## 5        .              .          .       .        .          .    .
+## 6        .              .          .       .        .          .    .
+##   referring otherajs otherajsnum borehole comtap river citywater
+## 1         .        .           .        .      .     .         .
+## 2         .        .           .        .      .     .         .
+## 3         .        .           .        .      .     .         .
+## 4         .        .           .        .    Oui     .         .
+## 5         .      Non           .      Oui      .     .         .
+## 6         .        .           .        .      .     .         .
+##   otherwater otherwatersp watersourcefreq ceramicjar jerrycan oildrum
+## 1          .            .               .          .        .       .
+## 2          .            .               .          .        .       .
+## 3          .            .               .          .        .       .
+## 4          .            .               .        Oui      Oui       .
+## 5          .            .               .        Oui        .       .
+## 6          .            .               .          .        .       .
+##   reserother reserothersp resertype chlorination volumreser handreser
+## 1          .            .         .            .          .         .
+## 2          .            .         .            .          .         .
+## 3          .            .         .            .          .         .
+## 4          .            .         .            .          .         .
+## 5          .            .         .            .          .         .
+## 6          .            .         .            .          .         .
+##   hweating hwwater hwsoap treatwater tptreatwater tptreatwaterother
+## 1        .       .      .          .            .                 .
+## 2        .       .      .          .            .                 .
+## 3        .       .      .          .            .                 .
+## 4        .       .      .        Non            .                 .
+## 5        .       .      .        Non            .                 .
+## 6        .       .      .          .            .                 .
+##                         nottreatwhy defecriver defecair defeclatrine
+## 1                                 .          .        .            .
+## 2                                 .          .        .            .
+## 3                                 .          .        .            .
+## 4                                 .          .        .          Oui
+## 5 L&#39;EAU C&#39;EST TRAITE DANS LE FORAGE          .        .          Oui
+## 6                                 .          .        .            .
+##   numlatrine  dtmedical hpid outreachscreened evaljaundice jaundiceid
+## 1          . 2016-09-01  633                .            .          .
+## 2          . 2016-09-06  643                .            .          .
+## 3          . 2016-09-09  649                .            .          .
+## 4          . 2016-09-12  656                N            .          .
+## 5          . 2016-09-19   72                N            .          .
+## 6          . 2016-09-19 1875                .            .          .
+##   referredbychw jaundiceid2 medjaundice dtjaundice medfever mednausea
+## 1             .           .           .          .      Oui       Non
+## 2             .           .           .          .      Oui       Oui
+## 3             .           .           .          .      Non       Oui
+## 4             .           .           .          .      Non       Oui
+## 5             .           .           . 2016-09-15      Oui       Oui
+## 6             .           .           . 2016-09-14      Oui       Oui
+##   medvomit medepigastric meditching medheadache medarthralgia meddiar
+## 1      Non           Non        Non         Oui           Non     Oui
+## 2      Oui           Oui        Non         Oui           Oui     Oui
+## 3      Oui           Oui        Non         Oui           Non     Non
+## 4      Non           Oui        Non         Oui           Non     Non
+## 5      Oui           Oui        Non         Oui           Oui     Non
+## 6      Non           Oui        Non         Oui           Oui     Oui
+##   medbleeding medfev38        medmental medother medothhhajs
+## 1         Non      Non           Normal        .         Non
+## 2         Non      Oui           Normal        .     Unknown
+## 3         Oui      Oui Confus/somnolent        .         Non
+## 4         Non      Non Confus/somnolent        .         Non
+## 5         Non      Non           Normal        .         Non
+## 6         Non      Oui           Normal        .         Oui
+##   medothhhajsnum othercaseid medpreg medpregtri medpp medppdays
+## 1              .           .     Non          .   Oui         5
+## 2           &lt;NA&gt;        &lt;NA&gt;     Oui          1   Non         .
+## 3              .           .     Oui          3   Non         .
+## 4              .           .     Oui          2   Non         .
+## 5              .           .     Non          .   Non         .
+## 6           &lt;NA&gt;        &lt;NA&gt;     Non          .   Non         .
+##                        medppoutcome matdeathdt medppga medblood
+## 1 Naissance, enfant toujours vivant          .       .      Non
+## 2                  Sortie, enceinte          .       .      Non
+## 3 Naissance, enfant toujours vivant          .       .      Non
+## 4                Avortement/mort.né          .      30      Oui
+## 5                                 .          .       -      Oui
+## 6                                 .          .       .      Oui
+##         medblooddt medmalrdt medhepb medhepc medhevrdt medhevelisa
+## 1               No       Neg       .       .         .           .
+## 2               No       Pos       .       .         .           .
+## 3 Yes but not sent       Neg     Neg     Neg       Neg           .
+## 4       2016-09-14       Neg     Neg     Neg       Pos   IgG+/IgM+
+## 5       2016-09-19       Neg     Neg     Neg       Neg   IgG-/IgM-
+## 6       2016-09-19       Pos     Neg     Neg       Pos   IgG+/IgM+
+##   hevrecent hevpcr hevgenotest hevgenotype medhavelisa medhbvelisa
+## 1         .      .           .           .        &lt;NA&gt;        &lt;NA&gt;
+## 2         .      .           .           .        &lt;NA&gt;        &lt;NA&gt;
+## 3         .      .           .           .        &lt;NA&gt;        &lt;NA&gt;
+## 4         1    Pos           .           .         Neg         Neg
+## 5         0    Neg           .           .         Neg         Neg
+## 6         1    Neg           .           .         Neg         Neg
+##   medhcvelisa arbovpcr        yf      zika    dengue       wnv       rvf
+## 1        &lt;NA&gt;     &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;
+## 2        &lt;NA&gt;     &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;
+## 3        &lt;NA&gt;     &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;
+## 4         Neg        .         .         .         .         .         .
+## 5         Neg      Neg IgG-/IgM- IgG-/IgM- IgG-/IgM- IgG+/IgM- IgG-/IgM-
+## 6         Neg        .         .         .         .         .         .
+##        chik hospitalised dthospitalisation      outcomehp    dtdeath
+## 1      &lt;NA&gt;          Oui        2016-09-01 Déchargé/Guéri          .
+## 2      &lt;NA&gt;          Oui        2016-09-06 Déchargé/Guéri          .
+## 3      &lt;NA&gt;          Oui        2016-09-09         Décédé 2016-09-13
+## 4         .          Oui        2016-09-12         Décédé 2016-09-14
+## 5 IgG-/IgM-          Non                 .              .          .
+## 6         .          Oui        2016-09-19 Déchargé/Guéri          .
+##   epiwajs epiwhevelisa epiwoutreach epiwmed epiwepiquest  epiwhp epiwdeath
+## 1       .         &lt;NA&gt;      2016_35 2016_35            . 2016_35         .
+## 2       .         &lt;NA&gt;      2016_36 2016_36            . 2016_36         .
+## 3       .         &lt;NA&gt;      2016_36 2016_36            . 2016_36   2016_37
+## 4       .            .      2016_37 2016_37      2016_37 2016_37   2016_37
+## 5 2016_37         &lt;NA&gt;      2016_38 2016_38      2016_39       .         .
+## 6 2016_37      2016_37      2016_38 2016_38            . 2016_38         .
+##    caseclass Latitude Longitude
+## 1    Suspect       NA        NA
+## 2    Suspect       NA        NA
+## 3 Not a case       NA        NA
+## 4  Confirmed 11.01991  20.28088
+## 5 Not a case 11.05434  20.27419
+## 6  Confirmed       NA        NA</code></pre>
+<p>We can see that</p>
 </div>

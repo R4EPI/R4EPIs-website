@@ -104,7 +104,7 @@ Compare that to a snapshot of our dataset:
 ## Read data ------------------------------------
 # Excel file
 # to read in a specific sheet use "which"
-linelist_raw <- rio::import("/data/AJS_AmTiman.xlsx")
+linelist_raw <- rio::import("AJS_AmTiman.xlsx")
 ```
 
 ```{r}
