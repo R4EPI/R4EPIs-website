@@ -18,7 +18,7 @@ Below are links to some of the many online tutorials for learning R.
 
 [Fundamentals of R](http://swcarpentry.github.io/r-novice-gapminder/)  
 
-[R for Novices (for Journalists)](https://learn.r-journalism.com/en/introduction/)  
+[R for Novices (written for journalists)](https://learn.r-journalism.com/en/introduction/)  
 
 [Clinical Epidemiology in R, from London School of Hygiene & Tropical Medicine](http://rpubs.com/michaelmarks/R-Clin-Epi)  
 
@@ -26,6 +26,7 @@ Below are links to some of the many online tutorials for learning R.
 
 [Tutorial for learning ggplot (the most common R package for visualizations, graphs, and maps)](http://r-statistics.co/Complete-Ggplot2-Tutorial-Part1-With-R-Code.html)  
 
+[short paragraph on using Stack Exchange for help]
 
 ## Everything is an object  
 
@@ -35,7 +36,7 @@ An object exists when you have assigned it a value (see the assignment section b
 
 ## Creating objects with the Assignment Operator <-  
 
-**You create objects *by assigning them a value* with the <- operator.** You can think of the assignment operator <- as the words "is defined as". Assignment commands generally follow a standard order:  
+**You create objects *by assigning them a value* with the <- operator.** You can think of the assignment operator `<-` as the words "is defined as". Assignment commands generally follow a standard order:  
   
  
 **object_name**  <-  **value** (or process/calculation that produce a value)
@@ -86,7 +87,7 @@ A quick note on naming of objects:
 
 ## Objects can have Structure  
 
-Objects can be a single piece of data (e.g. my_number <- 24), or they can consist of structured data. The graphic below, sourced from [this online R tutorial](http://venus.ifca.unican.es/Rintro/dataStruct.html) shows some common data structures and their names. Not included in this image is spatial data, which is discussed in another page.  
+Objects can be a single piece of data (e.g. `my_number <- 24`), or they can consist of structured data. The graphic below, sourced from [this online R tutorial](http://venus.ifca.unican.es/Rintro/dataStruct.html) shows some common data structures and their names. Not included in this image is spatial data, which is discussed in another page.  
 
 ![](/images/r_data_structures.png)  
 
@@ -98,12 +99,13 @@ Common structure | Explanation | Example from templates
 Vectors | A container for a sequence of singular objects, all of the same class (e.g. numeric, character). | **"Variables" (columns) in data frames are vectors** (e.g. the variable age_years).  
 Data Frames | Vectors (e.g. columns) that are bound together that all have the same number of rows. | linelist_raw and linelist_cleaned are both data frames.  
 
-### Accesing/calling variables within data frames  
+### Using `$` to access/call variables  
 
-**Vectors within a data frame (variables in a dataset) can be called or referenced using the $ symbol.** The $ symbol connects the name of the column to the name of its dataset. The $ symbol must be used, otherwise R will not know where to look for or create the column.
+**Vectors within a data frame (variables in a dataset) can be called or referenced using the $ symbol.** The `$` symbol connects the name of the column to the name of its dataset. The $ symbol must be used, otherwise R will not know where to look for or create the column.
 
 ```{r}
-# Retrieve the length of the vector age_years (which is in the data frame linelist_cleaned)
+# Retrieve the length of the vector age_years
+# (age_years is in the data frame linelist_cleaned)
 length(linelist_cleaned$age_years)  
 ```
   
@@ -122,7 +124,7 @@ Date | **Once R is told that certain data are Dates**, these data can be manipul
 Logical | Values must be one of the two special values TRUE or FALSE (note these are **not** "TRUE" and "FALSE" in quotation marks) | TRUE or FALSE  
 data.frame | A data frame is how R stores a **typical dataset**. It consists of vectors (columns) of data bound together, that all have the same number of observations (rows). | The example AJS dataset named linelist_raw contains 68 variables with 300 observations (rows) each.  
 
-**You can test the class of an object by writing it within the function class()**. Note: you can reference a specific column within a dataset using the $ notation to separate the name of the dataset and the name of the column.
+**You can test the class of an object by writing it within the function class()**. Note: you can reference a specific column within a dataset using the `$` notation to separate the name of the dataset and the name of the column.
 
 ```{r echo=TRUE}
 class(linelist_raw$age_years)
@@ -209,8 +211,52 @@ linelist_cleaned <- linelist_cleaned %>%
 ```
 
 
+## Relational and logical operators  
+
+**Relational operators compare values** and are often used when defining new variables and subsets of datasets. Here are the common relational operators in R:  
+
+Function | Operator	| Example	| Result
+-------------- | ---------- | ----------- | ------------------------  
+Equal to |	`==` | `"A" == "a"`	| `FALSE` (because R is case sensitive) *Note that == (double equals) is different from = (single equals), which acts like the assignment operator <-*  
+Not equal to | `!=`	| `2 != 0` | `TRUE`  
+Greater than | `>` | `4 > 2` | `TRUE`  
+Less than | `<` | `4 < 2` | `FALSE`  
+Greater than or equal to | `>=` | `6 >= 4` | `TRUE`  
+Less than or equal to	| `<=` | `6 <= 4` | `FALSE`  
+Value is missing | `is.na()` | `is.na(7)` | `FALSE` (special case, see section on missing values)
+Value is not missing | `!is.na()` | `!is.na(7)` | `TRUE`
+
+**Logical operators, such as AND and OR, are often used to connect relational operators and create more complicated criteria**. Complex statements might require parentheses ( ) for grouping and order of application.  
+
+Function | Operator
+-------- | ------------------------  
+AND | `&`  
+OR |  `|` (vertical bar)  
+Parentheses	| ( ) Used to group criteria together and clarify order  
+
+> For example, the command below use the function case_when to create the new variable "case_def" such that:  
+
+```{r eval=FALSE}
+linelist_cleaned <- linelist_cleaned %>%
+  mutate(case_def = case_when(
+    is.na(hep_e_rdt) & is.na(other_cases_in_hh)           ~ NA_character_,
+    hep_e_rdt == "Positive"                               ~ "Confirmed",
+    hep_e_rdt != "Positive" & other_cases_in_hh == "Yes"  ~ "Probable",
+    TRUE                                                  ~ "Suspected"
+  ))
+
+```
 
 
+Criteria in example above                        | Resulting value in new variable "case_def""
+------------------------------------------|-------------------------------------
+If the value for variables hep_e_rdt and other_cases_in_hh are missing | NA (missing)  
+If the value in hep_e_rdt is "Positive" | "Confirmed"  
+If the value in hep_e_rdt is NOT "Positive" AND the value in other_cases_in_hh is "Yes" | "Probable"  
+If one of the above criteria are not met | "Suspected"  
+
+
+*Note that R is case-sensitive, so "Positive" is different than "positive"...*  
 
 ## Missing Values
 **In R, missing values are represented by the special value NA** (capital letters N and A - not in quotation marks). If you import data that records missing data in another way (e.g. 99, "Missing", or .), you may want to re-code those values to NA.
