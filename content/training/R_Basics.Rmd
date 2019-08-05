@@ -8,6 +8,8 @@ weight: 7
 # Silently read AJS example dataset
 linelist_raw <- read.csv("linelist_raw.csv")
 linelist_cleaned <- linelist_raw
+library(sitrep)
+library(dplyr)
 ```
 
 ## Other online resources  
@@ -159,22 +161,37 @@ summary(linelist_raw$age_years)
 
 ### Functions with Multiple Arguments  
 
-Functions often ask for several inputs. **Each piece of information needed is called an argument**. Some arguments are required for the function to work correctly, some are optional. Some have default settings. Arguments are all located within the parentheses of the function, separated by commas.  
+Functions often ask for several inputs. **Each piece of information needed is called an argument**. Some arguments are required for the function to work correctly, some are optional. Arguments can take character, numeric, logical (TRUE/FALSE), and other inputs. Optional arguments have default settings if they are not specified. Arguments are all located within the parentheses of the function, **separated by commas**.  
   
   
-> **As an example:** The hist() function requires a numeric variable as input, and the output is a histogram.   
+>**For example**, this descriptive() command in the templates creates a descriptive summary table of counts and proportions. In this command the function is given three arguments, establishing linelist_cleaned as the data frame to use, age_group as the variable to count, and sex as the variable to use for groupings.
 
-For example, a simple command using hist() might look like this:  
+```{r include=FALSE, results='hide', message=FALSE, warning=FALSE}
+## create an age group variable by specifying categorical breaks
+linelist_cleaned$age_group <- age_categories(linelist_cleaned$age_years, 
+                                             breakers = c(0, 3, 15, 30, 45))
 
-```{r, fig.width=4, fig.height=4, fig.align='center'}
-hist(linelist_cleaned$age_years)
 ```
-  
-  
-A more complex command would use optional arguments to define the main title, axis labels, and bar color. As long as you define the value for each optional argument with an equals symbol (e.g. xlab = ...), the order of the arguments, (*separated by commas!*), is not important. 
 
-```{r, fig.width=4, fig.height=4, fig.align='center'}
-hist(linelist_cleaned$age_years, main = "Distribution of Patient Age", xlab = "Age", ylab = "Counts", col = "light blue")
+
+
+```{r}
+# Creates a descriptive table by specifying the dataframe and two columns
+descriptive(df = linelist_cleaned, counter = "age_group", grouper = "sex")
+```
+
+> Often, the first half of argument assignment (e.g. `df = `) does not need to be specified if the arguments are written in a specific order (specified in the function's documentation). The below code produces the exact same table as above, because the function expects the argument order: data frame, counter variable, grouper variable. 
+```{r eval = FALSE}
+# This command will produce the same table as above
+descriptive(linelist_cleaned, "age_group", "sex")
+```
+
+**A more complex descriptive() command might include the optional arguments to add a Total column and row to the table.** This is done by including the argument coltotals and rowtotals, both set to equal TRUE (their default is FALSE).
+
+*Note: For arguments specified with an equals symbol (e.g. coltotals = ...), their order among the arguments is not important (must still be within the parentheses and separated by commas).* 
+
+```{r}
+descriptive(linelist_cleaned, "age_group", "sex", coltotals = TRUE, rowtotals = TRUE)
 ```
 
 ### Using Additional Functions  

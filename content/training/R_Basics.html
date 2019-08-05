@@ -214,16 +214,39 @@ length(linelist_cleaned$age_years)  </code></pre>
 </div>
 <div id="functions-with-multiple-arguments" class="section level3">
 <h3>Functions with Multiple Arguments</h3>
-<p>Functions often ask for several inputs. <strong>Each piece of information needed is called an argument</strong>. Some arguments are required for the function to work correctly, some are optional. Some have default settings. Arguments are all located within the parentheses of the function, separated by commas.</p>
+<p>Functions often ask for several inputs. <strong>Each piece of information needed is called an argument</strong>. Some arguments are required for the function to work correctly, some are optional. Arguments can take character, numeric, logical (TRUE/FALSE), and other inputs. Optional arguments have default settings if they are not specified. Arguments are all located within the parentheses of the function, <strong>separated by commas</strong>.</p>
 <blockquote>
-<p><strong>As an example:</strong> The hist() function requires a numeric variable as input, and the output is a histogram.</p>
+<p><strong>For example</strong>, this descriptive() command in the templates creates a descriptive summary table of counts and proportions. In this command the function is given three arguments, establishing linelist_cleaned as the data frame to use, age_group as the variable to count, and sex as the variable to use for groupings.</p>
 </blockquote>
-<p>For example, a simple command using hist() might look like this:</p>
-<pre class="r"><code>hist(linelist_cleaned$age_years)</code></pre>
-<p><img src="/training/R_Basics_files/figure-html/unnamed-chunk-8-1.png" width="384" style="display: block; margin: auto;" /></p>
-<p>A more complex command would use optional arguments to define the main title, axis labels, and bar color. As long as you define the value for each optional argument with an equals symbol (e.g. xlab = …), the order of the arguments, (<em>separated by commas!</em>), is not important.</p>
-<pre class="r"><code>hist(linelist_cleaned$age_years, main = &quot;Distribution of Patient Age&quot;, xlab = &quot;Age&quot;, ylab = &quot;Counts&quot;, col = &quot;light blue&quot;)</code></pre>
-<p><img src="/training/R_Basics_files/figure-html/unnamed-chunk-9-1.png" width="384" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># Creates a descriptive table by specifying the dataframe and two columns
+descriptive(df = linelist_cleaned, counter = &quot;age_group&quot;, grouper = &quot;sex&quot;)</code></pre>
+<pre><code>## # A tibble: 6 x 7
+##   age_group   F_n F_prop   M_n M_prop   U_n U_prop
+##   &lt;fct&gt;     &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;
+## 1 0-2           0   0        0      0     0   0   
+## 2 3-14          6   5.41     9      9     7   7.87
+## 3 15-29        15  13.5     17     17    17  19.1 
+## 4 30-44         9   8.11     9      9    16  18.0 
+## 5 45+          78  70.3     61     61    45  50.6 
+## 6 Missing       3   2.70     4      4     4   4.49</code></pre>
+<blockquote>
+<p>Often, the first half of argument assignment (e.g. <code>df =</code>) does not need to be specified if the arguments are written in a specific order (specified in the function’s documentation). The below code produces the exact same table as above, because the function expects the argument order: data frame, counter variable, grouper variable.</p>
+</blockquote>
+<pre class="r"><code># This command will produce the same table as above
+descriptive(linelist_cleaned, &quot;age_group&quot;, &quot;sex&quot;)</code></pre>
+<p><strong>A more complex descriptive() command might include the optional arguments to add a Total column and row to the table.</strong> This is done by including the argument coltotals and rowtotals, both set to equal TRUE (their default is FALSE).</p>
+<p><em>Note: For arguments specified with an equals symbol (e.g. coltotals = …), their order among the arguments is not important (must still be within the parentheses and separated by commas).</em></p>
+<pre class="r"><code>descriptive(linelist_cleaned, &quot;age_group&quot;, &quot;sex&quot;, coltotals = TRUE, rowtotals = TRUE)</code></pre>
+<pre><code>## # A tibble: 7 x 8
+##   age_group   F_n F_prop   M_n M_prop   U_n U_prop Total
+##   &lt;chr&gt;     &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;
+## 1 0-2           0   0        0      0     0   0        0
+## 2 3-14          6   5.41     9      9     7   7.87    22
+## 3 15-29        15  13.5     17     17    17  19.1     49
+## 4 30-44         9   8.11     9      9    16  18.0     34
+## 5 45+          78  70.3     61     61    45  50.6    184
+## 6 Missing       3   2.70     4      4     4   4.49    11
+## 7 Total       111 100      100    100    89 100      300</code></pre>
 </div>
 <div id="using-additional-functions" class="section level3">
 <h3>Using Additional Functions</h3>
