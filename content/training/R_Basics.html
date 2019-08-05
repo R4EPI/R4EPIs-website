@@ -6,6 +6,15 @@ weight: 7
 
 
 
+<div id="other-online-resources" class="section level2">
+<h2>Other online resources</h2>
+<p>Below are links to some of the many online tutorials for learning R.</p>
+<p><a href="http://swcarpentry.github.io/r-novice-gapminder/">Fundamentals of R</a></p>
+<p><a href="https://learn.r-journalism.com/en/introduction/">R for Novices (for Journalists)</a></p>
+<p><a href="http://rpubs.com/michaelmarks/R-Clin-Epi">Clinical Epidemiology in R, from London School of Hygiene &amp; Tropical Medicine</a></p>
+<p><a href="https://www.repidemicsconsortium.org/resources/">Resources page of R for Epidemics Consortium Website</a></p>
+<p><a href="http://r-statistics.co/Complete-Ggplot2-Tutorial-Part1-With-R-Code.html">Tutorial for learning ggplot (the most common R package for visualizations, graphs, and maps)</a></p>
+</div>
 <div id="everything-is-an-object" class="section level2">
 <h2>Everything is an object</h2>
 <p>Everything you store in R - datasets, variables, a list of village names, a total population number, even outputs such as graphs - are <strong>objects</strong> which are <strong>assigned a name</strong> and <strong>can be referenced</strong> in later commands.</p>
@@ -23,12 +32,12 @@ weight: 7
 </blockquote>
 <pre class="r"><code>reporting_week &lt;- &quot;2018-W10&quot;   # creates the object reporting_week by assigning a value
 
-print(reporting_week)          # prints the current value of reporting_week</code></pre>
+reporting_week                 # prints the current value of reporting_week</code></pre>
 <pre><code>## [1] &quot;2018-W10&quot;</code></pre>
 <p><em>IMPORTANT: <strong>An object’s value can be over-written</strong> at any time by running an assignment command to re-define its value. Thus, the <strong>order of the commands run is very important</strong>.</em></p>
 <pre class="r"><code>reporting_week &lt;- &quot;2018-W51&quot;   # assigns a NEW value to the object reporting_week
 
-print(reporting_week)          # prints the current value of reporting_week</code></pre>
+reporting_week                 # prints the current value of reporting_week</code></pre>
 <pre><code>## [1] &quot;2018-W51&quot;</code></pre>
 <p><strong>Datasets are also assigned names and defined as objects when they are imported.</strong> In the code below:</p>
 <ol style="list-style-type: decimal">
@@ -55,7 +64,7 @@ linelist_cleaned &lt;- mutate(linelist_cleaned,
 </div>
 <div id="objects-can-have-structure" class="section level2">
 <h2>Objects can have Structure</h2>
-<p>Objects can be a single piece of data (e.g. my_number &lt;- 24), or they can consist of structured data. The graphic below shows some common data structures and their names. Not included in this image is spatial data, which is discussed in another page.</p>
+<p>Objects can be a single piece of data (e.g. my_number &lt;- 24), or they can consist of structured data. The graphic below, sourced from <a href="http://venus.ifca.unican.es/Rintro/dataStruct.html">this online R tutorial</a> shows some common data structures and their names. Not included in this image is spatial data, which is discussed in another page.</p>
 <div class="figure">
 <img src="/images/r_data_structures.png" />
 
@@ -87,10 +96,13 @@ linelist_cleaned &lt;- mutate(linelist_cleaned,
 </tr>
 </tbody>
 </table>
+<div id="accesingcalling-variables-within-data-frames" class="section level3">
+<h3>Accesing/calling variables within data frames</h3>
 <p><strong>Vectors within a data frame (variables in a dataset) can be called or referenced using the $ symbol.</strong> The $ symbol connects the name of the column to the name of its dataset. The $ symbol must be used, otherwise R will not know where to look for or create the column.</p>
 <pre class="r"><code># Retrieve the length of the vector age_years (which is in the data frame linelist_cleaned)
 length(linelist_cleaned$age_years)  </code></pre>
 <pre><code>## [1] 300</code></pre>
+</div>
 </div>
 <div id="objects-have-classes" class="section level2">
 <h2>Objects have Classes</h2>
@@ -211,20 +223,26 @@ length(linelist_cleaned$age_years)  </code></pre>
 <pre class="r"><code>hist(linelist_cleaned$age_years, main = &quot;Distribution of Patient Age&quot;, xlab = &quot;Age&quot;, ylab = &quot;Counts&quot;, col = &quot;light blue&quot;)</code></pre>
 <p><img src="/training/R_Basics_files/figure-html/unnamed-chunk-9-1.png" width="384" style="display: block; margin: auto;" /></p>
 </div>
+<div id="using-additional-functions" class="section level3">
+<h3>Using Additional Functions</h3>
+<p>R comes with “base” functions, but the R community has created and verified many other specialized functions that are available to you. These <em>functions</em> are contained within <strong>packages</strong> that can be downloaded to your computer. Once downloaded, you access the functions within a package by calling the package with the library() command at the beginning of each R session.</p>
+<p><strong>Note: While you only have to install packages once, you must load them at the beginning of every R session using library().</strong> There is a code chunk at the beginning of each template that loads the necessary packages.</p>
+<p>Think of R as your personal library: When you download a package your library gains a book of functions, but each time you want to use a function in that book, you must borrow that book from your library.</p>
+<p>For clarity in the templates, functions are often preceeded by the name of their package using the :: symbol in the following way:</p>
+<p>package_name::function_name()</p>
+<pre class="r"><code>#This line uses the package &quot;rio&quot;&quot; and it&#39;s function &quot;import&quot; to import a dataset
+linelist_raw &lt;- rio::import(&quot;linelist.xlsx&quot;, which = &quot;Sheet1&quot;)</code></pre>
+</div>
 <div id="the-pipe-operator-between-functions" class="section level3">
 <h3>The Pipe Operator %&gt;% between functions</h3>
 <p>Within the template scripts you will see the pipe operator %&gt;%. Simply explained, the pipe operator passes an intermediate output from one function to the next. You can think of it as saying “then”. Many functions can be linked together with %&gt;%.</p>
+<p>Piping is not a base function. To use piping, the dplyr package must be installed and loaded. Near the top of every template script is a code chunk that installs and loads the necessary packages, including dplyr. You can read more about piping <a href="https://magrittr.tidyverse.org/">here</a></p>
 <blockquote>
 <p><strong>As an example:</strong> The following code chunk from the AJD template data cleaning section can be read as “linelist_cleaned is defined as linelist_cleaned, filtered to remove the rows where the variables case_number and date_of_admission are missing”</p>
 </blockquote>
 <pre class="r"><code># only keep variables with a case ID and a date of consultation
 linelist_cleaned &lt;- linelist_cleaned %&gt;% 
   filter(!is.na(case_number) &amp; !is.na(date_of_admission))</code></pre>
-</div>
-<div id="installing-additional-functions" class="section level3">
-<h3>Installing Additional Functions</h3>
-<p>R comes with “base” functions, but the R community has created and verified many other functions that you can use. These <em>functions</em> are contained within <strong>packages</strong> that can be downloaded to your computer. Once downloaded, you access the functions within a package by calling the package with the library() command at the beginning of each R session.</p>
-<p>Think of R as your personal library: When you download a package your library has gained a book of functions, but each time you want to read/use a function in the book, you must check the book out from your library.</p>
 </div>
 </div>
 <div id="missing-values" class="section level2">
