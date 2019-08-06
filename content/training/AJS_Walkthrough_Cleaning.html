@@ -70,84 +70,14 @@ colnames(linelist_cleaned) &lt;- cleaned_colnames</code></pre>
 </div>
 <div id="re-name-variables-to-align-with-data-dictionary" class="section level3">
 <h3>Re-name variables to align with data dictionary</h3>
-<p>Standardized variable names are required for this template to work smoothly, and the variable names in our dataset do not align with the names this template expects. The template offers code that you can uncomment if you only have to change a few variable names (see below), but in our case we need to change many variable names. MSF developed a special function to help map our variables to the expected variables.</p>
+<p>Standardized variable names are required for this template to work smoothly, and the variable names in our dataset do not align with the names this template expects. The template offers code that you can uncomment if you only have to change a few variable names (see below). <strong>However, in this example we need to change many variable names. MSF developed a special function to help map our variables to the expected variables.</strong></p>
 <ul>
-<li><p>Run the command <code>msf_dict_rename_helper(&quot;AJS&quot;)</code> and a block of code text will be copied to your clipboard. You can run this command by entering it directly into the R terminal (lower-left RStudio pane), or highlighing it in the template and pressing Ctrl+Enter.</p></li>
-<li><p>Return to your template script and paste from your clipboard into the template. For the AJS template, the code that is pasted will look like the code below. This code uses the function rename() to change variable names. To the right of the equals sign, and before the comma, type the <em>exact</em> names of the variables from your dataset that correspond to the expected MSF data dictionary variables on the left.</p></li>
-<li><p>If there is a data dictionary variable that is not present in the dataset, be sure to comment (#) out that line, as shown in the GIF below the code.</p></li>
+<li><strong>Paste the disease-specific rename helper into the script.</strong> This command is found in the template. For our example we run the command <code>msf_dict_rename_helper(&quot;AJS&quot;)</code> and a block of code text is copied to the clipboard. Return to the template script and paste from the clipboard into the template. For the AJS template, the code that is pasted will look like the code below. This code uses the function rename() to change variable names.</li>
 </ul>
-<pre class="r"><code>## Add the appropriate column names after the equals signs
-
-linelist_cleaned &lt;- rename(linelist_cleaned,
-  event_file_type                   =   , # TEXT
-  case_number                       =   , # TEXT
-  date_of_admission                 =   , # DATE
-  detected_by                       =   , # TEXT
-  patient_facility_type             =   , # TEXT
-  msf_involvement                   =   , # TEXT
-  age_years                         =   , # INTEGER_POSITIVE
-  age_months                        =   , # INTEGER_POSITIVE
-  age_days                          =   , # INTEGER_POSITIVE
-  sex                               =   , # TEXT
-  patient_origin                    =   , # ORG UNIT
-  residential_status_brief          =   , # TEXT
-  arrival_date_in_area_if_3m        =   , # DATE
-  ever_received_hepatitis_e_vaccine =   , # TEXT
-  date_of_last_vaccination          =   , # DATE
-  date_of_onset                     =   , # DATE
-  history_of_fever                  =   , # BOOLEAN
-  fever                             =   , # BOOLEAN
-  nausea_anorexia                   =   , # BOOLEAN
-  vomiting                          =   , # BOOLEAN
-  epigastric_pain_heartburn         =   , # BOOLEAN
-  generalized_itch                  =   , # BOOLEAN
-  headache                          =   , # BOOLEAN
-  joint_pains                       =   , # BOOLEAN
-  diarrhoea                         =   , # BOOLEAN
-  bleeding                          =   , # BOOLEAN
-  convulsions                       =   , # BOOLEAN
-  mental_state                      =   , # BOOLEAN
-  other_symptoms                    =   , # BOOLEAN
-  other_cases_in_hh                 =   , # BOOLEAN
-  traditional_medicines             =   , # BOOLEAN
-  traditional_medicine_details      =   , # TEXT
-  recent_travel                     =   , # BOOLEAN
-  water_source                      =   , # TEXT
-  malaria_rdt_at_admission          =   , # TEXT
-  hep_b_rdt                         =   , # TEXT
-  hep_c_rdt                         =   , # TEXT
-  hep_e_rdt                         =   , # TEXT
-  dengue_rdt                        =   , # TEXT
-  date_lab_sample_taken             =   , # DATE
-  test_hepatitis_a                  =   , # TEXT
-  test_hepatitis_b                  =   , # TEXT
-  test_hepatitis_c                  =   , # TEXT
-  test_hepatitis_e_virus            =   , # TEXT
-  test_hepatitis_e_igm              =   , # TEXT
-  test_hepatitis_e_igg              =   , # TEXT
-  test_hepatitis_e_genotype         =   , # TEXT
-  malaria_blood_film                =   , # TEXT
-  dengue                            =   , # TEXT
-  yellow_fever                      =   , # TEXT
-  lassa_fever                       =   , # TEXT
-  typhoid                           =   , # TEXT
-  chikungunya_onyongnyong           =   , # TEXT
-  ebola_marburg                     =   , # TEXT
-  other_arthropod_transmitted_virus =   , # TEXT
-  other_pathogen                    =   , # TEXT
-  lab_comments                      =   , # TEXT
-  pregnant                          =   , # TEXT
-  trimester                         =   , # TEXT
-  foetus_alive_at_admission         =   , # TEXT
-  delivery_event                    =   , # TRUE_ONLY
-  pregnancy_outcome_at_exit         =   , # TEXT
-  exit_status                       =   , # TEXT
-  date_of_exit                      =   , # DATE
-  time_to_death                     =   , # TEXT
-  treatment_facility_site           =   , # TEXT
-  treatment_location                =   , # ORGANISATION_UNIT
-  patient_origin_free_text          =     # TEXT
-)</code></pre>
+<p><img src="/images/AJS_Rename_Variables_Empty.png" alt="rename variables empty snip", width = "75%"></p>
+<ul>
+<li><strong>Complete the mapping of variable names.</strong> To the right of the equals sign, and before the comma, type the <em>exact</em> names of the variables from your dataset that correspond to the expected MSF data dictionary variables on the left. <em>If there is a data dictionary variable that is not present in your dataset, be sure to comment (#) out that line, as shown in the GIF below.</em></li>
+</ul>
 <div class="figure">
 <img src="/images/Variable_Names.gif" />
 

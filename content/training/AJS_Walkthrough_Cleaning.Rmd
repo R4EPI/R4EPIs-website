@@ -137,90 +137,19 @@ colnames(linelist_cleaned) <- cleaned_colnames
 
 ### Re-name variables to align with data dictionary  
 
-Standardized variable names are required for this template to work smoothly, and the variable names in our dataset do not align with the names this template expects. The template offers code that you can uncomment if you only have to change a few variable names (see below), but in our case we need to change many variable names. MSF developed a special function to help map our variables to the expected variables.  
+Standardized variable names are required for this template to work smoothly, and the variable names in our dataset do not align with the names this template expects. The template offers code that you can uncomment if you only have to change a few variable names (see below). **However, in this example we need to change many variable names. MSF developed a special function to help map our variables to the expected variables.**  
 
-* Run the command `msf_dict_rename_helper("AJS")` and a block of code text will be copied to your clipboard. You can run this command by entering it directly into the R terminal (lower-left RStudio pane), or highlighing it in the template and pressing Ctrl+Enter.  
+* **Paste the disease-specific rename helper into the script.** This command is found in the template. For our example we run the command `msf_dict_rename_helper("AJS")` and a block of code text is copied to the clipboard. Return to the template script and paste from the clipboard into the template. For the AJS template, the code that is pasted will look like the code below. This code uses the function rename() to change variable names.
 
-* Return to your template script and paste from your clipboard into the template. For the AJS template, the code that is pasted will look like the code below. This code uses the function rename() to change variable names. To the right of the equals sign, and before the comma, type the *exact* names of the variables from your dataset that correspond to the expected MSF data dictionary variables on the left.
+<img src="/images/AJS_Rename_Variables_Empty.png" alt="rename variables empty snip", width = "75%">
 
-* If there is a data dictionary variable that is not present in the dataset, be sure to comment (#) out that line, as shown in the GIF below the code.
+* **Complete the mapping of variable names.** To the right of the equals sign, and before the comma, type the *exact* names of the variables from your dataset that correspond to the expected MSF data dictionary variables on the left. *If there is a data dictionary variable that is not present in your dataset, be sure to comment (#) out that line, as shown in the GIF below.*
 
-```{r eval=FALSE}
-## Add the appropriate column names after the equals signs
+![](/images/Variable_Names.gif)  
 
-linelist_cleaned <- rename(linelist_cleaned,
-  event_file_type                   =   , # TEXT
-  case_number                       =   , # TEXT
-  date_of_admission                 =   , # DATE
-  detected_by                       =   , # TEXT
-  patient_facility_type             =   , # TEXT
-  msf_involvement                   =   , # TEXT
-  age_years                         =   , # INTEGER_POSITIVE
-  age_months                        =   , # INTEGER_POSITIVE
-  age_days                          =   , # INTEGER_POSITIVE
-  sex                               =   , # TEXT
-  patient_origin                    =   , # ORG UNIT
-  residential_status_brief          =   , # TEXT
-  arrival_date_in_area_if_3m        =   , # DATE
-  ever_received_hepatitis_e_vaccine =   , # TEXT
-  date_of_last_vaccination          =   , # DATE
-  date_of_onset                     =   , # DATE
-  history_of_fever                  =   , # BOOLEAN
-  fever                             =   , # BOOLEAN
-  nausea_anorexia                   =   , # BOOLEAN
-  vomiting                          =   , # BOOLEAN
-  epigastric_pain_heartburn         =   , # BOOLEAN
-  generalized_itch                  =   , # BOOLEAN
-  headache                          =   , # BOOLEAN
-  joint_pains                       =   , # BOOLEAN
-  diarrhoea                         =   , # BOOLEAN
-  bleeding                          =   , # BOOLEAN
-  convulsions                       =   , # BOOLEAN
-  mental_state                      =   , # BOOLEAN
-  other_symptoms                    =   , # BOOLEAN
-  other_cases_in_hh                 =   , # BOOLEAN
-  traditional_medicines             =   , # BOOLEAN
-  traditional_medicine_details      =   , # TEXT
-  recent_travel                     =   , # BOOLEAN
-  water_source                      =   , # TEXT
-  malaria_rdt_at_admission          =   , # TEXT
-  hep_b_rdt                         =   , # TEXT
-  hep_c_rdt                         =   , # TEXT
-  hep_e_rdt                         =   , # TEXT
-  dengue_rdt                        =   , # TEXT
-  date_lab_sample_taken             =   , # DATE
-  test_hepatitis_a                  =   , # TEXT
-  test_hepatitis_b                  =   , # TEXT
-  test_hepatitis_c                  =   , # TEXT
-  test_hepatitis_e_virus            =   , # TEXT
-  test_hepatitis_e_igm              =   , # TEXT
-  test_hepatitis_e_igg              =   , # TEXT
-  test_hepatitis_e_genotype         =   , # TEXT
-  malaria_blood_film                =   , # TEXT
-  dengue                            =   , # TEXT
-  yellow_fever                      =   , # TEXT
-  lassa_fever                       =   , # TEXT
-  typhoid                           =   , # TEXT
-  chikungunya_onyongnyong           =   , # TEXT
-  ebola_marburg                     =   , # TEXT
-  other_arthropod_transmitted_virus =   , # TEXT
-  other_pathogen                    =   , # TEXT
-  lab_comments                      =   , # TEXT
-  pregnant                          =   , # TEXT
-  trimester                         =   , # TEXT
-  foetus_alive_at_admission         =   , # TEXT
-  delivery_event                    =   , # TRUE_ONLY
-  pregnancy_outcome_at_exit         =   , # TEXT
-  exit_status                       =   , # TEXT
-  date_of_exit                      =   , # DATE
-  time_to_death                     =   , # TEXT
-  treatment_facility_site           =   , # TEXT
-  treatment_location                =   , # ORGANISATION_UNIT
-  patient_origin_free_text          =     # TEXT
-)
-```
-
-   
+**Tip: **If you see this error:  
+`Error in is_symbol(expr) : argument "expr" is missing, with no default`  
+then you likely forgot to comment (#) the line for a variable you did not use.  
 
 ```{r include=FALSE, results='hide', message=FALSE, warning=FALSE}
 ## Add the appropriate column names after the equals signs
@@ -297,11 +226,7 @@ linelist_cleaned <- rename(linelist_cleaned,
 )
 ```
 
-![](/images/Variable_Names.gif)  
 
-**Tip: **If you see this error:  
-`Error in is_symbol(expr) : argument "expr" is missing, with no default`  
-then you likely forgot to comment (#) the line for a variable you did not use.
 
 
 
