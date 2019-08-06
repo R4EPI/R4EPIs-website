@@ -227,6 +227,16 @@ linelist_cleaned <- rename(linelist_cleaned,
 ```
 
 
+## Provide population counts 
+The template provides several way to **enter population figures by region and age group** which are used to calculate Attack Rates and Mortality Rates later on. You can enter the counts directly, or have the function gen_population() do the calculations based on proportions that you provide.  
+
+[IMAGE OF POPULATION COUNTS HERE]
+
+NOTE THAT THE SITREP GEN_POPULATION() NEEDS TO BE UPDATED TO ACCEPT DIRECT COUNTS INPUT
+
+
+
+
 
 
 
