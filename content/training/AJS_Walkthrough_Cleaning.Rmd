@@ -148,8 +148,84 @@ For our situation where we must re-name many variables, MSF developed a function
 
 -Return to your template script and paste from your clipboard into the template. The code that is pasted will look like this: 
 
-
 ```{r}
+## Add the appropriate column names after the equals signs
+
+linelist_cleaned <- rename(linelist_cleaned,
+  event_file_type                   =   , # TEXT
+  case_number                       =   , # TEXT
+  date_of_admission                 =   , # DATE
+  detected_by                       =   , # TEXT
+  patient_facility_type             =   , # TEXT
+  msf_involvement                   =   , # TEXT
+  age_years                         =   , # INTEGER_POSITIVE
+  age_months                        =   , # INTEGER_POSITIVE
+  age_days                          =   , # INTEGER_POSITIVE
+  sex                               =   , # TEXT
+  patient_origin                    =   , # ORG UNIT
+  residential_status_brief          =   , # TEXT
+  arrival_date_in_area_if_3m        =   , # DATE
+  ever_received_hepatitis_e_vaccine =   , # TEXT
+  date_of_last_vaccination          =   , # DATE
+  date_of_onset                     =   , # DATE
+  history_of_fever                  =   , # BOOLEAN
+  fever                             =   , # BOOLEAN
+  nausea_anorexia                   =   , # BOOLEAN
+  vomiting                          =   , # BOOLEAN
+  epigastric_pain_heartburn         =   , # BOOLEAN
+  generalized_itch                  =   , # BOOLEAN
+  headache                          =   , # BOOLEAN
+  joint_pains                       =   , # BOOLEAN
+  diarrhoea                         =   , # BOOLEAN
+  bleeding                          =   , # BOOLEAN
+  convulsions                       =   , # BOOLEAN
+  mental_state                      =   , # BOOLEAN
+  other_symptoms                    =   , # BOOLEAN
+  other_cases_in_hh                 =   , # BOOLEAN
+  traditional_medicines             =   , # BOOLEAN
+  traditional_medicine_details      =   , # TEXT
+  recent_travel                     =   , # BOOLEAN
+  water_source                      =   , # TEXT
+  malaria_rdt_at_admission          =   , # TEXT
+  hep_b_rdt                         =   , # TEXT
+  hep_c_rdt                         =   , # TEXT
+  hep_e_rdt                         =   , # TEXT
+  dengue_rdt                        =   , # TEXT
+  date_lab_sample_taken             =   , # DATE
+  test_hepatitis_a                  =   , # TEXT
+  test_hepatitis_b                  =   , # TEXT
+  test_hepatitis_c                  =   , # TEXT
+  test_hepatitis_e_virus            =   , # TEXT
+  test_hepatitis_e_igm              =   , # TEXT
+  test_hepatitis_e_igg              =   , # TEXT
+  test_hepatitis_e_genotype         =   , # TEXT
+  malaria_blood_film                =   , # TEXT
+  dengue                            =   , # TEXT
+  yellow_fever                      =   , # TEXT
+  lassa_fever                       =   , # TEXT
+  typhoid                           =   , # TEXT
+  chikungunya_onyongnyong           =   , # TEXT
+  ebola_marburg                     =   , # TEXT
+  other_arthropod_transmitted_virus =   , # TEXT
+  other_pathogen                    =   , # TEXT
+  lab_comments                      =   , # TEXT
+  pregnant                          =   , # TEXT
+  trimester                         =   , # TEXT
+  foetus_alive_at_admission         =   , # TEXT
+  delivery_event                    =   , # TRUE_ONLY
+  pregnancy_outcome_at_exit         =   , # TEXT
+  exit_status                       =   , # TEXT
+  date_of_exit                      =   , # DATE
+  time_to_death                     =   , # TEXT
+  treatment_facility_site           =   , # TEXT
+  treatment_location                =   , # ORGANISATION_UNIT
+  patient_origin_free_text          =     # TEXT
+)
+```
+
+
+
+```{r include=FALSE, results='hide', message=FALSE, warning=FALSE}
 ## Add the appropriate column names after the equals signs
 
 linelist_cleaned <- rename(linelist_cleaned,
@@ -158,7 +234,7 @@ linelist_cleaned <- rename(linelist_cleaned,
   date_of_admission                 =   dtmedical, # DATE
   detected_by                       =   referredby, # TEXT
 # patient_facility_type             =   , # TEXT                # (Not in dataset)
-  msf_involvement                   =   , # TEXT                # (Not in dataset)
+#  msf_involvement                   =   , # TEXT                # (Not in dataset)
   age_years                         =   age, # INTEGER_POSITIVE
 #  age_months                        =   , # INTEGER_POSITIVE   # (Dataset only has years)
 #  age_days                          =   , # INTEGER_POSITIVE   # (Dataset only has years)
@@ -220,9 +296,15 @@ linelist_cleaned <- rename(linelist_cleaned,
   time_to_death                     =   dtdeath, # TEXT
   treatment_facility_site           =   hpid, # TEXT
 #  treatment_location                =   , # ORGANISATION_UNIT  # (Not in dataset)
-  patient_origin_free_text          =    block # TEXT
+  patient_origin_free_text          =   block # TEXT
 )
 ```
+
+![](/images/Variable_Names.gif)  
+
+**Tip:** If you see this error: `Error in is_symbol(expr) : argument "expr" is missing, with no default` then you likely forgot to hash (#) the line for a variable you did not use.
+
+
 
 
 
