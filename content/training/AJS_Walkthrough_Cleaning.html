@@ -11,13 +11,15 @@ weight: 8
 <p>This page will demonstrate use of the Acute Jaundice Syndrome (AJS) outbreak template using data from an outbreak in Am Timan, Chad. This first page covers the initial data importation and cleaning steps in the template.</p>
 <p><a href="https://rmarkdown.rstudio.com/articles_intro.html">Rmarkdown introduction</a></p>
 <p><a href="https://rmarkdown.rstudio.com/authoring_basics.html">Rmarkdown authoring basics</a></p>
+<div id="ajshev-outbreak-in-am-timan-chad-2016-2017" class="section level3">
+<h3>AJS/HEV outbreak in Am Timan, Chad (2016-2017)</h3>
+<p><img src="/images/AJS_Article.png" alt="AJS Article snip", width = "40%"></p>
+<p>[Paragraphs about the outbreak, MSF response, data collection, etc.]</p>
+</div>
 </div>
 <div id="template-header-and-introduction" class="section level2">
 <h2>Template header and introduction</h2>
-<div class="figure">
-<img src="/images/AJS_Intro.png" />
-
-</div>
+<p><img src="/images/AJS_Intro.png" alt="AJS Header and Introduction snip", width = "75%"></p>
 <p>The very top of the template consists of a header surrounded by <code>---</code> lines. Here you may want to edit the title of your document. The other settings in the header define the default document type produced (Microsoft Word) when the RMarkdown is “knit”.</p>
 <p>The introduction section is for your information only and this text can be deleted before knitting the document.</p>
 </div>
@@ -35,10 +37,7 @@ weight: 8
 <div id="importing-the-dataset" class="section level2">
 <h2>Importing the dataset</h2>
 <p><strong>In this template section you choose the appropriate code chunk to importing your dataset.</strong></p>
-<div class="figure">
-<img src="/images/Data_Import.png" />
-
-</div>
+<p><img src="/images/Data_Import.png" alt="Data import options snip", width = "75%"></p>
 <p>For this exercise our dataset is a <strong>non-standardized Excel file</strong> from MSF’s response an outbreak of AJS in Am Timan, Chad, so we use the <code>read_nonDHIS_data</code> code chunk, specifically the line that uses the import() function of the rio package to import an Excel file that is not password protected.</p>
 </div>
 <div id="aligning-the-dataset-with-the-data-dictionary" class="section level2">

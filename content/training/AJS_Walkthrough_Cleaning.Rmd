@@ -56,13 +56,14 @@ This page will demonstrate use of the Acute Jaundice Syndrome (AJS) outbreak tem
 
 [Rmarkdown authoring basics](https://rmarkdown.rstudio.com/authoring_basics.html)
 
-### AJS outbreak in Am Timan, Chad (YEAR)  
+### AJS/HEV outbreak in Am Timan, Chad (2016-2017)
+<img src="/images/AJS_Article.png" alt="AJS Article snip", width = "40%">
 
 [Paragraphs about the outbreak, MSF response, data collection, etc.]  
 
 ## Template header and introduction
 
-![](/images/AJS_Intro.png)
+<img src="/images/AJS_Intro.png" alt="AJS Header and Introduction snip", width = "75%">
 
 The very top of the template consists of a header surrounded by `---` lines. Here you may want to edit the title of your document. The other settings in the header define the default document type produced (Microsoft Word) when the RMarkdown is "knit".
 
@@ -87,7 +88,7 @@ The code chunk does the following:
 
 **In this template section you choose the appropriate code chunk to importing your dataset.** 
 
-![](/images/Data_Import.png)
+<img src="/images/Data_Import.png" alt="Data import options snip", width = "75%">
 
 For this exercise our dataset is a **non-standardized Excel file** from MSF's response an outbreak of AJS in Am Timan, Chad, so we use the `read_nonDHIS_data` code chunk, specifically the line that uses the import() function of the rio package to import an Excel file that is not password protected.  
 
