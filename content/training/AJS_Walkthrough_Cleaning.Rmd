@@ -7,7 +7,7 @@ weight: 8
 
 ```{r setup, include=FALSE, results='hide', message=FALSE, warning=FALSE}
 # hide all code chunks in the output, but show errors
-knitr::opts_chunk$set(echo = FALSE,       # hide all code chunks in output
+knitr::opts_chunk$set(echo = TRUE,       # hide all code chunks in output
                       error = TRUE,       # show errors if they appear, but don't stop
                       fig.width = 6*1.25, # Figure width
                       fig.height = 6      # Figure height
@@ -83,31 +83,148 @@ In the code chunk the commands do the following:
 
 ![Data Import](/images/Data_Import.png)
 
-For this exercise we are using a dataset from MSF's response an outbreak of suspected hepatitis E in Am Timan, Chad. We suspect that this dataset is not standardized to the MSF Data Dictionary for AJS.  
-
-We can view the data dictionary for AJS using this command (which is also found in your template)
-
-**[FIX to be scrolling version of the dataset]**
-
-```{r}
-# creates object linelist_dict using the msf_dict function from the sitrep package
-# View the data dictionary by using the View() command as below, or by clicking it in your Environment (upper-right RStudio pane)
-linelist_dict <- msf_dict("AJS", compact = FALSE) %>%
-  select(option_code, option_name, everything())
-
-head(linelist_dict)
-```
-
-Compare that to a snapshot of our dataset:
+For this exercise our dataset is a **non-standardized Excel file** from MSF's response an outbreak of AJS in Am Timan, Chad.
 
 ```{r include=FALSE, results='hide', message=FALSE, warning=FALSE}
 ## Read data ------------------------------------
 # Excel file
 # to read in a specific sheet use "which"
-linelist_raw <- rio::import("AJS_AmTiman.xlsx")
+linelist_raw <- rio::import("AJS_AmTiman.xlsx", which = "linelist")
 ```
 
-```{r}
-head(linelist_raw)
+
+## Aligning the dataset with the data dictionary
+1) We can view the data dictionary for AJS using this command (also found in the template)
+
+```{r eval = FALSE}
+# creates object linelist_dict using the msf_dict function from the sitrep package
+# View the data dictionary with View() or by clicking the name in Environment (upper-right RStudio pane)
+linelist_dict <- msf_dict("AJS", compact = FALSE) %>%
+  select(option_code, option_name, everything())
+
+View(linelist_dict)
 ```
-We can see that 
+
+![View of AJS data dictionary](/images/Data_Dictionary.png)
+
+2) Now we make changes to our dataset to align it with the data dictionary. Following the template instructions, we uncomment lines of code to make a copy of the dataset, naming the copy "linelist_cleaned". 
+
+```{r}
+## make a copy of your orginal dataset and name it linelist_cleaned
+linelist_cleaned <- linelist_raw
+```
+
+Now we use the clean_labels function from the epitrix package to fix any variable names with non-standard syntax.
+```{r}
+# define clean variable names using clean_labels from the epitrix package
+# this function is preset rules for variable naming 
+# for example it changes spaces and dots to "_" and characters to lowercase
+cleaned_colnames <- epitrix::clean_labels(colnames(linelist_raw))
+
+# overwrite variable names with defined clean names
+colnames(linelist_cleaned) <- cleaned_colnames
+```
+
+**Re-naming variables**  
+Standardized variable names make this template work smoothly, and the variable names in our dataset do not align with the names this template expects. The template offers code that you can uncomment if you only have to change a few variable names (see below), but in our case we need to change many. 
+
+```{r}
+## Renaming variables to match the template -------------------------------
+## OPTIONAL: below is just an example in case you want to specifically change a
+## few names you can also change specific var names using the *rename*
+## function. In this example, we have the columns "gender" and "age" that we
+## want to rename as "sex" and "age_years".
+## The formula for this is rename(data, NEW_NAME = OLD_NAME). 
+
+# linelist_cleaned <- rename(linelist_cleaned, 
+#                            gender    = sex, # TEXT
+#                            age_years = age  # INTEGER_POSITIVE
+# )
+```
+
+For our situation where we must re-name many variables, MSF developed a function that helps us map our variables to the expected variables.  
+
+-Run the command `msf_dict_rename_helper("AJS")` and a block of code text will be copied to your clipboard. You can run this command by entering it directly into the R terminal (lower-left RStudio pane), or highlighing it in the template and pressing Ctrl+Enter.  
+
+-Return to your template script and paste from your clipboard into the template. The code that is pasted will look like this: 
+
+
+```{r}
+## Add the appropriate column names after the equals signs
+
+linelist_cleaned <- rename(linelist_cleaned,
+#  event_file_type                   =   , # TEXT                # (Not in dataset)
+  case_number                       =   hevid, # TEXT
+  date_of_admission                 =   dtmedical, # DATE
+  detected_by                       =   referredby, # TEXT
+# patient_facility_type             =   , # TEXT                # (Not in dataset)
+  msf_involvement                   =   , # TEXT                # (Not in dataset)
+  age_years                         =   age, # INTEGER_POSITIVE
+#  age_months                        =   , # INTEGER_POSITIVE   # (Dataset only has years)
+#  age_days                          =   , # INTEGER_POSITIVE   # (Dataset only has years)
+  sex                               =   sex, # TEXT
+  patient_origin                    =   quartier, # ORG UNIT
+#  residential_status_brief          =   , # TEXT               # (Not in dataset)
+#  arrival_date_in_area_if_3m        =   , # DATE               # (Not in dataset)
+#  ever_received_hepatitis_e_vaccine =   , # TEXT               # (Not in dataset)
+#  date_of_last_vaccination          =   , # DATE               # (Not in dataset)
+  date_of_onset                     =   dtjaundice, # DATE
+#  history_of_fever                  =   , # BOOLEAN            # (Not in dataset)
+  fever                             =   medfever, # BOOLEAN
+  nausea_anorexia                   =   mednausea, # BOOLEAN
+  vomiting                          =   medvomit, # BOOLEAN
+  epigastric_pain_heartburn         =   medepigastric, # BOOLEAN
+  generalized_itch                  =   meditching, # BOOLEAN
+  headache                          =   medheadache, # BOOLEAN
+  joint_pains                       =   medarthralgia, # BOOLEAN
+  diarrhoea                         =   meddiar, # BOOLEAN
+  bleeding                          =   medbleeding, # BOOLEAN
+#  convulsions                       =   , # BOOLEAN            # (Not in dataset)
+  mental_state                      =   medmental, # BOOLEAN    # !(Needs value cleaning)
+  other_symptoms                    =   medother, # BOOLEAN
+  other_cases_in_hh                 =   medothhhajs, # BOOLEAN
+#  traditional_medicines             =   , # BOOLEAN            # (Not in dataset)
+#  traditional_medicine_details      =   , # TEXT               # (Not in dataset)
+#  recent_travel                     =   , # BOOLEAN            # (Not in dataset)
+#  water_source                      =   , # TEXT               # !(Split across many variables)
+  malaria_rdt_at_admission          =   medmalrdt, # TEXT
+  hep_b_rdt                         =   medhepb, # TEXT
+  hep_c_rdt                         =   medhepc, # TEXT
+  hep_e_rdt                         =   medhevrdt, # TEXT
+#  dengue_rdt                        =   , # TEXT               # (Not in dataset)
+  date_lab_sample_taken             =   medblooddt, # DATE
+  test_hepatitis_a                  =   medhavelisa, # TEXT
+  test_hepatitis_b                  =   medhbvelisa, # TEXT
+  test_hepatitis_c                  =   medhcvelisa, # TEXT
+  test_hepatitis_e_virus            =   medhevelisa, # TEXT
+  test_hepatitis_e_igm              =   hevrecent, # TEXT
+#  test_hepatitis_e_igg              =   , # TEXT               # (In same variable as elisa result)
+  test_hepatitis_e_genotype         =   hevgenotype, # TEXT
+#  malaria_blood_film                =   , # TEXT               # (Not in dataset)
+  dengue                            =   dengue, # TEXT
+  yellow_fever                      =   yf, # TEXT
+#  lassa_fever                       =   , # TEXT               # (Not in dataset)
+#  typhoid                           =   , # TEXT               # (Not in dataset)
+  chikungunya_onyongnyong           =   chik, # TEXT
+#  ebola_marburg                     =   , # TEXT               # (Not in dataset)
+  other_arthropod_transmitted_virus =   arbovpcr, # TEXT
+#  other_pathogen                    =   , # TEXT               # (Not in dataset)
+#  lab_comments                      =   , # TEXT               # (Not in dataset)
+  pregnant                          =   medpreg, # TEXT
+  trimester                         =   medpregtri, # TEXT
+#  foetus_alive_at_admission         =   , # TEXT               # (Not in dataset)
+#  delivery_event                    =   , # TRUE_ONLY          # (Not in dataset)
+  pregnancy_outcome_at_exit         =   medppoutcome, # TEXT
+  exit_status                       =   outcomehp, # TEXT
+#  date_of_exit                      =   , # DATE               # (Not in dataset)
+  time_to_death                     =   dtdeath, # TEXT
+  treatment_facility_site           =   hpid, # TEXT
+#  treatment_location                =   , # ORGANISATION_UNIT  # (Not in dataset)
+  patient_origin_free_text          =    block # TEXT
+)
+```
+
+
+
+
+
