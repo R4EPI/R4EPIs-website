@@ -50,40 +50,43 @@ aweek::set_week_start("Monday")
 ```
 
 ## Overview of this page
-This page will demonstrate the steps to use the Acute Jaundice Syndrome (AJS) outbreak template, using data from an outbreak in Am Timan, Chad.
+This page will demonstrate use of the Acute Jaundice Syndrome (AJS) outbreak template using data from an outbreak in Am Timan, Chad. This first page covers the initial data importation and cleaning steps in the template.
 
-[Rmarkdown introduction](https://rmarkdown.rstudio.com/articles_intro.html)
+[Rmarkdown introduction](https://rmarkdown.rstudio.com/articles_intro.html)  
+
 [Rmarkdown authoring basics](https://rmarkdown.rstudio.com/authoring_basics.html)
 
-## Header and introduction
+## Template header and introduction
 
 ![](/images/AJS_Intro.png)
 
-The very top of the template consists of a header surrounded by `---`. Here you may want to edit the title of your document. The other settings in the header define the default document type produced (Microsoft Word) when the RMarkdown is "knit".
+The very top of the template consists of a header surrounded by `---` lines. Here you may want to edit the title of your document. The other settings in the header define the default document type produced (Microsoft Word) when the RMarkdown is "knit".
 
-The Introduction section is for your information and may be deleted before knitting the document.
+The introduction section is for your information only and this text can be deleted before knitting the document.
 
 ## Package installation
-This section begins with text (with white background) which explains the purpose of the following code chunk. **For your final report you may delete the text, but you must keep the code chunk!** The code will run without producing any output in your report, but is required to load packages necessary to produce the report.
+This section begins with text which explains the purpose of the following code chunk. **For your final report you may delete the text, but you must keep this code chunk!** The code will run without producing any output in your report, but is required to load packages necessary to produce the report.
 
-In the code chunk the commands do the following:
-1) Sets default settings for the RMarkdown such as figure size, and handling of errors  
+The code chunk does the following:  
 
-2) Sets the default way of displaying missing values in tables as "-"  
+* Set default settings for the RMarkdown such as figure size, and handling of errors  
 
-3) Creates a vector of names of packages required for the template to run. Then each package is installed if it is not already installed, and each package is loaded for use in the current R session.
+* Set the default way of displaying missing values in tables as "-"  
 
-4) Default plot theme text size and epidemiological weeks are set to begin on Mondays.  
+* Create a vector of names of packages required for the template to run. Then each package is installed if it is not already installed, and each package is loaded for use in the current R session.
+
+* Set default plot theme text size and epidemiological weeks are set to begin on Mondays.  
 
 
 
-## Reading in your data
+## Importing the dataset
 
 **In this template section you choose the appropriate code chunk to importing your dataset.** 
 
-![Data Import](/images/Data_Import.png)
+![](/images/Data_Import.png)
 
-For this exercise our dataset is a **non-standardized Excel file** from MSF's response an outbreak of AJS in Am Timan, Chad.
+For this exercise our dataset is a **non-standardized Excel file** from MSF's response an outbreak of AJS in Am Timan, Chad, so we use the `read_nonDHIS_data` code chunk, specifically the line that uses the import() function of the rio package to import an Excel file that is not password protected.  
+
 
 ```{r include=FALSE, results='hide', message=FALSE, warning=FALSE}
 ## Read data ------------------------------------
@@ -93,30 +96,32 @@ linelist_raw <- rio::import("AJS_AmTiman.xlsx", which = "linelist")
 ```
 
 
-## Aligning the dataset with the data dictionary
-1) We can view the data dictionary for AJS using this command (also found in the template)
+## Aligning the dataset with the data dictionary  
+When using a non-standardized dataset, the variable names and values must be aligned with the data dictionary. This can take some time and requires looking back-and-forth between your dataset, RStudio, and the MSF data dictionary. In this example, here are the steps taken:  
+
+### Review the MSF data dictionary
+Use this command (found in the template) to view the MSF data dictionary for the disease ("AJS" in this example)
 
 ```{r eval = FALSE}
 # creates object linelist_dict using the msf_dict function from the sitrep package
-# View the data dictionary with View() or by clicking the name in Environment (upper-right RStudio pane)
 linelist_dict <- msf_dict("AJS", compact = FALSE) %>%
   select(option_code, option_name, everything())
-
-View(linelist_dict)
 ```
 
-![View of AJS data dictionary](/images/Data_Dictionary.png)
+You can view the data dictionary by running the command `View(linelist_dict)`, or by clicking the name linelist_dict in the RStudio Environment (upper-right RStudio pane)  
 
-2) Now we make changes to our dataset to align it with the data dictionary. Following the template instructions, we uncomment lines of code to make a copy of the dataset, naming the copy "linelist_cleaned". 
+![](/images/Data_Dictionary.png)
+
+### Clean variable names  
+Uncomment the appropriate lines of code to make a copy of the dataset, naming the copy "linelist_cleaned". 
 
 ```{r}
 ## make a copy of your orginal dataset and name it linelist_cleaned
 linelist_cleaned <- linelist_raw
 ```
 
-Now we use the clean_labels function from the epitrix package to fix any variable names with non-standard syntax.
+Use the clean_labels function from the epitrix package to fix any variable names with non-standard syntax.
 ```{r}
-# define clean variable names using clean_labels from the epitrix package
 # this function is preset rules for variable naming 
 # for example it changes spaces and dots to "_" and characters to lowercase
 cleaned_colnames <- epitrix::clean_labels(colnames(linelist_raw))
@@ -125,30 +130,17 @@ cleaned_colnames <- epitrix::clean_labels(colnames(linelist_raw))
 colnames(linelist_cleaned) <- cleaned_colnames
 ```
 
-**Re-naming variables**  
-Standardized variable names make this template work smoothly, and the variable names in our dataset do not align with the names this template expects. The template offers code that you can uncomment if you only have to change a few variable names (see below), but in our case we need to change many. 
+### Re-name variables to align with data dictionary  
 
-```{r}
-## Renaming variables to match the template -------------------------------
-## OPTIONAL: below is just an example in case you want to specifically change a
-## few names you can also change specific var names using the *rename*
-## function. In this example, we have the columns "gender" and "age" that we
-## want to rename as "sex" and "age_years".
-## The formula for this is rename(data, NEW_NAME = OLD_NAME). 
+Standardized variable names are required for this template to work smoothly, and the variable names in our dataset do not align with the names this template expects. The template offers code that you can uncomment if you only have to change a few variable names (see below), but in our case we need to change many variable names. MSF developed a special function to help map our variables to the expected variables.  
 
-# linelist_cleaned <- rename(linelist_cleaned, 
-#                            gender    = sex, # TEXT
-#                            age_years = age  # INTEGER_POSITIVE
-# )
-```
+* Run the command `msf_dict_rename_helper("AJS")` and a block of code text will be copied to your clipboard. You can run this command by entering it directly into the R terminal (lower-left RStudio pane), or highlighing it in the template and pressing Ctrl+Enter.  
 
-For our situation where we must re-name many variables, MSF developed a function that helps us map our variables to the expected variables.  
+* Return to your template script and paste from your clipboard into the template. For the AJS template, the code that is pasted will look like the code below. This code uses the function rename() to change variable names. To the right of the equals sign, and before the comma, type the *exact* names of the variables from your dataset that correspond to the expected MSF data dictionary variables on the left.
 
--Run the command `msf_dict_rename_helper("AJS")` and a block of code text will be copied to your clipboard. You can run this command by entering it directly into the R terminal (lower-left RStudio pane), or highlighing it in the template and pressing Ctrl+Enter.  
+* If there is a data dictionary variable that is not present in the dataset, be sure to comment (#) out that line, as shown in the GIF below the code.
 
--Return to your template script and paste from your clipboard into the template. The code that is pasted will look like this: 
-
-```{r}
+```{r eval=FALSE}
 ## Add the appropriate column names after the equals signs
 
 linelist_cleaned <- rename(linelist_cleaned,
@@ -223,7 +215,7 @@ linelist_cleaned <- rename(linelist_cleaned,
 )
 ```
 
-
+   
 
 ```{r include=FALSE, results='hide', message=FALSE, warning=FALSE}
 ## Add the appropriate column names after the equals signs
@@ -302,7 +294,9 @@ linelist_cleaned <- rename(linelist_cleaned,
 
 ![](/images/Variable_Names.gif)  
 
-**Tip:** If you see this error: `Error in is_symbol(expr) : argument "expr" is missing, with no default` then you likely forgot to hash (#) the line for a variable you did not use.
+**Tip: **If you see this error:  
+`Error in is_symbol(expr) : argument "expr" is missing, with no default`  
+then you likely forgot to comment (#) the line for a variable you did not use.
 
 
 

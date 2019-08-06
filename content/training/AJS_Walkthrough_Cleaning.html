@@ -8,84 +8,153 @@ weight: 8
 
 <div id="overview-of-this-page" class="section level2">
 <h2>Overview of this page</h2>
-<p>This page will demonstrate the steps to use the Acute Jaundice Syndrome (AJS) outbreak template, using data from an outbreak in Am Timan, Chad.</p>
-<p><a href="https://rmarkdown.rstudio.com/articles_intro.html">Rmarkdown introduction</a> <a href="https://rmarkdown.rstudio.com/authoring_basics.html">Rmarkdown authoring basics</a></p>
+<p>This page will demonstrate use of the Acute Jaundice Syndrome (AJS) outbreak template using data from an outbreak in Am Timan, Chad. This first page covers the initial data importation and cleaning steps in the template.</p>
+<p><a href="https://rmarkdown.rstudio.com/articles_intro.html">Rmarkdown introduction</a></p>
+<p><a href="https://rmarkdown.rstudio.com/authoring_basics.html">Rmarkdown authoring basics</a></p>
 </div>
-<div id="header-and-introduction" class="section level2">
-<h2>Header and introduction</h2>
+<div id="template-header-and-introduction" class="section level2">
+<h2>Template header and introduction</h2>
 <div class="figure">
 <img src="/images/AJS_Intro.png" />
 
 </div>
-<p>The very top of the template consists of a header surrounded by <code>---</code>. Here you may want to edit the title of your document. The other settings in the header define the default document type produced (Microsoft Word) when the RMarkdown is “knit”.</p>
-<p>The Introduction section is for your information and may be deleted before knitting the document.</p>
+<p>The very top of the template consists of a header surrounded by <code>---</code> lines. Here you may want to edit the title of your document. The other settings in the header define the default document type produced (Microsoft Word) when the RMarkdown is “knit”.</p>
+<p>The introduction section is for your information only and this text can be deleted before knitting the document.</p>
 </div>
 <div id="package-installation" class="section level2">
 <h2>Package installation</h2>
-<p>This section begins with text (with white background) which explains the purpose of the following code chunk. <strong>For your final report you may delete the text, but you must keep the code chunk!</strong> The code will run without producing any output in your report, but is required to load packages necessary to produce the report.</p>
-<p>In the code chunk the commands do the following: 1) Sets default settings for the RMarkdown such as figure size, and handling of errors</p>
-<ol start="2" style="list-style-type: decimal">
-<li><p>Sets the default way of displaying missing values in tables as “-”</p></li>
-<li><p>Creates a vector of names of packages required for the template to run. Then each package is installed if it is not already installed, and each package is loaded for use in the current R session.</p></li>
-<li><p>Default plot theme text size and epidemiological weeks are set to begin on Mondays.</p></li>
-</ol>
+<p>This section begins with text which explains the purpose of the following code chunk. <strong>For your final report you may delete the text, but you must keep this code chunk!</strong> The code will run without producing any output in your report, but is required to load packages necessary to produce the report.</p>
+<p>The code chunk does the following:</p>
+<ul>
+<li><p>Set default settings for the RMarkdown such as figure size, and handling of errors</p></li>
+<li><p>Set the default way of displaying missing values in tables as “-”</p></li>
+<li><p>Create a vector of names of packages required for the template to run. Then each package is installed if it is not already installed, and each package is loaded for use in the current R session.</p></li>
+<li><p>Set default plot theme text size and epidemiological weeks are set to begin on Mondays.</p></li>
+</ul>
 </div>
-<div id="reading-in-your-data" class="section level2">
-<h2>Reading in your data</h2>
+<div id="importing-the-dataset" class="section level2">
+<h2>Importing the dataset</h2>
 <p><strong>In this template section you choose the appropriate code chunk to importing your dataset.</strong></p>
 <div class="figure">
-<img src="/images/Data_Import.png" alt="Data Import" />
-<p class="caption">Data Import</p>
+<img src="/images/Data_Import.png" />
+
 </div>
-<p>For this exercise our dataset is a <strong>non-standardized Excel file</strong> from MSF’s response an outbreak of AJS in Am Timan, Chad.</p>
+<p>For this exercise our dataset is a <strong>non-standardized Excel file</strong> from MSF’s response an outbreak of AJS in Am Timan, Chad, so we use the <code>read_nonDHIS_data</code> code chunk, specifically the line that uses the import() function of the rio package to import an Excel file that is not password protected.</p>
 </div>
 <div id="aligning-the-dataset-with-the-data-dictionary" class="section level2">
 <h2>Aligning the dataset with the data dictionary</h2>
-<ol style="list-style-type: decimal">
-<li>We can view the data dictionary for AJS using this command (also found in the template)</li>
-</ol>
+<p>When using a non-standardized dataset, the variable names and values must be aligned with the data dictionary. This can take some time and requires looking back-and-forth between your dataset, RStudio, and the MSF data dictionary. In this example, here are the steps taken:</p>
+<div id="review-the-msf-data-dictionary" class="section level3">
+<h3>Review the MSF data dictionary</h3>
+<p>Use this command (found in the template) to view the MSF data dictionary for the disease (“AJS” in this example)</p>
 <pre class="r"><code># creates object linelist_dict using the msf_dict function from the sitrep package
-# View the data dictionary with View() or by clicking the name in Environment (upper-right RStudio pane)
 linelist_dict &lt;- msf_dict(&quot;AJS&quot;, compact = FALSE) %&gt;%
-  select(option_code, option_name, everything())
-
-View(linelist_dict)</code></pre>
+  select(option_code, option_name, everything())</code></pre>
+<p>You can view the data dictionary by running the command <code>View(linelist_dict)</code>, or by clicking the name linelist_dict in the RStudio Environment (upper-right RStudio pane)</p>
 <div class="figure">
-<img src="/images/Data_Dictionary.png" alt="View of AJS data dictionary" />
-<p class="caption">View of AJS data dictionary</p>
+<img src="/images/Data_Dictionary.png" />
+
 </div>
-<ol start="2" style="list-style-type: decimal">
-<li>Now we make changes to our dataset to align it with the data dictionary. Following the template instructions, we uncomment lines of code to make a copy of the dataset, naming the copy “linelist_cleaned”.</li>
-</ol>
+</div>
+<div id="clean-variable-names" class="section level3">
+<h3>Clean variable names</h3>
+<p>Uncomment the appropriate lines of code to make a copy of the dataset, naming the copy “linelist_cleaned”.</p>
 <pre class="r"><code>## make a copy of your orginal dataset and name it linelist_cleaned
 linelist_cleaned &lt;- linelist_raw</code></pre>
-<p>Now we use the clean_labels function from the epitrix package to fix any variable names with non-standard syntax.</p>
-<pre class="r"><code># define clean variable names using clean_labels from the epitrix package
-# this function is preset rules for variable naming 
+<p>Use the clean_labels function from the epitrix package to fix any variable names with non-standard syntax.</p>
+<pre class="r"><code># this function is preset rules for variable naming 
 # for example it changes spaces and dots to &quot;_&quot; and characters to lowercase
 cleaned_colnames &lt;- epitrix::clean_labels(colnames(linelist_raw))
 
 # overwrite variable names with defined clean names
 colnames(linelist_cleaned) &lt;- cleaned_colnames</code></pre>
-<p><strong>Re-naming variables</strong><br />
-Standardized variable names make this template work smoothly, and the variable names in our dataset do not align with the names this template expects. The template offers code that you can uncomment if you only have to change a few variable names (see below), but in our case we need to change many.</p>
-<pre class="r"><code>## Renaming variables to match the template -------------------------------
-## OPTIONAL: below is just an example in case you want to specifically change a
-## few names you can also change specific var names using the *rename*
-## function. In this example, we have the columns &quot;gender&quot; and &quot;age&quot; that we
-## want to rename as &quot;sex&quot; and &quot;age_years&quot;.
-## The formula for this is rename(data, NEW_NAME = OLD_NAME). 
+</div>
+<div id="re-name-variables-to-align-with-data-dictionary" class="section level3">
+<h3>Re-name variables to align with data dictionary</h3>
+<p>Standardized variable names are required for this template to work smoothly, and the variable names in our dataset do not align with the names this template expects. The template offers code that you can uncomment if you only have to change a few variable names (see below), but in our case we need to change many variable names. MSF developed a special function to help map our variables to the expected variables.</p>
+<ul>
+<li><p>Run the command <code>msf_dict_rename_helper(&quot;AJS&quot;)</code> and a block of code text will be copied to your clipboard. You can run this command by entering it directly into the R terminal (lower-left RStudio pane), or highlighing it in the template and pressing Ctrl+Enter.</p></li>
+<li><p>Return to your template script and paste from your clipboard into the template. For the AJS template, the code that is pasted will look like the code below. This code uses the function rename() to change variable names. To the right of the equals sign, and before the comma, type the <em>exact</em> names of the variables from your dataset that correspond to the expected MSF data dictionary variables on the left.</p></li>
+<li><p>If there is a data dictionary variable that is not present in the dataset, be sure to comment (#) out that line, as shown in the GIF below the code.</p></li>
+</ul>
+<pre class="r"><code>## Add the appropriate column names after the equals signs
 
-# linelist_cleaned &lt;- rename(linelist_cleaned, 
-#                            gender    = sex, # TEXT
-#                            age_years = age  # INTEGER_POSITIVE
-# )</code></pre>
-<p>For our situation where we must re-name many variables, MSF developed a function that helps us map our variables to the expected variables.</p>
-<p>-Run the command <code>msf_dict_rename_helper(&quot;AJS&quot;)</code> and a block of code text will be copied to your clipboard. You can run this command by entering it directly into the R terminal (lower-left RStudio pane), or highlighing it in the template and pressing Ctrl+Enter.</p>
-<p>-Return to your template script and paste from your clipboard into the template. The code that is pasted will look like this:</p>
-<p>**<a href="Tip:**" class="uri">Tip:**</a> If you see this error: <code>Error in is_symbol(expr) : argument &quot;expr&quot; is missing, with no default</code> then you likely forgot to hash (#) the line for a variable you did not use.</p>
+linelist_cleaned &lt;- rename(linelist_cleaned,
+  event_file_type                   =   , # TEXT
+  case_number                       =   , # TEXT
+  date_of_admission                 =   , # DATE
+  detected_by                       =   , # TEXT
+  patient_facility_type             =   , # TEXT
+  msf_involvement                   =   , # TEXT
+  age_years                         =   , # INTEGER_POSITIVE
+  age_months                        =   , # INTEGER_POSITIVE
+  age_days                          =   , # INTEGER_POSITIVE
+  sex                               =   , # TEXT
+  patient_origin                    =   , # ORG UNIT
+  residential_status_brief          =   , # TEXT
+  arrival_date_in_area_if_3m        =   , # DATE
+  ever_received_hepatitis_e_vaccine =   , # TEXT
+  date_of_last_vaccination          =   , # DATE
+  date_of_onset                     =   , # DATE
+  history_of_fever                  =   , # BOOLEAN
+  fever                             =   , # BOOLEAN
+  nausea_anorexia                   =   , # BOOLEAN
+  vomiting                          =   , # BOOLEAN
+  epigastric_pain_heartburn         =   , # BOOLEAN
+  generalized_itch                  =   , # BOOLEAN
+  headache                          =   , # BOOLEAN
+  joint_pains                       =   , # BOOLEAN
+  diarrhoea                         =   , # BOOLEAN
+  bleeding                          =   , # BOOLEAN
+  convulsions                       =   , # BOOLEAN
+  mental_state                      =   , # BOOLEAN
+  other_symptoms                    =   , # BOOLEAN
+  other_cases_in_hh                 =   , # BOOLEAN
+  traditional_medicines             =   , # BOOLEAN
+  traditional_medicine_details      =   , # TEXT
+  recent_travel                     =   , # BOOLEAN
+  water_source                      =   , # TEXT
+  malaria_rdt_at_admission          =   , # TEXT
+  hep_b_rdt                         =   , # TEXT
+  hep_c_rdt                         =   , # TEXT
+  hep_e_rdt                         =   , # TEXT
+  dengue_rdt                        =   , # TEXT
+  date_lab_sample_taken             =   , # DATE
+  test_hepatitis_a                  =   , # TEXT
+  test_hepatitis_b                  =   , # TEXT
+  test_hepatitis_c                  =   , # TEXT
+  test_hepatitis_e_virus            =   , # TEXT
+  test_hepatitis_e_igm              =   , # TEXT
+  test_hepatitis_e_igg              =   , # TEXT
+  test_hepatitis_e_genotype         =   , # TEXT
+  malaria_blood_film                =   , # TEXT
+  dengue                            =   , # TEXT
+  yellow_fever                      =   , # TEXT
+  lassa_fever                       =   , # TEXT
+  typhoid                           =   , # TEXT
+  chikungunya_onyongnyong           =   , # TEXT
+  ebola_marburg                     =   , # TEXT
+  other_arthropod_transmitted_virus =   , # TEXT
+  other_pathogen                    =   , # TEXT
+  lab_comments                      =   , # TEXT
+  pregnant                          =   , # TEXT
+  trimester                         =   , # TEXT
+  foetus_alive_at_admission         =   , # TEXT
+  delivery_event                    =   , # TRUE_ONLY
+  pregnancy_outcome_at_exit         =   , # TEXT
+  exit_status                       =   , # TEXT
+  date_of_exit                      =   , # DATE
+  time_to_death                     =   , # TEXT
+  treatment_facility_site           =   , # TEXT
+  treatment_location                =   , # ORGANISATION_UNIT
+  patient_origin_free_text          =     # TEXT
+)</code></pre>
 <div class="figure">
 <img src="/images/Variable_Names.gif" />
 
+</div>
+<p><strong>Tip: </strong>If you see this error:<br />
+<code>Error in is_symbol(expr) : argument &quot;expr&quot; is missing, with no default</code><br />
+then you likely forgot to comment (#) the line for a variable you did not use.</p>
 </div>
 </div>
