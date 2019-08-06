@@ -56,6 +56,10 @@ This page will demonstrate use of the Acute Jaundice Syndrome (AJS) outbreak tem
 
 [Rmarkdown authoring basics](https://rmarkdown.rstudio.com/authoring_basics.html)
 
+### AJS outbreak in Am Timan, Chad (YEAR)  
+
+[Paragraphs about the outbreak, MSF response, data collection, etc.]  
+
 ## Template header and introduction
 
 ![](/images/AJS_Intro.png)
