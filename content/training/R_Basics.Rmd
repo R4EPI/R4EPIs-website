@@ -39,7 +39,7 @@ Everything you store in R - datasets, variables, a list of village names, a tota
 
 An object exists when you have assigned it a value (see the assignment section below). When it is assigned a value, the object appears in the Environment (see the upper right pane of RStudio). It can then be operated upon, manipulated, changed, and re-defined.
 
-## Creating objects with the Assignment Operator <-  
+### Creating objects with the Assignment Operator <-  
 
 **You create objects *by assigning them a value* with the <- operator.** You can think of the assignment operator `<-` as the words "is defined as". Assignment commands generally follow a standard order:  
   
@@ -90,7 +90,7 @@ A quick note on naming of objects:
   * Object names are case-sensitive (meaning that Dataset_A is different from dataset_A). 
   * Object names must begin with a letter (cannot begin with a number like 1, 2 or 3).  
 
-## Objects can have Structure  
+### Objects can have Structure  
 
 Objects can be a single piece of data (e.g. `my_number <- 24`), or they can consist of structured data. The graphic below, sourced from [this online R tutorial](http://venus.ifca.unican.es/Rintro/dataStruct.html) shows some common data structures and their names. Not included in this image is spatial data, which is discussed in another page.  
 
@@ -104,7 +104,7 @@ Common structure | Explanation | Example from templates
 Vectors | A container for a sequence of singular objects, all of the same class (e.g. numeric, character). | **"Variables" (columns) in data frames are vectors** (e.g. the variable age_years).  
 Data Frames | Vectors (e.g. columns) that are bound together that all have the same number of rows. | linelist_raw and linelist_cleaned are both data frames.  
 
-### Using `$` to access/call variables  
+#### Using `$` to access/call variables  
 
 **Vectors within a data frame (variables in a dataset) can be called or referenced using the $ symbol.** The `$` symbol connects the name of the column to the name of its dataset. The $ symbol must be used, otherwise R will not know where to look for or create the column.  
 
@@ -117,7 +117,7 @@ length(linelist_cleaned$age_years)
 ```
   
   
-## Objects have Classes  
+### Objects have Classes  
 
 All the objects stored in R have a *class* which tells R how to handle the object. There are many possible classes, but common ones include:
 
@@ -351,7 +351,7 @@ Excel stores dates as the number of days since December 30, 1899. If the dataset
 # An example of providing an origin date when converting to class Date
 linelist_cleaned$date_of_onset <- as.Date(linelist_cleaned$date_of_onset, origin = "1899-12-30")
 ```
-### Calculating distance between dates
+#### Calculating distance between dates
 The difference between dates can be calculated by:  
   
   

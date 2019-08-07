@@ -11,12 +11,11 @@ output:
 <div id="TOC">
 <ul>
 <li><a href="#online-resources">Online resources</a></li>
-<li><a href="#everything-is-an-object">Everything is an object</a></li>
+<li><a href="#everything-is-an-object">Everything is an object</a><ul>
 <li><a href="#creating-objects-with-the-assignment-operator--">Creating objects with the Assignment Operator &lt;-</a></li>
-<li><a href="#objects-can-have-structure">Objects can have Structure</a><ul>
-<li><a href="#using-to-accesscall-variables">Using <code>$</code> to access/call variables</a></li>
-</ul></li>
+<li><a href="#objects-can-have-structure">Objects can have Structure</a></li>
 <li><a href="#objects-have-classes">Objects have Classes</a></li>
+</ul></li>
 <li><a href="#functions">Functions</a><ul>
 <li><a href="#simple-functions">Simple Functions</a></li>
 <li><a href="#functions-with-multiple-arguments">Functions with Multiple Arguments</a></li>
@@ -29,7 +28,6 @@ output:
 <li><a href="#working-with-dates">Working with Dates</a><ul>
 <li><a href="#converting-date-variables-to-the-date-class">Converting date variables to the date class</a></li>
 <li><a href="#excel-dates">Excel Dates</a></li>
-<li><a href="#calculating-distance-between-dates">Calculating distance between dates</a></li>
 </ul></li>
 <li><a href="#general-syntax">General Syntax</a></li>
 <li><a href="#errors-and-warnings">Errors and Warnings</a></li>
@@ -51,9 +49,8 @@ Typically when you are “stuck”, it is a good strategy to use Google to find 
 <h2>Everything is an object</h2>
 <p>Everything you store in R - datasets, variables, a list of village names, a total population number, even outputs such as graphs - are <strong>objects</strong> which are <strong>assigned a name</strong> and <strong>can be referenced</strong> in later commands.</p>
 <p>An object exists when you have assigned it a value (see the assignment section below). When it is assigned a value, the object appears in the Environment (see the upper right pane of RStudio). It can then be operated upon, manipulated, changed, and re-defined.</p>
-</div>
-<div id="creating-objects-with-the-assignment-operator--" class="section level2">
-<h2>Creating objects with the Assignment Operator &lt;-</h2>
+<div id="creating-objects-with-the-assignment-operator--" class="section level3">
+<h3>Creating objects with the Assignment Operator &lt;-</h3>
 <p><strong>You create objects <em>by assigning them a value</em> with the &lt;- operator.</strong> You can think of the assignment operator <code>&lt;-</code> as the words “is defined as”. Assignment commands generally follow a standard order:</p>
 <p><strong>object_name</strong> &lt;- <strong>value</strong> (or process/calculation that produce a value)</p>
 <blockquote>
@@ -94,8 +91,8 @@ linelist_cleaned &lt;- mutate(linelist_cleaned,
 <li>Object names must begin with a letter (cannot begin with a number like 1, 2 or 3).</li>
 </ul>
 </div>
-<div id="objects-can-have-structure" class="section level2">
-<h2>Objects can have Structure</h2>
+<div id="objects-can-have-structure" class="section level3">
+<h3>Objects can have Structure</h3>
 <p>Objects can be a single piece of data (e.g. <code>my_number &lt;- 24</code>), or they can consist of structured data. The graphic below, sourced from <a href="http://venus.ifca.unican.es/Rintro/dataStruct.html">this online R tutorial</a> shows some common data structures and their names. Not included in this image is spatial data, which is discussed in another page.</p>
 <div class="figure">
 <img src="/images/r_data_structures.png" />
@@ -128,8 +125,8 @@ linelist_cleaned &lt;- mutate(linelist_cleaned,
 </tr>
 </tbody>
 </table>
-<div id="using-to-accesscall-variables" class="section level3">
-<h3>Using <code>$</code> to access/call variables</h3>
+<div id="using-to-accesscall-variables" class="section level4">
+<h4>Using <code>$</code> to access/call variables</h4>
 <p><strong>Vectors within a data frame (variables in a dataset) can be called or referenced using the $ symbol.</strong> The <code>$</code> symbol connects the name of the column to the name of its dataset. The $ symbol must be used, otherwise R will not know where to look for or create the column.</p>
 <p>**<em><a href="Tip:**" class="uri">Tip:**</a> by typing the name of the data frame followed by <code>$</code> you will see a list of all variables in the data frame. You can scroll through them using arrow key, select one with your Enter key, and avoid spelling mistakes!</em></p>
 <pre class="r"><code># Retrieve the length of the vector age_years
@@ -138,8 +135,8 @@ length(linelist_cleaned$age_years)  </code></pre>
 <pre><code>## [1] 300</code></pre>
 </div>
 </div>
-<div id="objects-have-classes" class="section level2">
-<h2>Objects have Classes</h2>
+<div id="objects-have-classes" class="section level3">
+<h3>Objects have Classes</h3>
 <p>All the objects stored in R have a <em>class</em> which tells R how to handle the object. There are many possible classes, but common ones include:</p>
 <table>
 <colgroup>
@@ -232,6 +229,7 @@ length(linelist_cleaned$age_years)  </code></pre>
 </tr>
 </tbody>
 </table>
+</div>
 </div>
 <div id="functions" class="section level2">
 <h2>Functions</h2>
@@ -528,9 +526,8 @@ class(linelist_cleaned$date_of_onset)  </code></pre>
 <p>Excel stores dates as the number of days since December 30, 1899. If the dataset you imported from Excel has a date variable showing numbers like “41369”… use the as.Date() function to convert, but <strong>instead of supplying a format as above, supply an origin date</strong>. Note that the origin date must be given in the default date format for R (“YYYY-MM-DD”).</p>
 <pre class="r"><code># An example of providing an origin date when converting to class Date
 linelist_cleaned$date_of_onset &lt;- as.Date(linelist_cleaned$date_of_onset, origin = &quot;1899-12-30&quot;)</code></pre>
-</div>
-<div id="calculating-distance-between-dates" class="section level3">
-<h3>Calculating distance between dates</h3>
+<div id="calculating-distance-between-dates" class="section level4">
+<h4>Calculating distance between dates</h4>
 <p>The difference between dates can be calculated by:</p>
 <ol style="list-style-type: decimal">
 <li>Correctly formating <em>both</em> date variable as class date (see instructions above)<br />
@@ -538,6 +535,7 @@ linelist_cleaned$date_of_onset &lt;- as.Date(linelist_cleaned$date_of_onset, ori
 <li>Creating a new variable that is defined as one date variable subtracted from the other</li>
 <li>Converting the result to numeric class (default is class “datediff”). This ensures that subsequent mathematical calculations can be performed.</li>
 </ol>
+</div>
 </div>
 </div>
 <div id="general-syntax" class="section level2">
