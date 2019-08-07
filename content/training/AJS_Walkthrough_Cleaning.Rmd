@@ -241,6 +241,18 @@ You can either:
 
 
 
+## Lab data
+[Paragraph about lab data here - how it is used]  
+
+
+
+## Creating and cleaning variables  
+The variables and values in our example AJS dataset are still very far from the standard AJS MSF data dictionary. In the data cleaning step we will need to do the following:  
+* Change the French ("oui", "non") to English or binary 1's and 0's  
+* 
+
+
+
 
 
 
