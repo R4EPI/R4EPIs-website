@@ -38,6 +38,14 @@ While the RMarkdown may at first look like a wall of code, notice how "chunks" o
 
 * **In chunks with GRAY background, RMarkdown is running R commands.** The commands perform data processing and cleaning steps, or could produce visual outputs in the document.    
 
+
+#### Navigating the RMarkdown  
+
+Use the Table of Contents menu in the bottom-left of the script to easily navigate between code chunks and sections of the script. The line numbers on the left side can be helpful to reference specific commands when asking for assistance.  
+
+![](/images/Table_of_Contents.gif)
+
+
 #### Commented code  
 
 Every script should include helpful text that organizes commands and explains their rationale to collaborators. The **# (hash or comment) symbol** ensures that any text *after the # and on the same line* will not be executed by R as it runs the script. Such "commented" text will appear a different color than the code.  
