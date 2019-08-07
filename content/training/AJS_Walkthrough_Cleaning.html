@@ -89,7 +89,14 @@ then you likely forgot to comment (#) the line for a variable you did not use.</
 </div>
 <div id="provide-population-counts" class="section level2">
 <h2>Provide population counts</h2>
-<p>The template provides several way to <strong>enter population figures by region and age group</strong> which are used to calculate Attack Rates and Mortality Rates later on. You can enter the counts directly, or have the function gen_population() do the calculations based on proportions that you provide.</p>
-<p>[IMAGE OF POPULATION COUNTS HERE]</p>
-<p>NOTE THAT THE SITREP GEN_POPULATION() NEEDS TO BE UPDATED TO ACCEPT DIRECT COUNTS INPUT</p>
+<p>In order to calculate attack and mortality rates by region and age groups, the population counts for these categories are collected. If you choose not to complete this section, please delete or comment (#) the default gen_population() code and expect that later sections on attack and mortality rates will give errors instead of output.</p>
+<p><strong>The template allows several ways to provide population figures so that they are stored in data frames with specific variable names.</strong> Of course, the specific age groupings and region names in your data frames may differ from the examples.</p>
+<p>You can either:<br />
+* Enter the counts directly <strong>[need clarification here as this is not yet built]</strong><br />
+* Use the function gen_population() to derive the counts from proportions<br />
+* Import a spreadsheet file with the counts in the correct format</p>
+<div class="figure">
+<img src="/images/Population_Counts.png" />
+
+</div>
 </div>
