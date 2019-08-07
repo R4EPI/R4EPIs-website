@@ -1,0 +1,21 @@
+---
+date: "2019-08-07T09:17:02+02:00"
+title: Test page for Annick
+weight: 5
+---
+
+This is text. 
+
+# Things to do
+
+## Send Annick the RMarkdown cheatsheet
+I need to send her this by email.  
+
+awoe  
+
+* Bullet 1
+
+1)
+
+2)
+
