@@ -2,19 +2,50 @@
 date: "2019-07-31T11:05:34+02:00"
 title: R Basics
 weight: 7
+output:
+  blogdown::html_page:
+    toc: true
 ---
 
 
+<div id="TOC">
+<ul>
+<li><a href="#online-resources">Online resources</a></li>
+<li><a href="#everything-is-an-object">Everything is an object</a></li>
+<li><a href="#creating-objects-with-the-assignment-operator--">Creating objects with the Assignment Operator &lt;-</a></li>
+<li><a href="#objects-can-have-structure">Objects can have Structure</a><ul>
+<li><a href="#using-to-accesscall-variables">Using <code>$</code> to access/call variables</a></li>
+</ul></li>
+<li><a href="#objects-have-classes">Objects have Classes</a></li>
+<li><a href="#functions">Functions</a><ul>
+<li><a href="#simple-functions">Simple Functions</a></li>
+<li><a href="#functions-with-multiple-arguments">Functions with Multiple Arguments</a></li>
+<li><a href="#using-additional-functions">Using Additional Functions</a></li>
+<li><a href="#the-pipe-operator-between-functions">The Pipe Operator %&gt;% between functions</a></li>
+</ul></li>
+<li><a href="#relational-and-logical-operators">Relational and logical operators</a></li>
+<li><a href="#missing-values">Missing Values</a></li>
+<li><a href="#calculations">Calculations</a></li>
+<li><a href="#working-with-dates">Working with Dates</a><ul>
+<li><a href="#converting-date-variables-to-the-date-class">Converting date variables to the date class</a></li>
+<li><a href="#excel-dates">Excel Dates</a></li>
+<li><a href="#calculating-distance-between-dates">Calculating distance between dates</a></li>
+</ul></li>
+<li><a href="#general-syntax">General Syntax</a></li>
+<li><a href="#errors-and-warnings">Errors and Warnings</a></li>
+</ul>
+</div>
 
-<div id="other-online-resources" class="section level2">
-<h2>Other online resources</h2>
+<div id="online-resources" class="section level2">
+<h2>Online resources</h2>
 <p>Below are links to some of the many online tutorials for learning R.</p>
 <p><a href="http://swcarpentry.github.io/r-novice-gapminder/">Fundamentals of R</a></p>
 <p><a href="https://learn.r-journalism.com/en/introduction/">R for Novices (written for journalists)</a></p>
 <p><a href="http://rpubs.com/michaelmarks/R-Clin-Epi">Clinical Epidemiology in R, from London School of Hygiene &amp; Tropical Medicine</a></p>
 <p><a href="https://www.repidemicsconsortium.org/resources/">Resources page of R for Epidemics Consortium Website</a></p>
 <p><a href="http://r-statistics.co/Complete-Ggplot2-Tutorial-Part1-With-R-Code.html">Tutorial for learning ggplot (the most common R package for visualizations, graphs, and maps)</a></p>
-<p>[short paragraph on using Stack Exchange for help]</p>
+<p><strong>Googling</strong><br />
+Typically when you are “stuck”, it is a good strategy to use Google to find notes from other people who have worked through your same problem. If you phrase your search terms carefully, relevant results from Question/Answer sites such as <a href="https://stackoverflow.com/questions/tagged/r">StackExchange</a> will appear and you can often get insights on approach, code examples, and be pointed toward other resources. If you decide to post a question yourself, use these <a href="https://stackoverflow.com/questions/5963269/how-to-make-a-great-r-reproducible-example">guidelines</a>.</p>
 </div>
 <div id="everything-is-an-object" class="section level2">
 <h2>Everything is an object</h2>

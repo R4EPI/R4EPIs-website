@@ -2,6 +2,9 @@
 date: "2019-07-31T11:05:34+02:00"
 title: R Basics
 weight: 7
+output:
+  blogdown::html_page:
+    toc: true
 ---
 
 ```{r include=FALSE, results='hide', message=FALSE, warning=FALSE}
@@ -12,11 +15,9 @@ library(sitrep)
 library(dplyr)
 ```
 
-## Other online resources  
+## Online resources  
 
 Below are links to some of the many online tutorials for learning R.
-
-
 
 [Fundamentals of R](http://swcarpentry.github.io/r-novice-gapminder/)  
 
@@ -28,7 +29,9 @@ Below are links to some of the many online tutorials for learning R.
 
 [Tutorial for learning ggplot (the most common R package for visualizations, graphs, and maps)](http://r-statistics.co/Complete-Ggplot2-Tutorial-Part1-With-R-Code.html)  
 
-[short paragraph on using Stack Exchange for help]
+**Googling**  
+Typically when you are "stuck", it is a good strategy to use Google to find notes from other people who have worked through your same problem. If you phrase your search terms carefully, relevant results from Question/Answer sites such as [StackExchange](https://stackoverflow.com/questions/tagged/r) will appear and you can often get insights on approach, code examples, and be pointed toward other resources. If you decide to post a question yourself, use these [guidelines](https://stackoverflow.com/questions/5963269/how-to-make-a-great-r-reproducible-example).  
+
 
 ## Everything is an object  
 
