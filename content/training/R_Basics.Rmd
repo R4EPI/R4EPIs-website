@@ -217,7 +217,7 @@ linelist_raw <- rio::import("linelist.xlsx", which = "Sheet1")
 
 ### The Pipe Operator %>% between functions 
 
-Within the template scripts you will see the pipe operator %>%. Simply explained, the pipe operator passes an intermediate output from one function to the next. You can think of it as saying "then". Many functions can be linked together with %>%.  
+Within the template scripts you will see the pipe operator `%>%`. Simply explained, the pipe operator passes an intermediate output from one function to the next. You can think of it as saying "then". Many functions can be linked together with `%>%`.  
 
 Piping is not a base function. To use piping, the dplyr package must be installed and loaded. Near the top of every template script is a code chunk that installs and loads the necessary packages, including dplyr. You can read more about piping [here](https://magrittr.tidyverse.org/)
 
@@ -307,15 +307,15 @@ It is important to make R recognize when a variable contains dates. Dates are an
 The templates provides some code for converting variables to class date, but if your data are not standardized to a MSF data dictionary this process can require attention.  
 It can be easiest to first convert the variable to character class, and then convert to date class:  
 
-  1. Turn the variable into character values using the function as.character()
+  1. Turn the variable into character values using the function `as.character()`
 ```{r}
 class(linelist_cleaned$date_of_onset)   #Check the class of the variable
 
 linelist_cleaned$date_of_onset <- as.character(linelist_cleaned$date_of_onset)
 ```
-  2. Convert the variable from character values into date values, using the function as.Date()  
+  2. Convert the variable from character values into date values, using the function `as.Date()`  
   (note the capital "D" in this function)  
-  + Within the as.Date() function, you must tell R which characters are which date components - which characters refer to the month, the day, and the year.  
+  + Within the `as.Date()` function, you must tell R which characters are which date components - which characters refer to the month, the day, and the year.  
   
   + The codes are:  
          %d = Day # (of the month e.g. 16, 17, 18...)  

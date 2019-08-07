@@ -261,7 +261,7 @@ linelist_raw &lt;- rio::import(&quot;linelist.xlsx&quot;, which = &quot;Sheet1&q
 </div>
 <div id="the-pipe-operator-between-functions" class="section level3">
 <h3>The Pipe Operator %&gt;% between functions</h3>
-<p>Within the template scripts you will see the pipe operator %&gt;%. Simply explained, the pipe operator passes an intermediate output from one function to the next. You can think of it as saying “then”. Many functions can be linked together with %&gt;%.</p>
+<p>Within the template scripts you will see the pipe operator <code>%&gt;%</code>. Simply explained, the pipe operator passes an intermediate output from one function to the next. You can think of it as saying “then”. Many functions can be linked together with <code>%&gt;%</code>.</p>
 <p>Piping is not a base function. To use piping, the dplyr package must be installed and loaded. Near the top of every template script is a code chunk that installs and loads the necessary packages, including dplyr. You can read more about piping <a href="https://magrittr.tidyverse.org/">here</a></p>
 <blockquote>
 <p><strong>As an example:</strong> The following code chunk from the AJD template data cleaning section can be read as “linelist_cleaned is defined as linelist_cleaned, filtered to remove the rows where the variables case_number and date_of_admission are missing”</p>
@@ -459,18 +459,18 @@ is.na(rdt_result)  # Tests whether the value of rdt_result is NA</code></pre>
 <p>The templates provides some code for converting variables to class date, but if your data are not standardized to a MSF data dictionary this process can require attention.<br />
 It can be easiest to first convert the variable to character class, and then convert to date class:</p>
 <ol style="list-style-type: decimal">
-<li>Turn the variable into character values using the function as.character()</li>
+<li>Turn the variable into character values using the function <code>as.character()</code></li>
 </ol>
 <pre class="r"><code>class(linelist_cleaned$date_of_onset)   #Check the class of the variable</code></pre>
 <pre><code>## [1] &quot;factor&quot;</code></pre>
 <pre class="r"><code>linelist_cleaned$date_of_onset &lt;- as.character(linelist_cleaned$date_of_onset)</code></pre>
 <ol start="2" style="list-style-type: decimal">
-<li>Convert the variable from character values into date values, using the function as.Date()<br />
+<li>Convert the variable from character values into date values, using the function <code>as.Date()</code><br />
 (note the capital “D” in this function)<br />
 </li>
 </ol>
 <ul>
-<li><p>Within the as.Date() function, you must tell R which characters are which date components - which characters refer to the month, the day, and the year.</p></li>
+<li><p>Within the <code>as.Date()</code> function, you must tell R which characters are which date components - which characters refer to the month, the day, and the year.</p></li>
 <li><p>The codes are:<br />
 %d = Day # (of the month e.g. 16, 17, 18…)<br />
 %a = abbreviated weekday (Mon, Tues, Wed, etc.)<br />
