@@ -300,6 +300,62 @@ division	      | 30/5
 exponent	      | 2^3 or 2**3   
 order of operations | ( )
 
+## Working with Dates
+### Converting date variables to the date class
+It is important to make R recognize when a variable contains dates. Dates are an object class and can be tricky to work with.  
+
+The templates provides some code for converting variables to class date, but if your data are not standardized to a MSF data dictionary this process can require attention.  
+It can be easiest to first convert the variable to character class, and then convert to date class:  
+
+  1. Turn the variable into character values using the function as.character()
+```{r}
+class(linelist_cleaned$date_of_onset)   #Check the class of the variable
+
+linelist_cleaned$date_of_onset <- as.character(linelist_cleaned$date_of_onset)
+```
+  2. Convert the variable from character values into date values, using the function as.Date()  
+  (note the capital "D" in this function)  
+  + Within the as.Date() function, you must tell R which characters are which date components - which characters refer to the month, the day, and the year.  
+  
+  + The codes are:  
+         %d = Day # (of the month e.g. 16, 17, 18...)  
+         %a = abbreviated weekday (Mon, Tues, Wed, etc.)  
+         %A = full weekday (Monday, Tuesday, etc.)  
+         %m = # of month (e.g. 01, 02, 03, 04)  
+         %b = abbreviated month (Jan, Feb, etc.)  
+         %B = Full Month (January, February, etc.)  
+         %y = 2-digit year  (e.g. 89)  
+         %Y = 4-digit year  (e.g. 1989)  
+
+For example, if your character dates are in the format YYYY-MM-DD, like "1988-08-24", then your command to turn the values into dates will be as below. **Putting the format in quotation marks is necessary.**  
+
+**Note: the format= argument is *not* telling R the format you want the dates to be, but rather how to identify the date parts as they are *before* you run the command.**  
+
+*Note: if your date parts are separated by a slash ( / ) instead of hyphen ( - ) , the format you tell R must also use slashes ( / ).*
+
+```{r}
+# Convert the variable to class Date by providing the format of the variable
+linelist_cleaned$date_of_onset <- as.Date(linelist_cleaned$date_of_onset, format="%Y-%m-%d")
+
+# Check the class of the variable again
+class(linelist_cleaned$date_of_onset)  
+```
+Once the values are in class Date, R will present them in it's standard format, which is YYYY-MM-DD.
+
+### Excel Dates
+Excel stores dates as the number of days since December 30, 1899. If the dataset you imported from Excel has a date variable showing numbers like "41369"... use the as.Date() function to convert, but **instead of supplying a format as above, supply an origin date**. Note that the origin date must be given in the default date format for R ("YYYY-MM-DD").
+```{r, eval=FALSE}
+# An example of providing an origin date when converting to class Date
+linelist_cleaned$date_of_onset <- as.Date(linelist_cleaned$date_of_onset, origin = "1899-12-30")
+```
+### Calculating distance between dates
+The difference between dates can be calculated by:  
+  
+  
+1. Correctly formating *both* date variable as class date (see instructions above)  
+2. Creating a new variable that is defined as one date variable subtracted from the other
+3. Converting the result to numeric class (default is class "datediff"). This ensures that subsequent mathematical calculations can be performed.  
+
 
 ## General Syntax  
 

@@ -451,6 +451,64 @@ is.na(rdt_result)  # Tests whether the value of rdt_result is NA</code></pre>
 </tbody>
 </table>
 </div>
+<div id="working-with-dates" class="section level2">
+<h2>Working with Dates</h2>
+<div id="converting-date-variables-to-the-date-class" class="section level3">
+<h3>Converting date variables to the date class</h3>
+<p>It is important to make R recognize when a variable contains dates. Dates are an object class and can be tricky to work with.</p>
+<p>The templates provides some code for converting variables to class date, but if your data are not standardized to a MSF data dictionary this process can require attention.<br />
+It can be easiest to first convert the variable to character class, and then convert to date class:</p>
+<ol style="list-style-type: decimal">
+<li>Turn the variable into character values using the function as.character()</li>
+</ol>
+<pre class="r"><code>class(linelist_cleaned$date_of_onset)   #Check the class of the variable</code></pre>
+<pre><code>## [1] &quot;factor&quot;</code></pre>
+<pre class="r"><code>linelist_cleaned$date_of_onset &lt;- as.character(linelist_cleaned$date_of_onset)</code></pre>
+<ol start="2" style="list-style-type: decimal">
+<li>Convert the variable from character values into date values, using the function as.Date()<br />
+(note the capital “D” in this function)<br />
+</li>
+</ol>
+<ul>
+<li><p>Within the as.Date() function, you must tell R which characters are which date components - which characters refer to the month, the day, and the year.</p></li>
+<li><p>The codes are:<br />
+%d = Day # (of the month e.g. 16, 17, 18…)<br />
+%a = abbreviated weekday (Mon, Tues, Wed, etc.)<br />
+%A = full weekday (Monday, Tuesday, etc.)<br />
+%m = # of month (e.g. 01, 02, 03, 04)<br />
+%b = abbreviated month (Jan, Feb, etc.)<br />
+%B = Full Month (January, February, etc.)<br />
+%y = 2-digit year (e.g. 89)<br />
+%Y = 4-digit year (e.g. 1989)</p></li>
+</ul>
+<p>For example, if your character dates are in the format YYYY-MM-DD, like “1988-08-24”, then your command to turn the values into dates will be as below. <strong>Putting the format in quotation marks is necessary.</strong></p>
+<p><strong>Note: the format= argument is <em>not</em> telling R the format you want the dates to be, but rather how to identify the date parts as they are <em>before</em> you run the command.</strong></p>
+<p><em>Note: if your date parts are separated by a slash ( / ) instead of hyphen ( - ) , the format you tell R must also use slashes ( / ).</em></p>
+<pre class="r"><code># Convert the variable to class Date by providing the format of the variable
+linelist_cleaned$date_of_onset &lt;- as.Date(linelist_cleaned$date_of_onset, format=&quot;%Y-%m-%d&quot;)
+
+# Check the class of the variable again
+class(linelist_cleaned$date_of_onset)  </code></pre>
+<pre><code>## [1] &quot;Date&quot;</code></pre>
+<p>Once the values are in class Date, R will present them in it’s standard format, which is YYYY-MM-DD.</p>
+</div>
+<div id="excel-dates" class="section level3">
+<h3>Excel Dates</h3>
+<p>Excel stores dates as the number of days since December 30, 1899. If the dataset you imported from Excel has a date variable showing numbers like “41369”… use the as.Date() function to convert, but <strong>instead of supplying a format as above, supply an origin date</strong>. Note that the origin date must be given in the default date format for R (“YYYY-MM-DD”).</p>
+<pre class="r"><code># An example of providing an origin date when converting to class Date
+linelist_cleaned$date_of_onset &lt;- as.Date(linelist_cleaned$date_of_onset, origin = &quot;1899-12-30&quot;)</code></pre>
+</div>
+<div id="calculating-distance-between-dates" class="section level3">
+<h3>Calculating distance between dates</h3>
+<p>The difference between dates can be calculated by:</p>
+<ol style="list-style-type: decimal">
+<li>Correctly formating <em>both</em> date variable as class date (see instructions above)<br />
+</li>
+<li>Creating a new variable that is defined as one date variable subtracted from the other</li>
+<li>Converting the result to numeric class (default is class “datediff”). This ensures that subsequent mathematical calculations can be performed.</li>
+</ol>
+</div>
+</div>
 <div id="general-syntax" class="section level2">
 <h2>General Syntax</h2>
 <p>A few things to remember when writing commands in R:</p>
