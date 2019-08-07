@@ -106,7 +106,18 @@ then you likely forgot to comment (#) the line for a variable you did not use.</
 </div>
 <div id="creating-and-cleaning-variables" class="section level2">
 <h2>Creating and cleaning variables</h2>
-<p>The variables and values in our example AJS dataset are still very far from the standard AJS MSF data dictionary. In the data cleaning step we will need to do the following:<br />
-* Change the French (“oui”, “non”) to English or binary 1’s and 0’s<br />
-*</p>
+<p>The variables and values in our example AJS dataset are still very far from the standard AJS MSF data dictionary. In the data cleaning step we will need to do the following:</p>
+<ol style="list-style-type: decimal">
+<li><strong>Re-code missing values from periods (.) to <code>NA</code> at import</strong></li>
+</ol>
+<p>Currently, missing values in the dataset are represented by a period (.). This causes problems because R expects missing values to be coded as <code>NA</code>. For example, if we attempt to set the variable date_of_onset to class Date, R gives an error because the periods are considered character values and do not fit the expected YYYY-MM-DD date format.</p>
+<p>To fix this problem we scroll up to the import section of the template and insert an additional argument in the import command. The argument <code>na = &quot;.&quot;</code> specifies a period as the value in the Excel sheet that R will consider to be “missing”. As the data are imported, all cells with that value are changed to <code>NA</code>.</p>
+<pre class="r"><code># The old import command
+linelist_raw &lt;- rio::import(&quot;AJS_AmTiman.xlsx&quot;, which = &quot;linelist&quot;)
+
+# The revised import command (don&#39;t forget the comma between arguments!)
+linelist_raw &lt;- rio::import(&quot;AJS_AmTiman.xlsx&quot;, which = &quot;linelist&quot;, na = &quot;.&quot;)</code></pre>
+<ol start="2" style="list-style-type: decimal">
+<li>**</li>
+</ol>
 </div>

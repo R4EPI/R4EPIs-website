@@ -248,10 +248,22 @@ You can either:
 
 ## Creating and cleaning variables  
 The variables and values in our example AJS dataset are still very far from the standard AJS MSF data dictionary. In the data cleaning step we will need to do the following:  
-* Change the French ("oui", "non") to English or binary 1's and 0's  
-* 
 
+1) **Re-code missing values from periods (.) to `NA` at import**  
 
+Currently, missing values in the dataset are represented by a period (.). This causes problems because R expects missing values to be coded as `NA`. For example, if we attempt to set the variable date_of_onset to class Date, R gives an error because the periods are considered character values and do not fit the expected YYYY-MM-DD date format.  
+
+To fix this problem we scroll up to the import section of the template and insert an additional argument in the import command. The argument `na = "."` specifies a period as the value in the Excel sheet that R will consider to be "missing". As the data are imported, all cells with that value are changed to `NA`.
+
+```{r }
+# The old import command
+linelist_raw <- rio::import("AJS_AmTiman.xlsx", which = "linelist")
+
+# The revised import command (don't forget the comma between arguments!)
+linelist_raw <- rio::import("AJS_AmTiman.xlsx", which = "linelist", na = ".")
+```
+
+2) **
 
 
 
