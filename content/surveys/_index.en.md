@@ -7,15 +7,15 @@ weight: 15
 
 # Survey Templates
 
-The survey templates have been developed to match the data that would be collected using MSF Ethical Review Board pre approved surveys ([MSF Ethical Review Board pre-approved surveys](https://fieldresearch.msf.org/handle/10144/618942)) on: 
+The survey templates have been developed to match the data that would be collected using [MSF Ethical Review Board pre-approved surveys](https://fieldresearch.msf.org/handle/10144/618942) on: 
 
-* ***retrospective mortality and access to care***,  
-* ***vaccination coverage*** and   
-* ***malnutrition***.   
+* ***Retrospective mortality and access to care***,  
+* ***Vaccination coverage*** and   
+* ***Malnutrition***.   
 
 All survey templates are available in the [sitrep] package.  
 
-You can access these by selecting them from the RStudio RMarkdown template menu:
+You can access these by selecting them from the RStudio RMarkdown template menu.
 
 # Getting started with Survey templates in R?
 
@@ -30,20 +30,20 @@ We will cover a few crucial concepts which are required for the understanding an
 ## Sampling strategy
 There are different ways to sample populations for surveys. The most commonly used in MSF settings are:
 
-1. ***Simple random sampling (SRS)***: requires a comprehensive sampling frame (i.e. total list of households inside a refugee camp or 
+1. **Simple random sampling (SRS)**: requires a comprehensive sampling frame (i.e. total list of households inside a refugee camp or 
 GPS based sampling in a known area).
-2. ***Cluster based sampling***: most commonly used in combination with sampling villages proportional to population size.
-3. ***Stratified samples***: uses either SRS or cluster based sampling but in two different adminstrative areas in order to obtain
+2. **Cluster based sampling**: most commonly used in combination with sampling villages proportional to population size.
+3. **Stratified samples**: uses either SRS or cluster based sampling but in two different adminstrative areas in order to obtain
 precise prevalence estimates for them.
 
-The templates can accopmodate analysis of data from all sampling designs.
+The templates can accomodate analysis of data from all sampling designs.
 
 ## Sample size
 When calculating a sample size for your survey you take the below parameters into consideration:
 
-* ***Estimate of prevalence***
-* ***Design effect or intraclass coefficient***
-* ***Precision required around your estimate of prevalence*** 
+* **Estimate of prevalence**
+* **Design effect or intraclass coefficient**
+* **Precision required around your estimate of prevalence**
 
 You might consider recalculating these parameters once the survey is completed, in order to check that your original assumptions were accurate.
 
@@ -60,13 +60,14 @@ The higher the DEFF, the higher the variability between clusters and the higher 
 In a well designed survey, you will aim to have a calculated DEFF for your outcome of interest as close as possible to 1. This is because a DEFF of 1 means that your survey design has approached Simple Random Sampling (SRS) for your outcome of interest. SRS is the gold standard in survey design, but often not possible in MSF contexts. In general, in two-stage cluster sampling surveys, we would assume a DEFF of 2.
 
 Mathematically DEFF is calculated as:
-> ***DEFF=1+(1-n) * rho*** 
+
+> **DEFF=1+(1-n) * rho**
 > where n=sample size of your survey and rho=intraclass coefficient
 
 ### Precision around your estimate
 The precision around your estimate stipulates how close to the your estimate you would like the 95% confidence interval of your prevalence estimate to fall.
 
-> For example, you have calculated a 72% measles vaccination coverage in your study population. You would like to ensure that the 
+> **For example**: you have calculated a 72% measles vaccination coverage in your study population. You would like to ensure that the 
 > 95% confidence interval is narrow (between 70-74%); thus you would set your precision at 2% (2% above and below 72%).
 
 The lower your precision, the higher your sample size calculation will be.
@@ -81,13 +82,15 @@ In the Survey Template Walkthrough (INSERT LINK), there is a step by step descri
 
 We have designed the templates to run through a similar series of analytical questions in the same order:
 
-1. Description of your survey sample and population in that survey sample
-2. Comparison of your survey sample to the population breakdown of that area (this will help you understand how biased your data is)
-3. Calculation of the main outcomes of interest (including DEFF): 
+1. **Description of your survey** sample and population in that survey sample
+2. **Comparison of your survey sample** to the population breakdown of that area (this will help you understand how biased your data is)
+3. **Calculation of the main outcomes of interest** (including DEFF): 
+
   * Mortality survey template: crude mortality rate (CMR) and under 5 year mortality rate (U5MR)
   * Vaccination coverage: vaccination coverage of vaccines of interest
-  * Malnutrition: prevalence of malnutrition in target population through MUAC and Weight for Height Scores
-4. Calculation of secondary outcomes of interest
+  * Malnutrition: prevalence of malnutrition in target population through MUAC and Weight for Height Scores  
+  
+4. Calculation of **secondary outcomes of interest**
 
-The sampling stratgey ***MUST*** be considered by the epidemiologist using the templates in order to ensure an appropriate weighting is applied to the analysis.
+The sampling stratgey **MUST** be considered by the epidemiologist using the templates in order to ensure an appropriate weighting is applied to the analysis.
 
