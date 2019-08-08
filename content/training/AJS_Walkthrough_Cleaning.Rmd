@@ -50,24 +50,44 @@ aweek::set_week_start("Monday")
 ```
 
 ## Overview of this page
-This page will demonstrate use of the Acute Jaundice Syndrome (AJS) outbreak template using data from an outbreak in Am Timan, Chad. This first page covers the initial data importation and cleaning steps in the template.
+This page will demonstrate use of the Acute Jaundice Syndrome (AJS) outbreak template using data from an outbreak in Am Timan, Chad. This first page covers the initial data importation and cleaning steps in the template.  
 
-[Rmarkdown introduction](https://rmarkdown.rstudio.com/articles_intro.html)  
+**Opening the correct template**
+[instructions here on opening the correct template]
 
-[Rmarkdown authoring basics](https://rmarkdown.rstudio.com/authoring_basics.html)
+**Access the dataset for this walk-through**
+[instructions and link to dataset here]
+
+**RMarkdown resources**  
+Review the page "Reading a RMarkdown Script", or reference these resources: [Rmarkdown introduction](https://rmarkdown.rstudio.com/articles_intro.html) and [Rmarkdown authoring basics](https://rmarkdown.rstudio.com/authoring_basics.html).  
+
+  
+
 
 ### AJS/HEV outbreak in Am Timan, Chad (2016-2017)
+
+We will be using data and examples from a real outbreak of Hepatitis E virus (HEV) infection which occurred in the Chadian town of Am Timan between October 2016 and April 2017  
+
 <img src="/images/AJS_Article.png" alt="AJS Article snip", width = "40%">
 
-[Paragraphs about the outbreak, MSF response, data collection, etc.]  
+[Link to publication](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0188240)  
+
+*DISCLAIMER: The real data from the outbreak has been used for the training materials linked to the outbreak templates of the R4epis project. The Chadian Ministry of Health (MoH) has approved the use of this data for training purposes. Please note, that some data has been adapted in order to best achieve training objectives. Also, the GPS coordinates included in the dataset do not correspond to real cases identified during this outbreak. They have been generated exclusively for training purposes.*  
+
+In early September 2016, a cluster of severely ill pregnant women with jaundice was detected at the Am Timan Hospital in the maternity ward. Following rapid tests conducted in Am Timan and confirmatory testing in the Netherlands, this was confirmed as due to HEV infection. Thus the MoH and MSF outbreak response was activated. The response consisted of four components: 1) active community based surveillance (CBS), 2) clinical assessment and management of ill cases at the hospital, 3) water chlorination activities at most water points in the town, 4) hygiene promotion.  
+
+The outbreak linelist data was combined data from the active CBS data and the clinical data from the hospital. The CBS functioned with community health workers visiting all households in the town every two weeks and actively searching for people with Acute Jaundice Syndrome (AJS). For this group of persons (suspected cases), only those that were visibly ill or that were pregnant were referred to the hospital for clinical assessment and admission if required. Persons that self-reported to the hospital or that arrived after referral would undergo a clinical assessment and a rapid test for HEV for diagnosis. Thus only for people assessed at the hospital were we able to capture a confirmed case status.  
+
+For the duration of the outbreak we detected 1193 suspected cases, 100 confirmed cases and discarded 150 cases with AJS who were not positive for HEV infection.  
 
 ## Template header and introduction
 
-<img src="/images/AJS_Intro.png" alt="AJS Header and Introduction snip", width = "75%">
-
 The very top of the template consists of a header surrounded by `---` lines. Here you may want to edit the title of your document. The other settings in the header define the default document type produced (Microsoft Word) when the RMarkdown is "knit".
 
-The introduction section is for your information only and this text can be deleted before knitting the document.
+The "Introduction to this template" section is for your information only and this text can be deleted before knitting the document.  
+
+<img src="/images/AJS_Intro.png" alt="AJS Header and Introduction snip", width = "75%">
+
 
 ## Package installation
 This section begins with text which explains the purpose of the following code chunk. **For your final report you may delete the text, but you must keep this code chunk!** The code will run without producing any output in your report, but is required to load packages necessary to produce the report.
@@ -88,7 +108,7 @@ The code chunk does the following:
 
 **In this template section you choose the appropriate code chunk to importing your dataset.** 
 
-<img src="/images/Data_Import.png" alt="Data import options snip", width = "75%">
+<img src="/images/AJS_Data_Import.png" alt="Data import options snip", width = "75%">
 
 For this exercise our dataset is a **non-standardized Excel file** from MSF's response an outbreak of AJS in Am Timan, Chad, so we use the `read_nonDHIS_data` code chunk, specifically the line that uses the import() function of the rio package to import an Excel file that is not password protected.  
 
@@ -115,7 +135,7 @@ linelist_dict <- msf_dict("AJS", compact = FALSE) %>%
 
 You can view the data dictionary by running the command `View(linelist_dict)`, or by clicking the name linelist_dict in the RStudio Environment (upper-right RStudio pane)  
 
-![](/images/Data_Dictionary.png)
+![](/images/AJS_Data_Dictionary.png)
 
 ### Clean variable names  
 Uncomment the appropriate lines of code to make a copy of the dataset, naming the copy "linelist_cleaned". 
@@ -145,11 +165,16 @@ Standardized variable names are required for this template to work smoothly, and
 
 * **Complete the mapping of variable names.** To the right of the equals sign, and before the comma, type the *exact* names of the variables from your dataset that correspond to the expected MSF data dictionary variables on the left. *If there is a data dictionary variable that is not present in your dataset, be sure to comment (#) out that line, as shown in the GIF below.*
 
-![](/images/Variable_Names.gif)  
+![](/images/AJS_Variable_Names.gif)  
 
 **Tip: **If you see this error:  
 `Error in is_symbol(expr) : argument "expr" is missing, with no default`  
 then you likely forgot to comment (#) the line for a variable you did not use.  
+
+And now you can see the result:  
+
+<img src="/images/AJS_Rename_Variables_Proof.png" alt="rename variables proof", width = "85%">
+
 
 ```{r include=FALSE, results='hide', message=FALSE, warning=FALSE}
 ## Add the appropriate column names after the equals signs
@@ -232,12 +257,12 @@ In order to calculate attack and mortality rates by region and age groups, the p
 
 **The template allows several ways to provide population figures so that they are stored in data frames with specific variable names.** Of course, the specific age groupings and region names in your data frames may differ from the examples.  
 
-You can either:  
-* Enter the counts directly **[need clarification here as this is not yet built]**  
-* Use the function gen_population() to derive the counts from proportions  
-* Import a spreadsheet file with the counts in the correct format  
+You can do one of the following:  
+1) Enter the counts directly **[need clarification here as this is not yet built]**  
+2) Use the function gen_population() to derive the counts from proportions  
+3) Import a spreadsheet file with the counts in the correct format  
 
-![](/images/Population_Counts.png)  
+![](/images/AJS_Population_Counts.png)  
 
 
 
