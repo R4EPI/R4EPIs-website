@@ -7,7 +7,10 @@ weight: 15
 
 # Survey Templates
 
-The survey templates have been developed to match the data that would be collected using MSF Ethical Review Board pre approved surveys ([available here](https://fieldresearch.msf.org/handle/10144/618942)) on: ***retrospective mortality and access to care***, ***vaccination coverage*** and ***malnutrition***. 
+The survey templates have been developed to match the data that would be collected using MSF Ethical Review Board pre approved surveys ([available here](https://fieldresearch.msf.org/handle/10144/618942)) on: 
+* ***retrospective mortality and access to care***, 
+* ***vaccination coverage*** and 
+* ***malnutrition***. 
 
 All survey templates are available in the [sitrep] package.
 
@@ -25,10 +28,10 @@ We will cover a few crucial concepts which are required for the understanding an
 
 ## Sampling strategy
 There are different ways to sample populations for surveys. The most commonly used in MSF settings are:
-1) ***Simple random sampling (SRS)***: requires a comprehensive sampling frame (i.e. total list of households inside a refugee camp or 
+1. ***Simple random sampling (SRS)***: requires a comprehensive sampling frame (i.e. total list of households inside a refugee camp or 
 GPS based sampling in a known area).
-2) ***Cluster based sampling***: most commonly used in combination with sampling villages proportional to population size.
-3) ***Stratified samples***: uses either SRS or cluster based sampling but in two different adminstrative areas in order to obtain
+2. ***Cluster based sampling***: most commonly used in combination with sampling villages proportional to population size.
+3. ***Stratified samples***: uses either SRS or cluster based sampling but in two different adminstrative areas in order to obtain
 precise prevalence estimates for them.
 
 The templates can accopmodate analysis of data from all sampling designs.
@@ -74,13 +77,13 @@ We recommend that you try and establish generic data dictionaries for mobile dat
 In the Survey Template Walkthrough (INSERT LINK), there is a step by step description of how to use the templates for data analysis.
 
 We have designed the templates to run through a similar series of analytical questions in the same order:
-1) Description of your survey sample and population in that survey sample
-2) Comparison of your survey sample to the population breakdown of that area (this will help you understand how biased your data is)
-3) Calculation of the main outcomes of interest (including DEFF): 
+1. Description of your survey sample and population in that survey sample
+2. Comparison of your survey sample to the population breakdown of that area (this will help you understand how biased your data is)
+3. Calculation of the main outcomes of interest (including DEFF): 
   * Mortality survey template: crude mortality rate (CMR) and under 5 year mortality rate (U5MR)
   * Vaccination coverage: vaccination coverage of vaccines of interest
   * Malnutrition: prevalence of malnutrition in target population through MUAC and Weight for Height Scores
-4) Calculation of secondary outcomes of interest
+4. Calculation of secondary outcomes of interest
 
 The sampling stratgey ***MUST*** be considered by the epidemiologist using the templates in order to ensure an appropriate weighting is applied to the analysis.
 
