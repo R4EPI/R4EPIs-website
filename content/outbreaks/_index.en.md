@@ -41,15 +41,23 @@ Usually the main component of this will include the creation of an "epidemic cur
 
 The epidemic curve will give an understanding about the mode of transmission of the outbreak in question and also possibly whether the outbreak is slowing down or still not under control.
 
+![Number and weekly incidence rate of CSM cases treated by MSF in Kebbi and Sokoto states, February 10 – June 8, 2015](images/epicurvemeningitis.jpg)
+
 ## Person characteristics
 
 This will include a series of graphs or tables that show the demographic breakdown of the cases identified in the outbreak.  It will include a comparison in attack rates and mortality rates in different age and gender groups to help guide the analysis to the identification of risk groups for infection and death. 
 
 This information can help identify priority groups for public health interventions and prevention activities or for improved/different clinical management approaches.
 
+![Characteristics of cases of acute jaundice syndrome and those testing positive and negative for HEV using RDTs RDTs during an acute outbreak of HEV in Am Timan, Chad, 2016–2017](images/hevperson.png)
+
 ## Place characteristics
 
 Here you will create different types of maps to illustrate the geographical spread and impact of the outbreak. Maps can aid in the identification of hotspots for the targeting or improvement of prevention and public health measures.
+
+![Cholera in Yemen, 2017](images/cholerayemen.png)
+
+[MSF calls for increased response to cholera outbreak](https://www.msf.ie/article/yemen-msf-calls-increased-response-cholera-outbreak)
 
 # Outbreak templates, the basics
 
