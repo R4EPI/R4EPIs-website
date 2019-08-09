@@ -4,6 +4,7 @@ categories: ["R"]
 tags: ["wiki"]
 weight: 10
 ---
+[insert nice picture here]
 
 The outbreak templates have been developed to cover four of the most common outbreak scenarios MSF teams face in our project locations. They include:
 
