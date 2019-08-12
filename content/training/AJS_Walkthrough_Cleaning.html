@@ -108,6 +108,13 @@ then you likely forgot to comment (#) the line for a variable you did not use.</
 <img src="/images/AJS_Population_Counts.png" />
 
 </div>
+<p>For the AJS example, we can use the population Excel spreadsheet, importing it with the template code as below. Note that the variables names have been edited to match the expected names (“patient_origin” and “population”).</p>
+<blockquote>
+<p>The file path you provide to the function may differ. A few notes about file paths:<br />
+* If copying a file path from Microsoft computer, you will need to reverse any slashes from  to /.<br />
+* [NOTES ON USING HERE and RIO::IMPORT]</p>
+</blockquote>
+<pre class="r"><code>population_data &lt;- rio::import(&quot;AJS_AmTiman_population_revised_for_template.xlsx&quot;, which=&quot;quartier&quot;)</code></pre>
 </div>
 <div id="lab-data" class="section level2">
 <h2>Lab data</h2>
@@ -127,6 +134,19 @@ linelist_raw &lt;- rio::import(&quot;AJS_AmTiman.xlsx&quot;, which = &quot;linel
 # The revised import command (don&#39;t forget the comma between arguments!)
 linelist_raw &lt;- rio::import(&quot;AJS_AmTiman.xlsx&quot;, which = &quot;linelist&quot;, na = &quot;.&quot;)</code></pre>
 <ol start="2" style="list-style-type: decimal">
-<li>**</li>
+<li><strong>Set date variables to class Date</strong> In linelist_cleaned there are seven variables containing dates (dateentry, epiquestdate, date_of_admission, date_of_onset, date_lab_sample_taken, dthospitalisation, dtdeath).</li>
 </ol>
+<p><strong>IF</strong> your dataset <em>completely</em> aligns with the MSF data dictionary then use the code in the template that converts all the date variables to class Date at once.</p>
+<pre class="r"><code># Use this is your dataset aligns with the data dictionary
+# Creates list of date variables from the data dictionary
+DATEVARS &lt;- filter(linelist_dict, data_element_valuetype == &quot;DATE&quot;) %&gt;% 
+  select(data_element_shortname) # select date vars
+# change to the date variables found in your dataset to class date 
+linelist_cleaned &lt;- linelist_cleaned %&gt;%
+  mutate_at(DATEVARS$data_element_shortname, as.Date)</code></pre>
+<p>However, if your dataset is at all unstandard you will need to use this code instead.</p>
+<pre class="r"><code># Use this if your dataset does not align with the data dictionary
+  linelist_cleaned &lt;- linelist_cleaned %&gt;%
+    mutate_at(vars(matches(&quot;date|Date&quot;)), linelist::guess_dates,
+            error_tolerance = 0.5)</code></pre>
 </div>

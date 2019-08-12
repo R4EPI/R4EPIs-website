@@ -117,7 +117,7 @@ For this exercise our dataset is a **non-standardized Excel file** from MSF's re
 ## Read data ------------------------------------
 # Excel file
 # to read in a specific sheet use "which"
-linelist_raw <- rio::import("AJS_AmTiman.xlsx", which = "linelist")
+linelist_raw <- rio::import("AJS_AmTiman.xlsx", which = "linelist", na=".")
 ```
 
 
@@ -244,7 +244,7 @@ linelist_cleaned <- rename(linelist_cleaned,
   pregnancy_outcome_at_exit         =   medppoutcome, # TEXT
   exit_status                       =   outcomehp, # TEXT
 #  date_of_exit                      =   , # DATE               # (Not in dataset)
-  time_to_death                     =   dtdeath, # TEXT
+#  time_to_death                     =   , # TEXT               # (Not in dataset)
   treatment_facility_site           =   hpid, # TEXT
 #  treatment_location                =   , # ORGANISATION_UNIT  # (Not in dataset)
   patient_origin_free_text          =   block # TEXT
@@ -264,7 +264,15 @@ You can do one of the following:
 
 ![](/images/AJS_Population_Counts.png)  
 
+For the AJS example, we can use the population Excel spreadsheet, importing it with the template code as below. Note that the variables names have been edited to match the expected names ("patient_origin" and "population").  
 
+>The file path you provide to the function may differ. A few notes about file paths:  
+* If copying a file path from Microsoft computer, you will need to reverse any slashes from \ to /.  
+* [NOTES ON USING HERE and RIO::IMPORT]  
+
+```{r eval=FALSE}
+population_data <- rio::import("AJS_AmTiman_population_revised_for_template.xlsx", which="quartier")
+```
 
 ## Lab data
 [Paragraph about lab data here - how it is used]  
@@ -280,7 +288,7 @@ Currently, missing values in the dataset are represented by a period (.). This c
 
 To fix this problem we scroll up to the import section of the template and insert an additional argument in the import command. The argument `na = "."` specifies a period as the value in the Excel sheet that R will consider to be "missing". As the data are imported, all cells with that value are changed to `NA`.
 
-```{r }
+```{r eval=FALSE}
 # The old import command
 linelist_raw <- rio::import("AJS_AmTiman.xlsx", which = "linelist")
 
@@ -288,17 +296,282 @@ linelist_raw <- rio::import("AJS_AmTiman.xlsx", which = "linelist")
 linelist_raw <- rio::import("AJS_AmTiman.xlsx", which = "linelist", na = ".")
 ```
 
-2) **
+2) **Set date variables to class Date**
+In linelist_cleaned there are seven variables containing dates (dateentry, epiquestdate, date_of_admission, date_of_onset, date_lab_sample_taken, dthospitalisation, dtdeath).  
+
+**IF** your dataset *completely* aligns with the MSF data dictionary then use the code in the template that converts all the date variables to class Date at once.
+
+```{r eval=FALSE}
+# Use this is your dataset aligns with the data dictionary
+# Creates list of date variables from the data dictionary
+DATEVARS <- filter(linelist_dict, data_element_valuetype == "DATE") %>% 
+  select(data_element_shortname) # select date vars
+# change to the date variables found in your dataset to class date 
+linelist_cleaned <- linelist_cleaned %>%
+  mutate_at(DATEVARS$data_element_shortname, as.Date)
+```
+
+However, if your dataset is at all unstandard you will need to use this code instead.  
+```{r}
+# Use this if your dataset does not align with the data dictionary
+  linelist_cleaned <- linelist_cleaned %>%
+    mutate_at(vars(matches("date|Date")), linelist::guess_dates,
+            error_tolerance = 0.5)
+```
+
+In our example dataset, this code converted many of our date variables, but did not detect the variables named with "dt", such as "dtdeath" and "dthospitalization". We must convert those manually:
+```{r}
+# Individually convert other date columns
+class(linelist_cleaned$dthospitalisation)
+
+linelist_cleaned$dthospitalisation <- linelist::guess_dates(linelist_cleaned$dthospitalisation)
+
+class(linelist_cleaned$dthospitalisation)
+
+# Repeat for variable "dtdeath"
+linelist_cleaned$dtdeath <- linelist::guess_dates(linelist_cleaned$dtdeath)
+```
+
+```{r}
+# create an epiweek variable
+# floor_day shortens to only give you the week number (rather than including day as well) 
+# factor includes all weeks between the min and max as levels (useful for zero count weeks)
+linelist_cleaned$epiweek <- aweek::date2week(linelist_cleaned$date_of_onset, 
+                                             floor_day = TRUE, 
+                                             factor = TRUE)
+```
+
+
+Skip number of days under observation bc no date of exit variable exists
+
+Skip the optional age group variables because only have age_years
+
+```{r}
+## create an age group variable by specifying categorical breaks
+linelist_cleaned$age_group <- age_categories(linelist_cleaned$age_years, 
+                                             breakers = c(0, 3, 15, 30, 45))
+```
+
+Create DIED variable, but recognize that the values in the dataset are in French.
+
+```{r}
+## use this version for coded values (e.g. "DOA", "DD")
+linelist_cleaned$DIED <- linelist_cleaned$exit_status %in% c("Décédé")
+```
+
+New exit status variable?
+
+Skip Skip Skip 
+
+Create case definition variable
+
+```{r}
+# Create a factor variable based on rules from other simple character variables
+# If you have access to lab results, you can create a case definition variable 
+# the tilda (~) is used to assign the new values (Conf, prob, susp, unknown)
+# starting from the specific to the general
+# TRUE assigns all remaining rows 
+# You MUST modify this section to match your case definition. The below
+# uses positive RDT for Confirmed and epi link only for Probable.
+#
+linelist_cleaned <- linelist_cleaned %>%
+  mutate(case_def = case_when(
+    is.na(hep_e_rdt) & is.na(other_cases_in_hh)           ~ NA_character_,
+    hep_e_rdt == "Positive"                               ~ "Confirmed",
+    hep_e_rdt != "Positive" & other_cases_in_hh == "Yes"  ~ "Probable",
+    TRUE                                                  ~ "Suspected"
+  ))
+```
+
+Create list of symptom variables - **already switched "med" variables to these ones, but some do not apply and must be removed from the list, such as convulsions and history of fever?**
+
+```{r}
+# vectors of variable names ----------------------------------------------------
+
+## You may want to group the names of several variables that have the same possible 
+## values in to a named vector. 
+## This way if you want to run the same function over these variables you can 
+## simply use the named vector rather than typing out each variable individually
+
+# create a grouping of all symptoms 
+SYMPTOMS <- c("generalized_itch", 
+              #"history_of_fever", 
+              "fever",
+              "joint_pains",
+              "epigastric_pain_heartburn",
+              "nausea_anorexia",
+              "vomiting", 
+              "diarrhoea",
+              "bleeding", 
+              "headache",
+              "mental_state",
+              #"convulsions",
+              "other_symptoms"  
+              )
+
+# create a grouping of all lab tests 
+LABS <- c("hep_b_rdt", 
+          "hep_c_rdt",
+          "hep_e_rdt",
+          "test_hepatitis_a",
+          "test_hepatitis_b",
+          "test_hepatitis_c",
+#          "test_hepatitis_e_igg",
+          "test_hepatitis_e_igm" ,
+          "test_hepatitis_e_genotype",
+          "test_hepatitis_e_virus",
+          "malaria_rdt_at_admission",
+#          "malaria_blood_film", 
+          "dengue",
+#          "dengue_rdt", 
+          "yellow_fever",
+#          "typhoid",
+          "chikungunya_onyongnyong", 
+#          "ebola_marburg",
+#          "lassa_fever",
+          "other_arthropod_transmitted_virus" 
+#          "other_pathogen"
+          )
+
+```
+
+Drop observations  
+
+**Maybe keep only the inpatient observations? And Add an "inpatient" variable to those that have "date_of_admission" value?**  
+
+
+```{r}
+# only keep variables with a case ID and a date of consultation
+linelist_cleaned <- linelist_cleaned %>% 
+  filter(!is.na(case_number) & !is.na(date_of_admission)) 
+```
+
+Export if you want
+
+```{r save_cleaned_data, eval = FALSE}
+## OPTIONAL: save your cleaned dataset as an excel file! 
+## put the current date in the name so you know!
+writexl::write_xlsx(linelist_cleaned, paste0("linelist_cleaned_", Sys.Date(), ".xlsx"))
+```
+
+
+Remmber, you defined reporting_week at beginning of script
+```{r}
+
+# drop cases after current week
+# you will probably have cases in your dataset if case finding continues
+# as these are after the week of reporting, drop them
+linelist_cleaned <- linelist_cleaned %>% 
+  filter(date_of_onset <= week2date(sprintf("%s-7", reporting_week)))
+
+# define the first week of outbreak (date of first case)
+first_week <- levels(linelist_cleaned$epiweek)[1]
+
+# outbreak start 
+# return the first day in the week of first case 
+obs_start <- week2date(sprintf("%s-1", first_week))
+
+# return last day of reporting week 
+obs_end   <- week2date(sprintf("%s-7", reporting_week))
+
+```
 
 
 
 
 
+Demographic Tables:
+
+These work:
+
+Cases by age group and definition 
+
+```{r describe_by_age_group_and_def}
+# use if you have lab results in your data
+# get counts and props of age groups by case definition 
+# include column and row totals 
+descriptive(linelist_cleaned, "age_group", "case_def", coltotals = TRUE, rowtotals = TRUE) %>%
+  rename("Age group" = age_group) %>%
+  rename_redundant(prop = "%") %>%
+  augment_redundant("_n$" = " cases (n)") %>%
+  kable(digits = 2)
+```
+
+
+
+
+Cases by age group and sex 
+
+```{r describe_by_age_group_and_sex}
+descriptive(linelist_cleaned, "age_group", "sex", coltotals = TRUE, rowtotals = TRUE) %>% 
+  rename("Age group" = age_group) %>%
+  rename_redundant(prop = "%") %>%
+  augment_redundant("_n$" = " cases (n)") %>%
+  kable(digits = 2)
+```
+
+
+Alternatively if you would like proportions to be of the total population, use the following. 
+
+```{r total_props_agegroup_sex}
+descriptive(linelist_cleaned, "age_group", "sex", 
+            coltotals = TRUE, rowtotals = TRUE, proptotal = TRUE) %>% 
+  rename("Age group" = age_group) %>%
+  rename_redundant(prop = "%") %>%
+  augment_redundant("_n$" = " cases (n)") %>%
+  kable(digits = 2)
+```
+
+
+Age pyramid 
+
+There were `r fmt_count(linelist_cleaned, is.na(sex))` cases missing information on sex and 
+`r fmt_count(linelist_cleaned, is.na(age_group))` missing age group.
+
+```{r age_pyramid, warning=FALSE}
+# plot age pyramid 
+ 
+plot_age_pyramid(linelist_cleaned, 
+                 age_group = "age_group", 
+                 split_by = "sex") + 
+  labs(y = "Cases (n)", x = "Age group") + # change axis  labels (nb. x/y flip)
+  theme(legend.position = "bottom",     # move legend to bottom
+        legend.title = element_blank(), # remove title
+        text = element_text(size = 18)  # change text size
+       )
+```
+
+Age pyramid for Under 2 obviously doesn't work.
 
 
 
 
 
+```{r describe_by_symptoms}
+
+# get counts and proportions for all variables named in SYMPTOMS
+multi_descriptive(linelist_cleaned, SYMPTOMS) %>% 
+  # re-order columns (drop total_prop too)
+  select(symptom, Yes_n, Yes_prop, No_n, No_prop, Total_n) %>%
+  # rename accordingly
+  rename_redundant("prop" = "%") %>%
+  augment_redundant("_n$" = " (n)") %>%
+  kable(digits = 2)
 
 
+```
+
+```{r describe_by_labs}
+# get counts and proportions for all variables named in LABS
+multi_descriptive(linelist_cleaned, LABS, .id = "Lab test") %>% 
+  # re-order columns (drop total_prop too)
+  select("Lab test", Pos_n, Positive_prop, Neg_n, Negative_prop, 
+         "Not done_n", "Not done_prop", Total_n) %>% 
+  # rename accordingly
+  rename("Unknown (n)" = "Not done_n") %>%
+  rename_redundant("prop" = "%") %>%
+  augment_redundant("_n$" = " (n)") %>%
+  kable(digits = 2)
+
+```
 
