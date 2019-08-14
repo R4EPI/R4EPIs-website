@@ -6,8 +6,7 @@ weight: 10
 ---
 ![msfepimeasles](images/msfepimeasles.jpg?width=30pc)
 
-Source: Elise Mertens/MSF
-MSF is working with the Ministry of Public Health throughout the year to monitor areas at risks of disease outbreaks. Week after week Louis, the MSF epidemiologist, monitors the health zones that have reported cases and the levels of epidemic alert. He is also in charge of coordinating the post-vaccination coverage survey to ensure that the vaccination coverage rate is sufficient.
+**Source**: Elise Mertens/MSF; MSF is working with the Ministry of Public Health throughout the year to monitor areas at risks of disease outbreaks. Week after week Louis, the MSF epidemiologist, monitors the health zones that have reported cases and the levels of epidemic alert. He is also in charge of coordinating the post-vaccination coverage survey to ensure that the vaccination coverage rate is sufficient.
 
 The outbreak templates have been developed to cover four of the most common outbreak scenarios MSF teams face in our project locations. They include:
 
@@ -46,7 +45,7 @@ The epidemic curve will give an understanding about the mode of transmission of 
 
 ![Number and weekly incidence rate of CSM cases treated by MSF in Kebbi and Sokoto states, February 10 – June 8, 2015](images/epicurvemeningitis.jpg?width=40pc)
 
-Source: [Chow J, et al. Invasive Meningococcal Meningitis Serogroup C Outbreak in Northwest Nigeria, 2015 – Third Consecutive Outbreak of a New Strain. PLOS Currents Outbreaks. 2016 Jul 7 . Edition 1.](10.1371/currents.outbreaks.06d10b6b4e690917d8b0a04268906143)
+**Source**: [Chow J, et al. Invasive Meningococcal Meningitis Serogroup C Outbreak in Northwest Nigeria, 2015 – Third Consecutive Outbreak of a New Strain. PLOS Currents Outbreaks. 2016 Jul 7 . Edition 1.](10.1371/currents.outbreaks.06d10b6b4e690917d8b0a04268906143)
 
 ## Person characteristics
 
@@ -56,7 +55,7 @@ This information can help identify priority groups for public health interventio
 
 ![Characteristics of cases of acute jaundice syndrome and those testing positive and negative for HEV using RDTs RDTs during an acute outbreak of HEV in Am Timan, Chad, 2016–2017](images/hevperson.png?width=40pc)
 
-Source: [Spina A, Lenglet A, et al.(2017) A large outbreak of Hepatitis E virus genotype 1 infection in an urban setting in Chad likely linked to household level transmission factors, 2016-2017. PLoS ONE 12(11): e0188240.](https://doi.org/10.1371/journal.pone.0188240)
+**Source**: [Spina A, Lenglet A, et al.(2017) A large outbreak of Hepatitis E virus genotype 1 infection in an urban setting in Chad likely linked to household level transmission factors, 2016-2017. PLoS ONE 12(11): e0188240.](https://doi.org/10.1371/journal.pone.0188240)
 
 ## Place characteristics
 
@@ -64,7 +63,7 @@ Here you will create different types of maps to illustrate the geographical spre
 
 ![Cholera in Yemen, 2017](images/cholerayemen.png?width=40pc)
 
-Source: [MSF calls for increased response to cholera outbreak](https://www.msf.ie/article/yemen-msf-calls-increased-response-cholera-outbreak)
+**Source**: [MSF calls for increased response to cholera outbreak](https://www.msf.ie/article/yemen-msf-calls-increased-response-cholera-outbreak)
 
 # Outbreak templates, the basics
 
