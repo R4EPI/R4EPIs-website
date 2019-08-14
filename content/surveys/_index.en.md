@@ -21,7 +21,7 @@ You can access these by selecting them from the RStudio RMarkdown template menu.
 
 # Getting started with Survey templates in R?
 
-This section (INSERT LINK TO THE WALK THROUGH ON SURVEY DATA ANALYSIS) offers you a step by step guide on how to use the survey templates to fit your data and run the analysis.
+This section (TODO: INSERT LINK TO THE WALK THROUGH ON SURVEY DATA ANALYSIS) offers you a step by step guide on how to use the survey templates to fit your data and run the analysis.
 
 # Basic concepts of survey data analysis
 
