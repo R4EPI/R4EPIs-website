@@ -23,7 +23,8 @@ Some recent examples of such outbreak responses and the data analysis that was d
 * [A large outbreak of Hepatitis E virus genotype 1 infection in an urban setting in Chad likely linked to household level transmission factors, 2016-2017](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0188240)
 
 You can access these by selecting them from the RStudio RMarkdown template menu:
-> RStudio>File>New File>R Markdownn>Template>Select Outbreak Report Template
+> 1. in RStudio, click on File > New File > R Markdown
+> 2. select "From Template" and then select the outbreak report template you want to use
 
 # Getting started with outbreak templates in R
 
