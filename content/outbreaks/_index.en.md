@@ -91,7 +91,7 @@ You will not be able to use the same set up of the data dictionaries, but you sh
 
 There is also coding to be able to guide you on conducting simple statistical comparisons between groups (chi square, t-test etc.), as well as the calculation of Odds Ratios (ORs) and Risk Ratios (RR) and running regression models for multivariate analyses.
 
-> **Below here is all the stuff that was written before that we need to make sure is included in the outbreak template walkthrough**
+> **TODO: Below here is all the stuff that was written before that we need to make sure is included in the outbreak template walkthrough**
 
 
 # Available Templates
