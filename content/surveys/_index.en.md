@@ -5,7 +5,7 @@ tags: ["wiki"]
 weight: 15
 ---
 
-# Survey Templates
+![MSF Epidemiologist carrying out survey](images/msfepisurvey.jpg?width=30pc)
 
 The survey templates have been developed to match the data that would be collected using [MSF Ethical Review Board pre-approved surveys](https://fieldresearch.msf.org/handle/10144/618942) on: 
 
