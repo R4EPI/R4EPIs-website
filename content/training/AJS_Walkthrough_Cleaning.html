@@ -134,9 +134,8 @@ then you likely forgot to comment (#) the line for a variable you did not use.</
 <div id="creating-and-cleaning-variables" class="section level2">
 <h2>Creating and cleaning variables</h2>
 <p>The variables and values in our example AJS dataset are still very far from the standard AJS MSF data dictionary. In the data cleaning step we will need to do the following:</p>
-<ol style="list-style-type: decimal">
-<li><strong>Re-code missing values from periods (.) to <code>NA</code> at import</strong></li>
-</ol>
+<div id="re-code-missing-values-from-periods-.-to-na-at-import" class="section level3">
+<h3><strong>Re-code missing values from periods (.) to <code>NA</code> at import</strong></h3>
 <p>Currently, missing values in the dataset are represented by a period (.). This causes problems because R expects missing values to be coded as <code>NA</code>. For example, if we attempt to set the variable date_of_onset to class Date, R gives an error because the periods are considered character values and do not fit the expected YYYY-MM-DD date format.</p>
 <p>To fix this problem we scroll up to the import section of the template and insert an additional argument in the import command. The argument <code>na = &quot;.&quot;</code> specifies a period as the value in the Excel sheet that R will consider to be “missing”. As the data are imported, all cells with that value are changed to <code>NA</code>.</p>
 <p><strong>Remember that after making this change to the import command you must re-run the entire script. This way, the dataset is imported correctly AND the changes to variable names, etc. are also performed on this newly imported dataset</strong></p>
@@ -145,9 +144,10 @@ linelist_raw &lt;- rio::import(&quot;AJS_AmTiman.xlsx&quot;, which = &quot;linel
 
 # The revised import command (don&#39;t forget the comma between arguments!)
 linelist_raw &lt;- rio::import(&quot;AJS_AmTiman.xlsx&quot;, which = &quot;linelist&quot;, na = &quot;.&quot;)</code></pre>
-<ol start="2" style="list-style-type: decimal">
-<li><strong>Set date variables to class Date</strong> In linelist_cleaned there are seven variables containing dates (dateentry, epiquestdate, date_of_admission, date_of_onset, date_lab_sample_taken, dthospitalisation, dtdeath).</li>
-</ol>
+</div>
+<div id="set-date-variables-to-class-date" class="section level3">
+<h3><strong>Set date variables to class Date</strong></h3>
+<p>In linelist_cleaned there are seven variables containing dates (dateentry, epiquestdate, date_of_admission, date_of_onset, date_lab_sample_taken, dthospitalisation, dtdeath).</p>
 <p><strong>IF</strong> your dataset <em>completely</em> aligns with the MSF data dictionary then use the code in the template that converts all the date variables to class Date at once.</p>
 <pre class="r"><code># Use this is your dataset aligns with the data dictionary
 # Creates list of date variables from the data dictionary
@@ -185,36 +185,72 @@ class(linelist_cleaned$dthospitalisation)</code></pre>
 <pre><code>## [1] &quot;Date&quot;</code></pre>
 <pre class="r"><code># Repeat for variable &quot;dtdeath&quot;
 linelist_cleaned$dtdeath &lt;- linelist::guess_dates(linelist_cleaned$dtdeath)</code></pre>
-<ol start="3" style="list-style-type: decimal">
-<li><strong>Re-code values in patient_facility_type</strong></li>
-</ol>
+</div>
+<div id="re-code-values-in-patient_facility_type" class="section level3">
+<h3><strong>Re-code values in patient_facility_type</strong></h3>
 <p>When assigning variables to match the data dictionary, we used the variable “hospitalisation” as the variable “patient_facility_type”. In the data dictionary, patient_facility_type should have values of “Inpatient” or “Outpatient.” Currently, the values are “Oui” and “Non”.</p>
 <p>This variable is referenced in later chunks, in which the analyses are restricted to observations where patient_facility_type == “Inpatient”. Thus, we need to change the values to match the data dictionary and what the later code expects.</p>
-<p>We can modify a chunk from the cleaning section of the template. The code below re-defines linelist_cleaned as itself mutated such that in the case when it’s value equals “Oui”, the value is changed (~) to “Inpatient”, and so on.</p>
-<p>As you modify this chunk for your own situation, remember to include commas at the end of the case_when() lines, and that each left-hand side (LHS) of the ~ must be a logical statement, not just a value. You can read more about case_when() here.</p>
+<p>We can modify a chunk from the cleaning section of the template. The code below re-defines linelist_cleaned as itself mutated such that in the case when it’s value equals “Oui”, the value is changed (~) to “Inpatient”, and so on. If applicable, write the lines from most specific at top to most general at bottom (see the section below on creating a case definition variable).</p>
+<p>As you modify this chunk for your own situation, remember to include commas at the end of each case_when() line (except the last one), and that each left-hand side (LHS) of the ~ must be a logical statement, not just a value. You can read more about case_when() <a href="https://dplyr.tidyverse.org/reference/case_when.html">here</a>.</p>
 <p><strong>Tip: All the right-hand side (RHS) values must be the same class (either character, numeric, etc.). So, if your RHS values are character and you want one RHS value to be missing, you cannot just write <code>NA</code> on the RHS. Instead you must use the special character version of <code>NA</code> : <code>NA_character_</code>.</strong></p>
-<pre class="r"><code>linelist_cleaned &lt;- linelist_cleaned %&gt;% 
+<pre class="r"><code># Check the values in patient_facility_type
+table(linelist_cleaned$patient_facility_type, useNA = &quot;always&quot;)</code></pre>
+<pre><code>## 
+##  Non  Oui &lt;NA&gt; 
+##  699   86  662</code></pre>
+<pre class="r"><code># Convert the values
+linelist_cleaned &lt;- linelist_cleaned %&gt;% 
   mutate(patient_facility_type = case_when(
     patient_facility_type == &quot;Oui&quot; ~ &quot;Inpatient&quot;,
     patient_facility_type == &quot;Non&quot; ~ &quot;Outpatient&quot;
-  ))</code></pre>
+  ))
+
+# Re-check the values in patient_facility_type
+table(linelist_cleaned$patient_facility_type, useNA = &quot;always&quot;)</code></pre>
+<pre><code>## 
+##  Inpatient Outpatient       &lt;NA&gt; 
+##         86        699        662</code></pre>
 <pre class="r"><code># create an epiweek variable
 # floor_day shortens to only give you the week number (rather than including day as well) 
 # factor includes all weeks between the min and max as levels (useful for zero count weeks)
 linelist_cleaned$epiweek &lt;- aweek::date2week(linelist_cleaned$date_of_onset, 
                                              floor_day = TRUE, 
                                              factor = TRUE)</code></pre>
-<p>Skip number of days under observation bc no date of exit variable exists</p>
+<p>We ignore the section on “number of days under observation”&quot; because our dataset does not have a date of exit variable.</p>
 <p>Skip the optional age group variables because only have age_years</p>
 <pre class="r"><code>## create an age group variable by specifying categorical breaks
 linelist_cleaned$age_group &lt;- age_categories(linelist_cleaned$age_years, 
                                              breakers = c(0, 3, 15, 30, 45))</code></pre>
-<p>Create DIED variable, but recognize that the values in the dataset are in French.</p>
+</div>
+<div id="create-died-variable" class="section level3">
+<h3>Create DIED variable</h3>
+<p>When performing this step, we recognize that our current values in exit_status are in French, therefore ask R to look for “Décédé” instead of “Dead”, “DOA”, or “DD”.</p>
 <pre class="r"><code>## use this version for coded values (e.g. &quot;DOA&quot;, &quot;DD&quot;)
 linelist_cleaned$DIED &lt;- linelist_cleaned$exit_status %in% c(&quot;Décédé&quot;)</code></pre>
-<p>New exit status variable?</p>
-<p>Skip Skip Skip</p>
-<p>Create case definition variable</p>
+</div>
+<div id="creating-new-values-for-exit-status" class="section level3">
+<h3>Creating new values for exit status</h3>
+<pre class="r"><code># Tabulate to see all possible values of exit_status
+table(linelist_cleaned$exit_status, useNA = &quot;always&quot;)</code></pre>
+<pre><code>## 
+##              -         Décédé Déchargé/Guéri        Echappé           &lt;NA&gt; 
+##              2             14             55              2           1374</code></pre>
+<pre class="r"><code>linelist_cleaned &lt;- linelist_cleaned %&gt;% 
+  mutate(exit_status2 = case_when(
+    exit_status == &quot;Décédé&quot;          ~ &quot;Died&quot;,
+    exit_status == &quot;-&quot;               ~ NA_character_,
+    exit_status == &quot;Echappé&quot;         ~ &quot;Left&quot;,
+    exit_status == &quot;Déchargé/Guéri&quot;  ~ &quot;Discharged&quot;
+  ))
+
+# Table the NEW variable to check transformation
+table(linelist_cleaned$exit_status2, useNA = &quot;always&quot;)</code></pre>
+<pre><code>## 
+##       Died Discharged       Left       &lt;NA&gt; 
+##         14         55          2       1376</code></pre>
+</div>
+<div id="create-case-definition-variable" class="section level3">
+<h3>Create case definition variable</h3>
 <pre class="r"><code># Create a factor variable based on rules from other simple character variables
 # If you have access to lab results, you can create a case definition variable 
 # the tilda (~) is used to assign the new values (Conf, prob, susp, unknown)
@@ -277,19 +313,23 @@ LABS &lt;- c(&quot;hep_b_rdt&quot;,
           &quot;other_arthropod_transmitted_virus&quot; 
 #          &quot;other_pathogen&quot;
           )</code></pre>
-<p>Drop observations</p>
-<p><strong>Maybe keep only the inpatient observations? And Add an “inpatient” variable to those that have “date_of_admission” value?</strong></p>
+</div>
+<div id="drop-observations" class="section level3">
+<h3><strong>Drop observations</strong></h3>
 <p><strong>Removing those with dates of onset outside of years 2016 or 2017</strong></p>
 <pre class="r"><code># Check date range of date_of_onset
 range(linelist_cleaned$date_of_onset, na.rm = T)</code></pre>
 <pre><code>## [1] &quot;2014-11-01&quot; &quot;2017-12-27&quot;</code></pre>
-<pre class="r"><code># Filter linelist_cleaned to keep observations where date_of_onset is after April 2016 AND before October 2017 OR missing
+<pre class="r"><code># Filter to keep observations where date_of_onset after April 2016 AND before October 2017 (OR missing)
 linelist_cleaned &lt;- linelist_cleaned %&gt;%
-  filter((date_of_onset &gt;= as.Date(&quot;2016-04-01&quot;) &amp; date_of_onset &lt;= as.Date(&quot;2017-10-01&quot;)) | date_of_onset) | 
-
+  filter((date_of_onset &gt;= as.Date(&quot;2016-04-01&quot;) &amp; date_of_onset &lt;= as.Date(&quot;2017-10-01&quot;)) | is.na(date_of_onset))
+# Re-check the date range
 range(linelist_cleaned$date_of_onset, na.rm = T)</code></pre>
-<pre><code>## Error in Ops.Date((date_of_onset &gt;= as.Date(&quot;2016-04-01&quot;) &amp; date_of_onset &lt;= : | not defined for &quot;Date&quot; objects</code></pre>
-<p>Export if you want</p>
+<pre><code>## [1] &quot;2016-06-09&quot; &quot;2017-04-22&quot;</code></pre>
+</div>
+</div>
+<div id="export-the-cleaned-dataset" class="section level2">
+<h2>Export the cleaned dataset</h2>
 <pre class="r"><code>## OPTIONAL: save your cleaned dataset as an excel file! 
 ## put the current date in the name so you know!
 writexl::write_xlsx(linelist_cleaned, paste0(&quot;linelist_cleaned_&quot;, Sys.Date(), &quot;.xlsx&quot;))</code></pre>
@@ -335,50 +375,50 @@ descriptive(linelist_cleaned, &quot;age_group&quot;, &quot;case_def&quot;, colto
 <tr class="odd">
 <td align="left">0-2</td>
 <td align="right">33</td>
-<td align="right">5.52</td>
+<td align="right">5.63</td>
 <td align="right">0</td>
 <td align="right">0.00</td>
 <td align="right">33</td>
 </tr>
 <tr class="even">
 <td align="left">3-14</td>
-<td align="right">246</td>
-<td align="right">41.14</td>
-<td align="right">11</td>
-<td align="right">37.93</td>
-<td align="right">257</td>
+<td align="right">239</td>
+<td align="right">40.78</td>
+<td align="right">10</td>
+<td align="right">35.71</td>
+<td align="right">249</td>
 </tr>
 <tr class="odd">
 <td align="left">15-29</td>
-<td align="right">206</td>
-<td align="right">34.45</td>
+<td align="right">203</td>
+<td align="right">34.64</td>
 <td align="right">13</td>
-<td align="right">44.83</td>
-<td align="right">219</td>
+<td align="right">46.43</td>
+<td align="right">216</td>
 </tr>
 <tr class="even">
 <td align="left">30-44</td>
-<td align="right">92</td>
-<td align="right">15.38</td>
+<td align="right">90</td>
+<td align="right">15.36</td>
 <td align="right">2</td>
-<td align="right">6.90</td>
-<td align="right">94</td>
+<td align="right">7.14</td>
+<td align="right">92</td>
 </tr>
 <tr class="odd">
 <td align="left">45+</td>
 <td align="right">21</td>
-<td align="right">3.51</td>
+<td align="right">3.58</td>
 <td align="right">3</td>
-<td align="right">10.34</td>
+<td align="right">10.71</td>
 <td align="right">24</td>
 </tr>
 <tr class="even">
 <td align="left">Total</td>
-<td align="right">598</td>
+<td align="right">586</td>
 <td align="right">100.00</td>
-<td align="right">29</td>
+<td align="right">28</td>
 <td align="right">100.00</td>
-<td align="right">627</td>
+<td align="right">614</td>
 </tr>
 </tbody>
 </table>
@@ -403,50 +443,50 @@ descriptive(linelist_cleaned, &quot;age_group&quot;, &quot;case_def&quot;, colto
 <tr class="odd">
 <td align="left">0-2</td>
 <td align="right">14</td>
-<td align="right">4.58</td>
+<td align="right">4.61</td>
 <td align="right">19</td>
-<td align="right">5.92</td>
+<td align="right">6.13</td>
 <td align="right">33</td>
 </tr>
 <tr class="even">
 <td align="left">3-14</td>
-<td align="right">86</td>
-<td align="right">28.10</td>
-<td align="right">171</td>
-<td align="right">53.27</td>
-<td align="right">257</td>
+<td align="right">85</td>
+<td align="right">27.96</td>
+<td align="right">164</td>
+<td align="right">52.90</td>
+<td align="right">249</td>
 </tr>
 <tr class="odd">
 <td align="left">15-29</td>
-<td align="right">147</td>
-<td align="right">48.04</td>
-<td align="right">72</td>
-<td align="right">22.43</td>
-<td align="right">219</td>
+<td align="right">146</td>
+<td align="right">48.03</td>
+<td align="right">70</td>
+<td align="right">22.58</td>
+<td align="right">216</td>
 </tr>
 <tr class="even">
 <td align="left">30-44</td>
 <td align="right">52</td>
-<td align="right">16.99</td>
-<td align="right">42</td>
-<td align="right">13.08</td>
-<td align="right">94</td>
+<td align="right">17.11</td>
+<td align="right">40</td>
+<td align="right">12.90</td>
+<td align="right">92</td>
 </tr>
 <tr class="odd">
 <td align="left">45+</td>
 <td align="right">7</td>
-<td align="right">2.29</td>
+<td align="right">2.30</td>
 <td align="right">17</td>
-<td align="right">5.30</td>
+<td align="right">5.48</td>
 <td align="right">24</td>
 </tr>
 <tr class="even">
 <td align="left">Total</td>
-<td align="right">306</td>
+<td align="right">304</td>
 <td align="right">100.00</td>
-<td align="right">321</td>
+<td align="right">310</td>
 <td align="right">100.00</td>
-<td align="right">627</td>
+<td align="right">614</td>
 </tr>
 </tbody>
 </table>
@@ -472,50 +512,50 @@ descriptive(linelist_cleaned, &quot;age_group&quot;, &quot;case_def&quot;, colto
 <tr class="odd">
 <td align="left">0-2</td>
 <td align="right">14</td>
-<td align="right">2.23</td>
+<td align="right">2.28</td>
 <td align="right">19</td>
-<td align="right">3.03</td>
+<td align="right">3.09</td>
 <td align="right">33</td>
 </tr>
 <tr class="even">
 <td align="left">3-14</td>
-<td align="right">86</td>
-<td align="right">13.72</td>
-<td align="right">171</td>
-<td align="right">27.27</td>
-<td align="right">257</td>
+<td align="right">85</td>
+<td align="right">13.84</td>
+<td align="right">164</td>
+<td align="right">26.71</td>
+<td align="right">249</td>
 </tr>
 <tr class="odd">
 <td align="left">15-29</td>
-<td align="right">147</td>
-<td align="right">23.44</td>
-<td align="right">72</td>
-<td align="right">11.48</td>
-<td align="right">219</td>
+<td align="right">146</td>
+<td align="right">23.78</td>
+<td align="right">70</td>
+<td align="right">11.40</td>
+<td align="right">216</td>
 </tr>
 <tr class="even">
 <td align="left">30-44</td>
 <td align="right">52</td>
-<td align="right">8.29</td>
-<td align="right">42</td>
-<td align="right">6.70</td>
-<td align="right">94</td>
+<td align="right">8.47</td>
+<td align="right">40</td>
+<td align="right">6.51</td>
+<td align="right">92</td>
 </tr>
 <tr class="odd">
 <td align="left">45+</td>
 <td align="right">7</td>
-<td align="right">1.12</td>
+<td align="right">1.14</td>
 <td align="right">17</td>
-<td align="right">2.71</td>
+<td align="right">2.77</td>
 <td align="right">24</td>
 </tr>
 <tr class="even">
 <td align="left">Total</td>
-<td align="right">306</td>
-<td align="right">48.80</td>
-<td align="right">321</td>
-<td align="right">51.20</td>
-<td align="right">627</td>
+<td align="right">304</td>
+<td align="right">49.51</td>
+<td align="right">310</td>
+<td align="right">50.49</td>
+<td align="right">614</td>
 </tr>
 </tbody>
 </table>
@@ -770,9 +810,9 @@ ar %&gt;%
 </thead>
 <tbody>
 <tr class="odd">
-<td align="right">627</td>
-<td align="right">100.58</td>
-<td align="right">(93.05–108.72)</td>
+<td align="right">614</td>
+<td align="right">98.5</td>
+<td align="right">(91.04–106.56)</td>
 </tr>
 </tbody>
 </table>
@@ -847,10 +887,10 @@ ar %&gt;%
 <tbody>
 <tr class="odd">
 <td align="right">2014-W44</td>
-<td align="right">1</td>
+<td align="right">0</td>
 <td align="right">62336</td>
-<td align="right">1.60</td>
-<td align="right">(0.28–9.09)</td>
+<td align="right">0.00</td>
+<td align="right">(0.00–6.16)</td>
 </tr>
 <tr class="even">
 <td align="right">2014-W45</td>
@@ -1274,17 +1314,17 @@ ar %&gt;%
 </tr>
 <tr class="even">
 <td align="right">2015-W53</td>
-<td align="right">1</td>
+<td align="right">0</td>
 <td align="right">62336</td>
-<td align="right">1.60</td>
-<td align="right">(0.28–9.09)</td>
+<td align="right">0.00</td>
+<td align="right">(0.00–6.16)</td>
 </tr>
 <tr class="odd">
 <td align="right">2016-W01</td>
-<td align="right">1</td>
+<td align="right">0</td>
 <td align="right">62336</td>
-<td align="right">1.60</td>
-<td align="right">(0.28–9.09)</td>
+<td align="right">0.00</td>
+<td align="right">(0.00–6.16)</td>
 </tr>
 <tr class="even">
 <td align="right">2016-W02</td>
@@ -1960,10 +2000,10 @@ ar %&gt;%
 </tr>
 <tr class="even">
 <td align="right">2017-W46</td>
-<td align="right">1</td>
+<td align="right">0</td>
 <td align="right">62336</td>
-<td align="right">1.60</td>
-<td align="right">(0.28–9.09)</td>
+<td align="right">0.00</td>
+<td align="right">(0.00–6.16)</td>
 </tr>
 <tr class="odd">
 <td align="right">2017-W47</td>
@@ -1974,17 +2014,17 @@ ar %&gt;%
 </tr>
 <tr class="even">
 <td align="right">2017-W48</td>
-<td align="right">1</td>
+<td align="right">0</td>
 <td align="right">62336</td>
-<td align="right">1.60</td>
-<td align="right">(0.28–9.09)</td>
+<td align="right">0.00</td>
+<td align="right">(0.00–6.16)</td>
 </tr>
 <tr class="odd">
 <td align="right">2017-W49</td>
-<td align="right">1</td>
+<td align="right">0</td>
 <td align="right">62336</td>
-<td align="right">1.60</td>
-<td align="right">(0.28–9.09)</td>
+<td align="right">0.00</td>
+<td align="right">(0.00–6.16)</td>
 </tr>
 <tr class="even">
 <td align="right">2017-W50</td>
@@ -1995,17 +2035,17 @@ ar %&gt;%
 </tr>
 <tr class="odd">
 <td align="right">2017-W51</td>
-<td align="right">4</td>
+<td align="right">0</td>
 <td align="right">62336</td>
-<td align="right">6.42</td>
-<td align="right">(2.50–16.50)</td>
+<td align="right">0.00</td>
+<td align="right">(0.00–6.16)</td>
 </tr>
 <tr class="even">
 <td align="right">2017-W52</td>
-<td align="right">3</td>
+<td align="right">0</td>
 <td align="right">62336</td>
-<td align="right">4.81</td>
-<td align="right">(1.64–14.15)</td>
+<td align="right">0.00</td>
+<td align="right">(0.00–6.16)</td>
 </tr>
 </tbody>
 </table>
@@ -2033,1165 +2073,1165 @@ attack_rate(cases$cumulative, population, multiplier = 100000) %&gt;%
 <tbody>
 <tr class="odd">
 <td align="right">2014-W44</td>
-<td align="right">1</td>
+<td align="right">0</td>
 <td align="right">62336</td>
-<td align="right">1.60</td>
-<td align="right">(0.28–9.09)</td>
+<td align="right">0.00</td>
+<td align="right">(0.00–6.16)</td>
 </tr>
 <tr class="even">
 <td align="right">2014-W45</td>
-<td align="right">1</td>
+<td align="right">0</td>
 <td align="right">62336</td>
-<td align="right">1.60</td>
-<td align="right">(0.28–9.09)</td>
+<td align="right">0.00</td>
+<td align="right">(0.00–6.16)</td>
 </tr>
 <tr class="odd">
 <td align="right">2014-W46</td>
-<td align="right">1</td>
+<td align="right">0</td>
 <td align="right">62336</td>
-<td align="right">1.60</td>
-<td align="right">(0.28–9.09)</td>
+<td align="right">0.00</td>
+<td align="right">(0.00–6.16)</td>
 </tr>
 <tr class="even">
 <td align="right">2014-W47</td>
-<td align="right">1</td>
+<td align="right">0</td>
 <td align="right">62336</td>
-<td align="right">1.60</td>
-<td align="right">(0.28–9.09)</td>
+<td align="right">0.00</td>
+<td align="right">(0.00–6.16)</td>
 </tr>
 <tr class="odd">
 <td align="right">2014-W48</td>
-<td align="right">1</td>
+<td align="right">0</td>
 <td align="right">62336</td>
-<td align="right">1.60</td>
-<td align="right">(0.28–9.09)</td>
+<td align="right">0.00</td>
+<td align="right">(0.00–6.16)</td>
 </tr>
 <tr class="even">
 <td align="right">2014-W49</td>
-<td align="right">1</td>
+<td align="right">0</td>
 <td align="right">62336</td>
-<td align="right">1.60</td>
-<td align="right">(0.28–9.09)</td>
+<td align="right">0.00</td>
+<td align="right">(0.00–6.16)</td>
 </tr>
 <tr class="odd">
 <td align="right">2014-W50</td>
-<td align="right">1</td>
+<td align="right">0</td>
 <td align="right">62336</td>
-<td align="right">1.60</td>
-<td align="right">(0.28–9.09)</td>
+<td align="right">0.00</td>
+<td align="right">(0.00–6.16)</td>
 </tr>
 <tr class="even">
 <td align="right">2014-W51</td>
-<td align="right">1</td>
+<td align="right">0</td>
 <td align="right">62336</td>
-<td align="right">1.60</td>
-<td align="right">(0.28–9.09)</td>
+<td align="right">0.00</td>
+<td align="right">(0.00–6.16)</td>
 </tr>
 <tr class="odd">
 <td align="right">2014-W52</td>
-<td align="right">1</td>
+<td align="right">0</td>
 <td align="right">62336</td>
-<td align="right">1.60</td>
-<td align="right">(0.28–9.09)</td>
+<td align="right">0.00</td>
+<td align="right">(0.00–6.16)</td>
 </tr>
 <tr class="even">
 <td align="right">2015-W01</td>
-<td align="right">1</td>
+<td align="right">0</td>
 <td align="right">62336</td>
-<td align="right">1.60</td>
-<td align="right">(0.28–9.09)</td>
+<td align="right">0.00</td>
+<td align="right">(0.00–6.16)</td>
 </tr>
 <tr class="odd">
 <td align="right">2015-W02</td>
-<td align="right">1</td>
+<td align="right">0</td>
 <td align="right">62336</td>
-<td align="right">1.60</td>
-<td align="right">(0.28–9.09)</td>
+<td align="right">0.00</td>
+<td align="right">(0.00–6.16)</td>
 </tr>
 <tr class="even">
 <td align="right">2015-W03</td>
-<td align="right">1</td>
+<td align="right">0</td>
 <td align="right">62336</td>
-<td align="right">1.60</td>
-<td align="right">(0.28–9.09)</td>
+<td align="right">0.00</td>
+<td align="right">(0.00–6.16)</td>
 </tr>
 <tr class="odd">
 <td align="right">2015-W04</td>
-<td align="right">1</td>
+<td align="right">0</td>
 <td align="right">62336</td>
-<td align="right">1.60</td>
-<td align="right">(0.28–9.09)</td>
+<td align="right">0.00</td>
+<td align="right">(0.00–6.16)</td>
 </tr>
 <tr class="even">
 <td align="right">2015-W05</td>
-<td align="right">1</td>
+<td align="right">0</td>
 <td align="right">62336</td>
-<td align="right">1.60</td>
-<td align="right">(0.28–9.09)</td>
+<td align="right">0.00</td>
+<td align="right">(0.00–6.16)</td>
 </tr>
 <tr class="odd">
 <td align="right">2015-W06</td>
-<td align="right">1</td>
+<td align="right">0</td>
 <td align="right">62336</td>
-<td align="right">1.60</td>
-<td align="right">(0.28–9.09)</td>
+<td align="right">0.00</td>
+<td align="right">(0.00–6.16)</td>
 </tr>
 <tr class="even">
 <td align="right">2015-W07</td>
-<td align="right">1</td>
+<td align="right">0</td>
 <td align="right">62336</td>
-<td align="right">1.60</td>
-<td align="right">(0.28–9.09)</td>
+<td align="right">0.00</td>
+<td align="right">(0.00–6.16)</td>
 </tr>
 <tr class="odd">
 <td align="right">2015-W08</td>
-<td align="right">1</td>
+<td align="right">0</td>
 <td align="right">62336</td>
-<td align="right">1.60</td>
-<td align="right">(0.28–9.09)</td>
+<td align="right">0.00</td>
+<td align="right">(0.00–6.16)</td>
 </tr>
 <tr class="even">
 <td align="right">2015-W09</td>
-<td align="right">1</td>
+<td align="right">0</td>
 <td align="right">62336</td>
-<td align="right">1.60</td>
-<td align="right">(0.28–9.09)</td>
+<td align="right">0.00</td>
+<td align="right">(0.00–6.16)</td>
 </tr>
 <tr class="odd">
 <td align="right">2015-W10</td>
-<td align="right">1</td>
+<td align="right">0</td>
 <td align="right">62336</td>
-<td align="right">1.60</td>
-<td align="right">(0.28–9.09)</td>
+<td align="right">0.00</td>
+<td align="right">(0.00–6.16)</td>
 </tr>
 <tr class="even">
 <td align="right">2015-W11</td>
-<td align="right">1</td>
+<td align="right">0</td>
 <td align="right">62336</td>
-<td align="right">1.60</td>
-<td align="right">(0.28–9.09)</td>
+<td align="right">0.00</td>
+<td align="right">(0.00–6.16)</td>
 </tr>
 <tr class="odd">
 <td align="right">2015-W12</td>
-<td align="right">1</td>
+<td align="right">0</td>
 <td align="right">62336</td>
-<td align="right">1.60</td>
-<td align="right">(0.28–9.09)</td>
+<td align="right">0.00</td>
+<td align="right">(0.00–6.16)</td>
 </tr>
 <tr class="even">
 <td align="right">2015-W13</td>
-<td align="right">1</td>
+<td align="right">0</td>
 <td align="right">62336</td>
-<td align="right">1.60</td>
-<td align="right">(0.28–9.09)</td>
+<td align="right">0.00</td>
+<td align="right">(0.00–6.16)</td>
 </tr>
 <tr class="odd">
 <td align="right">2015-W14</td>
-<td align="right">1</td>
+<td align="right">0</td>
 <td align="right">62336</td>
-<td align="right">1.60</td>
-<td align="right">(0.28–9.09)</td>
+<td align="right">0.00</td>
+<td align="right">(0.00–6.16)</td>
 </tr>
 <tr class="even">
 <td align="right">2015-W15</td>
-<td align="right">1</td>
+<td align="right">0</td>
 <td align="right">62336</td>
-<td align="right">1.60</td>
-<td align="right">(0.28–9.09)</td>
+<td align="right">0.00</td>
+<td align="right">(0.00–6.16)</td>
 </tr>
 <tr class="odd">
 <td align="right">2015-W16</td>
-<td align="right">1</td>
+<td align="right">0</td>
 <td align="right">62336</td>
-<td align="right">1.60</td>
-<td align="right">(0.28–9.09)</td>
+<td align="right">0.00</td>
+<td align="right">(0.00–6.16)</td>
 </tr>
 <tr class="even">
 <td align="right">2015-W17</td>
-<td align="right">1</td>
+<td align="right">0</td>
 <td align="right">62336</td>
-<td align="right">1.60</td>
-<td align="right">(0.28–9.09)</td>
+<td align="right">0.00</td>
+<td align="right">(0.00–6.16)</td>
 </tr>
 <tr class="odd">
 <td align="right">2015-W18</td>
-<td align="right">1</td>
+<td align="right">0</td>
 <td align="right">62336</td>
-<td align="right">1.60</td>
-<td align="right">(0.28–9.09)</td>
+<td align="right">0.00</td>
+<td align="right">(0.00–6.16)</td>
 </tr>
 <tr class="even">
 <td align="right">2015-W19</td>
-<td align="right">1</td>
+<td align="right">0</td>
 <td align="right">62336</td>
-<td align="right">1.60</td>
-<td align="right">(0.28–9.09)</td>
+<td align="right">0.00</td>
+<td align="right">(0.00–6.16)</td>
 </tr>
 <tr class="odd">
 <td align="right">2015-W20</td>
-<td align="right">1</td>
+<td align="right">0</td>
 <td align="right">62336</td>
-<td align="right">1.60</td>
-<td align="right">(0.28–9.09)</td>
+<td align="right">0.00</td>
+<td align="right">(0.00–6.16)</td>
 </tr>
 <tr class="even">
 <td align="right">2015-W21</td>
-<td align="right">1</td>
+<td align="right">0</td>
 <td align="right">62336</td>
-<td align="right">1.60</td>
-<td align="right">(0.28–9.09)</td>
+<td align="right">0.00</td>
+<td align="right">(0.00–6.16)</td>
 </tr>
 <tr class="odd">
 <td align="right">2015-W22</td>
-<td align="right">1</td>
+<td align="right">0</td>
 <td align="right">62336</td>
-<td align="right">1.60</td>
-<td align="right">(0.28–9.09)</td>
+<td align="right">0.00</td>
+<td align="right">(0.00–6.16)</td>
 </tr>
 <tr class="even">
 <td align="right">2015-W23</td>
-<td align="right">1</td>
+<td align="right">0</td>
 <td align="right">62336</td>
-<td align="right">1.60</td>
-<td align="right">(0.28–9.09)</td>
+<td align="right">0.00</td>
+<td align="right">(0.00–6.16)</td>
 </tr>
 <tr class="odd">
 <td align="right">2015-W24</td>
-<td align="right">1</td>
+<td align="right">0</td>
 <td align="right">62336</td>
-<td align="right">1.60</td>
-<td align="right">(0.28–9.09)</td>
+<td align="right">0.00</td>
+<td align="right">(0.00–6.16)</td>
 </tr>
 <tr class="even">
 <td align="right">2015-W25</td>
-<td align="right">1</td>
+<td align="right">0</td>
 <td align="right">62336</td>
-<td align="right">1.60</td>
-<td align="right">(0.28–9.09)</td>
+<td align="right">0.00</td>
+<td align="right">(0.00–6.16)</td>
 </tr>
 <tr class="odd">
 <td align="right">2015-W26</td>
-<td align="right">1</td>
+<td align="right">0</td>
 <td align="right">62336</td>
-<td align="right">1.60</td>
-<td align="right">(0.28–9.09)</td>
+<td align="right">0.00</td>
+<td align="right">(0.00–6.16)</td>
 </tr>
 <tr class="even">
 <td align="right">2015-W27</td>
-<td align="right">1</td>
+<td align="right">0</td>
 <td align="right">62336</td>
-<td align="right">1.60</td>
-<td align="right">(0.28–9.09)</td>
+<td align="right">0.00</td>
+<td align="right">(0.00–6.16)</td>
 </tr>
 <tr class="odd">
 <td align="right">2015-W28</td>
-<td align="right">1</td>
+<td align="right">0</td>
 <td align="right">62336</td>
-<td align="right">1.60</td>
-<td align="right">(0.28–9.09)</td>
+<td align="right">0.00</td>
+<td align="right">(0.00–6.16)</td>
 </tr>
 <tr class="even">
 <td align="right">2015-W29</td>
-<td align="right">1</td>
+<td align="right">0</td>
 <td align="right">62336</td>
-<td align="right">1.60</td>
-<td align="right">(0.28–9.09)</td>
+<td align="right">0.00</td>
+<td align="right">(0.00–6.16)</td>
 </tr>
 <tr class="odd">
 <td align="right">2015-W30</td>
-<td align="right">1</td>
+<td align="right">0</td>
 <td align="right">62336</td>
-<td align="right">1.60</td>
-<td align="right">(0.28–9.09)</td>
+<td align="right">0.00</td>
+<td align="right">(0.00–6.16)</td>
 </tr>
 <tr class="even">
 <td align="right">2015-W31</td>
-<td align="right">1</td>
+<td align="right">0</td>
 <td align="right">62336</td>
-<td align="right">1.60</td>
-<td align="right">(0.28–9.09)</td>
+<td align="right">0.00</td>
+<td align="right">(0.00–6.16)</td>
 </tr>
 <tr class="odd">
 <td align="right">2015-W32</td>
-<td align="right">1</td>
+<td align="right">0</td>
 <td align="right">62336</td>
-<td align="right">1.60</td>
-<td align="right">(0.28–9.09)</td>
+<td align="right">0.00</td>
+<td align="right">(0.00–6.16)</td>
 </tr>
 <tr class="even">
 <td align="right">2015-W33</td>
-<td align="right">1</td>
+<td align="right">0</td>
 <td align="right">62336</td>
-<td align="right">1.60</td>
-<td align="right">(0.28–9.09)</td>
+<td align="right">0.00</td>
+<td align="right">(0.00–6.16)</td>
 </tr>
 <tr class="odd">
 <td align="right">2015-W34</td>
-<td align="right">1</td>
+<td align="right">0</td>
 <td align="right">62336</td>
-<td align="right">1.60</td>
-<td align="right">(0.28–9.09)</td>
+<td align="right">0.00</td>
+<td align="right">(0.00–6.16)</td>
 </tr>
 <tr class="even">
 <td align="right">2015-W35</td>
-<td align="right">1</td>
+<td align="right">0</td>
 <td align="right">62336</td>
-<td align="right">1.60</td>
-<td align="right">(0.28–9.09)</td>
+<td align="right">0.00</td>
+<td align="right">(0.00–6.16)</td>
 </tr>
 <tr class="odd">
 <td align="right">2015-W36</td>
-<td align="right">1</td>
+<td align="right">0</td>
 <td align="right">62336</td>
-<td align="right">1.60</td>
-<td align="right">(0.28–9.09)</td>
+<td align="right">0.00</td>
+<td align="right">(0.00–6.16)</td>
 </tr>
 <tr class="even">
 <td align="right">2015-W37</td>
-<td align="right">1</td>
+<td align="right">0</td>
 <td align="right">62336</td>
-<td align="right">1.60</td>
-<td align="right">(0.28–9.09)</td>
+<td align="right">0.00</td>
+<td align="right">(0.00–6.16)</td>
 </tr>
 <tr class="odd">
 <td align="right">2015-W38</td>
-<td align="right">1</td>
+<td align="right">0</td>
 <td align="right">62336</td>
-<td align="right">1.60</td>
-<td align="right">(0.28–9.09)</td>
+<td align="right">0.00</td>
+<td align="right">(0.00–6.16)</td>
 </tr>
 <tr class="even">
 <td align="right">2015-W39</td>
-<td align="right">1</td>
+<td align="right">0</td>
 <td align="right">62336</td>
-<td align="right">1.60</td>
-<td align="right">(0.28–9.09)</td>
+<td align="right">0.00</td>
+<td align="right">(0.00–6.16)</td>
 </tr>
 <tr class="odd">
 <td align="right">2015-W40</td>
-<td align="right">1</td>
+<td align="right">0</td>
 <td align="right">62336</td>
-<td align="right">1.60</td>
-<td align="right">(0.28–9.09)</td>
+<td align="right">0.00</td>
+<td align="right">(0.00–6.16)</td>
 </tr>
 <tr class="even">
 <td align="right">2015-W41</td>
-<td align="right">1</td>
+<td align="right">0</td>
 <td align="right">62336</td>
-<td align="right">1.60</td>
-<td align="right">(0.28–9.09)</td>
+<td align="right">0.00</td>
+<td align="right">(0.00–6.16)</td>
 </tr>
 <tr class="odd">
 <td align="right">2015-W42</td>
-<td align="right">1</td>
+<td align="right">0</td>
 <td align="right">62336</td>
-<td align="right">1.60</td>
-<td align="right">(0.28–9.09)</td>
+<td align="right">0.00</td>
+<td align="right">(0.00–6.16)</td>
 </tr>
 <tr class="even">
 <td align="right">2015-W43</td>
-<td align="right">1</td>
+<td align="right">0</td>
 <td align="right">62336</td>
-<td align="right">1.60</td>
-<td align="right">(0.28–9.09)</td>
+<td align="right">0.00</td>
+<td align="right">(0.00–6.16)</td>
 </tr>
 <tr class="odd">
 <td align="right">2015-W44</td>
-<td align="right">1</td>
+<td align="right">0</td>
 <td align="right">62336</td>
-<td align="right">1.60</td>
-<td align="right">(0.28–9.09)</td>
+<td align="right">0.00</td>
+<td align="right">(0.00–6.16)</td>
 </tr>
 <tr class="even">
 <td align="right">2015-W45</td>
-<td align="right">1</td>
+<td align="right">0</td>
 <td align="right">62336</td>
-<td align="right">1.60</td>
-<td align="right">(0.28–9.09)</td>
+<td align="right">0.00</td>
+<td align="right">(0.00–6.16)</td>
 </tr>
 <tr class="odd">
 <td align="right">2015-W46</td>
-<td align="right">1</td>
+<td align="right">0</td>
 <td align="right">62336</td>
-<td align="right">1.60</td>
-<td align="right">(0.28–9.09)</td>
+<td align="right">0.00</td>
+<td align="right">(0.00–6.16)</td>
 </tr>
 <tr class="even">
 <td align="right">2015-W47</td>
-<td align="right">1</td>
+<td align="right">0</td>
 <td align="right">62336</td>
-<td align="right">1.60</td>
-<td align="right">(0.28–9.09)</td>
+<td align="right">0.00</td>
+<td align="right">(0.00–6.16)</td>
 </tr>
 <tr class="odd">
 <td align="right">2015-W48</td>
-<td align="right">1</td>
+<td align="right">0</td>
 <td align="right">62336</td>
-<td align="right">1.60</td>
-<td align="right">(0.28–9.09)</td>
+<td align="right">0.00</td>
+<td align="right">(0.00–6.16)</td>
 </tr>
 <tr class="even">
 <td align="right">2015-W49</td>
-<td align="right">1</td>
+<td align="right">0</td>
 <td align="right">62336</td>
-<td align="right">1.60</td>
-<td align="right">(0.28–9.09)</td>
+<td align="right">0.00</td>
+<td align="right">(0.00–6.16)</td>
 </tr>
 <tr class="odd">
 <td align="right">2015-W50</td>
+<td align="right">0</td>
+<td align="right">62336</td>
+<td align="right">0.00</td>
+<td align="right">(0.00–6.16)</td>
+</tr>
+<tr class="even">
+<td align="right">2015-W51</td>
+<td align="right">0</td>
+<td align="right">62336</td>
+<td align="right">0.00</td>
+<td align="right">(0.00–6.16)</td>
+</tr>
+<tr class="odd">
+<td align="right">2015-W52</td>
+<td align="right">0</td>
+<td align="right">62336</td>
+<td align="right">0.00</td>
+<td align="right">(0.00–6.16)</td>
+</tr>
+<tr class="even">
+<td align="right">2015-W53</td>
+<td align="right">0</td>
+<td align="right">62336</td>
+<td align="right">0.00</td>
+<td align="right">(0.00–6.16)</td>
+</tr>
+<tr class="odd">
+<td align="right">2016-W01</td>
+<td align="right">0</td>
+<td align="right">62336</td>
+<td align="right">0.00</td>
+<td align="right">(0.00–6.16)</td>
+</tr>
+<tr class="even">
+<td align="right">2016-W02</td>
+<td align="right">0</td>
+<td align="right">62336</td>
+<td align="right">0.00</td>
+<td align="right">(0.00–6.16)</td>
+</tr>
+<tr class="odd">
+<td align="right">2016-W03</td>
+<td align="right">0</td>
+<td align="right">62336</td>
+<td align="right">0.00</td>
+<td align="right">(0.00–6.16)</td>
+</tr>
+<tr class="even">
+<td align="right">2016-W04</td>
+<td align="right">0</td>
+<td align="right">62336</td>
+<td align="right">0.00</td>
+<td align="right">(0.00–6.16)</td>
+</tr>
+<tr class="odd">
+<td align="right">2016-W05</td>
+<td align="right">0</td>
+<td align="right">62336</td>
+<td align="right">0.00</td>
+<td align="right">(0.00–6.16)</td>
+</tr>
+<tr class="even">
+<td align="right">2016-W06</td>
+<td align="right">0</td>
+<td align="right">62336</td>
+<td align="right">0.00</td>
+<td align="right">(0.00–6.16)</td>
+</tr>
+<tr class="odd">
+<td align="right">2016-W07</td>
+<td align="right">0</td>
+<td align="right">62336</td>
+<td align="right">0.00</td>
+<td align="right">(0.00–6.16)</td>
+</tr>
+<tr class="even">
+<td align="right">2016-W08</td>
+<td align="right">0</td>
+<td align="right">62336</td>
+<td align="right">0.00</td>
+<td align="right">(0.00–6.16)</td>
+</tr>
+<tr class="odd">
+<td align="right">2016-W09</td>
+<td align="right">0</td>
+<td align="right">62336</td>
+<td align="right">0.00</td>
+<td align="right">(0.00–6.16)</td>
+</tr>
+<tr class="even">
+<td align="right">2016-W10</td>
+<td align="right">0</td>
+<td align="right">62336</td>
+<td align="right">0.00</td>
+<td align="right">(0.00–6.16)</td>
+</tr>
+<tr class="odd">
+<td align="right">2016-W11</td>
+<td align="right">0</td>
+<td align="right">62336</td>
+<td align="right">0.00</td>
+<td align="right">(0.00–6.16)</td>
+</tr>
+<tr class="even">
+<td align="right">2016-W12</td>
+<td align="right">0</td>
+<td align="right">62336</td>
+<td align="right">0.00</td>
+<td align="right">(0.00–6.16)</td>
+</tr>
+<tr class="odd">
+<td align="right">2016-W13</td>
+<td align="right">0</td>
+<td align="right">62336</td>
+<td align="right">0.00</td>
+<td align="right">(0.00–6.16)</td>
+</tr>
+<tr class="even">
+<td align="right">2016-W14</td>
+<td align="right">0</td>
+<td align="right">62336</td>
+<td align="right">0.00</td>
+<td align="right">(0.00–6.16)</td>
+</tr>
+<tr class="odd">
+<td align="right">2016-W15</td>
+<td align="right">0</td>
+<td align="right">62336</td>
+<td align="right">0.00</td>
+<td align="right">(0.00–6.16)</td>
+</tr>
+<tr class="even">
+<td align="right">2016-W16</td>
+<td align="right">0</td>
+<td align="right">62336</td>
+<td align="right">0.00</td>
+<td align="right">(0.00–6.16)</td>
+</tr>
+<tr class="odd">
+<td align="right">2016-W17</td>
+<td align="right">0</td>
+<td align="right">62336</td>
+<td align="right">0.00</td>
+<td align="right">(0.00–6.16)</td>
+</tr>
+<tr class="even">
+<td align="right">2016-W18</td>
+<td align="right">0</td>
+<td align="right">62336</td>
+<td align="right">0.00</td>
+<td align="right">(0.00–6.16)</td>
+</tr>
+<tr class="odd">
+<td align="right">2016-W19</td>
+<td align="right">0</td>
+<td align="right">62336</td>
+<td align="right">0.00</td>
+<td align="right">(0.00–6.16)</td>
+</tr>
+<tr class="even">
+<td align="right">2016-W20</td>
+<td align="right">0</td>
+<td align="right">62336</td>
+<td align="right">0.00</td>
+<td align="right">(0.00–6.16)</td>
+</tr>
+<tr class="odd">
+<td align="right">2016-W21</td>
+<td align="right">0</td>
+<td align="right">62336</td>
+<td align="right">0.00</td>
+<td align="right">(0.00–6.16)</td>
+</tr>
+<tr class="even">
+<td align="right">2016-W22</td>
+<td align="right">0</td>
+<td align="right">62336</td>
+<td align="right">0.00</td>
+<td align="right">(0.00–6.16)</td>
+</tr>
+<tr class="odd">
+<td align="right">2016-W23</td>
 <td align="right">1</td>
 <td align="right">62336</td>
 <td align="right">1.60</td>
 <td align="right">(0.28–9.09)</td>
 </tr>
 <tr class="even">
-<td align="right">2015-W51</td>
+<td align="right">2016-W24</td>
 <td align="right">1</td>
 <td align="right">62336</td>
 <td align="right">1.60</td>
 <td align="right">(0.28–9.09)</td>
 </tr>
 <tr class="odd">
-<td align="right">2015-W52</td>
+<td align="right">2016-W25</td>
 <td align="right">1</td>
 <td align="right">62336</td>
 <td align="right">1.60</td>
 <td align="right">(0.28–9.09)</td>
 </tr>
 <tr class="even">
-<td align="right">2015-W53</td>
+<td align="right">2016-W26</td>
+<td align="right">1</td>
+<td align="right">62336</td>
+<td align="right">1.60</td>
+<td align="right">(0.28–9.09)</td>
+</tr>
+<tr class="odd">
+<td align="right">2016-W27</td>
+<td align="right">1</td>
+<td align="right">62336</td>
+<td align="right">1.60</td>
+<td align="right">(0.28–9.09)</td>
+</tr>
+<tr class="even">
+<td align="right">2016-W28</td>
+<td align="right">1</td>
+<td align="right">62336</td>
+<td align="right">1.60</td>
+<td align="right">(0.28–9.09)</td>
+</tr>
+<tr class="odd">
+<td align="right">2016-W29</td>
 <td align="right">2</td>
 <td align="right">62336</td>
 <td align="right">3.21</td>
 <td align="right">(0.88–11.70)</td>
 </tr>
-<tr class="odd">
-<td align="right">2016-W01</td>
-<td align="right">3</td>
-<td align="right">62336</td>
-<td align="right">4.81</td>
-<td align="right">(1.64–14.15)</td>
-</tr>
-<tr class="even">
-<td align="right">2016-W02</td>
-<td align="right">3</td>
-<td align="right">62336</td>
-<td align="right">4.81</td>
-<td align="right">(1.64–14.15)</td>
-</tr>
-<tr class="odd">
-<td align="right">2016-W03</td>
-<td align="right">3</td>
-<td align="right">62336</td>
-<td align="right">4.81</td>
-<td align="right">(1.64–14.15)</td>
-</tr>
-<tr class="even">
-<td align="right">2016-W04</td>
-<td align="right">3</td>
-<td align="right">62336</td>
-<td align="right">4.81</td>
-<td align="right">(1.64–14.15)</td>
-</tr>
-<tr class="odd">
-<td align="right">2016-W05</td>
-<td align="right">3</td>
-<td align="right">62336</td>
-<td align="right">4.81</td>
-<td align="right">(1.64–14.15)</td>
-</tr>
-<tr class="even">
-<td align="right">2016-W06</td>
-<td align="right">3</td>
-<td align="right">62336</td>
-<td align="right">4.81</td>
-<td align="right">(1.64–14.15)</td>
-</tr>
-<tr class="odd">
-<td align="right">2016-W07</td>
-<td align="right">3</td>
-<td align="right">62336</td>
-<td align="right">4.81</td>
-<td align="right">(1.64–14.15)</td>
-</tr>
-<tr class="even">
-<td align="right">2016-W08</td>
-<td align="right">3</td>
-<td align="right">62336</td>
-<td align="right">4.81</td>
-<td align="right">(1.64–14.15)</td>
-</tr>
-<tr class="odd">
-<td align="right">2016-W09</td>
-<td align="right">3</td>
-<td align="right">62336</td>
-<td align="right">4.81</td>
-<td align="right">(1.64–14.15)</td>
-</tr>
-<tr class="even">
-<td align="right">2016-W10</td>
-<td align="right">3</td>
-<td align="right">62336</td>
-<td align="right">4.81</td>
-<td align="right">(1.64–14.15)</td>
-</tr>
-<tr class="odd">
-<td align="right">2016-W11</td>
-<td align="right">3</td>
-<td align="right">62336</td>
-<td align="right">4.81</td>
-<td align="right">(1.64–14.15)</td>
-</tr>
-<tr class="even">
-<td align="right">2016-W12</td>
-<td align="right">3</td>
-<td align="right">62336</td>
-<td align="right">4.81</td>
-<td align="right">(1.64–14.15)</td>
-</tr>
-<tr class="odd">
-<td align="right">2016-W13</td>
-<td align="right">3</td>
-<td align="right">62336</td>
-<td align="right">4.81</td>
-<td align="right">(1.64–14.15)</td>
-</tr>
-<tr class="even">
-<td align="right">2016-W14</td>
-<td align="right">3</td>
-<td align="right">62336</td>
-<td align="right">4.81</td>
-<td align="right">(1.64–14.15)</td>
-</tr>
-<tr class="odd">
-<td align="right">2016-W15</td>
-<td align="right">3</td>
-<td align="right">62336</td>
-<td align="right">4.81</td>
-<td align="right">(1.64–14.15)</td>
-</tr>
-<tr class="even">
-<td align="right">2016-W16</td>
-<td align="right">3</td>
-<td align="right">62336</td>
-<td align="right">4.81</td>
-<td align="right">(1.64–14.15)</td>
-</tr>
-<tr class="odd">
-<td align="right">2016-W17</td>
-<td align="right">3</td>
-<td align="right">62336</td>
-<td align="right">4.81</td>
-<td align="right">(1.64–14.15)</td>
-</tr>
-<tr class="even">
-<td align="right">2016-W18</td>
-<td align="right">3</td>
-<td align="right">62336</td>
-<td align="right">4.81</td>
-<td align="right">(1.64–14.15)</td>
-</tr>
-<tr class="odd">
-<td align="right">2016-W19</td>
-<td align="right">3</td>
-<td align="right">62336</td>
-<td align="right">4.81</td>
-<td align="right">(1.64–14.15)</td>
-</tr>
-<tr class="even">
-<td align="right">2016-W20</td>
-<td align="right">3</td>
-<td align="right">62336</td>
-<td align="right">4.81</td>
-<td align="right">(1.64–14.15)</td>
-</tr>
-<tr class="odd">
-<td align="right">2016-W21</td>
-<td align="right">3</td>
-<td align="right">62336</td>
-<td align="right">4.81</td>
-<td align="right">(1.64–14.15)</td>
-</tr>
-<tr class="even">
-<td align="right">2016-W22</td>
-<td align="right">3</td>
-<td align="right">62336</td>
-<td align="right">4.81</td>
-<td align="right">(1.64–14.15)</td>
-</tr>
-<tr class="odd">
-<td align="right">2016-W23</td>
-<td align="right">4</td>
-<td align="right">62336</td>
-<td align="right">6.42</td>
-<td align="right">(2.50–16.50)</td>
-</tr>
-<tr class="even">
-<td align="right">2016-W24</td>
-<td align="right">4</td>
-<td align="right">62336</td>
-<td align="right">6.42</td>
-<td align="right">(2.50–16.50)</td>
-</tr>
-<tr class="odd">
-<td align="right">2016-W25</td>
-<td align="right">4</td>
-<td align="right">62336</td>
-<td align="right">6.42</td>
-<td align="right">(2.50–16.50)</td>
-</tr>
-<tr class="even">
-<td align="right">2016-W26</td>
-<td align="right">4</td>
-<td align="right">62336</td>
-<td align="right">6.42</td>
-<td align="right">(2.50–16.50)</td>
-</tr>
-<tr class="odd">
-<td align="right">2016-W27</td>
-<td align="right">4</td>
-<td align="right">62336</td>
-<td align="right">6.42</td>
-<td align="right">(2.50–16.50)</td>
-</tr>
-<tr class="even">
-<td align="right">2016-W28</td>
-<td align="right">4</td>
-<td align="right">62336</td>
-<td align="right">6.42</td>
-<td align="right">(2.50–16.50)</td>
-</tr>
-<tr class="odd">
-<td align="right">2016-W29</td>
-<td align="right">5</td>
-<td align="right">62336</td>
-<td align="right">8.02</td>
-<td align="right">(3.43–18.78)</td>
-</tr>
 <tr class="even">
 <td align="right">2016-W30</td>
-<td align="right">7</td>
+<td align="right">4</td>
 <td align="right">62336</td>
-<td align="right">11.23</td>
-<td align="right">(5.44–23.18)</td>
+<td align="right">6.42</td>
+<td align="right">(2.50–16.50)</td>
 </tr>
 <tr class="odd">
 <td align="right">2016-W31</td>
-<td align="right">7</td>
+<td align="right">4</td>
 <td align="right">62336</td>
-<td align="right">11.23</td>
-<td align="right">(5.44–23.18)</td>
+<td align="right">6.42</td>
+<td align="right">(2.50–16.50)</td>
 </tr>
 <tr class="even">
 <td align="right">2016-W32</td>
+<td align="right">4</td>
+<td align="right">62336</td>
+<td align="right">6.42</td>
+<td align="right">(2.50–16.50)</td>
+</tr>
+<tr class="odd">
+<td align="right">2016-W33</td>
 <td align="right">7</td>
 <td align="right">62336</td>
 <td align="right">11.23</td>
 <td align="right">(5.44–23.18)</td>
 </tr>
-<tr class="odd">
-<td align="right">2016-W33</td>
-<td align="right">10</td>
-<td align="right">62336</td>
-<td align="right">16.04</td>
-<td align="right">(8.71–29.53)</td>
-</tr>
 <tr class="even">
 <td align="right">2016-W34</td>
+<td align="right">14</td>
+<td align="right">62336</td>
+<td align="right">22.46</td>
+<td align="right">(13.38–37.70)</td>
+</tr>
+<tr class="odd">
+<td align="right">2016-W35</td>
+<td align="right">15</td>
+<td align="right">62336</td>
+<td align="right">24.06</td>
+<td align="right">(14.58–39.70)</td>
+</tr>
+<tr class="even">
+<td align="right">2016-W36</td>
 <td align="right">17</td>
 <td align="right">62336</td>
 <td align="right">27.27</td>
 <td align="right">(17.03–43.67)</td>
 </tr>
 <tr class="odd">
-<td align="right">2016-W35</td>
-<td align="right">18</td>
-<td align="right">62336</td>
-<td align="right">28.88</td>
-<td align="right">(18.27–45.64)</td>
-</tr>
-<tr class="even">
-<td align="right">2016-W36</td>
-<td align="right">20</td>
-<td align="right">62336</td>
-<td align="right">32.08</td>
-<td align="right">(20.77–49.56)</td>
-</tr>
-<tr class="odd">
 <td align="right">2016-W37</td>
-<td align="right">37</td>
+<td align="right">34</td>
 <td align="right">62336</td>
-<td align="right">59.36</td>
-<td align="right">(43.07–81.80)</td>
+<td align="right">54.54</td>
+<td align="right">(39.04–76.21)</td>
 </tr>
 <tr class="even">
 <td align="right">2016-W38</td>
-<td align="right">49</td>
+<td align="right">46</td>
 <td align="right">62336</td>
-<td align="right">78.61</td>
-<td align="right">(59.47–103.90)</td>
+<td align="right">73.79</td>
+<td align="right">(55.33–98.41)</td>
 </tr>
 <tr class="odd">
 <td align="right">2016-W39</td>
-<td align="right">58</td>
+<td align="right">55</td>
 <td align="right">62336</td>
-<td align="right">93.04</td>
-<td align="right">(71.99–120.25)</td>
+<td align="right">88.23</td>
+<td align="right">(67.80–114.82)</td>
 </tr>
 <tr class="even">
 <td align="right">2016-W40</td>
+<td align="right">65</td>
+<td align="right">62336</td>
+<td align="right">104.27</td>
+<td align="right">(81.83–132.87)</td>
+</tr>
+<tr class="odd">
+<td align="right">2016-W41</td>
 <td align="right">68</td>
 <td align="right">62336</td>
 <td align="right">109.09</td>
 <td align="right">(86.07–138.26)</td>
 </tr>
-<tr class="odd">
-<td align="right">2016-W41</td>
-<td align="right">71</td>
-<td align="right">62336</td>
-<td align="right">113.90</td>
-<td align="right">(90.32–143.63)</td>
-</tr>
 <tr class="even">
 <td align="right">2016-W42</td>
-<td align="right">76</td>
+<td align="right">73</td>
 <td align="right">62336</td>
-<td align="right">121.92</td>
-<td align="right">(97.43–152.56)</td>
+<td align="right">117.11</td>
+<td align="right">(93.16–147.20)</td>
 </tr>
 <tr class="odd">
 <td align="right">2016-W43</td>
+<td align="right">78</td>
+<td align="right">62336</td>
+<td align="right">125.13</td>
+<td align="right">(100.28–156.12)</td>
+</tr>
+<tr class="even">
+<td align="right">2016-W44</td>
 <td align="right">81</td>
 <td align="right">62336</td>
 <td align="right">129.94</td>
 <td align="right">(104.57–161.46)</td>
 </tr>
-<tr class="even">
-<td align="right">2016-W44</td>
-<td align="right">84</td>
-<td align="right">62336</td>
-<td align="right">134.75</td>
-<td align="right">(108.87–166.79)</td>
-</tr>
 <tr class="odd">
 <td align="right">2016-W45</td>
-<td align="right">89</td>
+<td align="right">86</td>
 <td align="right">62336</td>
-<td align="right">142.77</td>
-<td align="right">(116.05–175.65)</td>
+<td align="right">137.96</td>
+<td align="right">(111.74–170.33)</td>
 </tr>
 <tr class="even">
 <td align="right">2016-W46</td>
-<td align="right">101</td>
+<td align="right">98</td>
 <td align="right">62336</td>
-<td align="right">162.03</td>
-<td align="right">(133.38–196.82)</td>
+<td align="right">157.21</td>
+<td align="right">(129.03–191.54)</td>
 </tr>
 <tr class="odd">
 <td align="right">2016-W47</td>
-<td align="right">114</td>
+<td align="right">111</td>
 <td align="right">62336</td>
-<td align="right">182.88</td>
-<td align="right">(152.27–219.63)</td>
+<td align="right">178.07</td>
+<td align="right">(147.90–214.38)</td>
 </tr>
 <tr class="even">
 <td align="right">2016-W48</td>
-<td align="right">137</td>
+<td align="right">134</td>
 <td align="right">62336</td>
-<td align="right">219.78</td>
-<td align="right">(185.96–259.73)</td>
+<td align="right">214.96</td>
+<td align="right">(181.55–254.52)</td>
 </tr>
 <tr class="odd">
 <td align="right">2016-W49</td>
-<td align="right">156</td>
+<td align="right">153</td>
 <td align="right">62336</td>
-<td align="right">250.26</td>
-<td align="right">(213.98–292.66)</td>
+<td align="right">245.44</td>
+<td align="right">(209.55–287.47)</td>
 </tr>
 <tr class="even">
 <td align="right">2016-W50</td>
-<td align="right">191</td>
+<td align="right">188</td>
 <td align="right">62336</td>
-<td align="right">306.40</td>
-<td align="right">(265.97–352.96)</td>
+<td align="right">301.59</td>
+<td align="right">(261.50–347.81)</td>
 </tr>
 <tr class="odd">
 <td align="right">2016-W51</td>
-<td align="right">213</td>
+<td align="right">210</td>
 <td align="right">62336</td>
-<td align="right">341.70</td>
-<td align="right">(298.85–390.67)</td>
+<td align="right">336.88</td>
+<td align="right">(294.36–385.53)</td>
 </tr>
 <tr class="even">
 <td align="right">2016-W52</td>
-<td align="right">244</td>
+<td align="right">241</td>
 <td align="right">62336</td>
-<td align="right">391.43</td>
-<td align="right">(345.37–443.60)</td>
+<td align="right">386.61</td>
+<td align="right">(340.86–438.48)</td>
 </tr>
 <tr class="odd">
 <td align="right">2017-W01</td>
-<td align="right">260</td>
+<td align="right">257</td>
 <td align="right">62336</td>
-<td align="right">417.09</td>
-<td align="right">(369.47–470.83)</td>
+<td align="right">412.28</td>
+<td align="right">(364.95–465.73)</td>
 </tr>
 <tr class="even">
 <td align="right">2017-W02</td>
-<td align="right">282</td>
+<td align="right">279</td>
 <td align="right">62336</td>
-<td align="right">452.39</td>
-<td align="right">(402.67–508.21)</td>
+<td align="right">447.57</td>
+<td align="right">(398.14–503.12)</td>
 </tr>
 <tr class="odd">
 <td align="right">2017-W03</td>
-<td align="right">296</td>
+<td align="right">293</td>
 <td align="right">62336</td>
-<td align="right">474.85</td>
-<td align="right">(423.85–531.95)</td>
+<td align="right">470.03</td>
+<td align="right">(419.31–526.86)</td>
 </tr>
 <tr class="even">
 <td align="right">2017-W04</td>
-<td align="right">316</td>
+<td align="right">313</td>
 <td align="right">62336</td>
-<td align="right">506.93</td>
-<td align="right">(454.15–565.81)</td>
+<td align="right">502.12</td>
+<td align="right">(449.60–560.74)</td>
 </tr>
 <tr class="odd">
 <td align="right">2017-W05</td>
-<td align="right">332</td>
+<td align="right">329</td>
 <td align="right">62336</td>
-<td align="right">532.60</td>
-<td align="right">(478.43–592.86)</td>
+<td align="right">527.78</td>
+<td align="right">(473.87–587.79)</td>
 </tr>
 <tr class="even">
 <td align="right">2017-W06</td>
-<td align="right">450</td>
+<td align="right">447</td>
 <td align="right">62336</td>
-<td align="right">721.89</td>
-<td align="right">(658.41–791.46)</td>
+<td align="right">717.08</td>
+<td align="right">(653.81–786.42)</td>
 </tr>
 <tr class="odd">
 <td align="right">2017-W07</td>
-<td align="right">470</td>
+<td align="right">467</td>
 <td align="right">62336</td>
-<td align="right">753.98</td>
-<td align="right">(689.04–824.99)</td>
+<td align="right">749.17</td>
+<td align="right">(684.44–819.96)</td>
 </tr>
 <tr class="even">
 <td align="right">2017-W08</td>
-<td align="right">511</td>
+<td align="right">508</td>
 <td align="right">62336</td>
-<td align="right">819.75</td>
-<td align="right">(751.94–893.63)</td>
+<td align="right">814.94</td>
+<td align="right">(747.33–888.61)</td>
 </tr>
 <tr class="odd">
 <td align="right">2017-W09</td>
-<td align="right">526</td>
+<td align="right">523</td>
 <td align="right">62336</td>
-<td align="right">843.81</td>
-<td align="right">(774.98–918.71)</td>
+<td align="right">839.00</td>
+<td align="right">(770.37–913.70)</td>
 </tr>
 <tr class="even">
 <td align="right">2017-W10</td>
-<td align="right">566</td>
+<td align="right">563</td>
 <td align="right">62336</td>
-<td align="right">907.98</td>
-<td align="right">(836.49–985.53)</td>
+<td align="right">903.17</td>
+<td align="right">(831.87–980.52)</td>
 </tr>
 <tr class="odd">
 <td align="right">2017-W11</td>
-<td align="right">574</td>
+<td align="right">571</td>
 <td align="right">62336</td>
-<td align="right">920.82</td>
-<td align="right">(848.80–998.88)</td>
+<td align="right">916.00</td>
+<td align="right">(844.18–993.87)</td>
 </tr>
 <tr class="even">
 <td align="right">2017-W12</td>
-<td align="right">588</td>
+<td align="right">585</td>
 <td align="right">62336</td>
-<td align="right">943.28</td>
-<td align="right">(870.36–1022.24)</td>
+<td align="right">938.46</td>
+<td align="right">(865.74–1017.23)</td>
 </tr>
 <tr class="odd">
 <td align="right">2017-W13</td>
-<td align="right">596</td>
+<td align="right">593</td>
 <td align="right">62336</td>
-<td align="right">956.11</td>
-<td align="right">(882.68–1035.58)</td>
+<td align="right">951.30</td>
+<td align="right">(878.06–1030.58)</td>
 </tr>
 <tr class="even">
 <td align="right">2017-W14</td>
+<td align="right">604</td>
+<td align="right">62336</td>
+<td align="right">968.94</td>
+<td align="right">(895.01–1048.92)</td>
+</tr>
+<tr class="odd">
+<td align="right">2017-W15</td>
 <td align="right">607</td>
 <td align="right">62336</td>
 <td align="right">973.76</td>
 <td align="right">(899.63–1053.92)</td>
 </tr>
-<tr class="odd">
-<td align="right">2017-W15</td>
-<td align="right">610</td>
-<td align="right">62336</td>
-<td align="right">978.57</td>
-<td align="right">(904.26–1058.92)</td>
-</tr>
 <tr class="even">
 <td align="right">2017-W16</td>
-<td align="right">617</td>
+<td align="right">614</td>
 <td align="right">62336</td>
-<td align="right">989.80</td>
-<td align="right">(915.05–1070.59)</td>
+<td align="right">984.98</td>
+<td align="right">(910.42–1065.59)</td>
 </tr>
 <tr class="odd">
 <td align="right">2017-W17</td>
-<td align="right">617</td>
+<td align="right">614</td>
 <td align="right">62336</td>
-<td align="right">989.80</td>
-<td align="right">(915.05–1070.59)</td>
+<td align="right">984.98</td>
+<td align="right">(910.42–1065.59)</td>
 </tr>
 <tr class="even">
 <td align="right">2017-W18</td>
-<td align="right">617</td>
+<td align="right">614</td>
 <td align="right">62336</td>
-<td align="right">989.80</td>
-<td align="right">(915.05–1070.59)</td>
+<td align="right">984.98</td>
+<td align="right">(910.42–1065.59)</td>
 </tr>
 <tr class="odd">
 <td align="right">2017-W19</td>
-<td align="right">617</td>
+<td align="right">614</td>
 <td align="right">62336</td>
-<td align="right">989.80</td>
-<td align="right">(915.05–1070.59)</td>
+<td align="right">984.98</td>
+<td align="right">(910.42–1065.59)</td>
 </tr>
 <tr class="even">
 <td align="right">2017-W20</td>
-<td align="right">617</td>
+<td align="right">614</td>
 <td align="right">62336</td>
-<td align="right">989.80</td>
-<td align="right">(915.05–1070.59)</td>
+<td align="right">984.98</td>
+<td align="right">(910.42–1065.59)</td>
 </tr>
 <tr class="odd">
 <td align="right">2017-W21</td>
-<td align="right">617</td>
+<td align="right">614</td>
 <td align="right">62336</td>
-<td align="right">989.80</td>
-<td align="right">(915.05–1070.59)</td>
+<td align="right">984.98</td>
+<td align="right">(910.42–1065.59)</td>
 </tr>
 <tr class="even">
 <td align="right">2017-W22</td>
-<td align="right">617</td>
+<td align="right">614</td>
 <td align="right">62336</td>
-<td align="right">989.80</td>
-<td align="right">(915.05–1070.59)</td>
+<td align="right">984.98</td>
+<td align="right">(910.42–1065.59)</td>
 </tr>
 <tr class="odd">
 <td align="right">2017-W23</td>
-<td align="right">617</td>
+<td align="right">614</td>
 <td align="right">62336</td>
-<td align="right">989.80</td>
-<td align="right">(915.05–1070.59)</td>
+<td align="right">984.98</td>
+<td align="right">(910.42–1065.59)</td>
 </tr>
 <tr class="even">
 <td align="right">2017-W24</td>
-<td align="right">617</td>
+<td align="right">614</td>
 <td align="right">62336</td>
-<td align="right">989.80</td>
-<td align="right">(915.05–1070.59)</td>
+<td align="right">984.98</td>
+<td align="right">(910.42–1065.59)</td>
 </tr>
 <tr class="odd">
 <td align="right">2017-W25</td>
-<td align="right">617</td>
+<td align="right">614</td>
 <td align="right">62336</td>
-<td align="right">989.80</td>
-<td align="right">(915.05–1070.59)</td>
+<td align="right">984.98</td>
+<td align="right">(910.42–1065.59)</td>
 </tr>
 <tr class="even">
 <td align="right">2017-W26</td>
-<td align="right">617</td>
+<td align="right">614</td>
 <td align="right">62336</td>
-<td align="right">989.80</td>
-<td align="right">(915.05–1070.59)</td>
+<td align="right">984.98</td>
+<td align="right">(910.42–1065.59)</td>
 </tr>
 <tr class="odd">
 <td align="right">2017-W27</td>
-<td align="right">617</td>
+<td align="right">614</td>
 <td align="right">62336</td>
-<td align="right">989.80</td>
-<td align="right">(915.05–1070.59)</td>
+<td align="right">984.98</td>
+<td align="right">(910.42–1065.59)</td>
 </tr>
 <tr class="even">
 <td align="right">2017-W28</td>
-<td align="right">617</td>
+<td align="right">614</td>
 <td align="right">62336</td>
-<td align="right">989.80</td>
-<td align="right">(915.05–1070.59)</td>
+<td align="right">984.98</td>
+<td align="right">(910.42–1065.59)</td>
 </tr>
 <tr class="odd">
 <td align="right">2017-W29</td>
-<td align="right">617</td>
+<td align="right">614</td>
 <td align="right">62336</td>
-<td align="right">989.80</td>
-<td align="right">(915.05–1070.59)</td>
+<td align="right">984.98</td>
+<td align="right">(910.42–1065.59)</td>
 </tr>
 <tr class="even">
 <td align="right">2017-W30</td>
-<td align="right">617</td>
+<td align="right">614</td>
 <td align="right">62336</td>
-<td align="right">989.80</td>
-<td align="right">(915.05–1070.59)</td>
+<td align="right">984.98</td>
+<td align="right">(910.42–1065.59)</td>
 </tr>
 <tr class="odd">
 <td align="right">2017-W31</td>
-<td align="right">617</td>
+<td align="right">614</td>
 <td align="right">62336</td>
-<td align="right">989.80</td>
-<td align="right">(915.05–1070.59)</td>
+<td align="right">984.98</td>
+<td align="right">(910.42–1065.59)</td>
 </tr>
 <tr class="even">
 <td align="right">2017-W32</td>
-<td align="right">617</td>
+<td align="right">614</td>
 <td align="right">62336</td>
-<td align="right">989.80</td>
-<td align="right">(915.05–1070.59)</td>
+<td align="right">984.98</td>
+<td align="right">(910.42–1065.59)</td>
 </tr>
 <tr class="odd">
 <td align="right">2017-W33</td>
-<td align="right">617</td>
+<td align="right">614</td>
 <td align="right">62336</td>
-<td align="right">989.80</td>
-<td align="right">(915.05–1070.59)</td>
+<td align="right">984.98</td>
+<td align="right">(910.42–1065.59)</td>
 </tr>
 <tr class="even">
 <td align="right">2017-W34</td>
-<td align="right">617</td>
+<td align="right">614</td>
 <td align="right">62336</td>
-<td align="right">989.80</td>
-<td align="right">(915.05–1070.59)</td>
+<td align="right">984.98</td>
+<td align="right">(910.42–1065.59)</td>
 </tr>
 <tr class="odd">
 <td align="right">2017-W35</td>
-<td align="right">617</td>
+<td align="right">614</td>
 <td align="right">62336</td>
-<td align="right">989.80</td>
-<td align="right">(915.05–1070.59)</td>
+<td align="right">984.98</td>
+<td align="right">(910.42–1065.59)</td>
 </tr>
 <tr class="even">
 <td align="right">2017-W36</td>
-<td align="right">617</td>
+<td align="right">614</td>
 <td align="right">62336</td>
-<td align="right">989.80</td>
-<td align="right">(915.05–1070.59)</td>
+<td align="right">984.98</td>
+<td align="right">(910.42–1065.59)</td>
 </tr>
 <tr class="odd">
 <td align="right">2017-W37</td>
-<td align="right">617</td>
+<td align="right">614</td>
 <td align="right">62336</td>
-<td align="right">989.80</td>
-<td align="right">(915.05–1070.59)</td>
+<td align="right">984.98</td>
+<td align="right">(910.42–1065.59)</td>
 </tr>
 <tr class="even">
 <td align="right">2017-W38</td>
-<td align="right">617</td>
+<td align="right">614</td>
 <td align="right">62336</td>
-<td align="right">989.80</td>
-<td align="right">(915.05–1070.59)</td>
+<td align="right">984.98</td>
+<td align="right">(910.42–1065.59)</td>
 </tr>
 <tr class="odd">
 <td align="right">2017-W39</td>
-<td align="right">617</td>
+<td align="right">614</td>
 <td align="right">62336</td>
-<td align="right">989.80</td>
-<td align="right">(915.05–1070.59)</td>
+<td align="right">984.98</td>
+<td align="right">(910.42–1065.59)</td>
 </tr>
 <tr class="even">
 <td align="right">2017-W40</td>
-<td align="right">617</td>
+<td align="right">614</td>
 <td align="right">62336</td>
-<td align="right">989.80</td>
-<td align="right">(915.05–1070.59)</td>
+<td align="right">984.98</td>
+<td align="right">(910.42–1065.59)</td>
 </tr>
 <tr class="odd">
 <td align="right">2017-W41</td>
-<td align="right">617</td>
+<td align="right">614</td>
 <td align="right">62336</td>
-<td align="right">989.80</td>
-<td align="right">(915.05–1070.59)</td>
+<td align="right">984.98</td>
+<td align="right">(910.42–1065.59)</td>
 </tr>
 <tr class="even">
 <td align="right">2017-W42</td>
-<td align="right">617</td>
+<td align="right">614</td>
 <td align="right">62336</td>
-<td align="right">989.80</td>
-<td align="right">(915.05–1070.59)</td>
+<td align="right">984.98</td>
+<td align="right">(910.42–1065.59)</td>
 </tr>
 <tr class="odd">
 <td align="right">2017-W43</td>
-<td align="right">617</td>
+<td align="right">614</td>
 <td align="right">62336</td>
-<td align="right">989.80</td>
-<td align="right">(915.05–1070.59)</td>
+<td align="right">984.98</td>
+<td align="right">(910.42–1065.59)</td>
 </tr>
 <tr class="even">
 <td align="right">2017-W44</td>
-<td align="right">617</td>
+<td align="right">614</td>
 <td align="right">62336</td>
-<td align="right">989.80</td>
-<td align="right">(915.05–1070.59)</td>
+<td align="right">984.98</td>
+<td align="right">(910.42–1065.59)</td>
 </tr>
 <tr class="odd">
 <td align="right">2017-W45</td>
-<td align="right">617</td>
+<td align="right">614</td>
 <td align="right">62336</td>
-<td align="right">989.80</td>
-<td align="right">(915.05–1070.59)</td>
+<td align="right">984.98</td>
+<td align="right">(910.42–1065.59)</td>
 </tr>
 <tr class="even">
 <td align="right">2017-W46</td>
-<td align="right">618</td>
+<td align="right">614</td>
 <td align="right">62336</td>
-<td align="right">991.40</td>
-<td align="right">(916.59–1072.25)</td>
+<td align="right">984.98</td>
+<td align="right">(910.42–1065.59)</td>
 </tr>
 <tr class="odd">
 <td align="right">2017-W47</td>
-<td align="right">618</td>
+<td align="right">614</td>
 <td align="right">62336</td>
-<td align="right">991.40</td>
-<td align="right">(916.59–1072.25)</td>
+<td align="right">984.98</td>
+<td align="right">(910.42–1065.59)</td>
 </tr>
 <tr class="even">
 <td align="right">2017-W48</td>
-<td align="right">619</td>
+<td align="right">614</td>
 <td align="right">62336</td>
-<td align="right">993.01</td>
-<td align="right">(918.13–1073.92)</td>
+<td align="right">984.98</td>
+<td align="right">(910.42–1065.59)</td>
 </tr>
 <tr class="odd">
 <td align="right">2017-W49</td>
-<td align="right">620</td>
+<td align="right">614</td>
 <td align="right">62336</td>
-<td align="right">994.61</td>
-<td align="right">(919.67–1075.59)</td>
+<td align="right">984.98</td>
+<td align="right">(910.42–1065.59)</td>
 </tr>
 <tr class="even">
 <td align="right">2017-W50</td>
-<td align="right">620</td>
+<td align="right">614</td>
 <td align="right">62336</td>
-<td align="right">994.61</td>
-<td align="right">(919.67–1075.59)</td>
+<td align="right">984.98</td>
+<td align="right">(910.42–1065.59)</td>
 </tr>
 <tr class="odd">
 <td align="right">2017-W51</td>
-<td align="right">624</td>
+<td align="right">614</td>
 <td align="right">62336</td>
-<td align="right">1001.03</td>
-<td align="right">(925.84–1082.25)</td>
+<td align="right">984.98</td>
+<td align="right">(910.42–1065.59)</td>
 </tr>
 <tr class="even">
 <td align="right">2017-W52</td>
-<td align="right">627</td>
+<td align="right">614</td>
 <td align="right">62336</td>
-<td align="right">1005.84</td>
-<td align="right">(930.47–1087.25)</td>
+<td align="right">984.98</td>
+<td align="right">(910.42–1065.59)</td>
 </tr>
 </tbody>
 </table>
@@ -3495,9 +3535,9 @@ descriptive(linelist_cleaned, &quot;patient_origin&quot;,
 <td align="right">2</td>
 <td align="right">3.39</td>
 <td align="right">1</td>
-<td align="right">0.19</td>
+<td align="right">0.20</td>
 <td align="right">1</td>
-<td align="right">1.89</td>
+<td align="right">2.04</td>
 <td align="right">4</td>
 </tr>
 <tr class="even">
@@ -3505,9 +3545,9 @@ descriptive(linelist_cleaned, &quot;patient_origin&quot;,
 <td align="right">2</td>
 <td align="right">3.39</td>
 <td align="right">10</td>
-<td align="right">1.94</td>
+<td align="right">1.98</td>
 <td align="right">1</td>
-<td align="right">1.89</td>
+<td align="right">2.04</td>
 <td align="right">13</td>
 </tr>
 <tr class="odd">
@@ -3515,7 +3555,7 @@ descriptive(linelist_cleaned, &quot;patient_origin&quot;,
 <td align="right">1</td>
 <td align="right">1.69</td>
 <td align="right">1</td>
-<td align="right">0.19</td>
+<td align="right">0.20</td>
 <td align="right">0</td>
 <td align="right">0.00</td>
 <td align="right">2</td>
@@ -3535,9 +3575,9 @@ descriptive(linelist_cleaned, &quot;patient_origin&quot;,
 <td align="right">0</td>
 <td align="right">0.00</td>
 <td align="right">9</td>
-<td align="right">1.75</td>
+<td align="right">1.78</td>
 <td align="right">3</td>
-<td align="right">5.66</td>
+<td align="right">6.12</td>
 <td align="right">12</td>
 </tr>
 <tr class="even">
@@ -3555,7 +3595,7 @@ descriptive(linelist_cleaned, &quot;patient_origin&quot;,
 <td align="right">0</td>
 <td align="right">0.00</td>
 <td align="right">1</td>
-<td align="right">0.19</td>
+<td align="right">0.20</td>
 <td align="right">0</td>
 <td align="right">0.00</td>
 <td align="right">1</td>
@@ -3585,9 +3625,9 @@ descriptive(linelist_cleaned, &quot;patient_origin&quot;,
 <td align="right">0</td>
 <td align="right">0.00</td>
 <td align="right">4</td>
-<td align="right">0.78</td>
+<td align="right">0.79</td>
 <td align="right">2</td>
-<td align="right">3.77</td>
+<td align="right">4.08</td>
 <td align="right">6</td>
 </tr>
 <tr class="odd">
@@ -3595,9 +3635,9 @@ descriptive(linelist_cleaned, &quot;patient_origin&quot;,
 <td align="right">3</td>
 <td align="right">5.08</td>
 <td align="right">11</td>
-<td align="right">2.14</td>
+<td align="right">2.17</td>
 <td align="right">2</td>
-<td align="right">3.77</td>
+<td align="right">4.08</td>
 <td align="right">16</td>
 </tr>
 <tr class="even">
@@ -3605,7 +3645,7 @@ descriptive(linelist_cleaned, &quot;patient_origin&quot;,
 <td align="right">0</td>
 <td align="right">0.00</td>
 <td align="right">1</td>
-<td align="right">0.19</td>
+<td align="right">0.20</td>
 <td align="right">0</td>
 <td align="right">0.00</td>
 <td align="right">1</td>
@@ -3615,7 +3655,7 @@ descriptive(linelist_cleaned, &quot;patient_origin&quot;,
 <td align="right">0</td>
 <td align="right">0.00</td>
 <td align="right">1</td>
-<td align="right">0.19</td>
+<td align="right">0.20</td>
 <td align="right">0</td>
 <td align="right">0.00</td>
 <td align="right">1</td>
@@ -3625,9 +3665,9 @@ descriptive(linelist_cleaned, &quot;patient_origin&quot;,
 <td align="right">0</td>
 <td align="right">0.00</td>
 <td align="right">2</td>
-<td align="right">0.39</td>
+<td align="right">0.40</td>
 <td align="right">1</td>
-<td align="right">1.89</td>
+<td align="right">2.04</td>
 <td align="right">3</td>
 </tr>
 <tr class="odd">
@@ -3645,7 +3685,7 @@ descriptive(linelist_cleaned, &quot;patient_origin&quot;,
 <td align="right">0</td>
 <td align="right">0.00</td>
 <td align="right">2</td>
-<td align="right">0.39</td>
+<td align="right">0.40</td>
 <td align="right">0</td>
 <td align="right">0.00</td>
 <td align="right">2</td>
@@ -3655,7 +3695,7 @@ descriptive(linelist_cleaned, &quot;patient_origin&quot;,
 <td align="right">1</td>
 <td align="right">1.69</td>
 <td align="right">3</td>
-<td align="right">0.58</td>
+<td align="right">0.59</td>
 <td align="right">0</td>
 <td align="right">0.00</td>
 <td align="right">4</td>
@@ -3665,9 +3705,9 @@ descriptive(linelist_cleaned, &quot;patient_origin&quot;,
 <td align="right">2</td>
 <td align="right">3.39</td>
 <td align="right">2</td>
-<td align="right">0.39</td>
+<td align="right">0.40</td>
 <td align="right">2</td>
-<td align="right">3.77</td>
+<td align="right">4.08</td>
 <td align="right">6</td>
 </tr>
 <tr class="odd">
@@ -3675,7 +3715,7 @@ descriptive(linelist_cleaned, &quot;patient_origin&quot;,
 <td align="right">4</td>
 <td align="right">6.78</td>
 <td align="right">18</td>
-<td align="right">3.50</td>
+<td align="right">3.56</td>
 <td align="right">0</td>
 <td align="right">0.00</td>
 <td align="right">22</td>
@@ -3687,7 +3727,7 @@ descriptive(linelist_cleaned, &quot;patient_origin&quot;,
 <td align="right">0</td>
 <td align="right">0.00</td>
 <td align="right">1</td>
-<td align="right">1.89</td>
+<td align="right">2.04</td>
 <td align="right">1</td>
 </tr>
 <tr class="odd">
@@ -3695,7 +3735,7 @@ descriptive(linelist_cleaned, &quot;patient_origin&quot;,
 <td align="right">2</td>
 <td align="right">3.39</td>
 <td align="right">1</td>
-<td align="right">0.19</td>
+<td align="right">0.20</td>
 <td align="right">0</td>
 <td align="right">0.00</td>
 <td align="right">3</td>
@@ -3705,7 +3745,7 @@ descriptive(linelist_cleaned, &quot;patient_origin&quot;,
 <td align="right">1</td>
 <td align="right">1.69</td>
 <td align="right">1</td>
-<td align="right">0.19</td>
+<td align="right">0.20</td>
 <td align="right">0</td>
 <td align="right">0.00</td>
 <td align="right">2</td>
@@ -3715,7 +3755,7 @@ descriptive(linelist_cleaned, &quot;patient_origin&quot;,
 <td align="right">0</td>
 <td align="right">0.00</td>
 <td align="right">1</td>
-<td align="right">0.19</td>
+<td align="right">0.20</td>
 <td align="right">0</td>
 <td align="right">0.00</td>
 <td align="right">1</td>
@@ -3725,7 +3765,7 @@ descriptive(linelist_cleaned, &quot;patient_origin&quot;,
 <td align="right">0</td>
 <td align="right">0.00</td>
 <td align="right">1</td>
-<td align="right">0.19</td>
+<td align="right">0.20</td>
 <td align="right">0</td>
 <td align="right">0.00</td>
 <td align="right">1</td>
@@ -3735,7 +3775,7 @@ descriptive(linelist_cleaned, &quot;patient_origin&quot;,
 <td align="right">0</td>
 <td align="right">0.00</td>
 <td align="right">3</td>
-<td align="right">0.58</td>
+<td align="right">0.59</td>
 <td align="right">0</td>
 <td align="right">0.00</td>
 <td align="right">3</td>
@@ -3745,7 +3785,7 @@ descriptive(linelist_cleaned, &quot;patient_origin&quot;,
 <td align="right">0</td>
 <td align="right">0.00</td>
 <td align="right">1</td>
-<td align="right">0.19</td>
+<td align="right">0.20</td>
 <td align="right">0</td>
 <td align="right">0.00</td>
 <td align="right">1</td>
@@ -3755,9 +3795,9 @@ descriptive(linelist_cleaned, &quot;patient_origin&quot;,
 <td align="right">0</td>
 <td align="right">0.00</td>
 <td align="right">19</td>
-<td align="right">3.69</td>
+<td align="right">3.75</td>
 <td align="right">2</td>
-<td align="right">3.77</td>
+<td align="right">4.08</td>
 <td align="right">21</td>
 </tr>
 <tr class="even">
@@ -3765,7 +3805,7 @@ descriptive(linelist_cleaned, &quot;patient_origin&quot;,
 <td align="right">1</td>
 <td align="right">1.69</td>
 <td align="right">1</td>
-<td align="right">0.19</td>
+<td align="right">0.20</td>
 <td align="right">0</td>
 <td align="right">0.00</td>
 <td align="right">2</td>
@@ -3775,7 +3815,7 @@ descriptive(linelist_cleaned, &quot;patient_origin&quot;,
 <td align="right">2</td>
 <td align="right">3.39</td>
 <td align="right">1</td>
-<td align="right">0.19</td>
+<td align="right">0.20</td>
 <td align="right">0</td>
 <td align="right">0.00</td>
 <td align="right">3</td>
@@ -3795,9 +3835,9 @@ descriptive(linelist_cleaned, &quot;patient_origin&quot;,
 <td align="right">3</td>
 <td align="right">5.08</td>
 <td align="right">13</td>
-<td align="right">2.52</td>
+<td align="right">2.57</td>
 <td align="right">4</td>
-<td align="right">7.55</td>
+<td align="right">8.16</td>
 <td align="right">20</td>
 </tr>
 <tr class="even">
@@ -3805,9 +3845,9 @@ descriptive(linelist_cleaned, &quot;patient_origin&quot;,
 <td align="right">1</td>
 <td align="right">1.69</td>
 <td align="right">2</td>
-<td align="right">0.39</td>
+<td align="right">0.40</td>
 <td align="right">1</td>
-<td align="right">1.89</td>
+<td align="right">2.04</td>
 <td align="right">4</td>
 </tr>
 <tr class="odd">
@@ -3815,7 +3855,7 @@ descriptive(linelist_cleaned, &quot;patient_origin&quot;,
 <td align="right">0</td>
 <td align="right">0.00</td>
 <td align="right">7</td>
-<td align="right">1.36</td>
+<td align="right">1.38</td>
 <td align="right">0</td>
 <td align="right">0.00</td>
 <td align="right">7</td>
@@ -3824,18 +3864,18 @@ descriptive(linelist_cleaned, &quot;patient_origin&quot;,
 <td align="left">Ganatir</td>
 <td align="right">3</td>
 <td align="right">5.08</td>
-<td align="right">87</td>
-<td align="right">16.89</td>
-<td align="right">8</td>
-<td align="right">15.09</td>
-<td align="right">98</td>
+<td align="right">85</td>
+<td align="right">16.80</td>
+<td align="right">7</td>
+<td align="right">14.29</td>
+<td align="right">95</td>
 </tr>
 <tr class="odd">
 <td align="left">Ganatir 1</td>
 <td align="right">0</td>
 <td align="right">0.00</td>
 <td align="right">1</td>
-<td align="right">0.19</td>
+<td align="right">0.20</td>
 <td align="right">0</td>
 <td align="right">0.00</td>
 <td align="right">1</td>
@@ -3845,7 +3885,7 @@ descriptive(linelist_cleaned, &quot;patient_origin&quot;,
 <td align="right">0</td>
 <td align="right">0.00</td>
 <td align="right">5</td>
-<td align="right">0.97</td>
+<td align="right">0.99</td>
 <td align="right">0</td>
 <td align="right">0.00</td>
 <td align="right">5</td>
@@ -3855,7 +3895,7 @@ descriptive(linelist_cleaned, &quot;patient_origin&quot;,
 <td align="right">0</td>
 <td align="right">0.00</td>
 <td align="right">1</td>
-<td align="right">0.19</td>
+<td align="right">0.20</td>
 <td align="right">0</td>
 <td align="right">0.00</td>
 <td align="right">1</td>
@@ -3865,7 +3905,7 @@ descriptive(linelist_cleaned, &quot;patient_origin&quot;,
 <td align="right">0</td>
 <td align="right">0.00</td>
 <td align="right">1</td>
-<td align="right">0.19</td>
+<td align="right">0.20</td>
 <td align="right">0</td>
 <td align="right">0.00</td>
 <td align="right">1</td>
@@ -3895,7 +3935,7 @@ descriptive(linelist_cleaned, &quot;patient_origin&quot;,
 <td align="right">1</td>
 <td align="right">1.69</td>
 <td align="right">2</td>
-<td align="right">0.39</td>
+<td align="right">0.40</td>
 <td align="right">0</td>
 <td align="right">0.00</td>
 <td align="right">3</td>
@@ -3905,7 +3945,7 @@ descriptive(linelist_cleaned, &quot;patient_origin&quot;,
 <td align="right">0</td>
 <td align="right">0.00</td>
 <td align="right">1</td>
-<td align="right">0.19</td>
+<td align="right">0.20</td>
 <td align="right">0</td>
 <td align="right">0.00</td>
 <td align="right">1</td>
@@ -3914,18 +3954,18 @@ descriptive(linelist_cleaned, &quot;patient_origin&quot;,
 <td align="left">Goz mabile 2</td>
 <td align="right">1</td>
 <td align="right">1.69</td>
-<td align="right">5</td>
-<td align="right">0.97</td>
+<td align="right">4</td>
+<td align="right">0.79</td>
 <td align="right">1</td>
-<td align="right">1.89</td>
-<td align="right">7</td>
+<td align="right">2.04</td>
+<td align="right">6</td>
 </tr>
 <tr class="even">
 <td align="left">Hile Bara</td>
 <td align="right">2</td>
 <td align="right">3.39</td>
 <td align="right">11</td>
-<td align="right">2.14</td>
+<td align="right">2.17</td>
 <td align="right">0</td>
 <td align="right">0.00</td>
 <td align="right">13</td>
@@ -3935,7 +3975,7 @@ descriptive(linelist_cleaned, &quot;patient_origin&quot;,
 <td align="right">0</td>
 <td align="right">0.00</td>
 <td align="right">1</td>
-<td align="right">0.19</td>
+<td align="right">0.20</td>
 <td align="right">0</td>
 <td align="right">0.00</td>
 <td align="right">1</td>
@@ -3945,7 +3985,7 @@ descriptive(linelist_cleaned, &quot;patient_origin&quot;,
 <td align="right">0</td>
 <td align="right">0.00</td>
 <td align="right">1</td>
-<td align="right">0.19</td>
+<td align="right">0.20</td>
 <td align="right">0</td>
 <td align="right">0.00</td>
 <td align="right">1</td>
@@ -3955,7 +3995,7 @@ descriptive(linelist_cleaned, &quot;patient_origin&quot;,
 <td align="right">0</td>
 <td align="right">0.00</td>
 <td align="right">1</td>
-<td align="right">0.19</td>
+<td align="right">0.20</td>
 <td align="right">0</td>
 <td align="right">0.00</td>
 <td align="right">1</td>
@@ -3966,16 +4006,16 @@ descriptive(linelist_cleaned, &quot;patient_origin&quot;,
 <td align="right">3.39</td>
 <td align="right">0</td>
 <td align="right">0.00</td>
-<td align="right">1</td>
-<td align="right">1.89</td>
-<td align="right">3</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">2</td>
 </tr>
 <tr class="odd">
 <td align="left">Matar</td>
 <td align="right">0</td>
 <td align="right">0.00</td>
 <td align="right">2</td>
-<td align="right">0.39</td>
+<td align="right">0.40</td>
 <td align="right">0</td>
 <td align="right">0.00</td>
 <td align="right">2</td>
@@ -3985,9 +4025,9 @@ descriptive(linelist_cleaned, &quot;patient_origin&quot;,
 <td align="right">2</td>
 <td align="right">3.39</td>
 <td align="right">2</td>
-<td align="right">0.39</td>
+<td align="right">0.40</td>
 <td align="right">2</td>
-<td align="right">3.77</td>
+<td align="right">4.08</td>
 <td align="right">6</td>
 </tr>
 <tr class="odd">
@@ -4015,7 +4055,7 @@ descriptive(linelist_cleaned, &quot;patient_origin&quot;,
 <td align="right">0</td>
 <td align="right">0.00</td>
 <td align="right">1</td>
-<td align="right">0.19</td>
+<td align="right">0.20</td>
 <td align="right">0</td>
 <td align="right">0.00</td>
 <td align="right">1</td>
@@ -4025,7 +4065,7 @@ descriptive(linelist_cleaned, &quot;patient_origin&quot;,
 <td align="right">2</td>
 <td align="right">3.39</td>
 <td align="right">4</td>
-<td align="right">0.78</td>
+<td align="right">0.79</td>
 <td align="right">0</td>
 <td align="right">0.00</td>
 <td align="right">6</td>
@@ -4035,7 +4075,7 @@ descriptive(linelist_cleaned, &quot;patient_origin&quot;,
 <td align="right">1</td>
 <td align="right">1.69</td>
 <td align="right">29</td>
-<td align="right">5.63</td>
+<td align="right">5.73</td>
 <td align="right">0</td>
 <td align="right">0.00</td>
 <td align="right">30</td>
@@ -4045,17 +4085,17 @@ descriptive(linelist_cleaned, &quot;patient_origin&quot;,
 <td align="right">0</td>
 <td align="right">0.00</td>
 <td align="right">59</td>
-<td align="right">11.46</td>
-<td align="right">5</td>
-<td align="right">9.43</td>
-<td align="right">64</td>
+<td align="right">11.66</td>
+<td align="right">4</td>
+<td align="right">8.16</td>
+<td align="right">63</td>
 </tr>
 <tr class="odd">
 <td align="left">Ridina 1</td>
 <td align="right">0</td>
 <td align="right">0.00</td>
 <td align="right">1</td>
-<td align="right">0.19</td>
+<td align="right">0.20</td>
 <td align="right">0</td>
 <td align="right">0.00</td>
 <td align="right">1</td>
@@ -4064,20 +4104,20 @@ descriptive(linelist_cleaned, &quot;patient_origin&quot;,
 <td align="left">Ridina 2</td>
 <td align="right">0</td>
 <td align="right">0.00</td>
-<td align="right">5</td>
-<td align="right">0.97</td>
+<td align="right">3</td>
+<td align="right">0.59</td>
 <td align="right">2</td>
-<td align="right">3.77</td>
-<td align="right">7</td>
+<td align="right">4.08</td>
+<td align="right">5</td>
 </tr>
 <tr class="odd">
 <td align="left">Salamat</td>
 <td align="right">1</td>
 <td align="right">1.69</td>
 <td align="right">19</td>
-<td align="right">3.69</td>
+<td align="right">3.75</td>
 <td align="right">2</td>
-<td align="right">3.77</td>
+<td align="right">4.08</td>
 <td align="right">22</td>
 </tr>
 <tr class="even">
@@ -4094,40 +4134,40 @@ descriptive(linelist_cleaned, &quot;patient_origin&quot;,
 <td align="left">Taradona</td>
 <td align="right">1</td>
 <td align="right">1.69</td>
-<td align="right">107</td>
-<td align="right">20.78</td>
+<td align="right">106</td>
+<td align="right">20.95</td>
 <td align="right">4</td>
-<td align="right">7.55</td>
-<td align="right">112</td>
+<td align="right">8.16</td>
+<td align="right">111</td>
 </tr>
 <tr class="even">
 <td align="left">Taradona 1</td>
 <td align="right">1</td>
 <td align="right">1.69</td>
-<td align="right">10</td>
-<td align="right">1.94</td>
+<td align="right">9</td>
+<td align="right">1.78</td>
 <td align="right">2</td>
-<td align="right">3.77</td>
-<td align="right">13</td>
+<td align="right">4.08</td>
+<td align="right">12</td>
 </tr>
 <tr class="odd">
 <td align="left">Taradona 2</td>
 <td align="right">5</td>
 <td align="right">8.47</td>
-<td align="right">27</td>
-<td align="right">5.24</td>
-<td align="right">2</td>
-<td align="right">3.77</td>
-<td align="right">34</td>
+<td align="right">25</td>
+<td align="right">4.94</td>
+<td align="right">1</td>
+<td align="right">2.04</td>
+<td align="right">31</td>
 </tr>
 <tr class="even">
 <td align="left">Taradona 3</td>
 <td align="right">0</td>
 <td align="right">0.00</td>
 <td align="right">6</td>
-<td align="right">1.17</td>
+<td align="right">1.19</td>
 <td align="right">3</td>
-<td align="right">5.66</td>
+<td align="right">6.12</td>
 <td align="right">9</td>
 </tr>
 <tr class="odd">
@@ -4135,7 +4175,7 @@ descriptive(linelist_cleaned, &quot;patient_origin&quot;,
 <td align="right">0</td>
 <td align="right">0.00</td>
 <td align="right">3</td>
-<td align="right">0.58</td>
+<td align="right">0.59</td>
 <td align="right">0</td>
 <td align="right">0.00</td>
 <td align="right">3</td>
@@ -4145,20 +4185,20 @@ descriptive(linelist_cleaned, &quot;patient_origin&quot;,
 <td align="right">1</td>
 <td align="right">1.69</td>
 <td align="right">6</td>
-<td align="right">1.17</td>
+<td align="right">1.19</td>
 <td align="right">1</td>
-<td align="right">1.89</td>
+<td align="right">2.04</td>
 <td align="right">8</td>
 </tr>
 <tr class="odd">
 <td align="left">Total</td>
 <td align="right">59</td>
 <td align="right">100.00</td>
-<td align="right">515</td>
+<td align="right">506</td>
 <td align="right">100.00</td>
-<td align="right">53</td>
+<td align="right">49</td>
 <td align="right">100.00</td>
-<td align="right">627</td>
+<td align="right">614</td>
 </tr>
 </tbody>
 </table>
@@ -4203,10 +4243,10 @@ ar &lt;- attack_rate(cases$n, cases$population, multiplier = 100) %&gt;%
 <tbody>
 <tr class="odd">
 <td align="right">2014-W44</td>
-<td align="right">1</td>
+<td align="right">0</td>
 <td align="right">62,336</td>
-<td align="right">1.60</td>
-<td align="right">(0.28–9.09)</td>
+<td align="right">0.00</td>
+<td align="right">(0.00–6.16)</td>
 </tr>
 <tr class="even">
 <td align="right">2014-W45</td>
@@ -4630,17 +4670,17 @@ ar &lt;- attack_rate(cases$n, cases$population, multiplier = 100) %&gt;%
 </tr>
 <tr class="even">
 <td align="right">2015-W53</td>
-<td align="right">1</td>
+<td align="right">0</td>
 <td align="right">62,336</td>
-<td align="right">1.60</td>
-<td align="right">(0.28–9.09)</td>
+<td align="right">0.00</td>
+<td align="right">(0.00–6.16)</td>
 </tr>
 <tr class="odd">
 <td align="right">2016-W01</td>
-<td align="right">1</td>
+<td align="right">0</td>
 <td align="right">62,336</td>
-<td align="right">1.60</td>
-<td align="right">(0.28–9.09)</td>
+<td align="right">0.00</td>
+<td align="right">(0.00–6.16)</td>
 </tr>
 <tr class="even">
 <td align="right">2016-W02</td>
@@ -5316,10 +5356,10 @@ ar &lt;- attack_rate(cases$n, cases$population, multiplier = 100) %&gt;%
 </tr>
 <tr class="even">
 <td align="right">2017-W46</td>
-<td align="right">1</td>
+<td align="right">0</td>
 <td align="right">62,336</td>
-<td align="right">1.60</td>
-<td align="right">(0.28–9.09)</td>
+<td align="right">0.00</td>
+<td align="right">(0.00–6.16)</td>
 </tr>
 <tr class="odd">
 <td align="right">2017-W47</td>
@@ -5330,17 +5370,17 @@ ar &lt;- attack_rate(cases$n, cases$population, multiplier = 100) %&gt;%
 </tr>
 <tr class="even">
 <td align="right">2017-W48</td>
-<td align="right">1</td>
+<td align="right">0</td>
 <td align="right">62,336</td>
-<td align="right">1.60</td>
-<td align="right">(0.28–9.09)</td>
+<td align="right">0.00</td>
+<td align="right">(0.00–6.16)</td>
 </tr>
 <tr class="odd">
 <td align="right">2017-W49</td>
-<td align="right">1</td>
+<td align="right">0</td>
 <td align="right">62,336</td>
-<td align="right">1.60</td>
-<td align="right">(0.28–9.09)</td>
+<td align="right">0.00</td>
+<td align="right">(0.00–6.16)</td>
 </tr>
 <tr class="even">
 <td align="right">2017-W50</td>
@@ -5351,17 +5391,17 @@ ar &lt;- attack_rate(cases$n, cases$population, multiplier = 100) %&gt;%
 </tr>
 <tr class="odd">
 <td align="right">2017-W51</td>
-<td align="right">4</td>
+<td align="right">0</td>
 <td align="right">62,336</td>
-<td align="right">6.42</td>
-<td align="right">(2.50–16.50)</td>
+<td align="right">0.00</td>
+<td align="right">(0.00–6.16)</td>
 </tr>
 <tr class="even">
 <td align="right">2017-W52</td>
-<td align="right">3</td>
+<td align="right">0</td>
 <td align="right">62,336</td>
-<td align="right">4.81</td>
-<td align="right">(1.64–14.15)</td>
+<td align="right">0.00</td>
+<td align="right">(0.00–6.16)</td>
 </tr>
 </tbody>
 </table>

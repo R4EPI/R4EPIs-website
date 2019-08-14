@@ -299,7 +299,7 @@ population_data_region <- rio::import("AJS_AmTiman_population_revised_for_templa
 ## Creating and cleaning variables  
 The variables and values in our example AJS dataset are still very far from the standard AJS MSF data dictionary. In the data cleaning step we will need to do the following:  
 
-1) **Re-code missing values from periods (.) to `NA` at import**  
+### **Re-code missing values from periods (.) to `NA` at import**  
 
 Currently, missing values in the dataset are represented by a period (.). This causes problems because R expects missing values to be coded as `NA`. For example, if we attempt to set the variable date_of_onset to class Date, R gives an error because the periods are considered character values and do not fit the expected YYYY-MM-DD date format.  
 
@@ -317,7 +317,7 @@ linelist_raw <- rio::import("AJS_AmTiman.xlsx", which = "linelist", na = ".")
 
 
 
-2) **Set date variables to class Date**
+### **Set date variables to class Date**
 In linelist_cleaned there are seven variables containing dates (dateentry, epiquestdate, date_of_admission, date_of_onset, date_lab_sample_taken, dthospitalisation, dtdeath).  
 
 **IF** your dataset *completely* aligns with the MSF data dictionary then use the code in the template that converts all the date variables to class Date at once.
@@ -354,24 +354,31 @@ class(linelist_cleaned$dthospitalisation)
 linelist_cleaned$dtdeath <- linelist::guess_dates(linelist_cleaned$dtdeath)
 ```
 
-3) **Re-code values in patient_facility_type**  
+### **Re-code values in patient_facility_type**  
 
 When assigning variables to match the data dictionary, we used the variable "hospitalisation" as the variable "patient_facility_type". In the data dictionary, patient_facility_type should have values of "Inpatient" or "Outpatient." Currently, the values are "Oui" and "Non".  
 
 This variable is referenced in later chunks, in which the analyses are restricted to observations where patient_facility_type == "Inpatient". Thus, we need to change the values to match the data dictionary and what the later code expects.  
 
-We can modify a chunk from the cleaning section of the template. The code below re-defines linelist_cleaned as itself  mutated such that in the case when it's value equals "Oui", the value is changed (~) to "Inpatient", and so on.  
+We can modify a chunk from the cleaning section of the template. The code below re-defines linelist_cleaned as itself  mutated such that in the case when it's value equals "Oui", the value is changed (~) to "Inpatient", and so on. If applicable, write the lines from most specific at top to most general at bottom (see the section below on creating a case definition variable).
 
-As you modify this chunk for your own situation, remember to include commas at the end of the case_when() lines, and that each left-hand side (LHS) of the ~ must be a logical statement, not just a value. You can read more about case_when() here.  
+As you modify this chunk for your own situation, remember to include commas at the end of each case_when() line (except the last one), and that each left-hand side (LHS) of the ~ must be a logical statement, not just a value. You can read more about case_when() [here](https://dplyr.tidyverse.org/reference/case_when.html).  
 
 **Tip: All the right-hand side (RHS) values must be the same class (either character, numeric, etc.). So, if your RHS values are character and you want one RHS value to be missing, you cannot just write `NA` on the RHS. Instead you must use the special character version of `NA` : `NA_character_`.** 
 
 ```{r}
+# Check the values in patient_facility_type
+table(linelist_cleaned$patient_facility_type, useNA = "always")
+
+# Convert the values
 linelist_cleaned <- linelist_cleaned %>% 
   mutate(patient_facility_type = case_when(
     patient_facility_type == "Oui" ~ "Inpatient",
     patient_facility_type == "Non" ~ "Outpatient"
   ))
+
+# Re-check the values in patient_facility_type
+table(linelist_cleaned$patient_facility_type, useNA = "always")
 
 ```
 
@@ -385,7 +392,7 @@ linelist_cleaned$epiweek <- aweek::date2week(linelist_cleaned$date_of_onset,
 ```
 
 
-Skip number of days under observation bc no date of exit variable exists
+We ignore the section on "number of days under observation"" because our dataset does not have a date of exit variable.
 
 Skip the optional age group variables because only have age_years
 
@@ -395,18 +402,34 @@ linelist_cleaned$age_group <- age_categories(linelist_cleaned$age_years,
                                              breakers = c(0, 3, 15, 30, 45))
 ```
 
-Create DIED variable, but recognize that the values in the dataset are in French.
+### Create DIED variable  
+When performing this step, we recognize that our current values in exit_status are in French, therefore ask R to look for "Décédé" instead of "Dead", "DOA", or "DD".
 
 ```{r}
 ## use this version for coded values (e.g. "DOA", "DD")
 linelist_cleaned$DIED <- linelist_cleaned$exit_status %in% c("Décédé")
 ```
 
-New exit status variable?
 
-Skip Skip Skip 
+### Creating new values for exit status
+```{r}
+# Tabulate to see all possible values of exit_status
+table(linelist_cleaned$exit_status, useNA = "always")
 
-Create case definition variable
+linelist_cleaned <- linelist_cleaned %>% 
+  mutate(exit_status2 = case_when(
+    exit_status == "Décédé"          ~ "Died",
+    exit_status == "-"               ~ NA_character_,
+    exit_status == "Echappé"         ~ "Left",
+    exit_status == "Déchargé/Guéri"  ~ "Discharged"
+  ))
+
+# Table the NEW variable to check transformation
+table(linelist_cleaned$exit_status2, useNA = "always")
+```
+
+
+### Create case definition variable
 
 ```{r}
 # Create a factor variable based on rules from other simple character variables
@@ -478,9 +501,7 @@ LABS <- c("hep_b_rdt",
 
 ```
 
-Drop observations  
-
-**Maybe keep only the inpatient observations? And Add an "inpatient" variable to those that have "date_of_admission" value?**  
+### **Drop observations**  
 
 **Removing those with dates of onset outside of years 2016 or 2017**
 
@@ -488,16 +509,16 @@ Drop observations
 # Check date range of date_of_onset
 range(linelist_cleaned$date_of_onset, na.rm = T)
 
-# Filter linelist_cleaned to keep observations where date_of_onset is after April 2016 AND before October 2017 OR missing
+# Filter to keep observations where date_of_onset after April 2016 AND before October 2017 (OR missing)
 linelist_cleaned <- linelist_cleaned %>%
-  filter((date_of_onset >= as.Date("2016-04-01") & date_of_onset <= as.Date("2017-10-01")) | date_of_onset) | 
-
+  filter((date_of_onset >= as.Date("2016-04-01") & date_of_onset <= as.Date("2017-10-01")) | is.na(date_of_onset))
+# Re-check the date range
 range(linelist_cleaned$date_of_onset, na.rm = T)
 ```
 
 
 
-Export if you want
+## Export the cleaned dataset
 
 ```{r save_cleaned_data, eval = FALSE}
 ## OPTIONAL: save your cleaned dataset as an excel file! 
