@@ -95,5 +95,7 @@ We have designed the templates to run through a similar series of analytical que
   * Malnutrition: prevalence of malnutrition in target population through MUAC and Weight for Height Scores  
 4. Calculation of **secondary outcomes of interest**
 
+{{% notice info %}}
 The sampling stratgey **MUST** be considered by the epidemiologist using the templates in order to ensure an appropriate weighting is applied to the analysis.
+{% /notice %}}
 
