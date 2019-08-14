@@ -4,7 +4,7 @@ categories: ["R"]
 tags: ["wiki"]
 weight: 10
 ---
-![msfepimeasles](images/msfepimeasles.jpg?max-width:50%)
+![msfepimeasles](images/msfepimeasles.jpg?max-width=50%)
 
 Source: Elise Mertens/MSF
 MSF is working with the Ministry of Public Health throughout the year to monitor areas at risks of disease outbreaks. Week after week Louis, the MSF epidemiologist, monitors the health zones that have reported cases and the levels of epidemic alert. He is also in charge of coordinating the post-vaccination coverage survey to ensure that the vaccination coverage rate is sufficient.
