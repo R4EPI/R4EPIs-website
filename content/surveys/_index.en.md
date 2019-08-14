@@ -80,7 +80,7 @@ The templates assume that data will have been collected using mobile data collec
 We recommend that you try and establish generic data dictionaries for mobile data collection (through template questionnaires) or through template databases. This will improve the consistency of the naming of your variables and will facilitate the frequent and systematic use of the Survey Templates.
 
 ## Survey analysis, the basics
-In the Survey Template Walkthrough (INSERT LINK), there is a step by step description of how to use the templates for data analysis.
+In the Survey Template Walkthrough (TODO: INSERT LINK), there is a step by step description of how to use the templates for data analysis.
 
 We have designed the templates to run through a similar series of analytical questions in the same order:
 
