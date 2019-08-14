@@ -27,7 +27,7 @@ You can access these by selecting them from the RStudio RMarkdown template menu:
 
 # Getting started with outbreak templates in R
 
-This section (INSERT LINK TO THE WALK THROUGH ON OUTBREAK DATA ANALYSIS) offers you a step by step guide on how to use the outbreak templates to fit your data and run the analysis.
+This section (TODO: INSERT LINK TO THE WALK THROUGH ON OUTBREAK DATA ANALYSIS) offers you a step by step guide on how to use the outbreak templates to fit your data and run the analysis.
 
 # Concepts of outbreak linelist data analysis
 
