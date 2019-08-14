@@ -41,7 +41,9 @@ Usually the main component of this will include the creation of an "epidemic cur
 
 The epidemic curve will give an understanding about the mode of transmission of the outbreak in question and also possibly whether the outbreak is slowing down or still not under control.
 
-![Number and weekly incidence rate of CSM cases treated by MSF in Kebbi and Sokoto states, February 10 – June 8, 2015](images/epicurvemeningitis.jpg)
+![Number and weekly incidence rate of CSM cases treated by MSF in Kebbi and Sokoto states, February 10 – June 8, 2015](images/epicurvemeningitis.jpg?max-width:50%)
+
+Source: [Chow J, et al. Invasive Meningococcal Meningitis Serogroup C Outbreak in Northwest Nigeria, 2015 – Third Consecutive Outbreak of a New Strain. PLOS Currents Outbreaks. 2016 Jul 7 . Edition 1.](10.1371/currents.outbreaks.06d10b6b4e690917d8b0a04268906143)
 
 ## Person characteristics
 
