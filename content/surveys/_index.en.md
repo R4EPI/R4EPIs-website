@@ -41,13 +41,13 @@ precise prevalence estimates for them.
 The templates can accomodate analysis of data from all sampling designs.
 
 ## Sample size
+Before implementing a survey you will need to calculate the sample size for that survey.
+
 When calculating a sample size for your survey you take the below parameters into consideration:
 
 * **Estimate of prevalence**
 * **Design effect or intraclass coefficient**
 * **Precision required around your estimate of prevalence**
-
-You might consider recalculating these parameters once the survey is completed, in order to check that your original assumptions were accurate.
 
 ### Estimate of prevalence
 You will need to use an estimate of the prevalence/coverage of the your main outcome of interest in your to-be-surveyed population (prevalence of malnutrition, measles vaccination coverage etc.). You will use published or grey literature to determine a logical estimate of this parameter.
@@ -68,6 +68,8 @@ Mathematically DEFF is calculated as:
 > **DEFF=1+(1-n) * rho**
 > where n=sample size of your survey and rho=intraclass coefficient
 
+When analysing your survery data, we often recalculate the DEFF for the main outcomes of interest. This because the DEFF will give you a good estimate on whether the survey design and sampling approach made sense in your survey for your outcome of interest.
+
 ### Precision around your estimate
 The precision around your estimate stipulates how close to the your estimate you would like the 95% confidence interval of your prevalence estimate to fall.
 
@@ -75,6 +77,8 @@ The precision around your estimate stipulates how close to the your estimate you
 > 95% confidence interval is narrow (between 70-74%); thus you would set your precision at 2% (2% above and below 72%).
 
 The lower your precision, the higher your sample size calculation will be.
+
+You only use the estimate of the precision when calculating a sample size before your survey. 
 
 ## Data collection and databases
 The templates assume that data will have been collected using mobile data collection or will have been entered into an electronic database (Excel, Epi Data, Redcap etc.).
