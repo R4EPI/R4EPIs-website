@@ -7,6 +7,8 @@ weight: 15
 
 ![MSF Epidemiologist carrying out survey](images/msfepisurvey.jpg?width=30pc)
 
+**Source**: Charlotte Morris/MSF; Suzanne Moja, 36, from Madrid, Spain is an epidemologist and supervises the team of MSF researchers in Bokoro, Chad. 
+
 The survey templates have been developed to match the data that would be collected using [MSF Ethical Review Board pre-approved surveys](https://fieldresearch.msf.org/handle/10144/618942) on: 
 
 * ***Retrospective mortality and access to care***,  
