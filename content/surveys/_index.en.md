@@ -91,7 +91,6 @@ We have designed the templates to run through a similar series of analytical que
   * Mortality survey template: crude mortality rate (CMR) and under 5 year mortality rate (U5MR)
   * Vaccination coverage: vaccination coverage of vaccines of interest
   * Malnutrition: prevalence of malnutrition in target population through MUAC and Weight for Height Scores  
-  
 4. Calculation of **secondary outcomes of interest**
 
 The sampling stratgey **MUST** be considered by the epidemiologist using the templates in order to ensure an appropriate weighting is applied to the analysis.
