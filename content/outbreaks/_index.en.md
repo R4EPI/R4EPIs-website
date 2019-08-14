@@ -44,9 +44,7 @@ Usually the main component of this will include the creation of an "epidemic cur
 
 The epidemic curve will give an understanding about the mode of transmission of the outbreak in question and also possibly whether the outbreak is slowing down or still not under control.
 
-<img src="/images/epicurveymeningitis.jpg" alt="Number and weekly incidence rate of CSM cases treated by MSF in Kebbi and Sokoto states, February 10 – June 8, 2015", width = "75%">
-
-![Number and weekly incidence rate of CSM cases treated by MSF in Kebbi and Sokoto states, February 10 – June 8, 2015](images/epicurvemeningitis.jpg?width=20pc)
+![Number and weekly incidence rate of CSM cases treated by MSF in Kebbi and Sokoto states, February 10 – June 8, 2015](images/epicurvemeningitis.jpg?width=40pc)
 
 Source: [Chow J, et al. Invasive Meningococcal Meningitis Serogroup C Outbreak in Northwest Nigeria, 2015 – Third Consecutive Outbreak of a New Strain. PLOS Currents Outbreaks. 2016 Jul 7 . Edition 1.](10.1371/currents.outbreaks.06d10b6b4e690917d8b0a04268906143)
 
@@ -56,7 +54,7 @@ This will include a series of graphs or tables that show the demographic breakdo
 
 This information can help identify priority groups for public health interventions and prevention activities or for improved/different clinical management approaches.
 
-![Characteristics of cases of acute jaundice syndrome and those testing positive and negative for HEV using RDTs RDTs during an acute outbreak of HEV in Am Timan, Chad, 2016–2017](images/hevperson.png?width=20pc)
+![Characteristics of cases of acute jaundice syndrome and those testing positive and negative for HEV using RDTs RDTs during an acute outbreak of HEV in Am Timan, Chad, 2016–2017](images/hevperson.png?width=40pc)
 
 Source: [Spina A, Lenglet A, et al.(2017) A large outbreak of Hepatitis E virus genotype 1 infection in an urban setting in Chad likely linked to household level transmission factors, 2016-2017. PLoS ONE 12(11): e0188240.](https://doi.org/10.1371/journal.pone.0188240)
 
@@ -64,7 +62,7 @@ Source: [Spina A, Lenglet A, et al.(2017) A large outbreak of Hepatitis E virus 
 
 Here you will create different types of maps to illustrate the geographical spread and impact of the outbreak. Maps can aid in the identification of hotspots for the targeting or improvement of prevention and public health measures.
 
-![Cholera in Yemen, 2017](images/cholerayemen.png?width=20pc)
+![Cholera in Yemen, 2017](images/cholerayemen.png?width=40pc)
 
 Source: [MSF calls for increased response to cholera outbreak](https://www.msf.ie/article/yemen-msf-calls-increased-response-cholera-outbreak)
 
