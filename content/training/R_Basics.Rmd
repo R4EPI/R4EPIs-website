@@ -404,7 +404,7 @@ The difference between dates can be calculated by:
 2. Creating a new variable that is defined as one date variable subtracted from the other
 3. Converting the result to numeric class (default is class "datediff"). This ensures that subsequent mathematical calculations can be performed.  
 
-#### Epidemiological weeks  
+### Epidemiological weeks  
 The templates use the very flexible package "aweek"" to set epidemiological weeks. You can read more about it [here](https://www.repidemicsconsortium.org/aweek/)
 
 ## General Syntax  
@@ -420,9 +420,7 @@ A few things to remember when writing commands in R:
 
 When a command is run, the R Console may show you warning or error messages in red text.  
 
-* A **warning** means that R has completed your command, but had to take additional steps that you may want to be aware of (e.g. remove rows from a calculation that had missing values).  
+* A **warning** means that R has completed your command, but had to take additional steps or produced unusual output that you should be aware of.  
 
 * An **error** means that R was not able to complete your command.  
-
-[section on using Google, Stack Exchange, etc.]
 

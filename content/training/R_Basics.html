@@ -28,6 +28,7 @@ output:
 <li><a href="#calculations">Calculations</a></li>
 <li><a href="#working-with-dates">Working with Dates</a><ul>
 <li><a href="#converting-date-variables-to-the-date-class">Converting date variables to the date class</a></li>
+<li><a href="#epidemiological-weeks">Epidemiological weeks</a></li>
 </ul></li>
 <li><a href="#general-syntax">General Syntax</a></li>
 <li><a href="#errors-and-warnings">Errors and Warnings</a></li>
@@ -579,10 +580,10 @@ linelist_cleaned$date_of_onset &lt;- as.Date(linelist_cleaned$date_of_onset, ori
 <li>Converting the result to numeric class (default is class “datediff”). This ensures that subsequent mathematical calculations can be performed.</li>
 </ol>
 </div>
-<div id="epidemiological-weeks" class="section level4">
-<h4>Epidemiological weeks</h4>
-<p>The templates use the very flexible package “aweek”&quot; to set epidemiological weeks. You can read more about it <a href="https://www.repidemicsconsortium.org/aweek/">here</a></p>
 </div>
+<div id="epidemiological-weeks" class="section level3">
+<h3>Epidemiological weeks</h3>
+<p>The templates use the very flexible package “aweek”&quot; to set epidemiological weeks. You can read more about it <a href="https://www.repidemicsconsortium.org/aweek/">here</a></p>
 </div>
 </div>
 <div id="general-syntax" class="section level2">
@@ -599,8 +600,7 @@ linelist_cleaned$date_of_onset &lt;- as.Date(linelist_cleaned$date_of_onset, ori
 <h2>Errors and Warnings</h2>
 <p>When a command is run, the R Console may show you warning or error messages in red text.</p>
 <ul>
-<li><p>A <strong>warning</strong> means that R has completed your command, but had to take additional steps that you may want to be aware of (e.g. remove rows from a calculation that had missing values).</p></li>
+<li><p>A <strong>warning</strong> means that R has completed your command, but had to take additional steps or produced unusual output that you should be aware of.</p></li>
 <li><p>An <strong>error</strong> means that R was not able to complete your command.</p></li>
 </ul>
-<p>[section on using Google, Stack Exchange, etc.]</p>
 </div>
