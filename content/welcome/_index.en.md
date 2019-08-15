@@ -9,7 +9,7 @@ title: Introduction
 
 ![MSF268858_Medium](images/MSF268858_Medium.jpg?width=50pc)
 
-![Recon_logo](images/recon logo.png) ![R4epis logo](images/R4epis_clr_rgb.png) ![MSF LOGO](images/MSF LOGO.jpg)
+![Recon_logo](images/recon_logo.png) ![R4epis logo](images/R4epis_clr_rgb.png?width=30pc) ![MSF LOGO](images/MSF LOGO.jpg)
 
 # R4epis - what is it?
 
