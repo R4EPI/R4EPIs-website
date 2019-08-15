@@ -242,6 +242,10 @@ linelist_cleaned <- linelist_cleaned %>%
   filter(!is.na(case_number) & !is.na(date_of_admission))
 ```
 
+### Help with functions  
+To read more about a function, you can try searching online for resources OR use the Help tab in the lower-right R pane.  
+
+![](/images/Function_Help.gif)
 
 ## Relational and logical operators  
 

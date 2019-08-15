@@ -21,6 +21,7 @@ output:
 <li><a href="#functions-with-multiple-arguments">Functions with Multiple Arguments</a></li>
 <li><a href="#using-additional-functions">Using Additional Functions</a></li>
 <li><a href="#the-pipe-operator-between-functions">The Pipe Operator %&gt;% between functions</a></li>
+<li><a href="#help-with-functions">Help with functions</a></li>
 </ul></li>
 <li><a href="#relational-and-logical-operators">Relational and logical operators</a></li>
 <li><a href="#missing-values">Missing Values</a></li>
@@ -305,6 +306,14 @@ linelist_raw &lt;- rio::import(&quot;linelist.xlsx&quot;, which = &quot;Sheet1&q
 <pre class="r"><code># only keep variables with a case ID and a date of consultation
 linelist_cleaned &lt;- linelist_cleaned %&gt;% 
   filter(!is.na(case_number) &amp; !is.na(date_of_admission))</code></pre>
+</div>
+<div id="help-with-functions" class="section level3">
+<h3>Help with functions</h3>
+<p>To read more about a function, you can try searching online for resources OR use the Help tab in the lower-right R pane.</p>
+<div class="figure">
+<img src="/images/Function_Help.gif" />
+
+</div>
 </div>
 </div>
 <div id="relational-and-logical-operators" class="section level2">
