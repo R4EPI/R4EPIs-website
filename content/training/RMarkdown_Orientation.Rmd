@@ -12,7 +12,7 @@ Scripts are files that:
 
 * Help to reproduce and share your work with others  
 
-While it is possible to enter and run commands directly from the R Console, scripts will be the default way to work.
+While it is possible to enter and run commands directly from the R Console, scripts will be the default way to work. If you are more familiar with Stata, a script is equivalent to a Do File.
 
 
 **Remember to save your script as you work!** 
@@ -77,6 +77,8 @@ linelist_raw <- gen_data("AJS") # generates a fake dataset for use in this templ
 # CSV file
 # linelist_raw <- rio::import("linelist.csv")
 ```
+
+![](/images/Commented_Lines.png)
 
 *Tip*: Multiple lines of code can be commented/uncommented by highlighting the lines and pressing the keys Ctrl, Shift, and C at the same time (Ctrl+Shift+C).  
 
