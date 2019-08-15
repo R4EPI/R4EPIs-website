@@ -45,6 +45,17 @@ Use the Table of Contents menu in the bottom-left of the script to easily naviga
 
 ![](/images/Table_of_Contents.gif)
 
+#### Running code chunks  
+While editing and testing your RMarkdown, you may want to selectively run or re-run R code chunks. You have many options in the script's Run menu, including:  
+
+* Run specific code within a chunk  
+* Run one R code chunk at a time  
+* Run all R code chunks above or below the selected chunk  
+
+Progress bars and previews of chunk output/error messages help with revisions and trouble-shooting.
+
+![](/images/Running_Chunks.gif)
+
 
 #### Commented code  
 
