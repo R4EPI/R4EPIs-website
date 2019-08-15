@@ -25,7 +25,7 @@ Below are links to some of the many online tutorials for learning R.
 
 [Clinical Epidemiology in R, from London School of Hygiene & Tropical Medicine](http://rpubs.com/michaelmarks/R-Clin-Epi)  
 
-[Resources page of R for Epidemics Consortium Website](https://www.repidemicsconsortium.org/resources/)  
+[Resources page of R for Epidemics Consortium (RECON) website](https://www.repidemicsconsortium.org/resources/)  
 
 [Tutorial for learning ggplot (the most common R package for visualizations, graphs, and maps)](http://r-statistics.co/Complete-Ggplot2-Tutorial-Part1-With-R-Code.html)  
 
@@ -46,7 +46,7 @@ An object exists when you have assigned it a value (see the assignment section b
  
 **object_name**  <-  **value** (or process/calculation that produce a value)
 
-> **As an example:** When using an outbreak template you want to record the current reporting week for later reference. The object reporting_week is created when it is assigned the character value "2018-W10". reporting_week will appear in the R Environment (upper-right pane) and can be referenced in later commands.
+> **As an example:** While using an outbreak template you may want to record the current reporting week for later reference. In this example, the object reporting_week is created when it is assigned the character value "2018-W10". reporting_week will appear in the R Environment (upper-right pane) and can be referenced in later commands.
 
 > See the commands and their output in the boxes below. Note the [1] in the output is simply indicating that you are viewing the first (and only) item of the output
 
@@ -108,15 +108,17 @@ Data Frames | Vectors (e.g. columns) that are bound together that all have the s
 
 **Vectors within a data frame (variables in a dataset) can be called or referenced using the $ symbol.** The `$` symbol connects the name of the column to the name of its dataset. The $ symbol must be used, otherwise R will not know where to look for or create the column.  
 
-***Tip:** by typing the name of the data frame followed by `$` you will see a list of all variables in the data frame. You can scroll through them using arrow key, select one with your Enter key, and avoid spelling mistakes!*
-
 ```{r}
 # Retrieve the length of the vector age_years
 # (age_years is in the data frame linelist_cleaned)
 length(linelist_cleaned$age_years)  
 ```
-  
-  
+
+By typing the name of the data frame followed by `$` you will also see a list of all variables in the data frame. You can scroll through them using arrow key, select one with your Enter key, and avoid spelling mistakes!  
+
+![](/images/Calling_Names.gif)  
+
+
 ### Objects have Classes  
 
 All the objects stored in R have a *class* which tells R how to handle the object. There are many possible classes, but common ones include:

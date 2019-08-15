@@ -40,7 +40,7 @@ output:
 <p><a href="http://swcarpentry.github.io/r-novice-gapminder/">Fundamentals of R</a></p>
 <p><a href="https://learn.r-journalism.com/en/introduction/">R for Novices (written for journalists)</a></p>
 <p><a href="http://rpubs.com/michaelmarks/R-Clin-Epi">Clinical Epidemiology in R, from London School of Hygiene &amp; Tropical Medicine</a></p>
-<p><a href="https://www.repidemicsconsortium.org/resources/">Resources page of R for Epidemics Consortium Website</a></p>
+<p><a href="https://www.repidemicsconsortium.org/resources/">Resources page of R for Epidemics Consortium (RECON) website</a></p>
 <p><a href="http://r-statistics.co/Complete-Ggplot2-Tutorial-Part1-With-R-Code.html">Tutorial for learning ggplot (the most common R package for visualizations, graphs, and maps)</a></p>
 <p><strong>Googling</strong><br />
 Typically when you are “stuck”, it is a good strategy to use Google to find notes from other people who have worked through your same problem. If you phrase your search terms carefully, relevant results from Question/Answer sites such as <a href="https://stackoverflow.com/questions/tagged/r">StackExchange</a> will appear and you can often get insights on approach, code examples, and be pointed toward other resources. If you decide to post a question yourself, use these <a href="https://stackoverflow.com/questions/5963269/how-to-make-a-great-r-reproducible-example">guidelines</a>.</p>
@@ -54,7 +54,7 @@ Typically when you are “stuck”, it is a good strategy to use Google to find 
 <p><strong>You create objects <em>by assigning them a value</em> with the &lt;- operator.</strong> You can think of the assignment operator <code>&lt;-</code> as the words “is defined as”. Assignment commands generally follow a standard order:</p>
 <p><strong>object_name</strong> &lt;- <strong>value</strong> (or process/calculation that produce a value)</p>
 <blockquote>
-<p><strong>As an example:</strong> When using an outbreak template you want to record the current reporting week for later reference. The object reporting_week is created when it is assigned the character value “2018-W10”. reporting_week will appear in the R Environment (upper-right pane) and can be referenced in later commands.</p>
+<p><strong>As an example:</strong> While using an outbreak template you may want to record the current reporting week for later reference. In this example, the object reporting_week is created when it is assigned the character value “2018-W10”. reporting_week will appear in the R Environment (upper-right pane) and can be referenced in later commands.</p>
 </blockquote>
 <blockquote>
 <p>See the commands and their output in the boxes below. Note the [1] in the output is simply indicating that you are viewing the first (and only) item of the output</p>
@@ -128,11 +128,15 @@ linelist_cleaned &lt;- mutate(linelist_cleaned,
 <div id="using-to-accesscall-variables" class="section level4">
 <h4>Using <code>$</code> to access/call variables</h4>
 <p><strong>Vectors within a data frame (variables in a dataset) can be called or referenced using the $ symbol.</strong> The <code>$</code> symbol connects the name of the column to the name of its dataset. The $ symbol must be used, otherwise R will not know where to look for or create the column.</p>
-<p>**<em><a href="Tip:**" class="uri">Tip:**</a> by typing the name of the data frame followed by <code>$</code> you will see a list of all variables in the data frame. You can scroll through them using arrow key, select one with your Enter key, and avoid spelling mistakes!</em></p>
 <pre class="r"><code># Retrieve the length of the vector age_years
 # (age_years is in the data frame linelist_cleaned)
 length(linelist_cleaned$age_years)  </code></pre>
 <pre><code>## [1] 300</code></pre>
+<p>By typing the name of the data frame followed by <code>$</code> you will also see a list of all variables in the data frame. You can scroll through them using arrow key, select one with your Enter key, and avoid spelling mistakes!</p>
+<div class="figure">
+<img src="/images/Calling_Names.gif" />
+
+</div>
 </div>
 </div>
 <div id="objects-have-classes" class="section level3">
