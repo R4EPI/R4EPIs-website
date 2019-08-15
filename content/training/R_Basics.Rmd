@@ -84,6 +84,8 @@ linelist_cleaned <- mutate(linelist_cleaned,
 
 ```
 
+You can read more about importing and exporting datasets with the rio package [here](https://rdrr.io/cran/rio/f/vignettes/rio.Rmd)
+
 A quick note on naming of objects:
 
   * Object names must not contain spaces, but you should use underscore (_) or a period (.) instead of a space.  
@@ -103,6 +105,10 @@ Common structure | Explanation | Example from templates
 ------------------- | ------------------------------------ | ------------------------  
 Vectors | A container for a sequence of singular objects, all of the same class (e.g. numeric, character). | **"Variables" (columns) in data frames are vectors** (e.g. the variable age_years).  
 Data Frames | Vectors (e.g. columns) that are bound together that all have the same number of rows. | linelist_raw and linelist_cleaned are both data frames.  
+
+Note that to create a vector that "stands alone", or is not part of a data frame (such as a list of location names), the function `c()` is often used:  
+`list_of_names <- c("Ruhengeri", "Gisenyi", "Kigali", "Butare")`  
+
 
 #### Using `$` to access/call variables  
 
@@ -150,6 +156,8 @@ as.integer() | Converts to integer class
 as.Date() | Converts to Date class - Note: see section on dates for details  
 as.factor() | Converts to factor - Note: re-defining order of value levels requires extra arguments
 
+[Here](https://swcarpentry.github.io/r-novice-inflammation/13-supp-data-structures/) is more material on classes and data structures in R.  
+
 ## Functions  
 
 ### Simple Functions  
@@ -168,7 +176,7 @@ summary(linelist_raw$age_years)
 
 ### Functions with Multiple Arguments  
 
-Functions often ask for several inputs. **Each piece of information needed is called an argument**. Some arguments are required for the function to work correctly, some are optional. Arguments can take character, numeric, logical (TRUE/FALSE), and other inputs. Optional arguments have default settings if they are not specified. Arguments are all located within the parentheses of the function, **separated by commas**.  
+Functions often ask for several inputs. **Each piece of information needed is called an argument**. Some arguments are required for the function to work correctly, some are optional. Arguments can take character, numeric, logical (TRUE/FALSE), and other inputs. Optional arguments have default settings if they are not specified. **Arguments are located within the parentheses of the function, usually separated by commas**.  
   
   
 >**For example**, this descriptive() command in the templates creates a descriptive summary table of counts and proportions. In this command the function is given three arguments, establishing linelist_cleaned as the data frame to use, age_group as the variable to count, and sex as the variable to use for groupings.
@@ -294,7 +302,7 @@ is.na(rdt_result)  # Tests whether the value of rdt_result is NA
 
 ## Calculations  
 
-Mathematical operators are often used to perform addition, division, to create new columns, etc. Below are how to use mathematical operators in R. Whether you put spaces around the operators is not important.  
+Mathematical operators are often used to perform addition, division, to create new columns, etc. Below are common mathematical operators in R. Whether you put spaces around the operators is not important.  
 
 Objective	      | Example in R
 --------------  | -------------
@@ -307,15 +315,40 @@ order of operations | ( )
 
 ## Working with Dates
 ### Converting date variables to the date class
-It is important to make R recognize when a variable contains dates. Dates are an object class and can be tricky to work with.  
+It is important to make R recognize when a variable contains dates. Dates are an object class and can be tricky to work with. The templates provides some code for converting variables to class date, but if your data are not standardized to a MSF data dictionary this process can require attention. **The templates often use the function `guess_dates()`, but this guide will also demonstrate converting a variable to class date using the function as.Date().** 
 
-The templates provides some code for converting variables to class date, but if your data are not standardized to a MSF data dictionary this process can require attention.  
+#### The function guess_dates()  
+**The function guess_dates() attempts to read a "messy" date variable containing dates in many different formats and convert the dates to a standard format.** You can read more about guess_dates(), which is in the "linelist" package, [here](https://rdrr.io/github/reconhub/linelist/man/guess_dates.html).  
+
+>For example, guess_dates would see the following dates "03 Jan 2018" "07/03/1982" "08/20/85" and convert them in the class Date to: 2018-01-03 1982-03-07 1985-08-20. 
+
+*Some optional arguments for guess_dates() that you might include are:*  
+
+* error_tolerance - The proportion of entries which cannot be identified as dates to be tolerated (defaults to 0.1 or 10%)
+* last_date - the last valid date (defaults to current date)  
+* first_date - the first valid date. Defaults to fifty years before the last_date.
+
+
+```{r eval=FALSE}
+# An example using guess_dates on the variable dtdeath
+linelist_cleaned$dtdeath <- linelist::guess_dates(linelist_cleaned$dtdeath)
+
+# An example from the template using guess_dates over multiple date variables, with piping, error tolerance of 50%, and the earliest accepted date of 1 Jan 2016.
+linelist_cleaned <- linelist_cleaned %>%
+   mutate_at(vars(matches("date|Date")), linelist::guess_dates,
+           error_tolerance = 0.5, first_date = "2016-01-01")
+```
+
+
+
+#### The function as.Date()  
+
+If guess_dates() is not working for you, you can use the base function as.Date() to convert a variable to class Date. **as.Date() cannot guess dates, and therefore requires that all the date values be in the same format before converting.** Read more about using as.Date() [here](https://www.stat.berkeley.edu/~s133/dates.html)
+
 It can be easiest to first convert the variable to character class, and then convert to date class:  
 
   1. Turn the variable into character values using the function `as.character()`
-```{r}
-class(linelist_cleaned$date_of_onset)   #Check the class of the variable
-
+```{r eval=F}
 linelist_cleaned$date_of_onset <- as.character(linelist_cleaned$date_of_onset)
 ```
   2. Convert the variable from character values into date values, using the function `as.Date()`  
@@ -332,8 +365,10 @@ linelist_cleaned$date_of_onset <- as.character(linelist_cleaned$date_of_onset)
          %y = 2-digit year  (e.g. 89)  
          %Y = 4-digit year  (e.g. 1989)  
 
-For example, if your character dates are in the format YYYY-MM-DD, like "1988-08-24", then your command to turn the values into dates will be as below. **Putting the format in quotation marks is necessary.**  
-
+For example, if your character dates are in the format DD/MM/YYYY, like "24/04/1968", then your command to turn the values into dates will be as below. **Putting the format in quotation marks is necessary.**  
+```{r eval=F}
+linelist_cleaned$date_of_onset <- as.Date(linelist_cleaned$date_of_onset, format = "%d/%m/%Y")
+```
 **Note: the format= argument is *not* telling R the format you want the dates to be, but rather how to identify the date parts as they are *before* you run the command.**  
 
 *Note: if your date parts are separated by a slash ( / ) instead of hyphen ( - ) , the format you tell R must also use slashes ( / ).*
@@ -347,12 +382,16 @@ class(linelist_cleaned$date_of_onset)
 ```
 Once the values are in class Date, R will present them in it's standard format, which is YYYY-MM-DD.
 
-### Excel Dates
+#### Excel Dates
 Excel stores dates as the number of days since December 30, 1899. If the dataset you imported from Excel has a date variable showing numbers like "41369"... use the as.Date() function to convert, but **instead of supplying a format as above, supply an origin date**. Note that the origin date must be given in the default date format for R ("YYYY-MM-DD").
 ```{r, eval=FALSE}
 # An example of providing an origin date when converting to class Date
 linelist_cleaned$date_of_onset <- as.Date(linelist_cleaned$date_of_onset, origin = "1899-12-30")
 ```
+
+#### Changing the format of displayed dates  
+Once dates are the correct class, you often want them to display differently. For example, "Monday 05 Jan" instead of 2018-01-05. You can do this with the function format() in a similar was to as.Date(). Read more about it [here](https://www.statmethods.net/input/dates.html) 
+
 #### Calculating distance between dates
 The difference between dates can be calculated by:  
   
@@ -361,6 +400,8 @@ The difference between dates can be calculated by:
 2. Creating a new variable that is defined as one date variable subtracted from the other
 3. Converting the result to numeric class (default is class "datediff"). This ensures that subsequent mathematical calculations can be performed.  
 
+#### Epidemiological weeks  
+The templates use the very flexible package "aweek"" to set epidemiological weeks. You can read more about it [here](https://www.repidemicsconsortium.org/aweek/)
 
 ## General Syntax  
 

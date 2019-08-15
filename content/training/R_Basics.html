@@ -27,7 +27,6 @@ output:
 <li><a href="#calculations">Calculations</a></li>
 <li><a href="#working-with-dates">Working with Dates</a><ul>
 <li><a href="#converting-date-variables-to-the-date-class">Converting date variables to the date class</a></li>
-<li><a href="#excel-dates">Excel Dates</a></li>
 </ul></li>
 <li><a href="#general-syntax">General Syntax</a></li>
 <li><a href="#errors-and-warnings">Errors and Warnings</a></li>
@@ -83,6 +82,7 @@ linelist_cleaned &lt;- linelist_raw
 # linelist_cleaned is RE-defined as itself, but modified to include a new variable
 linelist_cleaned &lt;- mutate(linelist_cleaned, 
                            obs_days = as.numeric(date_of_exit - date_of_admission))</code></pre>
+<p>You can read more about importing and exporting datasets with the rio package <a href="https://rdrr.io/cran/rio/f/vignettes/rio.Rmd">here</a></p>
 <p>A quick note on naming of objects:</p>
 <ul>
 <li>Object names must not contain spaces, but you should use underscore (_) or a period (.) instead of a space.<br />
@@ -125,6 +125,8 @@ linelist_cleaned &lt;- mutate(linelist_cleaned,
 </tr>
 </tbody>
 </table>
+<p>Note that to create a vector that “stands alone”, or is not part of a data frame (such as a list of location names), the function <code>c()</code> is often used:<br />
+<code>list_of_names &lt;- c(&quot;Ruhengeri&quot;, &quot;Gisenyi&quot;, &quot;Kigali&quot;, &quot;Butare&quot;)</code></p>
 <div id="using-to-accesscall-variables" class="section level4">
 <h4>Using <code>$</code> to access/call variables</h4>
 <p><strong>Vectors within a data frame (variables in a dataset) can be called or referenced using the $ symbol.</strong> The <code>$</code> symbol connects the name of the column to the name of its dataset. The $ symbol must be used, otherwise R will not know where to look for or create the column.</p>
@@ -233,6 +235,7 @@ length(linelist_cleaned$age_years)  </code></pre>
 </tr>
 </tbody>
 </table>
+<p><a href="https://swcarpentry.github.io/r-novice-inflammation/13-supp-data-structures/">Here</a> is more material on classes and data structures in R.</p>
 </div>
 </div>
 <div id="functions" class="section level2">
@@ -248,7 +251,7 @@ length(linelist_cleaned$age_years)  </code></pre>
 </div>
 <div id="functions-with-multiple-arguments" class="section level3">
 <h3>Functions with Multiple Arguments</h3>
-<p>Functions often ask for several inputs. <strong>Each piece of information needed is called an argument</strong>. Some arguments are required for the function to work correctly, some are optional. Arguments can take character, numeric, logical (TRUE/FALSE), and other inputs. Optional arguments have default settings if they are not specified. Arguments are all located within the parentheses of the function, <strong>separated by commas</strong>.</p>
+<p>Functions often ask for several inputs. <strong>Each piece of information needed is called an argument</strong>. Some arguments are required for the function to work correctly, some are optional. Arguments can take character, numeric, logical (TRUE/FALSE), and other inputs. Optional arguments have default settings if they are not specified. <strong>Arguments are located within the parentheses of the function, usually separated by commas</strong>.</p>
 <blockquote>
 <p><strong>For example</strong>, this descriptive() command in the templates creates a descriptive summary table of counts and proportions. In this command the function is given three arguments, establishing linelist_cleaned as the data frame to use, age_group as the variable to count, and sex as the variable to use for groupings.</p>
 </blockquote>
@@ -448,7 +451,7 @@ is.na(rdt_result)  # Tests whether the value of rdt_result is NA</code></pre>
 </div>
 <div id="calculations" class="section level2">
 <h2>Calculations</h2>
-<p>Mathematical operators are often used to perform addition, division, to create new columns, etc. Below are how to use mathematical operators in R. Whether you put spaces around the operators is not important.</p>
+<p>Mathematical operators are often used to perform addition, division, to create new columns, etc. Below are common mathematical operators in R. Whether you put spaces around the operators is not important.</p>
 <table>
 <thead>
 <tr class="header">
@@ -488,14 +491,35 @@ is.na(rdt_result)  # Tests whether the value of rdt_result is NA</code></pre>
 <h2>Working with Dates</h2>
 <div id="converting-date-variables-to-the-date-class" class="section level3">
 <h3>Converting date variables to the date class</h3>
-<p>It is important to make R recognize when a variable contains dates. Dates are an object class and can be tricky to work with.</p>
-<p>The templates provides some code for converting variables to class date, but if your data are not standardized to a MSF data dictionary this process can require attention.<br />
-It can be easiest to first convert the variable to character class, and then convert to date class:</p>
+<p>It is important to make R recognize when a variable contains dates. Dates are an object class and can be tricky to work with. The templates provides some code for converting variables to class date, but if your data are not standardized to a MSF data dictionary this process can require attention. <strong>The templates often use the function <code>guess_dates()</code>, but this guide will also demonstrate converting a variable to class date using the function as.Date().</strong></p>
+<div id="the-function-guess_dates" class="section level4">
+<h4>The function guess_dates()</h4>
+<p><strong>The function guess_dates() attempts to read a “messy” date variable containing dates in many different formats and convert the dates to a standard format.</strong> You can read more about guess_dates(), which is in the “linelist” package, <a href="https://rdrr.io/github/reconhub/linelist/man/guess_dates.html">here</a>.</p>
+<blockquote>
+<p>For example, guess_dates would see the following dates “03 Jan 2018” “07/03/1982” “08/20/85” and convert them in the class Date to: 2018-01-03 1982-03-07 1985-08-20.</p>
+</blockquote>
+<p><em>Some optional arguments for guess_dates() that you might include are:</em></p>
+<ul>
+<li>error_tolerance - The proportion of entries which cannot be identified as dates to be tolerated (defaults to 0.1 or 10%)</li>
+<li>last_date - the last valid date (defaults to current date)<br />
+</li>
+<li>first_date - the first valid date. Defaults to fifty years before the last_date.</li>
+</ul>
+<pre class="r"><code># An example using guess_dates on the variable dtdeath
+linelist_cleaned$dtdeath &lt;- linelist::guess_dates(linelist_cleaned$dtdeath)
+
+# An example from the template using guess_dates over multiple date variables, with piping, error tolerance of 50%, and the earliest accepted date of 1 Jan 2016.
+linelist_cleaned &lt;- linelist_cleaned %&gt;%
+   mutate_at(vars(matches(&quot;date|Date&quot;)), linelist::guess_dates,
+           error_tolerance = 0.5, first_date = &quot;2016-01-01&quot;)</code></pre>
+</div>
+<div id="the-function-as.date" class="section level4">
+<h4>The function as.Date()</h4>
+<p>If guess_dates() is not working for you, you can use the base function as.Date() to convert a variable to class Date. <strong>as.Date() cannot guess dates, and therefore requires that all the date values be in the same format before converting.</strong> Read more about using as.Date() <a href="https://www.stat.berkeley.edu/~s133/dates.html">here</a></p>
+<p>It can be easiest to first convert the variable to character class, and then convert to date class:</p>
 <ol style="list-style-type: decimal">
 <li>Turn the variable into character values using the function <code>as.character()</code></li>
 </ol>
-<pre class="r"><code>class(linelist_cleaned$date_of_onset)   #Check the class of the variable</code></pre>
-<pre><code>## [1] &quot;factor&quot;</code></pre>
 <pre class="r"><code>linelist_cleaned$date_of_onset &lt;- as.character(linelist_cleaned$date_of_onset)</code></pre>
 <ol start="2" style="list-style-type: decimal">
 <li>Convert the variable from character values into date values, using the function <code>as.Date()</code><br />
@@ -514,7 +538,8 @@ It can be easiest to first convert the variable to character class, and then con
 %y = 2-digit year (e.g. 89)<br />
 %Y = 4-digit year (e.g. 1989)</p></li>
 </ul>
-<p>For example, if your character dates are in the format YYYY-MM-DD, like “1988-08-24”, then your command to turn the values into dates will be as below. <strong>Putting the format in quotation marks is necessary.</strong></p>
+<p>For example, if your character dates are in the format DD/MM/YYYY, like “24/04/1968”, then your command to turn the values into dates will be as below. <strong>Putting the format in quotation marks is necessary.</strong></p>
+<pre class="r"><code>linelist_cleaned$date_of_onset &lt;- as.Date(linelist_cleaned$date_of_onset, format = &quot;%d/%m/%Y&quot;)</code></pre>
 <p><strong>Note: the format= argument is <em>not</em> telling R the format you want the dates to be, but rather how to identify the date parts as they are <em>before</em> you run the command.</strong></p>
 <p><em>Note: if your date parts are separated by a slash ( / ) instead of hyphen ( - ) , the format you tell R must also use slashes ( / ).</em></p>
 <pre class="r"><code># Convert the variable to class Date by providing the format of the variable
@@ -525,11 +550,16 @@ class(linelist_cleaned$date_of_onset)  </code></pre>
 <pre><code>## [1] &quot;Date&quot;</code></pre>
 <p>Once the values are in class Date, R will present them in it’s standard format, which is YYYY-MM-DD.</p>
 </div>
-<div id="excel-dates" class="section level3">
-<h3>Excel Dates</h3>
+<div id="excel-dates" class="section level4">
+<h4>Excel Dates</h4>
 <p>Excel stores dates as the number of days since December 30, 1899. If the dataset you imported from Excel has a date variable showing numbers like “41369”… use the as.Date() function to convert, but <strong>instead of supplying a format as above, supply an origin date</strong>. Note that the origin date must be given in the default date format for R (“YYYY-MM-DD”).</p>
 <pre class="r"><code># An example of providing an origin date when converting to class Date
 linelist_cleaned$date_of_onset &lt;- as.Date(linelist_cleaned$date_of_onset, origin = &quot;1899-12-30&quot;)</code></pre>
+</div>
+<div id="changing-the-format-of-displayed-dates" class="section level4">
+<h4>Changing the format of displayed dates</h4>
+<p>Once dates are the correct class, you often want them to display differently. For example, “Monday 05 Jan” instead of 2018-01-05. You can do this with the function format() in a similar was to as.Date(). Read more about it <a href="https://www.statmethods.net/input/dates.html">here</a></p>
+</div>
 <div id="calculating-distance-between-dates" class="section level4">
 <h4>Calculating distance between dates</h4>
 <p>The difference between dates can be calculated by:</p>
@@ -539,6 +569,10 @@ linelist_cleaned$date_of_onset &lt;- as.Date(linelist_cleaned$date_of_onset, ori
 <li>Creating a new variable that is defined as one date variable subtracted from the other</li>
 <li>Converting the result to numeric class (default is class “datediff”). This ensures that subsequent mathematical calculations can be performed.</li>
 </ol>
+</div>
+<div id="epidemiological-weeks" class="section level4">
+<h4>Epidemiological weeks</h4>
+<p>The templates use the very flexible package “aweek”&quot; to set epidemiological weeks. You can read more about it <a href="https://www.repidemicsconsortium.org/aweek/">here</a></p>
 </div>
 </div>
 </div>
