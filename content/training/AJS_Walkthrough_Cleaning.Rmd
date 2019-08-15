@@ -402,14 +402,6 @@ linelist_cleaned$age_group <- age_categories(linelist_cleaned$age_years,
                                              breakers = c(0, 3, 15, 30, 45))
 ```
 
-### Create DIED variable  
-When performing this step, we recognize that our current values in exit_status are in French, therefore ask R to look for "Décédé" instead of "Dead", "DOA", or "DD".
-
-```{r}
-## use this version for coded values (e.g. "DOA", "DD")
-linelist_cleaned$DIED <- linelist_cleaned$exit_status %in% c("Décédé")
-```
-
 
 ### Creating new values for exit status
 ```{r}
@@ -426,6 +418,16 @@ linelist_cleaned <- linelist_cleaned %>%
 
 # Table the NEW variable to check transformation
 table(linelist_cleaned$exit_status2, useNA = "always")
+```
+
+
+### Create DIED variable  
+Now, slightly out-of-order, we can make the DIED variable (which is referenced in later code).  
+When performing this step, we recognize that our current values in exit_status are in French, therefore ask R to look for "Décédé" instead of "Dead", "DOA", or "DD".
+
+```{r}
+## Note we are looking within the NEW exit_status2 variable that is in English
+linelist_cleaned$DIED <- linelist_cleaned$exit_status2 == "Died"
 ```
 
 
@@ -552,7 +554,7 @@ obs_end   <- week2date(sprintf("%s-7", reporting_week))
 
 
 
-Demographic Tables:
+## Demographic Tables:
 
 These work:
 
@@ -647,8 +649,28 @@ multi_descriptive(linelist_cleaned, LABS, .id = "Lab test") %>%
 
 ```
 
-CFR Section
-Skip time-to-death because we don't have that variable.
+## CFR Section
+
+Time to death not applicable. 
+
+
+
+The case fatality ratio among inpatients with known outcomes is below.
+
+```{r overall_cfr, warning = FALSE, message = FALSE}
+# use arguments from above to produce overal CFR
+overall_cfr <- linelist_cleaned %>% 
+  filter(patient_facility_type == "Inpatient") %>%
+  case_fatality_rate_df(deaths = DIED, mergeCI = TRUE) %>%
+  rename("Deaths" = deaths,
+         "Cases" = population,
+         "CFR (%)" = cfr,
+         "95%CI" = ci)
+
+  knitr::kable(overall_cfr, digits = 2)         # print nicely with 2 digits
+```
+
+
 
 Case Fatality Ratio - note that this requires there to be a variable patient_facilit_type, the value "Inpatient", and the DIED variable created earlier. 
 
