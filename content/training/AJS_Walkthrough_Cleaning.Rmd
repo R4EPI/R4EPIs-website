@@ -1,6 +1,6 @@
 ---
 date: "2019-08-05T14:07:44+02:00"
-title: Template Walk-through
+title: Template Walk-through - Data Import and Cleaning
 weight: 8
 ---
 
@@ -52,8 +52,10 @@ aweek::set_week_start("Monday")
 ## Overview of this page
 This page will demonstrate use of the Acute Jaundice Syndrome (AJS) outbreak template using data from an outbreak in Am Timan, Chad. This first page covers the initial data importation and cleaning steps in the template.  
 
+#### Getting started  
+
 **Getting started with the sitrep package and opening the correct template**
-Please review the [sitrep wiki page](https://github.com/R4EPI/sitrep/wiki/1)-Getting-started) for instructions on the following start-up steps:  
+Please review the [getting started page](https://r4epis.netlify.com/welcome/001-getting-started/) for instructions on the following start-up steps:  
 
 * Downloading and configuring R and RStudio  
 * Installing the sitrep package  
@@ -71,7 +73,7 @@ Review the page "Reading a RMarkdown Script", or reference these resources: [Rma
   
 
 
-### AJS/HEV outbreak in Am Timan, Chad (2016-2017)
+#### AJS/HEV outbreak in Am Timan, Chad (2016-2017)
 
 We will be using data and examples from a real outbreak of Hepatitis E virus (HEV) infection which occurred in the Chadian town of Am Timan between October 2016 and April 2017  
 
@@ -100,26 +102,42 @@ The "Introduction to this template" section is for your information only and thi
 <img src="/images/AJS_Intro.png" alt="AJS Header and Introduction snip", width = "75%">
 
 
-## Package installation
-This section begins with text which explains the purpose of the following code chunk. **For your final report you may delete the text, but you must keep this code chunk!** The code will run without producing any output in your report, but is required to load packages necessary to produce the report.
+## Installation and loading required packages
+**The text which explains the purpose of this code chunk may be deleted, but you must keep the code chunk!** The code will run without producing any output in your final report, but it is required to install (or load using library(), if already installed) the packages necessary to produce the report. You can read more about the packages used by the template on this [page](https://r4epis.netlify.com/outbreaks/)
 
-The code chunk does the following:  
+This "setup" code chunk does the following:  
 
-* Set default settings for the RMarkdown such as figure size, and handling of errors  
+* Set default settings for tables such as size, error handling, and display of missing values  
 
-* Set the default way of displaying missing values in tables as "-"  
+* Create a vector of names of packages required for the template to run, each of which is installed if it is not already installed, and then is loaded using library() for use in the current R session.
 
-* Create a vector of names of packages required for the template to run. Then each package is installed if it is not already installed, and each package is loaded for use in the current R session.
+* Set default text size in graphic plots  
 
-* Set default plot theme text size and epidemiological weeks are set to begin on Mondays.  
+* Set epidemiological weeks to begin on Mondays  
 
-## define current week 
+<img src="/images/Package_Installation.png" alt="Package installation chunk snip", width = "75%">
+
+
+## Set current epi week  
+Set the epidemiological week for the report. **This value is used in later code chunks, for example when producing epidemic curves.** Note that you may want to specify the most recent **complete** epi week.  
+
+Follow the format demonstrated below:  
+
+> Within quotes (" ") give the 4-digit year, a hyphen (-), capital W, then the 2-digit epi week number  
+
+By default in the templates epi weeks begin on Mondays (this can be changed at the bottom of the "setup" code chunk). See the documentation of the [package "aweek"](https://cran.r-project.org/web/packages/aweek/vignettes/introduction.html) for more information. 
 
 ```{r}
 reporting_week <- "2017-W52"  # Set the reporting week
 ```
 
-## Importing the dataset
+To determine which epi week it is currently (based on the template epi week settings), use the code below:
+
+```{r}
+date2week(Sys.Date())      #Sys.Date() uses the current date from your computer
+```
+
+## Import the dataset
 
 **In this template section you choose the appropriate code chunk to importing your dataset.** 
 
@@ -127,7 +145,7 @@ reporting_week <- "2017-W52"  # Set the reporting week
 
 For this exercise our dataset is a **non-standardized Excel file** from MSF's response an outbreak of AJS in Am Timan, Chad, so we use the `read_nonDHIS_data` code chunk, specifically the line that uses the import() function of the rio package to import an Excel file that is not password protected.  
 
-Note that writing sometimes errors can occur if you provide an incorrect file name or path.
+Note that errors can occur if you provide an incorrect file name or path. 
 
 
 ```{r eval=FALSE}
@@ -136,6 +154,10 @@ Note that writing sometimes errors can occur if you provide an incorrect file na
 # to read in a specific sheet use "which"
 linelist_raw <- rio::import("AJS_AmTiman.xlsx", which = "linelist")
 ```
+
+There should now be a dataframe object named "linelist_raw" in your environment pane, consisting of 1447 observations and 122 variables.  
+
+<img src="/images/linelist_raw_imported.png" alt="Environment snip with linelist_raw", width = "50%">
 
 
 
@@ -147,10 +169,10 @@ linelist_raw <- rio::import("AJS_AmTiman.xlsx", which = "linelist", na=".")
 
 
 ## Aligning the dataset with the data dictionary  
-When using a non-standardized dataset, the variable names and values must be aligned with the data dictionary. This can take some time and requires looking back-and-forth between your dataset, RStudio, and the MSF data dictionary. In this example, here are the steps taken:  
+When using a non-standardized dataset, the variable names and values must be aligned with the data dictionary. **This process can take some time** and requires looking back-and-forth between your dataset, RStudio, and the MSF data dictionary. In this example, here are the steps taken:  
 
 ### Review the MSF data dictionary
-Use this command (found in the template) to view the MSF data dictionary for the disease ("AJS" in this example)
+Use this command found in the template to view the MSF data dictionary for the disease ("AJS" in this example).
 
 ```{r eval = FALSE}
 # creates object linelist_dict using the msf_dict function from the sitrep package
@@ -158,35 +180,39 @@ linelist_dict <- msf_dict("AJS", compact = FALSE) %>%
   select(option_code, option_name, everything())
 ```
 
-You can view the data dictionary by running the command `View(linelist_dict)`, or by clicking the name linelist_dict in the RStudio Environment (upper-right RStudio pane)  
+The dataframe linelist_dict should appear in your Environment pane. You can view the data dictionary by running the command `View(linelist_dict)` (note capital V), or by clicking linelist_dict in the Environment pane.  
 
 ![](/images/AJS_Data_Dictionary.png)
 
-### Clean variable names  
-Uncomment the appropriate lines of code to make a copy of the dataset, naming the copy "linelist_cleaned". 
+### Clean the variable names  
+This step standardizes how your variable names are written, such as changing spaces and dots to underscores ("_"). **Uncomment the appropriate lines of template code**.  
+
+**First, make a copy of the dataframe linelist_raw but with a new name: linelist_cleaned.** Throughout the template you will modify and improve this linelist_cleaned dataframe. However, you can always return to the linelist_raw version for reference.  
 
 ```{r}
 ## make a copy of your orginal dataset and name it linelist_cleaned
 linelist_cleaned <- linelist_raw
 ```
 
-Use the clean_labels function from the epitrix package to fix any variable names with non-standard syntax.
+**Second, use the clean_labels() function** from the epitrix package to fix any variable names with non-standard syntax. These code lines take the column names, clean them, and then store the cleaned names in the vector cleaned_colnames. The second code line over-writes the old column names of linelist_cleaned with the improved ones.
+
 ```{r}
-# this function is preset rules for variable naming 
-# for example it changes spaces and dots to "_" and characters to lowercase
+# Store cleaned column names
 cleaned_colnames <- epitrix::clean_labels(colnames(linelist_raw))
 
-# overwrite variable names with defined clean names
+# Overwrite variable column names with clean ones
 colnames(linelist_cleaned) <- cleaned_colnames
 ```
 
 ### Re-name variables to align with data dictionary  
 
-Standardized variable names are required for this template to work smoothly, and the variable names in our dataset do not align with the names this template expects. The template offers code that you can uncomment if you only have to change a few variable names (see below). **However, in this example we need to change many variable names. MSF developed a special function to help map our variables to the expected variables.**  
+Standardized variable names are required for this template to work smoothly, and the variable names in our Am Timan dataset do not align with the names this template expects. The template offers code that you can uncomment if you only have to change a few variable names (see below). **However, in this example we need to change many variable names. For this scenario, MSF developed a special function to help map our variables to the expected variable names.**  
 
-* **Paste the disease-specific rename helper into the script.** This command is found in the template. For our example we run the command `msf_dict_rename_helper("AJS")` and a block of code text is copied to the clipboard. Return to the template script and paste from the clipboard into the template. For the AJS template, the code that is pasted will look like the code below. This code uses the function rename() to change variable names.
+* **Paste the disease-specific rename helper into the script.** This command is found in the template near the end of the "read_nonDHIS_data"" chunk. For our example we run the command `msf_dict_rename_helper("AJS")` and a block of code text is copied to our clipboard. Return to the template script and *paste* from the clipboard into the template. For the AJS template, the code that is pasted will look like the code below. This code uses the function rename() to change variable names.  
 
-<img src="/images/AJS_Rename_Variables_Empty.png" alt="rename variables empty snip", width = "75%">
+*Note: Be sure to paste the code into an existing R code chunk, not into the white space of the RMarkdown script. 
+
+<img src="/images/Variable_Helper_Paste.gif" alt="rename variables empty snip", width = "100%">
 
 * **Complete the mapping of variable names.** To the right of the equals sign, and before the comma, type the *exact* names of the variables from your dataset that correspond to the expected MSF data dictionary variables on the left. *If there is a data dictionary variable that is not present in your dataset, be sure to comment (#) out that line, as shown in the GIF below.*
 
@@ -198,7 +224,7 @@ then you likely forgot to comment (#) the line for a variable you did not use.
 
 And now you can see the result:  
 
-<img src="/images/AJS_Rename_Variables_Proof.png" alt="rename variables proof", width = "85%">
+<img src="/images/AJS_Rename_Variables_Proof.png" alt="rename variables proof", width = "100%">
 
 
 ```{r include=FALSE, results='hide', message=FALSE, warning=FALSE}
@@ -278,14 +304,12 @@ linelist_cleaned <- rename(linelist_cleaned,
 
 
 ## Provide population counts  
-In order to calculate attack and mortality rates by region and age groups, the population counts for these categories are collected. If you choose not to complete this section, please delete or comment (#) the default gen_population() code and expect that later sections on attack and mortality rates will give errors instead of output. 
-
-**The template allows several ways to provide population figures so that they are stored in data frames with specific variable names.** Of course, the specific age groupings and region names in your data frames may differ from the examples.  
+The population estimates for regions and age groups are collected in order to calculate attack and mortality rates. **The template allows several ways to provide population estimates, but importantly, the data must be stored under specific variable names.** The specific age groupings and region names in your data frames may differ from the examples, but the variable names but follow the expected standard.  
 
 You can do one of the following:  
-1) Enter the counts directly **[need clarification here as this is not yet built]**  
-2) Use the function gen_population() to derive the counts from proportions  
-3) Import a spreadsheet file with the counts in the correct format  
+1) Enter the estimates directly **[need clarification here as this is not yet built]**  
+2) Use the function gen_population() to derive the estimates from proportions  
+3) Import a spreadsheet file with the estimates in the correct format  
 
 ![](/images/AJS_Population_Counts.png)  
 
@@ -299,19 +323,23 @@ For the AJS example, we can use the population Excel spreadsheet, importing it w
 population_data_region <- rio::import("AJS_AmTiman_population_revised_for_template.xlsx", which="quartier")
 ```
 
+
+**If you choose not to complete the population estimates section, delete the default gen_population() code, and expect that later sections on attack and mortality rates will not produce output.**
+
+
 ## Lab data
 [Paragraph about lab data here - how it is used]  
 
 
 
 ## Creating and cleaning variables  
-The variables and values in our example AJS dataset are still very far from the standard AJS MSF data dictionary. In the data cleaning step we will need to do the following:  
+The variables and values in our example AJS dataset are still very different from the standard AJS MSF data dictionary. In the data cleaning steps we will need to do the following:  
 
 ### **Re-code missing values from periods (.) to `NA` at import**  
 
-Currently, missing values in the dataset are represented by a period (.). This causes problems because R expects missing values to be coded as `NA`. For example, if we attempt to set the variable date_of_onset to class Date, R gives an error because the periods are considered character values and do not fit the expected YYYY-MM-DD date format.  
+Currently, missing values in the dataset are represented by a period (.). This causes problems because R expects missing values to be coded as `NA`. For example, if we attempt to set the variable date_of_onset to class Date, R gives an error because the periods are considered character values that do not fit the expected YYYY-MM-DD date format.  
 
-To fix this problem we scroll up to the import section of the template and insert an additional argument in the import command. The argument `na = "."` specifies a period as the value in the Excel sheet that R will consider to be "missing". As the data are imported, all cells with that value are changed to `NA`.  
+To fix this problem we **scroll up to the data import section of the template and insert an additional argument in the import command**. The argument `na = "."` specifies a period as the value in the Excel sheet that R will consider to be "missing". As the data are imported, all cells with that value are changed to `NA`.  
 
 **Remember that after making this change to the import command you must re-run the entire script. This way, the dataset is imported correctly AND the changes to variable names, etc. are also performed on this newly imported dataset** 
 
@@ -349,7 +377,7 @@ However, if your dataset is at all unstandard you will need to use this code ins
             error_tolerance = 0.5)
 ```
 
-In our example dataset, this code converted many of our date variables, but did not detect the variables named with "dt", such as "dtdeath" and "dthospitalization". We must convert those manually:
+In our Am Timan dataset, this code converted many of our date variables, but did not detect the variables named with "dt", such as "dtdeath" and "dthospitalization". We must convert those manually:
 ```{r}
 # Individually convert other date columns
 class(linelist_cleaned$dthospitalisation)
@@ -364,18 +392,16 @@ linelist_cleaned$dtdeath <- linelist::guess_dates(linelist_cleaned$dtdeath)
 
 ### **Re-code values in patient_facility_type**  
 
-When assigning variables to match the data dictionary, we used the variable "hospitalisation" as the variable "patient_facility_type". In the data dictionary, patient_facility_type should have values of "Inpatient" or "Outpatient." Currently, the values are "Oui" and "Non".  
+When we assigned our variables to match the data dictionary, we used the variable "hospitalisation" as the variable "patient_facility_type". **However, the values in that variable do not match those expected by the template.** In the data dictionary, patient_facility_type should have values of "Inpatient" or "Outpatient." Currently, the values are "Oui" and "Non". In later code chunks, analyses are restricted to observations where patient_facility_type == "Inpatient", thus, we should align the values to match the data dictionary.  
 
-This variable is referenced in later chunks, in which the analyses are restricted to observations where patient_facility_type == "Inpatient". Thus, we need to change the values to match the data dictionary and what the later code expects.  
+**To clean these values we modify code from the standardise_clean_data template chunk.** The code below uses the function case_when() to re-define linelist_cleaned as itself, but mutated such that when its value equals "Oui", that value is changed (~) to "Inpatient", and so on. If applicable, write these case_when() lines from most specific at top to most general at bottom (see section on creating a case definition variable).
 
-We can modify a chunk from the cleaning section of the template. The code below re-defines linelist_cleaned as itself  mutated such that in the case when it's value equals "Oui", the value is changed (~) to "Inpatient", and so on. If applicable, write the lines from most specific at top to most general at bottom (see the section below on creating a case definition variable).
+As you modify this chunk for your own situation, remember to include commas at the end of each case_when() line (except the last one), and that **each left-hand side (LHS) of the ~ must be a logical statement**, not just a value. You can read more about case_when() [here](https://dplyr.tidyverse.org/reference/case_when.html).  
 
-As you modify this chunk for your own situation, remember to include commas at the end of each case_when() line (except the last one), and that each left-hand side (LHS) of the ~ must be a logical statement, not just a value. You can read more about case_when() [here](https://dplyr.tidyverse.org/reference/case_when.html).  
-
-**Tip: All the right-hand side (RHS) values must be the same class (either character, numeric, etc.). So, if your RHS values are character and you want one RHS value to be missing, you cannot just write `NA` on the RHS. Instead you must use the special character version of `NA` : `NA_character_`.** 
+**Tip: All the right-hand side (RHS) values must be the same class (either character, numeric, etc.). So, if your other RHS values are character and you want one RHS value to be missing, you cannot just write `NA` on the RHS. Instead you must use the special character version of `NA` : `NA_character_`.** 
 
 ```{r}
-# Check the values in patient_facility_type
+# View all the values in patient_facility_type
 table(linelist_cleaned$patient_facility_type, useNA = "always")
 
 # Convert the values
@@ -385,11 +411,17 @@ linelist_cleaned <- linelist_cleaned %>%
     patient_facility_type == "Non" ~ "Outpatient"
   ))
 
-# Re-check the values in patient_facility_type
+# Re-check that the values converted sucessfully
 table(linelist_cleaned$patient_facility_type, useNA = "always")
 
 ```
 
+
+### Other data cleaning steps
+There are many sections of code in the data cleaning chunk that you can use as necessary. These are the steps taken for the Am Timan example:  
+
+* **Create a new epi week variable**  
+The template provides code to create a new epi week variable based on date_of_onset.
 ```{r}
 # create an epiweek variable
 # floor_day shortens to only give you the week number (rather than including day as well) 
@@ -399,10 +431,11 @@ linelist_cleaned$epiweek <- aweek::date2week(linelist_cleaned$date_of_onset,
                                              factor = TRUE)
 ```
 
+* **Comment out code for "create number of days under observation"**, because our dataset does not have a date of exit variable.  
 
-We ignore the section on "number of days under observation"" because our dataset does not have a date of exit variable.
+* **Comment out code that creates the age_group_mon variable**, because our dataset only has age_years  
 
-Skip the optional age group variables because only have age_years
+* **Create the age_group variable** as below (based on age_years):
 
 ```{r}
 ## create an age group variable by specifying categorical breaks
@@ -410,8 +443,8 @@ linelist_cleaned$age_group <- age_categories(linelist_cleaned$age_years,
                                              breakers = c(0, 3, 15, 30, 45))
 ```
 
+* **Use case_when() to assign new values for a new exit_status2 variable**, as in the code below:  
 
-### Creating new values for exit status
 ```{r}
 # Tabulate to see all possible values of exit_status
 table(linelist_cleaned$exit_status, useNA = "always")
@@ -429,9 +462,8 @@ table(linelist_cleaned$exit_status2, useNA = "always")
 ```
 
 
-### Create DIED variable  
-Now, slightly out-of-order, we can make the DIED variable (which is referenced in later code).  
-When performing this step, we recognize that our current values in exit_status are in French, therefore ask R to look for "Décédé" instead of "Dead", "DOA", or "DD".
+* **Create DIED variable**  
+Now that we have translated the exit status values, we can make the DIED variable (which is referenced in later code).
 
 ```{r}
 ## Note we are looking within the NEW exit_status2 variable that is in English
@@ -439,7 +471,7 @@ linelist_cleaned$DIED <- linelist_cleaned$exit_status2 == "Died"
 ```
 
 
-### Create case definition variable
+* **Create case definition variable**
 
 ```{r}
 # Create a factor variable based on rules from other simple character variables
@@ -459,7 +491,8 @@ linelist_cleaned <- linelist_cleaned %>%
   ))
 ```
 
-Create list of symptom variables - **already switched "med" variables to these ones, but some do not apply and must be removed from the list, such as convulsions and history of fever?**
+* **Create lists of symptom variables**
+**already switched "med" variables to these ones, but some do not apply and must be removed from the list, such as convulsions and history of fever?**
 
 ```{r}
 # vectors of variable names ----------------------------------------------------
@@ -511,9 +544,7 @@ LABS <- c("hep_b_rdt",
 
 ```
 
-### **Drop observations**  
-
-**Removing those with dates of onset outside of years 2016 or 2017**
+* **Drop observations** Remove observations with date of onset outside outbreak dates. This should reduce the number of observations in linelist_cleaned from 1447 to 1434.
 
 ```{r}
 # Check date range of date_of_onset
@@ -522,13 +553,14 @@ range(linelist_cleaned$date_of_onset, na.rm = T)
 # Filter to keep observations where date_of_onset after April 2016 AND before October 2017 (OR missing)
 linelist_cleaned <- linelist_cleaned %>%
   filter((date_of_onset >= as.Date("2016-04-01") & date_of_onset <= as.Date("2017-10-01")) | is.na(date_of_onset))
+
 # Re-check the date range
 range(linelist_cleaned$date_of_onset, na.rm = T)
 ```
 
 
 
-## Export the cleaned dataset
+* **Optionally, you can export the cleaned dataset** for other purposes
 
 ```{r save_cleaned_data, eval = FALSE}
 ## OPTIONAL: save your cleaned dataset as an excel file! 
@@ -537,7 +569,9 @@ writexl::write_xlsx(linelist_cleaned, paste0("linelist_cleaned_", Sys.Date(), ".
 ```
 
 
-Remmber, you defined reporting_week at beginning of script
+
+* **Drop cases after reporting week.** Remember, you defined the reporting_week at beginning of the script.  
+
 ```{r}
 
 # drop cases after current week
@@ -545,7 +579,11 @@ Remmber, you defined reporting_week at beginning of script
 # as these are after the week of reporting, drop them
 linelist_cleaned <- linelist_cleaned %>% 
   filter(date_of_onset <= week2date(sprintf("%s-7", reporting_week)))
+```
 
+* **Define these date-related objects** that are referenced later in the template script.  
+
+```{r}
 # define the first week of outbreak (date of first case)
 first_week <- levels(linelist_cleaned$epiweek)[1]
 
@@ -560,486 +598,3 @@ obs_end   <- week2date(sprintf("%s-7", reporting_week))
 
 
 
-
-
-## Demographic Tables:
-
-These work:
-
-Cases by age group and definition 
-
-```{r describe_by_age_group_and_def}
-# use if you have lab results in your data
-# get counts and props of age groups by case definition 
-# include column and row totals 
-descriptive(linelist_cleaned, "age_group", "case_def", coltotals = TRUE, rowtotals = TRUE) %>%
-  rename("Age group" = age_group) %>%
-  rename_redundant(prop = "%") %>%
-  augment_redundant("_n$" = " cases (n)") %>%
-  kable(digits = 2)
-```
-
-
-
-
-Cases by age group and sex 
-
-```{r describe_by_age_group_and_sex}
-descriptive(linelist_cleaned, "age_group", "sex", coltotals = TRUE, rowtotals = TRUE) %>% 
-  rename("Age group" = age_group) %>%
-  rename_redundant(prop = "%") %>%
-  augment_redundant("_n$" = " cases (n)") %>%
-  kable(digits = 2)
-```
-
-
-Alternatively if you would like proportions to be of the total population, use the following. 
-
-```{r total_props_agegroup_sex}
-descriptive(linelist_cleaned, "age_group", "sex", 
-            coltotals = TRUE, rowtotals = TRUE, proptotal = TRUE) %>% 
-  rename("Age group" = age_group) %>%
-  rename_redundant(prop = "%") %>%
-  augment_redundant("_n$" = " cases (n)") %>%
-  kable(digits = 2)
-```
-
-
-Age pyramid 
-
-There were `r fmt_count(linelist_cleaned, is.na(sex))` cases missing information on sex and 
-`r fmt_count(linelist_cleaned, is.na(age_group))` missing age group.
-
-```{r age_pyramid, warning=FALSE}
-# plot age pyramid 
- 
-plot_age_pyramid(linelist_cleaned, 
-                 age_group = "age_group", 
-                 split_by = "sex") + 
-  labs(y = "Cases (n)", x = "Age group") + # change axis  labels (nb. x/y flip)
-  theme(legend.position = "bottom",     # move legend to bottom
-        legend.title = element_blank(), # remove title
-        text = element_text(size = 18)  # change text size
-       )
-```
-
-Age pyramid for Under 2 obviously doesn't work.
-
-
-
-
-
-```{r describe_by_symptoms}
-
-# get counts and proportions for all variables named in SYMPTOMS
-multi_descriptive(linelist_cleaned, SYMPTOMS) %>% 
-  # re-order columns (drop total_prop too)
-  select(symptom, Yes_n, Yes_prop, No_n, No_prop, Total_n) %>%
-  # rename accordingly
-  rename_redundant("prop" = "%") %>%
-  augment_redundant("_n$" = " (n)") %>%
-  kable(digits = 2)
-
-
-```
-
-```{r describe_by_labs}
-# get counts and proportions for all variables named in LABS
-multi_descriptive(linelist_cleaned, LABS, .id = "Lab test") %>% 
-  # re-order columns (drop total_prop too)
-  select("Lab test", Pos_n, Positive_prop, Neg_n, Negative_prop, 
-         "Not done_n", "Not done_prop", Total_n) %>% 
-  # rename accordingly
-  rename("Unknown (n)" = "Not done_n") %>%
-  rename_redundant("prop" = "%") %>%
-  augment_redundant("_n$" = " (n)") %>%
-  kable(digits = 2)
-
-```
-
-## CFR Section
-
-Time to death not applicable. 
-
-
-
-The case fatality ratio among inpatients with known outcomes is below.
-
-```{r overall_cfr, warning = FALSE, message = FALSE}
-# use arguments from above to produce overal CFR
-overall_cfr <- linelist_cleaned %>% 
-  filter(patient_facility_type == "Inpatient") %>%
-  case_fatality_rate_df(deaths = DIED, mergeCI = TRUE) %>%
-  rename("Deaths" = deaths,
-         "Cases" = population,
-         "CFR (%)" = cfr,
-         "95%CI" = ci)
-
-  knitr::kable(overall_cfr, digits = 2)         # print nicely with 2 digits
-```
-
-
-
-Case Fatality Ratio - note that this requires there to be a variable patient_facilit_type, the value "Inpatient", and the DIED variable created earlier. 
-
-```{r overall_cfr, warning = FALSE, message = FALSE}
-# use arguments from above to produce overal CFR
-overall_cfr <- linelist_cleaned %>% 
-  filter(patient_facility_type == "Inpatient") %>%
-  case_fatality_rate_df(deaths = DIED, mergeCI = TRUE) %>%
-  rename("Deaths" = deaths,
-         "Cases" = population,
-         "CFR (%)" = cfr,
-         "95%CI" = ci)
-
-  knitr::kable(overall_cfr, digits = 2)         # print nicely with 2 digits
-```
-
-
-
-We can also do CFR by sex
-
-```{r cfr_by_sex, warning = FALSE, message = FALSE}
-linelist_cleaned %>%
-  filter(patient_facility_type == "Inpatient") %>%
-  mutate(sex = forcats::fct_explicit_na(sex, "-")) %>%
-  case_fatality_rate_df(deaths = DIED, group = sex, mergeCI = TRUE, add_total = TRUE) %>%
-  rename("Sex" = sex, 
-         "Deaths" = deaths, 
-         "Cases" = population, 
-         "CFR (%)" = cfr, 
-         "95%CI" = ci) %>% 
-  knitr::kable(digits = 2)
-```
-
-
-...and by age_group:
-
-
-CFR by age group among inpatients with known outcomes
-
-```{r cfr_by_age_group, warning = FALSE, message = FALSE}
-
-linelist_cleaned %>%
-  filter(patient_facility_type == "Inpatient") %>%
-  case_fatality_rate_df(deaths = DIED, group = age_group, mergeCI = TRUE, add_total = TRUE) %>%
-  tidyr::complete(age_group, 
-                  fill = list(deaths = 0, population = 0, cfr = 0, ci = 0)) %>% # Ensure all levels are represented
-  rename("Age Group" = age_group, 
-         "Deaths" = deaths, 
-         "Cases" = population, 
-         "CFR (%)" = cfr, 
-         "95%CI" = ci) %>% 
-  knitr::kable(digits = 2)
-```
-
-
-CFR by case definition (not enough to do)
-
-```{r cfr_by_case_def, warning = FALSE, message = FALSE}
-# Use if you have enough confirmed cases for comparative analysis 
-#
- linelist_cleaned %>%
-   filter(patient_facility_type == "Inpatient") %>%
-   case_fatality_rate_df(deaths = DIED, group = case_def, mergeCI = TRUE, add_total = TRUE) %>%
-   rename("Case Definition" = case_def, 
-          "Deaths" = deaths, 
-          "Cases" = population, 
-          "CFR (%)" = cfr, 
-          "95%CI" = ci) %>% 
-   knitr::kable(digits = 2)
-```
-
-
-## Attack Rate
-To use the attack rate section, we need to modify the first code slightly. An object "population" is created from the sum of population counts in the population figures. Because we only imported region-based population counts, we must change this command to reflect that we do not have population_data_age, but rather population_data_region
-
-```{r eval=FALSE}
-# OLD define population 
-# population <- sum(population_data_age$population)
-```
-
-Running the correct command and printing the value of population, we see that the sum population across regions is estimated to be 62336.
-```{r}
-# Correct command for this exercise
-population <- sum(population_data_region$population)
-
-population
-```
-
-Below gives the attack rate per 10,000 population (N = `r format(population, big.mark = ",")`)
-```{r attack_rate}
-# calculate the ar
-# store as AR to be able to use output for automating text below (inline functions)
-ar <- attack_rate(nrow(linelist_cleaned), population, multiplier = 10000)
-
-ar %>%
-  merge_ci_df(e = 3) %>% # merge the lower and upper CI into one column
-  rename("Cases (n)" = cases, 
-         "Population" = population, 
-         "AR (per 100,000)" = ar, 
-         "95%CI" = ci) %>% 
-  select(-Population) %>% # drop the population column as it is not changing
-  knitr::kable(digits = 2, align = "r")
-```
-
-We are unable to calculate the attack rate by age group, because we do not have population counts for each age group.
-
-Mortality attributable to AJS - not appropriate for this example because...
-
-
-
-
-## Time
-
-```{r create_incidence, message = FALSE}
-# This code creates case counts for each week of your outbreak, overall
-# As with aweek, you can change the start of your week to e.g. "Sunday week"
-inc_week_7 <- incidence(linelist_cleaned$date_of_onset, interval = "Monday week")
-
-# this sets the theme in ggplot for epicurves
-epicurve_theme <- theme(
-  axis.text.x = element_text(angle = 45, hjust = 1, vjust = 1), 
-  legend.title = element_blank(),
-  panel.grid.major.x = element_line(color = "grey60", linetype = 3),
-  panel.grid.major.y = element_line(color = "grey60", linetype = 3)
-)
-# This sets the labels in ggplot for the epicurves
-epicurve_labels <- labs(x = "Calendar week", 
-                        y = "Cases (n)", 
-                        title = "Cases by week of onset",
-                        subtitle = sprintf("Source: MSF data from %s", reporting_week)
-                       ) 
-```
-
-
-```{r epicurve, message = FALSE}
-# plot your epicurve as a ggplot (incidence::plot is different to base::plot)
-basic_curve <- plot(inc_week_7, show_cases = TRUE, border = "black", n_breaks = nrow(inc_week_7)) + 
-  scale_y_continuous(expand = c(0, 0)) +  # set origin for axes
-  # add labels to axes and below chart
-  epicurve_labels +
-  # change visuals of dates and remove legend title
-  epicurve_theme
-
-# show your plot (stored for later use) 
-basic_curve
-basic_curve + scale_x_incidence(inc_week_7, n_breaks = 6)
-```
-
-
-Other possible variants on the epi curve:  
-* Option 1  
-* Option 2  
-* Option 3  
-
-
-The below gives the attack rate per week. 
-
-```{r attack_rate_per_week, warning = FALSE, message = FALSE}
-# counts and cumulative counts by week
-cases <- linelist_cleaned %>%
-  arrange(date_of_onset) %>%        # arrange by date of onset
-  count(epiweek, .drop = FALSE) %>% # count all epiweeks and include zero counts
-  mutate(cumulative = cumsum(n))    # add a cumulative sum
-
-# attack rate for each week
-ar <- attack_rate(cases$n, population, multiplier = 100000) %>% 
-  bind_cols(select(cases, epiweek), .) # add the epiweek column to table
-
-ar %>%
-  merge_ci_df(e = 4) %>% # merge the lower and upper CI into one column
-  rename("Epiweek" = epiweek, 
-         "Cases (n)" = cases, 
-         "Population" = population, 
-         "AR (per 100,000)" = ar, 
-         "95%CI" = ci) %>% 
-  knitr::kable(digits = 2, align = "r")
-```
-
-And cumulatively:  
-
-
-```{r cumulative_attack_rate_per_week}
-# cumulative attack rate by week
-attack_rate(cases$cumulative, population, multiplier = 100000) %>% 
-  bind_cols(select(cases, epiweek), .) %>% # add the epiweek column to table
-  merge_ci_df(e = 4) %>% # merge the lower and upper CI into one column
-  rename("Epiweek" = epiweek, 
-         "Cases (n)" = cases, 
-         "Population" = population, 
-         "AR (per 100,000)" = ar, 
-         "95%CI" = ci) %>% 
-  knitr::kable(digits = 2, align = "r")
-```
-
-```{r cfr_per_week, warning = FALSE, message = FALSE}
-# group by known outcome and case definition 
-cfr <- linelist_cleaned %>%
-  filter(patient_facility_type == "Inpatient") %>%
-  case_fatality_rate_df(grepl("Dead", exit_status), group = epiweek)
-
-cfr %>%
-  merge_ci_df(e = 4) %>% # merge the lower and upper CI into one column
-  rename("Epiweek" = epiweek, 
-         "Deaths" = deaths, 
-         "Cases" = population, 
-         "CFR (%)" = cfr, 
-         "95%CI" = ci) %>% 
-  knitr::kable(digits = 2, align = "r")
-```
-
-You could plot the AR (in the population) and CFR (among inpatients only) together as line graphs by epiweek. 
-
-```{r ar_line_graph}
-ar_plot <- ggplot(ar, aes(x = week2date(epiweek) + (7 * 0.5), group = 1)) +
-  geom_ribbon(aes(ymin = lower, ymax = upper), 
-              color = "blue", fill = "blue", linetype = 2, alpha = 0.2, show.legend = FALSE) +
-  geom_line(aes(y = ar), color = "blue", show.legend = FALSE) +
-  scale_y_continuous(expand = c(0, 0)) +  # set origin for axes
-  # scale the x axis the same as the incidence curve. Expand forces it to align. 
-  incidence::scale_x_incidence(inc_week_7, n_breaks = nrow(inc_week_7), expand = c(0, 7 * 1.5)) +
-  # add labels to axes and below chart
-  labs(x = "Calendar week", y = "AR [95% CI]", subtitle = "Attack Rate (per 100,000)") + 
-  # change visuals of dates and remove legend title
-  epicurve_theme
-```
-
-To plot CFR you must first make the CFR table using above code
-
-```{r cfr_line_graph}
-cfr_plot <- ggplot(cfr, aes(x = week2date(epiweek) + (7 * 0.5), group = 1)) +
-  geom_ribbon(aes(ymin = lower, ymax = upper), 
-              color = "red", fill = "red", linetype = 2, alpha = 0.2, show.legend = FALSE) +
-  geom_line(aes(y = cfr), color = "red", show.legend = FALSE) +
-  scale_y_continuous(expand = c(0, 0)) +  # set origin for axes
-  # scale the x axis the same as the incidence curve. Expand forces it to align. 
-  incidence::scale_x_incidence(inc_week_7, n_breaks = nrow(inc_week_7), expand = c(0, 7 * 1.5)) +
-  # add labels to axes and below chart
-  labs(x = "Calendar week", y = "CFR [95% CI]", 
-       subtitle = "Case Fatality Ratio [95% CI] Among Inpatients") + 
-  # change visuals of dates and remove legend title
-  epicurve_theme 
-
-```
-
-
-You could then also add the AR and CFR by week on to an epicurve. 
-
-```{r epicurve_ar_cfr, message = FALSE, fig.height = 10}
-nofx <- theme(axis.text.x = element_blank(),
-              axis.title.x = element_blank())
-cowplot::plot_grid(
-  basic_curve + nofx,
-  ar_plot + nofx,
-  cfr_plot,
-  align = "v", # align plots vertically
-  axis = "lr", # only by their left and right margins
-  ncol = 1     # allow only one column
-)
-```
-
-
-more optins...
-
-
-
-## Place
-
-
-Basic descriptive table:
-
-```{r describe_by_region_facility}
-# get counts and props of region by facility 
-# include column and row totals 
-
-descriptive(linelist_cleaned, "patient_origin", 
-            "patient_facility_type",
-            coltotals = TRUE, rowtotals = TRUE) %>% 
-  rename("Region" = "patient_origin") %>%
-  augment_redundant("_n$" = " (n)") %>% # modify _n to (n)
-  rename_redundant("prop" = "%")    %>% # rename proportions to %
-  kable(digits = 2)
-```
-
-
-And attack rates by region.   
-Note: changed population_data_region to population_data in line 2.
-Error received on left_join: Error in tbl_vars(y) : object 'population_data_region' not found
-
-Then, Error received from merge to create cases. Turns out that in population counts the regions are ALL CAPITALS but in linelist the are lowercase. Need to add line to make that solved.
-
-```{r}
-# Converts patient_origin variable to uppercase, to match with population_data
-linelist_cleaned$patient_origin <- toupper(linelist_cleaned$patient_origin)
-```
-
-Also need fix in proportion() function in sitrep to is.na(n)
-
-```{r attack_rate_by_region}
-
-## - [ ] consider facet wrapping by an overarching unit if have many regions (e.g. by province)
-
-
-cases <- count(linelist_cleaned, patient_origin) %>%   # cases for each region
-  left_join(population_data, by = "patient_origin")    # merge population data 
-# attack rate for region
-ar <- attack_rate(cases$n, cases$population, multiplier = 100) %>% 
-  # add the region column to table
-  bind_cols(select(cases, patient_origin), .) %>% 
-  rename("Region" = patient_origin, 
-         "Cases (n)" = cases, 
-         "Population" = population, 
-         "AR (per 100,000)" = ar, 
-         "Lower 95%CI" = lower,
-         "Upper 95%CI" = upper) 
-
-ar %>% 
-  merge_ci_df(e = 4) %>% # merge lower and upper CI in to one column 
-  rename("95%CI" = ci) %>%  # rename single 95%CI column
-  kable(digits = 2, align = "r", format.args = list(big.mark = ",")) # set thousands separator
-```
-
-
-You could then also plot this on a bar chart with confidence intervals. 
-
-```{r bar_attack_rate_by_region}
-# plot with the region on the x axis sorted by increasing ar
-# ar value on the y axis 
-ggplot(ar, aes(x = reorder(Region, `AR (per 100,000)`),
-               y = `AR (per 100,000)`)) + 
-  geom_bar(stat = "identity", col = "black", fill = "red") + # plot as bars (identity = as is)
-  geom_errorbar(aes(ymin = `Lower 95%CI`, ymax = `Upper 95%CI`), width = 0.2) + # add CIs
-  scale_y_continuous(expand = c(0,0)) +  # set origin for axes
-  # add labels to axes and below chart
-  labs(x = "Region", y = "AR (per 100,000)", 
-       captions = paste0("Source: MSF data from ", reporting_week)) + 
-  epicurve_theme
-```
-
-
-
-Mortality Rates by region
-Changed population_data_region to population_data
-
-Changed "Dead" to "Décédé" in grepl
-
-
-```{r mortality_rate_region}
-
-deaths <- group_by(linelist_cleaned, patient_origin) %>%
-  filter(grepl("Décédé", exit_status)) %>% 
-  summarise(deaths = n()) %>% # count deaths by region
-  left_join(population_data, by = "patient_origin") # merge population data 
-
-mortality_rate(deaths$deaths, deaths$population, multiplier = 10000) %>%
-  # add the region column to table
-  bind_cols(select(deaths, patient_origin), .) %>% 
-  merge_ci_df(e = 4) %>% # merge the lower and upper CI into one column
-  rename("Region" = patient_origin, 
-         "Deaths" = deaths, 
-         "Population" = population, 
-         "Mortality (per 10,000)" = `mortality per 10 000`, 
-         "95%CI" = ci) %>% 
-  kable(digits = 2)
-```
