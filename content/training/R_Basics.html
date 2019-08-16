@@ -307,6 +307,7 @@ linelist_raw &lt;- rio::import(&quot;linelist.xlsx&quot;, which = &quot;Sheet1&q
 <pre class="r"><code># only keep variables with a case ID and a date of consultation
 linelist_cleaned &lt;- linelist_cleaned %&gt;% 
   filter(!is.na(case_number) &amp; !is.na(date_of_admission))</code></pre>
+<p><strong>Note: Remember that even when using piping to link functions, if the assignment operator (<code>&lt;-</code>) is present, the object to the left will still be over-written (re-defined) by the right side.</strong> In the code above, linelist_cleaned will be replaced by the new linelist_cleaned which likely has fewer observations.</p>
 </div>
 <div id="help-with-functions" class="section level3">
 <h3>Help with functions</h3>
@@ -525,7 +526,7 @@ linelist_cleaned &lt;- linelist_cleaned %&gt;%
 </div>
 <div id="the-function-as.date" class="section level4">
 <h4>The function as.Date()</h4>
-<p>If guess_dates() is not working for you, you can use the base function as.Date() to convert a variable to class Date. <strong>as.Date() cannot guess dates, and therefore requires that all the date values be in the same format before converting.</strong> Read more about using as.Date() <a href="https://www.stat.berkeley.edu/~s133/dates.html">here</a></p>
+<p>If guess_dates() is not working for you, you can use the base function as.Date() to convert a variable to class Date. <strong>as.Date() cannot guess dates, and therefore requires that all the date values be in the same format before converting.</strong> Read more about using as.Date() <a href="https://www.stat.berkeley.edu/~s133/dates.html">here</a>.</p>
 <p>It can be easiest to first convert the variable to character class, and then convert to date class:</p>
 <ol style="list-style-type: decimal">
 <li>Turn the variable into character values using the function <code>as.character()</code></li>
@@ -537,8 +538,9 @@ linelist_cleaned &lt;- linelist_cleaned %&gt;%
 </li>
 </ol>
 <ul>
-<li><p>Within the <code>as.Date()</code> function, you must tell R which characters are which date components - which characters refer to the month, the day, and the year.</p></li>
-<li><p>The codes are:<br />
+<li><p>Within the <code>as.Date()</code> function, you must use the format= argument to tell R which characters are which date components - which characters refer to the month, the day, and the year. If your values are already in one of R’s standard formats (YYYY-MM-DD or YYYY/MM/DD) the format= argument is not necessary.</p>
+<ul>
+<li>The codes are:<br />
 %d = Day # (of the month e.g. 16, 17, 18…)<br />
 %a = abbreviated weekday (Mon, Tues, Wed, etc.)<br />
 %A = full weekday (Monday, Tuesday, etc.)<br />
@@ -546,12 +548,13 @@ linelist_cleaned &lt;- linelist_cleaned %&gt;%
 %b = abbreviated month (Jan, Feb, etc.)<br />
 %B = Full Month (January, February, etc.)<br />
 %y = 2-digit year (e.g. 89)<br />
-%Y = 4-digit year (e.g. 1989)</p></li>
+%Y = 4-digit year (e.g. 1989)</li>
+</ul></li>
 </ul>
 <p>For example, if your character dates are in the format DD/MM/YYYY, like “24/04/1968”, then your command to turn the values into dates will be as below. <strong>Putting the format in quotation marks is necessary.</strong></p>
 <pre class="r"><code>linelist_cleaned$date_of_onset &lt;- as.Date(linelist_cleaned$date_of_onset, format = &quot;%d/%m/%Y&quot;)</code></pre>
 <p><strong>Note: the format= argument is <em>not</em> telling R the format you want the dates to be, but rather how to identify the date parts as they are <em>before</em> you run the command.</strong></p>
-<p><em>Note: if your date parts are separated by a slash ( / ) instead of hyphen ( - ) , the format you tell R must also use slashes ( / ).</em></p>
+<p><em>Note: Be sure that in the format= argument you use the date-part separator (e.g. /, space, or -) that is present in your dates.</em></p>
 <pre class="r"><code># Convert the variable to class Date by providing the format of the variable
 linelist_cleaned$date_of_onset &lt;- as.Date(linelist_cleaned$date_of_onset, format=&quot;%Y-%m-%d&quot;)
 

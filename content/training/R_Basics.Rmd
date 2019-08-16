@@ -242,6 +242,9 @@ linelist_cleaned <- linelist_cleaned %>%
   filter(!is.na(case_number) & !is.na(date_of_admission))
 ```
 
+**Note: Remember that even when using piping to link functions, if the assignment operator (`<-`) is present, the object to the left will still be over-written (re-defined) by the right side.** In the code above, linelist_cleaned will be replaced by the new linelist_cleaned which likely has fewer observations.  
+
+
 ### Help with functions  
 To read more about a function, you can try searching online for resources OR use the Help tab in the lower-right R pane.  
 
@@ -347,7 +350,7 @@ linelist_cleaned <- linelist_cleaned %>%
 
 #### The function as.Date()  
 
-If guess_dates() is not working for you, you can use the base function as.Date() to convert a variable to class Date. **as.Date() cannot guess dates, and therefore requires that all the date values be in the same format before converting.** Read more about using as.Date() [here](https://www.stat.berkeley.edu/~s133/dates.html)
+If guess_dates() is not working for you, you can use the base function as.Date() to convert a variable to class Date. **as.Date() cannot guess dates, and therefore requires that all the date values be in the same format before converting.** Read more about using as.Date() [here](https://www.stat.berkeley.edu/~s133/dates.html).
 
 It can be easiest to first convert the variable to character class, and then convert to date class:  
 
@@ -357,9 +360,9 @@ linelist_cleaned$date_of_onset <- as.character(linelist_cleaned$date_of_onset)
 ```
   2. Convert the variable from character values into date values, using the function `as.Date()`  
   (note the capital "D" in this function)  
-  + Within the `as.Date()` function, you must tell R which characters are which date components - which characters refer to the month, the day, and the year.  
-  
-  + The codes are:  
+  + Within the `as.Date()` function, you must use the format= argument to tell R which characters are which date components - which characters refer to the month, the day, and the year. If your values are already in one of R's standard formats (YYYY-MM-DD or YYYY/MM/DD) the format= argument is not necessary.  
+    
+    + The codes are:  
          %d = Day # (of the month e.g. 16, 17, 18...)  
          %a = abbreviated weekday (Mon, Tues, Wed, etc.)  
          %A = full weekday (Monday, Tuesday, etc.)  
@@ -375,7 +378,7 @@ linelist_cleaned$date_of_onset <- as.Date(linelist_cleaned$date_of_onset, format
 ```
 **Note: the format= argument is *not* telling R the format you want the dates to be, but rather how to identify the date parts as they are *before* you run the command.**  
 
-*Note: if your date parts are separated by a slash ( / ) instead of hyphen ( - ) , the format you tell R must also use slashes ( / ).*
+*Note: Be sure that in the format= argument you use the date-part separator (e.g. /, space, or -) that is present in your dates.*
 
 ```{r}
 # Convert the variable to class Date by providing the format of the variable
