@@ -52,8 +52,12 @@ aweek::set_week_start("Monday")
 ## Overview of this page
 This page will demonstrate use of the Acute Jaundice Syndrome (AJS) outbreak template using data from an outbreak in Am Timan, Chad. This first page covers the initial data importation and cleaning steps in the template.  
 
-**Opening the correct template**
-[instructions here on opening the correct template]
+**Getting started with the sitrep package and opening the correct template**
+Please review the [sitrep wiki page](https://github.com/R4EPI/sitrep/wiki/1)-Getting-started) for instructions on the following start-up steps:  
+
+* Downloading and configuring R and RStudio  
+* Installing the sitrep package  
+* Opening an outbreak or survey template  
 
 **Access the datasets for this walk-through**
 [instructions and link to dataset here]
@@ -82,6 +86,10 @@ In early September 2016, a cluster of severely ill pregnant women with jaundice 
 The outbreak linelist data was combined data from the active CBS data and the clinical data from the hospital. The CBS functioned with community health workers visiting all households in the town every two weeks and actively searching for people with Acute Jaundice Syndrome (AJS). For this group of persons (suspected cases), only those that were visibly ill or that were pregnant were referred to the hospital for clinical assessment and admission if required. Persons that self-reported to the hospital or that arrived after referral would undergo a clinical assessment and a rapid test for HEV for diagnosis. Thus only for people assessed at the hospital were we able to capture a confirmed case status.  
 
 For the duration of the outbreak we detected 1193 suspected cases, 100 confirmed cases and discarded 150 cases with AJS who were not positive for HEV infection.  
+
+## Overview of template 
+
+Graphic showing big-picture overview of template parts  
 
 ## Template header and introduction
 
