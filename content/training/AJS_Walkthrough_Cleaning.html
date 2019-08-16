@@ -19,9 +19,9 @@ weight: 8
 </li>
 <li>Opening an outbreak or survey template</li>
 </ul>
-<p><strong>Access the datasets for this walk-through</strong> [instructions and link to dataset here]</p>
+<p><strong>Access the datasets for this walk-through</strong> [TODO: instructions and link to dataset here]</p>
 <p><strong>Access the final RMarkdown script used in this walk-through</strong><br />
-[link to download Chad AJS RMarkdown here]</p>
+[TODO: link to download Chad AJS RMarkdown here]</p>
 <p><strong>RMarkdown resources</strong><br />
 Review the page “Reading a RMarkdown Script”, or reference these resources: <a href="https://rmarkdown.rstudio.com/articles_intro.html">Rmarkdown introduction</a> and <a href="https://rmarkdown.rstudio.com/authoring_basics.html">Rmarkdown authoring basics</a>.</p>
 </div>
@@ -38,7 +38,7 @@ Review the page “Reading a RMarkdown Script”, or reference these resources: 
 </div>
 <div id="overview-of-template" class="section level2">
 <h2>Overview of template</h2>
-<p>Graphic showing big-picture overview of template parts</p>
+<p><strong>TODO: Graphic showing big-picture overview of template parts</strong></p>
 </div>
 <div id="template-header-and-introduction" class="section level2">
 <h2>Template header and introduction</h2>
@@ -192,7 +192,7 @@ then you likely forgot to comment (#) the line for a variable you did not use.</
 </div>
 <div id="lab-data" class="section level2">
 <h2>Lab data</h2>
-<p>[Paragraph about lab data here - how it is used]</p>
+<p><strong>TODO: [Paragraph about lab data here - how it is used]</strong></p>
 </div>
 <div id="creating-and-cleaning-variables" class="section level2">
 <h2>Creating and cleaning variables</h2>
@@ -340,8 +340,10 @@ linelist_cleaned &lt;- linelist_cleaned %&gt;%
     TRUE                                                  ~ &quot;Suspected&quot;
   ))</code></pre>
 <ul>
-<li><strong>Create lists of symptom variables</strong> <strong>already switched “med” variables to these ones, but some do not apply and must be removed from the list, such as convulsions and history of fever?</strong></li>
+<li><strong>Create lists of symptom variables</strong></li>
 </ul>
+<p>This code creates two vectors of variable names - one for symptoms and one for laboratory testing. In a previous step we assigned our dataset variables to standard data dictionary variables and so we can use this code from the template.</p>
+<p><strong>Some of these variables do not apply to our Am Timan data and must be removed from the list, or commented out (such as convulsions and history of fever).</strong> If non-existant variables are left in the list it will cause errors in later code chunks.</p>
 <pre class="r"><code># vectors of variable names ----------------------------------------------------
 
 ## You may want to group the names of several variables that have the same possible 
@@ -351,7 +353,7 @@ linelist_cleaned &lt;- linelist_cleaned %&gt;%
 
 # create a grouping of all symptoms 
 SYMPTOMS &lt;- c(&quot;generalized_itch&quot;, 
-              #&quot;history_of_fever&quot;, 
+#             &quot;history_of_fever&quot;, 
               &quot;fever&quot;,
               &quot;joint_pains&quot;,
               &quot;epigastric_pain_heartburn&quot;,
@@ -361,7 +363,7 @@ SYMPTOMS &lt;- c(&quot;generalized_itch&quot;,
               &quot;bleeding&quot;, 
               &quot;headache&quot;,
               &quot;mental_state&quot;,
-              #&quot;convulsions&quot;,
+#              &quot;convulsions&quot;,
               &quot;other_symptoms&quot;  
               )
 

@@ -62,10 +62,10 @@ Please review the [getting started page](https://r4epis.netlify.com/welcome/001-
 * Opening an outbreak or survey template  
 
 **Access the datasets for this walk-through**
-[instructions and link to dataset here]
+[TODO: instructions and link to dataset here]
 
 **Access the final RMarkdown script used in this walk-through**  
-[link to download Chad AJS RMarkdown here]
+[TODO: link to download Chad AJS RMarkdown here]
 
 **RMarkdown resources**  
 Review the page "Reading a RMarkdown Script", or reference these resources: [Rmarkdown introduction](https://rmarkdown.rstudio.com/articles_intro.html) and [Rmarkdown authoring basics](https://rmarkdown.rstudio.com/authoring_basics.html).  
@@ -91,7 +91,7 @@ For the duration of the outbreak we detected 1193 suspected cases, 100 confirmed
 
 ## Overview of template 
 
-Graphic showing big-picture overview of template parts  
+**TODO: Graphic showing big-picture overview of template parts** 
 
 ## Template header and introduction
 
@@ -352,7 +352,7 @@ population_data_region <- rio::import("AJS_AmTiman_population_revised_for_templa
 
 
 ## Lab data
-[Paragraph about lab data here - how it is used]  
+**TODO: [Paragraph about lab data here - how it is used]**  
 
 
 
@@ -516,7 +516,10 @@ linelist_cleaned <- linelist_cleaned %>%
 ```
 
 * **Create lists of symptom variables**
-**already switched "med" variables to these ones, but some do not apply and must be removed from the list, such as convulsions and history of fever?**
+
+This code creates two vectors of variable names - one for symptoms and one for laboratory testing. In a previous step we assigned our dataset variables to standard data dictionary variables and so we can use this code from the template.  
+
+**Some of these variables do not apply to our Am Timan data and must be removed from the list, or commented out (such as convulsions and history of fever).** If non-existant variables are left in the list it will cause errors in later code chunks.
 
 ```{r}
 # vectors of variable names ----------------------------------------------------
@@ -528,7 +531,7 @@ linelist_cleaned <- linelist_cleaned %>%
 
 # create a grouping of all symptoms 
 SYMPTOMS <- c("generalized_itch", 
-              #"history_of_fever", 
+#             "history_of_fever", 
               "fever",
               "joint_pains",
               "epigastric_pain_heartburn",
@@ -538,7 +541,7 @@ SYMPTOMS <- c("generalized_itch",
               "bleeding", 
               "headache",
               "mental_state",
-              #"convulsions",
+#              "convulsions",
               "other_symptoms"  
               )
 
