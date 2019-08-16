@@ -102,8 +102,8 @@ The "Introduction to this template" section is for your information only and thi
 <img src="/images/AJS_Intro.png" alt="AJS Header and Introduction snip", width = "75%">
 
 
-## Installation and loading required packages
-**The text which explains the purpose of this code chunk may be deleted, but you must keep the code chunk!** The code will run without producing any output in your final report, but it is required to install (or load using library(), if already installed) the packages necessary to produce the report. You can read more about the packages used by the template on this [page](https://r4epis.netlify.com/outbreaks/)
+## Installation and loading packages
+**The text which explains the purpose of this code chunk may be deleted, but you must keep the code chunk!** The code will run without producing any output in your final report, but it is required to install (or load using library(), if already installed) the packages necessary to produce the report.  
 
 This "setup" code chunk does the following:  
 
@@ -116,6 +116,30 @@ This "setup" code chunk does the following:
 * Set epidemiological weeks to begin on Mondays  
 
 <img src="/images/Package_Installation.png" alt="Package installation chunk snip", width = "75%">
+
+
+### About the packages used in this template  
+
+#### Generic packages  
+
+* knitr used to create the output document (pdf, doc, html)  
+* dplyr used to clean and shape the data  
+* epitrix used for data cleaning and variable standardisation  
+* ggplot2 used to visualise your data using different plotting methods  
+
+#### More epidemiology-specific packages  
+
+* sitrep includes a variety of useful field epidemiology functions  
+* incidence used for creating epicurves  
+* ISOweek used for creating epiweeks  
+* epitools used for creating 2by2 tables  
+
+#### Mapping packages  
+
+* ggspatial used for selecting basemap tiles  
+* sf used for manipulating spatial objects (e.g. polygons) easily
+
+
 
 
 ## Set current epi week  
