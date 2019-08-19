@@ -39,7 +39,6 @@ for (pkg in required_packages) {
 }
 
 
-# set default text size to 16 for plots
 # give classic black/white axes for plots
 ggplot2::theme_set(theme_classic(base_size = 18))
 
@@ -48,208 +47,71 @@ ggplot2::theme_set(theme_classic(base_size = 18))
 # (the ISO standard is to start on Monday) 
 aweek::set_week_start("Monday")
 
-
-
 reporting_week <- "2017-W52"  # Set the reporting week
 
 
-
-date2week(Sys.Date())      #Sys.Date() uses the current date from your computer
-
-
-# This code chunk runs in the background and actually imports the dataset while transforming "." to NA.
-# The import code chunk above (with eval=FALSE) does not run, but shows the viewer the default import code.
-linelist_raw <- rio::import("AJS_AmTiman.xlsx", which = "linelist", na=".")
-
-## make a copy of your orginal dataset and name it linelist_cleaned
-linelist_cleaned <- linelist_raw
-
-# Store cleaned column names
-cleaned_colnames <- epitrix::clean_labels(colnames(linelist_raw))
-
-# Overwrite variable column names with clean ones
-colnames(linelist_cleaned) <- cleaned_colnames
-
-## Add the appropriate column names after the equals signs
-
-linelist_cleaned <- rename(linelist_cleaned,
-#  event_file_type                   =   , # TEXT                # (Not in dataset)
-  case_number                       =   hevid, # TEXT
-  date_of_admission                 =   dtmedical, # DATE
-  detected_by                       =   referredby, # TEXT
-  patient_facility_type             =   hospitalised, # TEXT
-#  msf_involvement                   =   , # TEXT                # (Not in dataset)
-  age_years                         =   age, # INTEGER_POSITIVE
-#  age_months                        =   , # INTEGER_POSITIVE   # (Dataset only has years)
-#  age_days                          =   , # INTEGER_POSITIVE   # (Dataset only has years)
-  sex                               =   sex, # TEXT
-  patient_origin                    =   quartier, # ORG UNIT
-#  residential_status_brief          =   , # TEXT               # (Not in dataset)
-#  arrival_date_in_area_if_3m        =   , # DATE               # (Not in dataset)
-#  ever_received_hepatitis_e_vaccine =   , # TEXT               # (Not in dataset)
-#  date_of_last_vaccination          =   , # DATE               # (Not in dataset)
-  date_of_onset                     =   dtjaundice, # DATE
-#  history_of_fever                  =   , # BOOLEAN            # (Not in dataset)
-  fever                             =   medfever, # BOOLEAN
-  nausea_anorexia                   =   mednausea, # BOOLEAN
-  vomiting                          =   medvomit, # BOOLEAN
-  epigastric_pain_heartburn         =   medepigastric, # BOOLEAN
-  generalized_itch                  =   meditching, # BOOLEAN
-  headache                          =   medheadache, # BOOLEAN
-  joint_pains                       =   medarthralgia, # BOOLEAN
-  diarrhoea                         =   meddiar, # BOOLEAN
-  bleeding                          =   medbleeding, # BOOLEAN
-#  convulsions                       =   , # BOOLEAN            # (Not in dataset)
-  mental_state                      =   medmental, # BOOLEAN    # !(Needs value cleaning)
-  other_symptoms                    =   medother, # BOOLEAN
-  other_cases_in_hh                 =   medothhhajs, # BOOLEAN
-#  traditional_medicines             =   , # BOOLEAN            # (Not in dataset)
-#  traditional_medicine_details      =   , # TEXT               # (Not in dataset)
-#  recent_travel                     =   , # BOOLEAN            # (Not in dataset)
-#  water_source                      =   , # TEXT               # !(Split across many variables)
-  malaria_rdt_at_admission          =   medmalrdt, # TEXT
-  hep_b_rdt                         =   medhepb, # TEXT
-  hep_c_rdt                         =   medhepc, # TEXT
-  hep_e_rdt                         =   medhevrdt, # TEXT
-#  dengue_rdt                        =   , # TEXT               # (Not in dataset)
-  date_lab_sample_taken             =   medblooddt, # DATE
-  test_hepatitis_a                  =   medhavelisa, # TEXT
-  test_hepatitis_b                  =   medhbvelisa, # TEXT
-  test_hepatitis_c                  =   medhcvelisa, # TEXT
-  test_hepatitis_e_virus            =   medhevelisa, # TEXT
-  test_hepatitis_e_igm              =   hevrecent, # TEXT
-#  test_hepatitis_e_igg              =   , # TEXT               # (In same variable as elisa result)
-  test_hepatitis_e_genotype         =   hevgenotype, # TEXT
-#  malaria_blood_film                =   , # TEXT               # (Not in dataset)
-  dengue                            =   dengue, # TEXT
-  yellow_fever                      =   yf, # TEXT
-#  lassa_fever                       =   , # TEXT               # (Not in dataset)
-#  typhoid                           =   , # TEXT               # (Not in dataset)
-  chikungunya_onyongnyong           =   chik, # TEXT
-#  ebola_marburg                     =   , # TEXT               # (Not in dataset)
-  other_arthropod_transmitted_virus =   arbovpcr, # TEXT
-#  other_pathogen                    =   , # TEXT               # (Not in dataset)
-#  lab_comments                      =   , # TEXT               # (Not in dataset)
-  pregnant                          =   medpreg, # TEXT
-  trimester                         =   medpregtri, # TEXT
-#  foetus_alive_at_admission         =   , # TEXT               # (Not in dataset)
-#  delivery_event                    =   , # TRUE_ONLY          # (Not in dataset)
-  pregnancy_outcome_at_exit         =   medppoutcome, # TEXT
-  exit_status                       =   outcomehp, # TEXT
-#  date_of_exit                      =   , # DATE               # (Not in dataset)
-#  time_to_death                     =   , # TEXT               # (Not in dataset)
-  treatment_facility_site           =   hpid, # TEXT
-#  treatment_location                =   , # ORGANISATION_UNIT  # (Not in dataset)
-  patient_origin_free_text          =   block # TEXT
-)
-
-
-
+# Read in the R object linelist_cleaned that is defined and saved 
+# in the AJS_Walkthrough_Cleaning script
+linelist_cleaned <- readRDS("data/linelist_cleaned.rds")
 
 population_data_region <- rio::import("AJS_AmTiman_population_revised_for_template.xlsx", which="quartier")
 
-# Use this is your dataset aligns with the data dictionary
-# Creates list of date variables from the data dictionary
-#DATEVARS <- filter(linelist_dict, data_element_valuetype == "DATE") %>% 
-#  select(data_element_shortname) # select date vars
-# change to the date variables found in your dataset to class date 
-#linelist_cleaned <- linelist_cleaned %>%
-#  mutate_at(DATEVARS$data_element_shortname, as.Date)
+# create a grouping of all symptoms 
+SYMPTOMS <- c("generalized_itch", 
+#             "history_of_fever", 
+              "fever",
+              "joint_pains",
+              "epigastric_pain_heartburn",
+              "nausea_anorexia",
+              "vomiting", 
+              "diarrhoea",
+              "bleeding", 
+              "headache",
+              "mental_state",
+#              "convulsions",
+              "other_symptoms"  
+              )
 
-# Use this if your dataset does not align with the data dictionary
-  linelist_cleaned <- linelist_cleaned %>%
-    mutate_at(vars(matches("date|Date")), linelist::guess_dates,
-            error_tolerance = 0.5)
-
-
-
-# Individually convert other date columns
-class(linelist_cleaned$dtdeath)
-
-linelist_cleaned$dtdeath <- linelist::guess_dates(linelist_cleaned$dtdeath)
-
-class(linelist_cleaned$dtdeath)
-
-# Repeat for variable "dtdeath"
-linelist_cleaned$dthospitalisation <- linelist::guess_dates(linelist_cleaned$dthospitalisation)
-
-
-
-# Check range of date_of_onset values, ignoring (removing) missing values
-range(linelist_cleaned$date_of_onset, na.rm = TRUE)
-
-
-# Convert dates before April 2016 or after October 2017 to missing (NA)
-linelist_cleaned <- mutate(linelist_cleaned,
-                           date_of_onset = case_when(
-                                 date_of_onset < as.Date("2016-04-01")  ~ as.Date(NA),
-                                 date_of_onset > as.Date("2017-10-31")  ~ as.Date(NA),
-                                 TRUE                                   ~ date_of_onset
-                                 ))
-                           
-
-
+# create a grouping of all lab tests 
+LABS <- c("hep_b_rdt", 
+          "hep_c_rdt",
+          "hep_e_rdt",
+          "test_hepatitis_a",
+          "test_hepatitis_b",
+          "test_hepatitis_c",
+#          "test_hepatitis_e_igg",
+          "test_hepatitis_e_igm" ,
+          "test_hepatitis_e_genotype",
+          "test_hepatitis_e_virus",
+          "malaria_rdt_at_admission",
+#          "malaria_blood_film", 
+          "dengue",
+#          "dengue_rdt", 
+          "yellow_fever",
+#          "typhoid",
+          "chikungunya_onyongnyong", 
+#          "ebola_marburg",
+#          "lassa_fever",
+          "other_arthropod_transmitted_virus" 
+#          "other_pathogen"
+          )
 
 
-# Create variable epiweek
-linelist_cleaned$epiweek <- aweek::date2week(linelist_cleaned$date_of_onset, 
-                                             floor_day = TRUE, 
-                                             factor = TRUE)
+# define the first week of outbreak (date of first case)
+first_week <- levels(linelist_cleaned$epiweek)[1]
 
+# outbreak start 
+# return the first day in the week of first case 
+obs_start <- week2date(sprintf("%s-1", first_week))
 
- 
+# return last day of reporting week 
+obs_end   <- week2date(sprintf("%s-7", reporting_week))
 
-# See the range of age_years values, removing (excluding) NA
-range(linelist_cleaned$age_years, na.rm = TRUE)
-
-
-
-# Convert variable age_years to numeric class
-linelist_cleaned$age_years <- as.numeric(linelist_cleaned$age_years)
-
- 
-
-
-# For patients under 5 years, the new variable age_months is based on age_years * 12 
-linelist_cleaned <- mutate(linelist_cleaned,
-                            age_months = case_when(
-                              age_years < 5 ~ age_years * 12
-                              )) 
-
-
-
-## create age group variable for under 5 years based on months
-linelist_cleaned$age_group_mon <- age_categories(linelist_cleaned$age_months, 
-                                                 breakers = c(0, 6, 9, 12, 24), 
-                                                 ceiling = TRUE)
-
-
-
-## create an age group variable by specifying categorical breaks
-linelist_cleaned$age_group <- age_categories(linelist_cleaned$age_years, 
-                                             breakers = c(0, 3, 15, 30, 45))
-
-
-
-# Tabulate to see all possible values of exit_status
-table(linelist_cleaned$exit_status, useNA = "always")
-
-# Create exit_status2 from values in exit_status
-linelist_cleaned <- linelist_cleaned %>% 
-  mutate(exit_status2 = case_when(
-    exit_status == "Décédé"          ~ "Died",
-    exit_status == "-"               ~ NA_character_,
-    exit_status == "Echappé"         ~ "Left",
-    exit_status == "Déchargé/Guéri"  ~ "Discharged"
-  ))
-
-# Tabulate the NEW exit_status2 variable to check correct assignment
-table(linelist_cleaned$exit_status2, useNA = "always")
 ```
 
-
-
-
+```{r}
+nrow(linelist_cleaned)
+```
 
 After data import and cleaning, the template contains three analytical sections:  
 
@@ -263,9 +125,17 @@ After data import and cleaning, the template contains three analytical sections:
 
 TODO [general description of person section]
 
-###Demographic Tables:
+### Demographic Tables:
 
-The first demographic table presents patients by their age group (table rows) and their relationship with the case definition (table columns). Arguments col_total and row_total are set to TRUE, resulting in totals shown.  
+The first demographic table presents patients by their age group (the table's rows) and their relationship with the case definition (the table's columns). Arguments row_total and col_total are set to TRUE, resulting in totals shown for rows and columns.  
+
+* The select() command removed an unnecessary column "variable" generated by tab_linelist().  
+* The rename() command renames the column "value" with "Age Group"  
+* The rename_redundant() command replaces any column name that has proportion with "%"  
+* The augment_redundant() command replaces any column name with n with " cases (n)"  
+* The kable() command completes the table with two digits after a decimal
+
+**TODO: There seems to still be issues with the new tab_linelist function. Error says object proportion is unknown. Need to resolve and then remove the # from the rename_redundant line below.** 
 
 ```{r describe_by_age_group_and_def}
 # use if you have lab results in your data
@@ -281,42 +151,40 @@ tab_linelist(linelist_cleaned,
   kable(digits = 2)
 ```
 
+As demonstrated in the subsequent template code, you can change the argument strata = to refer to any number of variables including sex. You can also choose to include or edit the in-line code that gives a count of the missing cases by sex and age_group. 
 
-
-
-Cases by age group and sex 
-
-```{r describe_by_age_group_and_sex}
-descriptive(linelist_cleaned, "age_group", "sex", coltotals = TRUE, rowtotals = TRUE) %>% 
-  rename("Age group" = age_group) %>%
-  rename_redundant(prop = "%") %>%
-  augment_redundant("_n$" = " cases (n)") %>%
-  kable(digits = 2)
-```
-
-
-Alternatively if you would like proportions to be of the total population, use the following. 
+To show proportions of the total population, use the following code, with the argument prop_total specified as TRUE. 
 
 ```{r total_props_agegroup_sex}
-descriptive(linelist_cleaned, "age_group", "sex", 
-            coltotals = TRUE, rowtotals = TRUE, proptotal = TRUE) %>% 
-  rename("Age group" = age_group) %>%
-  rename_redundant(prop = "%") %>%
-  augment_redundant("_n$" = " cases (n)") %>%
+tab_linelist(linelist_cleaned, 
+             age_group, strata = sex,
+             col_total = TRUE, row_total = TRUE, prop_total = TRUE) %>% 
+  select(-variable) %>%
+  rename("Age group" = value) %>%
+#  rename_redundant("%" = proportion) %>%
+  augment_redundant(" cases (n)" = " n$") %>%
   kable(digits = 2)
 ```
 
 
-Age pyramid 
+### Age pyramid 
+To print an age pyramid in your report, use the code below. A few things to note:  
 
-There were `r fmt_count(linelist_cleaned, is.na(sex))` cases missing information on sex and 
-`r fmt_count(linelist_cleaned, is.na(age_group))` missing age group.
+* The **variable for split_by should have two non-missing value options** (e.g. Male or Female, Oui or Non, etc.)  
+* The variable names work with or without quotation marks  
+* The dashed lines in the bars are the midpoint of the un-stratified age group   
+* You can adjust the position of the legend by replacing legend.position = "bottom" with "top", "left", or "right"  
+* Read more by searching plot_age_pyramid in the Help tab of the lower-right RStudio pane  
+
+You can make this a pyramid of months by supplying age_group_mon to the age_group argument.  
+
+
 
 ```{r age_pyramid, warning=FALSE}
 # plot age pyramid 
  
 plot_age_pyramid(linelist_cleaned, 
-                 age_group = "age_group", 
+                 age_group = "age_group_mon", 
                  split_by = "sex") + 
   labs(y = "Cases (n)", x = "Age group") + # change axis  labels (nb. x/y flip)
   theme(legend.position = "bottom",     # move legend to bottom
@@ -325,24 +193,19 @@ plot_age_pyramid(linelist_cleaned,
        )
 ```
 
-Age pyramid for Under 2 obviously doesn't work.
-
-
 
 
 
 ```{r describe_by_symptoms}
-
 # get counts and proportions for all variables named in SYMPTOMS
-multi_descriptive(linelist_cleaned, SYMPTOMS) %>% 
-  # re-order columns (drop total_prop too)
-  select(symptom, Yes_n, Yes_prop, No_n, No_prop, Total_n) %>%
+tab_linelist(linelist_cleaned, SYMPTOMS, keep = "Yes") %>% 
+  select(-value) %>%
+  # fix the way symptom names are displayed
+  mutate(variable = str_to_sentence(gsub("_", " ", variable))) %>%
   # rename accordingly
-  rename_redundant("prop" = "%") %>%
-  augment_redundant("_n$" = " (n)") %>%
+  rename_redundant("%" = proportion) %>%
+  augment_redundant(" (n)" = " n$") %>%
   kable(digits = 2)
-
-
 ```
 
 ```{r describe_by_labs}

@@ -108,11 +108,11 @@ Review the page “Reading a RMarkdown Script”, or reference these resources: 
 <h2>Set current epi week</h2>
 <p>Set the epidemiological week for the report. <strong>This value is used in later code chunks, for example when producing epidemic curves.</strong> Note that you may want to specify the most recent <strong>complete</strong> epi week. Follow the format in the code below (within quotes give the 4-digit year, a hyphen (-), capital W, then the 2-digit epi week number).</p>
 <p>By default in the templates epi weeks begin on Mondays (this can be changed at the bottom of the “setup” code chunk). See the documentation of the <a href="https://cran.r-project.org/web/packages/aweek/vignettes/introduction.html">package “aweek”</a> for more information.</p>
-<pre class="r"><code>reporting_week &lt;- &quot;2017-W52&quot;  # Set the reporting week</code></pre>
-<p>To determine which epi week it is currently (based on the template epi week settings), use the code below:</p>
-<pre class="r"><code>date2week(Sys.Date())      #Sys.Date() uses the current date from your computer</code></pre>
+<p>To determine which epi week of a date you can use the date2week() function. Let’s assume the date of this analysis is 20 April, 2017.</p>
+<pre class="r"><code>date2week(&quot;2017-04-20&quot;)      #Sys.Date() uses the current date from your computer</code></pre>
 <pre><code>## &lt;aweek start: Monday&gt;
-## [1] &quot;2019-W34-1&quot;</code></pre>
+## [1] &quot;2017-W16-4&quot;</code></pre>
+<pre class="r"><code>reporting_week &lt;- &quot;2017-W16&quot;  # Set the reporting week</code></pre>
 </div>
 <div id="import-the-dataset" class="section level2">
 <h2>Import the dataset</h2>
@@ -416,9 +416,10 @@ LABS &lt;- c(&quot;hep_b_rdt&quot;,
 <div id="dropping-observations" class="section level3">
 <h3>Dropping observations</h3>
 <p>The next code assists with <strong>dropping observations and variables</strong>. We can remove any observations with date of onset after the reporting_week (reporting_week is defined at the beginning of the script).</p>
+<p><strong>Note: The default code in the template also removes observations with missing (NA) date_of_onset. We can add <code>| is.na(date_of_onset)</code> into the filter to keep these.</strong></p>
 <pre class="r"><code># Drop cases after reporting week
 linelist_cleaned &lt;- linelist_cleaned %&gt;% 
-  filter(date_of_onset &lt;= week2date(sprintf(&quot;%s-7&quot;, reporting_week)))</code></pre>
+  filter(date_of_onset &lt;= week2date(sprintf(&quot;%s-7&quot;, reporting_week)) | is.na(date_of_onset))</code></pre>
 <p>Then, it is important to <strong>define these date-related objects</strong> that are referenced in later code chunks.</p>
 <pre class="r"><code># define the first week of outbreak (date of first case)
 first_week &lt;- levels(linelist_cleaned$epiweek)[1]
@@ -436,5 +437,6 @@ obs_end   &lt;- week2date(sprintf(&quot;%s-7&quot;, reporting_week))</code></pre
 <pre class="r"><code>## OPTIONAL: save your cleaned dataset! 
 ## put the current date in the name so you know!
 rio::export(linelist_cleaned, paste0(&quot;AmTiman_linelist_cleaned_&quot;, Sys.Date(), &quot;.xlsx&quot;))</code></pre>
+<pre class="r"><code>saveRDS(linelist_cleaned, &quot;data/linelist_cleaned.rds&quot;)</code></pre>
 </div>
 </div>

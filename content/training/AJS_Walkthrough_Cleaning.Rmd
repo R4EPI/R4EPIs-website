@@ -157,14 +157,14 @@ Set the epidemiological week for the report. **This value is used in later code 
 
 By default in the templates epi weeks begin on Mondays (this can be changed at the bottom of the "setup" code chunk). See the documentation of the [package "aweek"](https://cran.r-project.org/web/packages/aweek/vignettes/introduction.html) for more information. 
 
+To determine which epi week of a date you can use the date2week() function. Let's assume the date of this analysis is 20 April, 2017.
+
 ```{r}
-reporting_week <- "2017-W52"  # Set the reporting week
+date2week("2017-04-20")      #Sys.Date() uses the current date from your computer
 ```
 
-To determine which epi week it is currently (based on the template epi week settings), use the code below:
-
 ```{r}
-date2week(Sys.Date())      #Sys.Date() uses the current date from your computer
+reporting_week <- "2017-W16"  # Set the reporting week
 ```
 
 ## Import the dataset
@@ -649,12 +649,14 @@ LABS <- c("hep_b_rdt",
 
 ### Dropping observations  
 
-The next code assists with **dropping observations and variables**. We can remove any observations with date of onset after the reporting_week (reporting_week is defined at the beginning of the script).
+The next code assists with **dropping observations and variables**. We can remove any observations with date of onset after the reporting_week (reporting_week is defined at the beginning of the script).  
+
+**Note: The default code in the template also removes observations with missing (NA) date_of_onset. We can add ` | is.na(date_of_onset)` into the filter to keep these.** 
 
 ```{r}
 # Drop cases after reporting week
 linelist_cleaned <- linelist_cleaned %>% 
-  filter(date_of_onset <= week2date(sprintf("%s-7", reporting_week)))
+  filter(date_of_onset <= week2date(sprintf("%s-7", reporting_week)) | is.na(date_of_onset))
 ```
 
 Then, it is important to **define these date-related objects** that are referenced in later code chunks.  
@@ -682,4 +684,7 @@ And finally, if desired you can **export the cleaned dataset** for other purpose
 rio::export(linelist_cleaned, paste0("AmTiman_linelist_cleaned_", Sys.Date(), ".xlsx"))
 ```
 
+```{r}
+saveRDS(linelist_cleaned, "data/linelist_cleaned.rds")
+```
 
