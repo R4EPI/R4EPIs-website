@@ -61,7 +61,7 @@ Please review the [getting started page](https://r4epis.netlify.com/welcome/001-
 * Installing the sitrep package  
 * Opening an outbreak or survey template  
 
-**Access the datasets for this walk-through**
+**Access the datasets for this walk-through**  
 [TODO: instructions and link to dataset here]
 
 **Access the final RMarkdown script used in this walk-through**  
@@ -77,23 +77,33 @@ Review the page "Reading a RMarkdown Script", or reference these resources: [Rma
 
 We will be using data and examples from a real outbreak of Hepatitis E virus (HEV) infection which occurred in the Chadian town of Am Timan between October 2016 and April 2017  
 
-<img src="/images/AJS_Article.png" alt="AJS Article snip", width = "40%">
+*DISCLAIMER: The real data from the outbreak has been used for the training materials linked to the outbreak templates of the R4epis project. The Chadian Ministry of Health (MoH) has approved the use of this data for training purposes. Please note, that some data has been adapted in order to best achieve training objectives. Also, the GPS coordinates included in the dataset do not correspond to real cases identified during this outbreak. They have been generated exclusively for training purposes.*  
+
+In early September 2016, a cluster of severely ill pregnant women with jaundice was detected at the Am Timan Hospital in the maternity ward. Following rapid tests conducted in Am Timan and confirmatory testing in the Netherlands, this was confirmed as due to HEV infection. Thus the MoH and MSF outbreak response was activated.  
+
+The response consisted of four components:  
+
+1) active community based surveillance (CBS)  
+2) clinical assessment and management of ill cases at the hospital  
+3) water chlorination activities at most water points in the town  
+4) hygiene promotion  
+
+**The outbreak linelist data was combined data from the active CBS data and the clinical data from the hospital.** The CBS functioned with community health workers visiting all households in the town every two weeks and actively searching for people with Acute Jaundice Syndrome (AJS). For this group of persons (suspected cases), only those that were visibly ill or that were pregnant were referred to the hospital for clinical assessment and admission if required. Persons that self-reported to the hospital or that arrived after referral would undergo a clinical assessment and a rapid test for HEV for diagnosis. Thus only for people assessed at the hospital were we able to capture a confirmed case status.  
+
+For the duration of the outbreak we detected 1193 suspected cases, 100 confirmed cases and discarded 150 cases with AJS who were not positive for HEV infection.  
 
 [Link to publication](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0188240)  
 
-*DISCLAIMER: The real data from the outbreak has been used for the training materials linked to the outbreak templates of the R4epis project. The Chadian Ministry of Health (MoH) has approved the use of this data for training purposes. Please note, that some data has been adapted in order to best achieve training objectives. Also, the GPS coordinates included in the dataset do not correspond to real cases identified during this outbreak. They have been generated exclusively for training purposes.*  
+<img src="/images/AJS_Article.png" alt="AJS Article snip", width = "40%">
 
-In early September 2016, a cluster of severely ill pregnant women with jaundice was detected at the Am Timan Hospital in the maternity ward. Following rapid tests conducted in Am Timan and confirmatory testing in the Netherlands, this was confirmed as due to HEV infection. Thus the MoH and MSF outbreak response was activated. The response consisted of four components: 1) active community based surveillance (CBS), 2) clinical assessment and management of ill cases at the hospital, 3) water chlorination activities at most water points in the town, 4) hygiene promotion.  
 
-The outbreak linelist data was combined data from the active CBS data and the clinical data from the hospital. The CBS functioned with community health workers visiting all households in the town every two weeks and actively searching for people with Acute Jaundice Syndrome (AJS). For this group of persons (suspected cases), only those that were visibly ill or that were pregnant were referred to the hospital for clinical assessment and admission if required. Persons that self-reported to the hospital or that arrived after referral would undergo a clinical assessment and a rapid test for HEV for diagnosis. Thus only for people assessed at the hospital were we able to capture a confirmed case status.  
 
-For the duration of the outbreak we detected 1193 suspected cases, 100 confirmed cases and discarded 150 cases with AJS who were not positive for HEV infection.  
 
 ## Overview of template 
 
 **TODO: Graphic showing big-picture overview of template parts** 
 
-## Template header and introduction
+## Header and introduction
 
 The very top of the template consists of a header surrounded by `---` lines. Here you may want to edit the title of your document. The other settings in the header define the default document type produced (Microsoft Word) when the RMarkdown is "knit".
 
@@ -143,11 +153,7 @@ This "setup" code chunk does the following:
 
 
 ## Set current epi week  
-Set the epidemiological week for the report. **This value is used in later code chunks, for example when producing epidemic curves.** Note that you may want to specify the most recent **complete** epi week.  
-
-Follow the format demonstrated below:  
-
-> Within quotes (" ") give the 4-digit year, a hyphen (-), capital W, then the 2-digit epi week number  
+Set the epidemiological week for the report. **This value is used in later code chunks, for example when producing epidemic curves.** Note that you may want to specify the most recent **complete** epi week. Follow the format in the code below (within quotes give the 4-digit year, a hyphen (-), capital W, then the 2-digit epi week number).  
 
 By default in the templates epi weeks begin on Mondays (this can be changed at the bottom of the "setup" code chunk). See the documentation of the [package "aweek"](https://cran.r-project.org/web/packages/aweek/vignettes/introduction.html) for more information. 
 
@@ -192,7 +198,7 @@ linelist_raw <- rio::import("AJS_AmTiman.xlsx", which = "linelist", na=".")
 ```
 
 
-## Aligning the dataset with the data dictionary  
+## Align the dataset with the data dictionary  
 When using a non-standardized dataset, the variable names and values must be aligned with the data dictionary. **This process can take some time** and requires looking back-and-forth between your dataset, RStudio, and the MSF data dictionary. In this example, here are the steps taken:  
 
 ### Review the MSF data dictionary
@@ -375,9 +381,9 @@ This code chunk can be used to explore your data, but remember to eventually com
 
 
 ## Standardize and clean data  
-The values in our example AJS dataset are still very different from the standard AJS MSF data dictionary. In the data cleaning steps we will need to do the following:  
+Becuase the Am Timan dataset is not yet aligned with the MSF data dictionary and what the template expects, there are several data cleaning steps we must complete.  
 
-### **Re-code missing values from periods (.) to `NA` at import**  
+### Re-code missing values from periods (.) to `NA` at import  
 
 Currently, missing values in the dataset are represented by a period (.). This causes problems because R expects missing values to be coded as `NA`. For example, if we attempt to set the variable date_of_onset to class Date, R gives an error because the periods are considered character values that do not fit the expected YYYY-MM-DD date format.  
 
@@ -393,7 +399,7 @@ linelist_raw <- rio::import("AJS_AmTiman.xlsx", which = "linelist")
 linelist_raw <- rio::import("AJS_AmTiman.xlsx", which = "linelist", na = ".")
 ```
 
-### **Drop ineligible observations**  
+### Drop ineligible observations  
 The next code item in the script drops observations with missing case_number or date_of_consultation_admission. Because the Am Timan dataset contains observations for patients seen in the community and at the hospital, these criteria may not be relevant. We can check and see that of the 1447 observations, there are 0 missing case_number or dateentry, but 616 observations missing date_of_admission. These 616 community-identified cases are still of interest for our report, so we will not drop them. 
 
 ```{r eval=FALSE}
@@ -401,14 +407,14 @@ The next code item in the script drops observations with missing case_number or 
 nrow(linelist_cleaned %>% filter(is.na(date_of_admission))) 
 ```
 
-### **Set date variables to class Date**
+### Convert and clean date variables
 In linelist_cleaned there are seven variables containing dates (dateentry, epiquestdate, date_of_admission, date_of_onset, date_lab_sample_taken, dthospitalisation, dtdeath).  
 
 Because the Am Timan dataset contains date variables not found in the data dictionary, we will ignore and comment out the first code of the Date variables chunk (these commands convert only the date variables known to the data dictionary).  
 
-Instead, we uncomment and **use the commands applicable to when a dataset does not align with the data dictionary**.
+Instead, we uncomment and **use the commands applicable to when a dataset does not align with the data dictionary**. You may see messages warning that a few dates are not in the correct timeframe - this is ok and these dates will be addressed in the next step.
 
-```{r}
+```{r results='hide', message=FALSE, warning=FALSE}
 # Use this is your dataset aligns with the data dictionary
 # Creates list of date variables from the data dictionary
 #DATEVARS <- filter(linelist_dict, data_element_valuetype == "DATE") %>% 
@@ -427,14 +433,14 @@ The code above converted successfully many of our date variables (remember you c
 
 ```{r}
 # Individually convert other date columns
-class(linelist_cleaned$dthospitalisation)
+class(linelist_cleaned$dtdeath)
 
-linelist_cleaned$dthospitalisation <- linelist::guess_dates(linelist_cleaned$dthospitalisation)
+linelist_cleaned$dtdeath <- linelist::guess_dates(linelist_cleaned$dtdeath)
 
-class(linelist_cleaned$dthospitalisation)
+class(linelist_cleaned$dtdeath)
 
 # Repeat for variable "dtdeath"
-linelist_cleaned$dtdeath <- linelist::guess_dates(linelist_cleaned$dtdeath)
+linelist_cleaned$dthospitalisation <- linelist::guess_dates(linelist_cleaned$dthospitalisation)
 ```
 
 Next we uncomment code to **correct unrealistic dates**. We have browsed our data and know that there are observations with date_of_onset outside the reasonable range:
@@ -460,29 +466,31 @@ linelist_cleaned <- mutate(linelist_cleaned,
                            
 ```
 
-We also must **use the provided code to create a variable called "epiweek"**. While there are already variables in our dataset that give the epidemiological weeks of various data points, it is safer to make a new variable AND later code chunks rely on the variable being named "epiweek".
+We also must **use the provided code to create a variable called "epiweek"**. While there are already variables in our dataset that give the epidemiological weeks of various data points, it is safer to make a new variable AND later code chunks rely on the variable being named "epiweek". See the documentation of the [package "aweek"](https://cran.r-project.org/web/packages/aweek/vignettes/introduction.html) for more information.
 
 ```{r}
-# floor_day shortens to only give you the week number (rather than including day as well) 
-# factor includes all weeks between the min and max as levels (useful for zero count weeks)
+# Create variable epiweek
 linelist_cleaned$epiweek <- aweek::date2week(linelist_cleaned$date_of_onset, 
                                              floor_day = TRUE, 
                                              factor = TRUE)
 ```
 
+### Clean numeric variables  
 
 We can **comment out/ignore the code that makes a new numeric variable "obs_days"**, because we do not have a date_of_exit in our dataset.  
 
 **However, we do need to clean the variable "age_years"**. If we look at the range of values, we get something strange:  
 ```{r}
+# See the range of age_years values, removing (excluding) NA
 range(linelist_cleaned$age_years, na.rm = TRUE)
 ```
-We can see that there are observations with ages older than 9, and we check `class(linelist_cleaned$age_years)` and see that R is reading this variable as class *character*, not *numeric*! So we must convert it by adding the following command to the script:
+We know there are ages older than 9 years. We check `class(linelist_cleaned$age_years)` and see that R is reading this variable as class *character*, not numeric! So we must convert it by adding the following command to the script:
 ```{r}
+# Convert variable age_years to numeric class
 linelist_cleaned$age_years <- as.numeric(linelist_cleaned$age_years)
 ```
 
-In the Age group variables chunk, we do not need and can comment out the code to add under 2 years to the age_years variable.  However, we do have some decimal years, so to align with the data dictionary we uncomment and use the code to create a *new* variable "age_months" from the decimal years.  
+**Now we must further clean the age-related variables.** In the chunk "Age group variables", we do not need and can comment out the code to add under 2 years to the age_years variable. However, we do have some decimal years. To align with the data dictionary we uncomment and **use the code to create a *new* variable "age_months" from the decimal years**.  
 
 ```{r}
 # For patients under 5 years, the new variable age_months is based on age_years * 12 
@@ -509,7 +517,7 @@ linelist_cleaned$age_group <- age_categories(linelist_cleaned$age_years,
                                              breakers = c(0, 3, 15, 30, 45))
 ```
 
-### **Cleaning categorical variables  
+### Cleaning categorical variables  
 While the template directs us to next create a DIED variable based on exit_status containing the characters "Dead", we must first **clean our exit_status variable, which is currrently in French**. 
 
 **Use case_when() to assign new values for a new exit_status2 variable**, as in the code below. The code uses the function case_when() to re-define linelist_cleaned as itself, but mutated to include the new variable exit_status2. The values in exit_status2 are based on the values in exit_status, such that when exist_status == "Décédé", the value in exit_status2 is "Died", and so on. 
@@ -536,7 +544,7 @@ table(linelist_cleaned$exit_status2, useNA = "always")
 ```
 
 
-Now we can **make the DIED variable**, which is referenced in later code chunks.
+Now we can **make the DIED variable**, which is referenced in later code chunks. This command creates DIED as a logical (TRUE/FALSE) variable), depending on whether each observation meets the criteria to the right of the assignment operator `<-`.
 
 ```{r}
 ## Note we are directing R to look within the NEW exit_status2 variable
@@ -583,7 +591,11 @@ linelist_cleaned <- linelist_cleaned %>%
   ))
 ```
 
-**Create lists of variables** that will be referenced in later code chunks. This code creates two vectors of variable names - one for symptoms and one for laboratory testing. **Some of these variables do not apply to our Am Timan data and must be removed from the list or commented out (such as convulsions and history of fever).** If non-existant variables are left in the list it will cause errors in later code chunks.
+### Create lists of variables  
+
+These variables names are stored in vectors that are created using the function c(). These vectors of names will be referenced in later code chunks. This code creates two vectors - one for symptoms variables and one for laboratory testing variables.  
+
+**Some of these variables do not apply to our Am Timan data and must be removed from the list or commented out (such as convulsions and history of fever).** If non-existant variables are left in the list it will cause errors in later code chunks.
 
 ```{r}
 # vectors of variable names ----------------------------------------------------
@@ -635,6 +647,8 @@ LABS <- c("hep_b_rdt",
 
 ```
 
+### Dropping observations  
+
 The next code assists with **dropping observations and variables**. We can remove any observations with date of onset after the reporting_week (reporting_week is defined at the beginning of the script).
 
 ```{r}
@@ -643,9 +657,7 @@ linelist_cleaned <- linelist_cleaned %>%
   filter(date_of_onset <= week2date(sprintf("%s-7", reporting_week)))
 ```
 
-
-
-It is important to **define these date-related objects** that are referenced in later code chunks.  
+Then, it is important to **define these date-related objects** that are referenced in later code chunks.  
 
 ```{r}
 # define the first week of outbreak (date of first case)
@@ -660,14 +672,14 @@ obs_end   <- week2date(sprintf("%s-7", reporting_week))
 
 ```
 
-
+### Export if desired  
 
 And finally, if desired you can **export the cleaned dataset** for other purposes.
 
 ```{r save_cleaned_data, eval = FALSE}
-## OPTIONAL: save your cleaned dataset as an excel file! 
+## OPTIONAL: save your cleaned dataset! 
 ## put the current date in the name so you know!
-writexl::write_xlsx(linelist_cleaned, paste0("linelist_cleaned_", Sys.Date(), ".xlsx"))
+rio::export(linelist_cleaned, paste0("AmTiman_linelist_cleaned_", Sys.Date(), ".xlsx"))
 ```
 
 
