@@ -684,7 +684,7 @@ And finally, if desired you can **export the cleaned dataset** for other purpose
 rio::export(linelist_cleaned, paste0("AmTiman_linelist_cleaned_", Sys.Date(), ".xlsx"))
 ```
 
-```{r}
+```{r, include=FALSE, results='hide', message=FALSE, warning=FALSE}
 saveRDS(linelist_cleaned, "data/linelist_cleaned.rds")
 ```
 
