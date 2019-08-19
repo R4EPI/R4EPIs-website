@@ -101,7 +101,7 @@ For the duration of the outbreak we detected 1193 suspected cases, 100 confirmed
 
 ## Overview of template 
 
-**TODO: Graphic showing big-picture overview of template parts** 
+**TODO: Graphic showing big-picture overview of template parts - waiting until final arrangement of chunks in template**
 
 ## Header and introduction
 

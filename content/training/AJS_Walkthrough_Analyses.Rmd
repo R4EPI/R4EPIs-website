@@ -1,0 +1,734 @@
+---
+date: "2019-08-19T09:28:05+02:00"
+title: Template Walk-through - Analyses
+weight: 9
+---
+
+
+```{r setup, include=FALSE, results='hide', message=FALSE, warning=FALSE}
+# hide all code chunks in the output, but show errors
+knitr::opts_chunk$set(echo = TRUE,       # hide all code chunks in output
+                      error = TRUE,       # show errors if they appear, but don't stop
+                      fig.width = 6*1.25, # Figure width
+                      fig.height = 6      # Figure height
+                     )
+# set default NA to - in output, define figure width/height
+options(knitr.kable.NA = "-")
+
+# Installing required packages for this template
+required_packages <- c("knitr",       # create output docs
+                       "dplyr",       # clean/shape data
+                       "forcats",     # clean/shape data
+                       "ggplot2",     # create plots and charts
+                       "sitrep",      # MSF field epi functions
+                       "linelist",    # Functions for cleaning/standardising data
+                       "incidence",   # create epicurves
+                       "aweek",       # define epi weeks
+                       "epitools",    # 2x2 tables and other epi goodness
+                       "sf",          # encode spatial vector data
+                       "ggspatial")   # plot maps
+
+for (pkg in required_packages) {
+  # install packages if not already present
+  if (!pkg %in% rownames(installed.packages())) {
+    install.packages(pkg)
+  }
+  
+  # load packages to this current session 
+  library(pkg, character.only = TRUE)
+}
+
+
+# set default text size to 16 for plots
+# give classic black/white axes for plots
+ggplot2::theme_set(theme_classic(base_size = 18))
+
+# Set the day that defines the beginning of your epiweek.
+# you can start the week on any day of the week
+# (the ISO standard is to start on Monday) 
+aweek::set_week_start("Monday")
+
+
+
+reporting_week <- "2017-W52"  # Set the reporting week
+
+
+
+date2week(Sys.Date())      #Sys.Date() uses the current date from your computer
+
+
+# This code chunk runs in the background and actually imports the dataset while transforming "." to NA.
+# The import code chunk above (with eval=FALSE) does not run, but shows the viewer the default import code.
+linelist_raw <- rio::import("AJS_AmTiman.xlsx", which = "linelist", na=".")
+
+## make a copy of your orginal dataset and name it linelist_cleaned
+linelist_cleaned <- linelist_raw
+
+# Store cleaned column names
+cleaned_colnames <- epitrix::clean_labels(colnames(linelist_raw))
+
+# Overwrite variable column names with clean ones
+colnames(linelist_cleaned) <- cleaned_colnames
+
+## Add the appropriate column names after the equals signs
+
+linelist_cleaned <- rename(linelist_cleaned,
+#  event_file_type                   =   , # TEXT                # (Not in dataset)
+  case_number                       =   hevid, # TEXT
+  date_of_admission                 =   dtmedical, # DATE
+  detected_by                       =   referredby, # TEXT
+  patient_facility_type             =   hospitalised, # TEXT
+#  msf_involvement                   =   , # TEXT                # (Not in dataset)
+  age_years                         =   age, # INTEGER_POSITIVE
+#  age_months                        =   , # INTEGER_POSITIVE   # (Dataset only has years)
+#  age_days                          =   , # INTEGER_POSITIVE   # (Dataset only has years)
+  sex                               =   sex, # TEXT
+  patient_origin                    =   quartier, # ORG UNIT
+#  residential_status_brief          =   , # TEXT               # (Not in dataset)
+#  arrival_date_in_area_if_3m        =   , # DATE               # (Not in dataset)
+#  ever_received_hepatitis_e_vaccine =   , # TEXT               # (Not in dataset)
+#  date_of_last_vaccination          =   , # DATE               # (Not in dataset)
+  date_of_onset                     =   dtjaundice, # DATE
+#  history_of_fever                  =   , # BOOLEAN            # (Not in dataset)
+  fever                             =   medfever, # BOOLEAN
+  nausea_anorexia                   =   mednausea, # BOOLEAN
+  vomiting                          =   medvomit, # BOOLEAN
+  epigastric_pain_heartburn         =   medepigastric, # BOOLEAN
+  generalized_itch                  =   meditching, # BOOLEAN
+  headache                          =   medheadache, # BOOLEAN
+  joint_pains                       =   medarthralgia, # BOOLEAN
+  diarrhoea                         =   meddiar, # BOOLEAN
+  bleeding                          =   medbleeding, # BOOLEAN
+#  convulsions                       =   , # BOOLEAN            # (Not in dataset)
+  mental_state                      =   medmental, # BOOLEAN    # !(Needs value cleaning)
+  other_symptoms                    =   medother, # BOOLEAN
+  other_cases_in_hh                 =   medothhhajs, # BOOLEAN
+#  traditional_medicines             =   , # BOOLEAN            # (Not in dataset)
+#  traditional_medicine_details      =   , # TEXT               # (Not in dataset)
+#  recent_travel                     =   , # BOOLEAN            # (Not in dataset)
+#  water_source                      =   , # TEXT               # !(Split across many variables)
+  malaria_rdt_at_admission          =   medmalrdt, # TEXT
+  hep_b_rdt                         =   medhepb, # TEXT
+  hep_c_rdt                         =   medhepc, # TEXT
+  hep_e_rdt                         =   medhevrdt, # TEXT
+#  dengue_rdt                        =   , # TEXT               # (Not in dataset)
+  date_lab_sample_taken             =   medblooddt, # DATE
+  test_hepatitis_a                  =   medhavelisa, # TEXT
+  test_hepatitis_b                  =   medhbvelisa, # TEXT
+  test_hepatitis_c                  =   medhcvelisa, # TEXT
+  test_hepatitis_e_virus            =   medhevelisa, # TEXT
+  test_hepatitis_e_igm              =   hevrecent, # TEXT
+#  test_hepatitis_e_igg              =   , # TEXT               # (In same variable as elisa result)
+  test_hepatitis_e_genotype         =   hevgenotype, # TEXT
+#  malaria_blood_film                =   , # TEXT               # (Not in dataset)
+  dengue                            =   dengue, # TEXT
+  yellow_fever                      =   yf, # TEXT
+#  lassa_fever                       =   , # TEXT               # (Not in dataset)
+#  typhoid                           =   , # TEXT               # (Not in dataset)
+  chikungunya_onyongnyong           =   chik, # TEXT
+#  ebola_marburg                     =   , # TEXT               # (Not in dataset)
+  other_arthropod_transmitted_virus =   arbovpcr, # TEXT
+#  other_pathogen                    =   , # TEXT               # (Not in dataset)
+#  lab_comments                      =   , # TEXT               # (Not in dataset)
+  pregnant                          =   medpreg, # TEXT
+  trimester                         =   medpregtri, # TEXT
+#  foetus_alive_at_admission         =   , # TEXT               # (Not in dataset)
+#  delivery_event                    =   , # TRUE_ONLY          # (Not in dataset)
+  pregnancy_outcome_at_exit         =   medppoutcome, # TEXT
+  exit_status                       =   outcomehp, # TEXT
+#  date_of_exit                      =   , # DATE               # (Not in dataset)
+#  time_to_death                     =   , # TEXT               # (Not in dataset)
+  treatment_facility_site           =   hpid, # TEXT
+#  treatment_location                =   , # ORGANISATION_UNIT  # (Not in dataset)
+  patient_origin_free_text          =   block # TEXT
+)
+
+
+
+
+population_data_region <- rio::import("AJS_AmTiman_population_revised_for_template.xlsx", which="quartier")
+
+# Use this is your dataset aligns with the data dictionary
+# Creates list of date variables from the data dictionary
+#DATEVARS <- filter(linelist_dict, data_element_valuetype == "DATE") %>% 
+#  select(data_element_shortname) # select date vars
+# change to the date variables found in your dataset to class date 
+#linelist_cleaned <- linelist_cleaned %>%
+#  mutate_at(DATEVARS$data_element_shortname, as.Date)
+
+# Use this if your dataset does not align with the data dictionary
+  linelist_cleaned <- linelist_cleaned %>%
+    mutate_at(vars(matches("date|Date")), linelist::guess_dates,
+            error_tolerance = 0.5)
+
+
+
+# Individually convert other date columns
+class(linelist_cleaned$dtdeath)
+
+linelist_cleaned$dtdeath <- linelist::guess_dates(linelist_cleaned$dtdeath)
+
+class(linelist_cleaned$dtdeath)
+
+# Repeat for variable "dtdeath"
+linelist_cleaned$dthospitalisation <- linelist::guess_dates(linelist_cleaned$dthospitalisation)
+
+
+
+# Check range of date_of_onset values, ignoring (removing) missing values
+range(linelist_cleaned$date_of_onset, na.rm = TRUE)
+
+
+# Convert dates before April 2016 or after October 2017 to missing (NA)
+linelist_cleaned <- mutate(linelist_cleaned,
+                           date_of_onset = case_when(
+                                 date_of_onset < as.Date("2016-04-01")  ~ as.Date(NA),
+                                 date_of_onset > as.Date("2017-10-31")  ~ as.Date(NA),
+                                 TRUE                                   ~ date_of_onset
+                                 ))
+                           
+
+
+
+
+# Create variable epiweek
+linelist_cleaned$epiweek <- aweek::date2week(linelist_cleaned$date_of_onset, 
+                                             floor_day = TRUE, 
+                                             factor = TRUE)
+
+
+ 
+
+# See the range of age_years values, removing (excluding) NA
+range(linelist_cleaned$age_years, na.rm = TRUE)
+
+
+
+# Convert variable age_years to numeric class
+linelist_cleaned$age_years <- as.numeric(linelist_cleaned$age_years)
+
+ 
+
+
+# For patients under 5 years, the new variable age_months is based on age_years * 12 
+linelist_cleaned <- mutate(linelist_cleaned,
+                            age_months = case_when(
+                              age_years < 5 ~ age_years * 12
+                              )) 
+
+
+
+## create age group variable for under 5 years based on months
+linelist_cleaned$age_group_mon <- age_categories(linelist_cleaned$age_months, 
+                                                 breakers = c(0, 6, 9, 12, 24), 
+                                                 ceiling = TRUE)
+
+
+
+## create an age group variable by specifying categorical breaks
+linelist_cleaned$age_group <- age_categories(linelist_cleaned$age_years, 
+                                             breakers = c(0, 3, 15, 30, 45))
+
+
+
+# Tabulate to see all possible values of exit_status
+table(linelist_cleaned$exit_status, useNA = "always")
+
+# Create exit_status2 from values in exit_status
+linelist_cleaned <- linelist_cleaned %>% 
+  mutate(exit_status2 = case_when(
+    exit_status == "Décédé"          ~ "Died",
+    exit_status == "-"               ~ NA_character_,
+    exit_status == "Echappé"         ~ "Left",
+    exit_status == "Déchargé/Guéri"  ~ "Discharged"
+  ))
+
+# Tabulate the NEW exit_status2 variable to check correct assignment
+table(linelist_cleaned$exit_status2, useNA = "always")
+```
+
+
+
+
+
+After data import and cleaning, the template contains three analytical sections:  
+
+* Person  
+* Time  
+* Place  
+
+
+
+## Person 
+
+TODO [general description of person section]
+
+###Demographic Tables:
+
+The first demographic table presents patients by their age group (table rows) and their relationship with the case definition (table columns). Arguments col_total and row_total are set to TRUE, resulting in totals shown.  
+
+```{r describe_by_age_group_and_def}
+# use if you have lab results in your data
+# get counts and props of age groups by case definition 
+# include column and row totals 
+tab_linelist(linelist_cleaned, 
+             age_group, strata = case_def, 
+             col_total = TRUE, row_total = TRUE) %>%
+  select(-variable) %>%
+  rename("Age group" = value) %>%
+  rename_redundant("%" = proportion) %>%
+  augment_redundant(" cases (n)" = " n$") %>%
+  kable(digits = 2)
+```
+
+
+
+
+Cases by age group and sex 
+
+```{r describe_by_age_group_and_sex}
+descriptive(linelist_cleaned, "age_group", "sex", coltotals = TRUE, rowtotals = TRUE) %>% 
+  rename("Age group" = age_group) %>%
+  rename_redundant(prop = "%") %>%
+  augment_redundant("_n$" = " cases (n)") %>%
+  kable(digits = 2)
+```
+
+
+Alternatively if you would like proportions to be of the total population, use the following. 
+
+```{r total_props_agegroup_sex}
+descriptive(linelist_cleaned, "age_group", "sex", 
+            coltotals = TRUE, rowtotals = TRUE, proptotal = TRUE) %>% 
+  rename("Age group" = age_group) %>%
+  rename_redundant(prop = "%") %>%
+  augment_redundant("_n$" = " cases (n)") %>%
+  kable(digits = 2)
+```
+
+
+Age pyramid 
+
+There were `r fmt_count(linelist_cleaned, is.na(sex))` cases missing information on sex and 
+`r fmt_count(linelist_cleaned, is.na(age_group))` missing age group.
+
+```{r age_pyramid, warning=FALSE}
+# plot age pyramid 
+ 
+plot_age_pyramid(linelist_cleaned, 
+                 age_group = "age_group", 
+                 split_by = "sex") + 
+  labs(y = "Cases (n)", x = "Age group") + # change axis  labels (nb. x/y flip)
+  theme(legend.position = "bottom",     # move legend to bottom
+        legend.title = element_blank(), # remove title
+        text = element_text(size = 18)  # change text size
+       )
+```
+
+Age pyramid for Under 2 obviously doesn't work.
+
+
+
+
+
+```{r describe_by_symptoms}
+
+# get counts and proportions for all variables named in SYMPTOMS
+multi_descriptive(linelist_cleaned, SYMPTOMS) %>% 
+  # re-order columns (drop total_prop too)
+  select(symptom, Yes_n, Yes_prop, No_n, No_prop, Total_n) %>%
+  # rename accordingly
+  rename_redundant("prop" = "%") %>%
+  augment_redundant("_n$" = " (n)") %>%
+  kable(digits = 2)
+
+
+```
+
+```{r describe_by_labs}
+# get counts and proportions for all variables named in LABS
+multi_descriptive(linelist_cleaned, LABS, .id = "Lab test") %>% 
+  # re-order columns (drop total_prop too)
+  select("Lab test", Pos_n, Positive_prop, Neg_n, Negative_prop, 
+         "Not done_n", "Not done_prop", Total_n) %>% 
+  # rename accordingly
+  rename("Unknown (n)" = "Not done_n") %>%
+  rename_redundant("prop" = "%") %>%
+  augment_redundant("_n$" = " (n)") %>%
+  kable(digits = 2)
+
+```
+
+## CFR Section
+
+Time to death not applicable. 
+
+
+
+The case fatality ratio among inpatients with known outcomes is below.
+
+
+
+Case Fatality Ratio - note that this requires there to be a variable patient_facilit_type, the value "Inpatient", and the DIED variable created earlier. 
+
+```{r overall_cfr, warning = FALSE, message = FALSE}
+# use arguments from above to produce overal CFR
+overall_cfr <- linelist_cleaned %>% 
+  filter(patient_facility_type == "Inpatient") %>%
+  case_fatality_rate_df(deaths = DIED, mergeCI = TRUE) %>%
+  rename("Deaths" = deaths,
+         "Cases" = population,
+         "CFR (%)" = cfr,
+         "95%CI" = ci)
+
+  knitr::kable(overall_cfr, digits = 2)         # print nicely with 2 digits
+```
+
+
+
+We can also do CFR by sex
+
+```{r cfr_by_sex, warning = FALSE, message = FALSE}
+linelist_cleaned %>%
+  filter(patient_facility_type == "Inpatient") %>%
+  mutate(sex = forcats::fct_explicit_na(sex, "-")) %>%
+  case_fatality_rate_df(deaths = DIED, group = sex, mergeCI = TRUE, add_total = TRUE) %>%
+  rename("Sex" = sex, 
+         "Deaths" = deaths, 
+         "Cases" = population, 
+         "CFR (%)" = cfr, 
+         "95%CI" = ci) %>% 
+  knitr::kable(digits = 2)
+```
+
+
+...and by age_group:
+
+
+CFR by age group among inpatients with known outcomes
+
+```{r cfr_by_age_group, warning = FALSE, message = FALSE}
+
+linelist_cleaned %>%
+  filter(patient_facility_type == "Inpatient") %>%
+  case_fatality_rate_df(deaths = DIED, group = age_group, mergeCI = TRUE, add_total = TRUE) %>%
+  tidyr::complete(age_group, 
+                  fill = list(deaths = 0, population = 0, cfr = 0, ci = 0)) %>% # Ensure all levels are represented
+  rename("Age Group" = age_group, 
+         "Deaths" = deaths, 
+         "Cases" = population, 
+         "CFR (%)" = cfr, 
+         "95%CI" = ci) %>% 
+  knitr::kable(digits = 2)
+```
+
+
+CFR by case definition (not enough to do)
+
+```{r cfr_by_case_def, warning = FALSE, message = FALSE}
+# Use if you have enough confirmed cases for comparative analysis 
+#
+ linelist_cleaned %>%
+   filter(patient_facility_type == "Inpatient") %>%
+   case_fatality_rate_df(deaths = DIED, group = case_def, mergeCI = TRUE, add_total = TRUE) %>%
+   rename("Case Definition" = case_def, 
+          "Deaths" = deaths, 
+          "Cases" = population, 
+          "CFR (%)" = cfr, 
+          "95%CI" = ci) %>% 
+   knitr::kable(digits = 2)
+```
+
+
+## Attack Rate
+To use the attack rate section, we need to modify the first code slightly. An object "population" is created from the sum of population counts in the population figures. Because we only imported region-based population counts, we must change this command to reflect that we do not have population_data_age, but rather population_data_region
+
+```{r eval=FALSE}
+# OLD define population 
+# population <- sum(population_data_age$population)
+```
+
+Running the correct command and printing the value of population, we see that the sum population across regions is estimated to be 62336.
+```{r}
+# Correct command for this exercise
+population <- sum(population_data_region$population)
+
+population
+```
+
+Below gives the attack rate per 10,000 population (N = `r format(population, big.mark = ",")`)
+```{r attack_rate}
+# calculate the ar
+# store as AR to be able to use output for automating text below (inline functions)
+ar <- attack_rate(nrow(linelist_cleaned), population, multiplier = 10000)
+
+ar %>%
+  merge_ci_df(e = 3) %>% # merge the lower and upper CI into one column
+  rename("Cases (n)" = cases, 
+         "Population" = population, 
+         "AR (per 100,000)" = ar, 
+         "95%CI" = ci) %>% 
+  select(-Population) %>% # drop the population column as it is not changing
+  knitr::kable(digits = 2, align = "r")
+```
+
+We are unable to calculate the attack rate by age group, because we do not have population counts for each age group.
+
+Mortality attributable to AJS - not appropriate for this example because...
+
+
+
+
+## Time
+
+```{r create_incidence, message = FALSE}
+# This code creates case counts for each week of your outbreak, overall
+# As with aweek, you can change the start of your week to e.g. "Sunday week"
+inc_week_7 <- incidence(linelist_cleaned$date_of_onset, interval = "Monday week")
+
+# this sets the theme in ggplot for epicurves
+epicurve_theme <- theme(
+  axis.text.x = element_text(angle = 45, hjust = 1, vjust = 1), 
+  legend.title = element_blank(),
+  panel.grid.major.x = element_line(color = "grey60", linetype = 3),
+  panel.grid.major.y = element_line(color = "grey60", linetype = 3)
+)
+# This sets the labels in ggplot for the epicurves
+epicurve_labels <- labs(x = "Calendar week", 
+                        y = "Cases (n)", 
+                        title = "Cases by week of onset",
+                        subtitle = sprintf("Source: MSF data from %s", reporting_week)
+                       ) 
+```
+
+
+```{r epicurve, message = FALSE}
+# plot your epicurve as a ggplot (incidence::plot is different to base::plot)
+basic_curve <- plot(inc_week_7, show_cases = TRUE, border = "black", n_breaks = nrow(inc_week_7)) + 
+  scale_y_continuous(expand = c(0, 0)) +  # set origin for axes
+  # add labels to axes and below chart
+  epicurve_labels +
+  # change visuals of dates and remove legend title
+  epicurve_theme
+
+# show your plot (stored for later use) 
+basic_curve
+basic_curve + scale_x_incidence(inc_week_7, n_breaks = 6)
+```
+
+
+Other possible variants on the epi curve:  
+* Option 1  
+* Option 2  
+* Option 3  
+
+
+The below gives the attack rate per week. 
+
+```{r attack_rate_per_week, warning = FALSE, message = FALSE}
+# counts and cumulative counts by week
+cases <- linelist_cleaned %>%
+  arrange(date_of_onset) %>%        # arrange by date of onset
+  count(epiweek, .drop = FALSE) %>% # count all epiweeks and include zero counts
+  mutate(cumulative = cumsum(n))    # add a cumulative sum
+
+# attack rate for each week
+ar <- attack_rate(cases$n, population, multiplier = 100000) %>% 
+  bind_cols(select(cases, epiweek), .) # add the epiweek column to table
+
+ar %>%
+  merge_ci_df(e = 4) %>% # merge the lower and upper CI into one column
+  rename("Epiweek" = epiweek, 
+         "Cases (n)" = cases, 
+         "Population" = population, 
+         "AR (per 100,000)" = ar, 
+         "95%CI" = ci) %>% 
+  knitr::kable(digits = 2, align = "r")
+```
+
+And cumulatively:  
+
+
+```{r cumulative_attack_rate_per_week}
+# cumulative attack rate by week
+attack_rate(cases$cumulative, population, multiplier = 100000) %>% 
+  bind_cols(select(cases, epiweek), .) %>% # add the epiweek column to table
+  merge_ci_df(e = 4) %>% # merge the lower and upper CI into one column
+  rename("Epiweek" = epiweek, 
+         "Cases (n)" = cases, 
+         "Population" = population, 
+         "AR (per 100,000)" = ar, 
+         "95%CI" = ci) %>% 
+  knitr::kable(digits = 2, align = "r")
+```
+
+```{r cfr_per_week, warning = FALSE, message = FALSE}
+# group by known outcome and case definition 
+cfr <- linelist_cleaned %>%
+  filter(patient_facility_type == "Inpatient") %>%
+  case_fatality_rate_df(grepl("Dead", exit_status), group = epiweek)
+
+cfr %>%
+  merge_ci_df(e = 4) %>% # merge the lower and upper CI into one column
+  rename("Epiweek" = epiweek, 
+         "Deaths" = deaths, 
+         "Cases" = population, 
+         "CFR (%)" = cfr, 
+         "95%CI" = ci) %>% 
+  knitr::kable(digits = 2, align = "r")
+```
+
+You could plot the AR (in the population) and CFR (among inpatients only) together as line graphs by epiweek. 
+
+```{r ar_line_graph}
+ar_plot <- ggplot(ar, aes(x = week2date(epiweek) + (7 * 0.5), group = 1)) +
+  geom_ribbon(aes(ymin = lower, ymax = upper), 
+              color = "blue", fill = "blue", linetype = 2, alpha = 0.2, show.legend = FALSE) +
+  geom_line(aes(y = ar), color = "blue", show.legend = FALSE) +
+  scale_y_continuous(expand = c(0, 0)) +  # set origin for axes
+  # scale the x axis the same as the incidence curve. Expand forces it to align. 
+  incidence::scale_x_incidence(inc_week_7, n_breaks = nrow(inc_week_7), expand = c(0, 7 * 1.5)) +
+  # add labels to axes and below chart
+  labs(x = "Calendar week", y = "AR [95% CI]", subtitle = "Attack Rate (per 100,000)") + 
+  # change visuals of dates and remove legend title
+  epicurve_theme
+```
+
+To plot CFR you must first make the CFR table using above code
+
+```{r cfr_line_graph}
+cfr_plot <- ggplot(cfr, aes(x = week2date(epiweek) + (7 * 0.5), group = 1)) +
+  geom_ribbon(aes(ymin = lower, ymax = upper), 
+              color = "red", fill = "red", linetype = 2, alpha = 0.2, show.legend = FALSE) +
+  geom_line(aes(y = cfr), color = "red", show.legend = FALSE) +
+  scale_y_continuous(expand = c(0, 0)) +  # set origin for axes
+  # scale the x axis the same as the incidence curve. Expand forces it to align. 
+  incidence::scale_x_incidence(inc_week_7, n_breaks = nrow(inc_week_7), expand = c(0, 7 * 1.5)) +
+  # add labels to axes and below chart
+  labs(x = "Calendar week", y = "CFR [95% CI]", 
+       subtitle = "Case Fatality Ratio [95% CI] Among Inpatients") + 
+  # change visuals of dates and remove legend title
+  epicurve_theme 
+
+```
+
+
+You could then also add the AR and CFR by week on to an epicurve. 
+
+```{r epicurve_ar_cfr, message = FALSE, fig.height = 10}
+nofx <- theme(axis.text.x = element_blank(),
+              axis.title.x = element_blank())
+cowplot::plot_grid(
+  basic_curve + nofx,
+  ar_plot + nofx,
+  cfr_plot,
+  align = "v", # align plots vertically
+  axis = "lr", # only by their left and right margins
+  ncol = 1     # allow only one column
+)
+```
+
+
+more optins...
+
+
+
+## Place
+
+
+Basic descriptive table:
+
+```{r describe_by_region_facility}
+# get counts and props of region by facility 
+# include column and row totals 
+
+descriptive(linelist_cleaned, "patient_origin", 
+            "patient_facility_type",
+            coltotals = TRUE, rowtotals = TRUE) %>% 
+  rename("Region" = "patient_origin") %>%
+  augment_redundant("_n$" = " (n)") %>% # modify _n to (n)
+  rename_redundant("prop" = "%")    %>% # rename proportions to %
+  kable(digits = 2)
+```
+
+
+And attack rates by region.   
+Note: changed population_data_region to population_data in line 2.
+Error received on left_join: Error in tbl_vars(y) : object 'population_data_region' not found
+
+Then, Error received from merge to create cases. Turns out that in population counts the regions are ALL CAPITALS but in linelist the are lowercase. Need to add line to make that solved.
+
+```{r}
+# Converts patient_origin variable to uppercase, to match with population_data
+linelist_cleaned$patient_origin <- toupper(linelist_cleaned$patient_origin)
+```
+
+Also need fix in proportion() function in sitrep to is.na(n)
+
+```{r attack_rate_by_region}
+
+## - [ ] consider facet wrapping by an overarching unit if have many regions (e.g. by province)
+
+
+cases <- count(linelist_cleaned, patient_origin) %>%   # cases for each region
+  left_join(population_data, by = "patient_origin")    # merge population data 
+# attack rate for region
+ar <- attack_rate(cases$n, cases$population, multiplier = 100) %>% 
+  # add the region column to table
+  bind_cols(select(cases, patient_origin), .) %>% 
+  rename("Region" = patient_origin, 
+         "Cases (n)" = cases, 
+         "Population" = population, 
+         "AR (per 100,000)" = ar, 
+         "Lower 95%CI" = lower,
+         "Upper 95%CI" = upper) 
+
+ar %>% 
+  merge_ci_df(e = 4) %>% # merge lower and upper CI in to one column 
+  rename("95%CI" = ci) %>%  # rename single 95%CI column
+  kable(digits = 2, align = "r", format.args = list(big.mark = ",")) # set thousands separator
+```
+
+
+You could then also plot this on a bar chart with confidence intervals. 
+
+```{r bar_attack_rate_by_region}
+# plot with the region on the x axis sorted by increasing ar
+# ar value on the y axis 
+ggplot(ar, aes(x = reorder(Region, `AR (per 100,000)`),
+               y = `AR (per 100,000)`)) + 
+  geom_bar(stat = "identity", col = "black", fill = "red") + # plot as bars (identity = as is)
+  geom_errorbar(aes(ymin = `Lower 95%CI`, ymax = `Upper 95%CI`), width = 0.2) + # add CIs
+  scale_y_continuous(expand = c(0,0)) +  # set origin for axes
+  # add labels to axes and below chart
+  labs(x = "Region", y = "AR (per 100,000)", 
+       captions = paste0("Source: MSF data from ", reporting_week)) + 
+  epicurve_theme
+```
+
+
+
+Mortality Rates by region
+Changed population_data_region to population_data
+
+Changed "Dead" to "Décédé" in grepl
+
+
+```{r mortality_rate_region}
+
+deaths <- group_by(linelist_cleaned, patient_origin) %>%
+  filter(grepl("Décédé", exit_status)) %>% 
+  summarise(deaths = n()) %>% # count deaths by region
+  left_join(population_data, by = "patient_origin") # merge population data 
+
+mortality_rate(deaths$deaths, deaths$population, multiplier = 10000) %>%
+  # add the region column to table
+  bind_cols(select(deaths, patient_origin), .) %>% 
+  merge_ci_df(e = 4) %>% # merge the lower and upper CI into one column
+  rename("Region" = patient_origin, 
+         "Deaths" = deaths, 
+         "Population" = population, 
+         "Mortality (per 10,000)" = `mortality per 10 000`, 
+         "95%CI" = ci) %>% 
+  kable(digits = 2)
+```

@@ -1,0 +1,2537 @@
+---
+date: "2019-08-19T09:28:05+02:00"
+title: Template Walk-through - Analyses
+weight: 9
+---
+
+
+
+<p>After data import and cleaning, the template contains three analytical sections:</p>
+<ul>
+<li>Person<br />
+</li>
+<li>Time<br />
+</li>
+<li>Place</li>
+</ul>
+<div id="person" class="section level2">
+<h2>Person</h2>
+<p>TODO [general description of person section]</p>
+<div id="demographic-tables" class="section level3">
+<h3>Demographic Tables:</h3>
+<p>The first demographic table presents patients by their age group (table rows) and their relationship with the case definition (table columns). Arguments col_total and row_total are set to TRUE, resulting in totals shown.</p>
+<pre class="r"><code># use if you have lab results in your data
+# get counts and props of age groups by case definition 
+# include column and row totals 
+tab_linelist(linelist_cleaned, 
+             age_group, strata = case_def, 
+             col_total = TRUE, row_total = TRUE) %&gt;%
+  select(-variable) %&gt;%
+  rename(&quot;Age group&quot; = value) %&gt;%
+  rename_redundant(&quot;%&quot; = proportion) %&gt;%
+  augment_redundant(&quot; cases (n)&quot; = &quot; n$&quot;) %&gt;%
+  kable(digits = 2)</code></pre>
+<pre><code>## Error in tab_linelist(linelist_cleaned, age_group, strata = case_def, : could not find function &quot;tab_linelist&quot;</code></pre>
+<p>Cases by age group and sex</p>
+<pre class="r"><code>descriptive(linelist_cleaned, &quot;age_group&quot;, &quot;sex&quot;, coltotals = TRUE, rowtotals = TRUE) %&gt;% 
+  rename(&quot;Age group&quot; = age_group) %&gt;%
+  rename_redundant(prop = &quot;%&quot;) %&gt;%
+  augment_redundant(&quot;_n$&quot; = &quot; cases (n)&quot;) %&gt;%
+  kable(digits = 2)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Age group</th>
+<th align="right">F cases (n)</th>
+<th align="right">%</th>
+<th align="right">M cases (n)</th>
+<th align="right">%</th>
+<th align="right">Total</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">0-2</td>
+<td align="right">26</td>
+<td align="right">3.62</td>
+<td align="right">42</td>
+<td align="right">5.77</td>
+<td align="right">68</td>
+</tr>
+<tr class="even">
+<td align="left">3-14</td>
+<td align="right">223</td>
+<td align="right">31.02</td>
+<td align="right">418</td>
+<td align="right">57.42</td>
+<td align="right">641</td>
+</tr>
+<tr class="odd">
+<td align="left">15-29</td>
+<td align="right">317</td>
+<td align="right">44.09</td>
+<td align="right">160</td>
+<td align="right">21.98</td>
+<td align="right">477</td>
+</tr>
+<tr class="even">
+<td align="left">30-44</td>
+<td align="right">118</td>
+<td align="right">16.41</td>
+<td align="right">71</td>
+<td align="right">9.75</td>
+<td align="right">189</td>
+</tr>
+<tr class="odd">
+<td align="left">45+</td>
+<td align="right">32</td>
+<td align="right">4.45</td>
+<td align="right">32</td>
+<td align="right">4.40</td>
+<td align="right">64</td>
+</tr>
+<tr class="even">
+<td align="left">Missing</td>
+<td align="right">3</td>
+<td align="right">0.42</td>
+<td align="right">5</td>
+<td align="right">0.69</td>
+<td align="right">8</td>
+</tr>
+<tr class="odd">
+<td align="left">Total</td>
+<td align="right">719</td>
+<td align="right">100.00</td>
+<td align="right">728</td>
+<td align="right">100.00</td>
+<td align="right">1447</td>
+</tr>
+</tbody>
+</table>
+<p>Alternatively if you would like proportions to be of the total population, use the following.</p>
+<pre class="r"><code>descriptive(linelist_cleaned, &quot;age_group&quot;, &quot;sex&quot;, 
+            coltotals = TRUE, rowtotals = TRUE, proptotal = TRUE) %&gt;% 
+  rename(&quot;Age group&quot; = age_group) %&gt;%
+  rename_redundant(prop = &quot;%&quot;) %&gt;%
+  augment_redundant(&quot;_n$&quot; = &quot; cases (n)&quot;) %&gt;%
+  kable(digits = 2)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Age group</th>
+<th align="right">F cases (n)</th>
+<th align="right">%</th>
+<th align="right">M cases (n)</th>
+<th align="right">%</th>
+<th align="right">Total</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">0-2</td>
+<td align="right">26</td>
+<td align="right">1.80</td>
+<td align="right">42</td>
+<td align="right">2.90</td>
+<td align="right">68</td>
+</tr>
+<tr class="even">
+<td align="left">3-14</td>
+<td align="right">223</td>
+<td align="right">15.41</td>
+<td align="right">418</td>
+<td align="right">28.89</td>
+<td align="right">641</td>
+</tr>
+<tr class="odd">
+<td align="left">15-29</td>
+<td align="right">317</td>
+<td align="right">21.91</td>
+<td align="right">160</td>
+<td align="right">11.06</td>
+<td align="right">477</td>
+</tr>
+<tr class="even">
+<td align="left">30-44</td>
+<td align="right">118</td>
+<td align="right">8.15</td>
+<td align="right">71</td>
+<td align="right">4.91</td>
+<td align="right">189</td>
+</tr>
+<tr class="odd">
+<td align="left">45+</td>
+<td align="right">32</td>
+<td align="right">2.21</td>
+<td align="right">32</td>
+<td align="right">2.21</td>
+<td align="right">64</td>
+</tr>
+<tr class="even">
+<td align="left">Missing</td>
+<td align="right">3</td>
+<td align="right">0.21</td>
+<td align="right">5</td>
+<td align="right">0.35</td>
+<td align="right">8</td>
+</tr>
+<tr class="odd">
+<td align="left">Total</td>
+<td align="right">719</td>
+<td align="right">49.69</td>
+<td align="right">728</td>
+<td align="right">50.31</td>
+<td align="right">1447</td>
+</tr>
+</tbody>
+</table>
+<p>Age pyramid</p>
+<p>There were 0 (0.0%) cases missing information on sex and 8 (0.6%) missing age group.</p>
+<pre class="r"><code># plot age pyramid 
+ 
+plot_age_pyramid(linelist_cleaned, 
+                 age_group = &quot;age_group&quot;, 
+                 split_by = &quot;sex&quot;) + 
+  labs(y = &quot;Cases (n)&quot;, x = &quot;Age group&quot;) + # change axis  labels (nb. x/y flip)
+  theme(legend.position = &quot;bottom&quot;,     # move legend to bottom
+        legend.title = element_blank(), # remove title
+        text = element_text(size = 18)  # change text size
+       )</code></pre>
+<p><img src="/training/AJS_Walkthrough_Analyses_files/figure-html/age_pyramid-1.png" width="720" /></p>
+<p>Age pyramid for Under 2 obviously doesn’t work.</p>
+<pre class="r"><code># get counts and proportions for all variables named in SYMPTOMS
+multi_descriptive(linelist_cleaned, SYMPTOMS) %&gt;% 
+  # re-order columns (drop total_prop too)
+  select(symptom, Yes_n, Yes_prop, No_n, No_prop, Total_n) %&gt;%
+  # rename accordingly
+  rename_redundant(&quot;prop&quot; = &quot;%&quot;) %&gt;%
+  augment_redundant(&quot;_n$&quot; = &quot; (n)&quot;) %&gt;%
+  kable(digits = 2)</code></pre>
+<pre><code>## Error in .f(.x[[i]], ...): object &#39;SYMPTOMS&#39; not found</code></pre>
+<pre class="r"><code># get counts and proportions for all variables named in LABS
+multi_descriptive(linelist_cleaned, LABS, .id = &quot;Lab test&quot;) %&gt;% 
+  # re-order columns (drop total_prop too)
+  select(&quot;Lab test&quot;, Pos_n, Positive_prop, Neg_n, Negative_prop, 
+         &quot;Not done_n&quot;, &quot;Not done_prop&quot;, Total_n) %&gt;% 
+  # rename accordingly
+  rename(&quot;Unknown (n)&quot; = &quot;Not done_n&quot;) %&gt;%
+  rename_redundant(&quot;prop&quot; = &quot;%&quot;) %&gt;%
+  augment_redundant(&quot;_n$&quot; = &quot; (n)&quot;) %&gt;%
+  kable(digits = 2)</code></pre>
+<pre><code>## Error in .f(.x[[i]], ...): object &#39;LABS&#39; not found</code></pre>
+</div>
+</div>
+<div id="cfr-section" class="section level2">
+<h2>CFR Section</h2>
+<p>Time to death not applicable.</p>
+<p>The case fatality ratio among inpatients with known outcomes is below.</p>
+<p>Case Fatality Ratio - note that this requires there to be a variable patient_facilit_type, the value “Inpatient”, and the DIED variable created earlier.</p>
+<pre class="r"><code># use arguments from above to produce overal CFR
+overall_cfr &lt;- linelist_cleaned %&gt;% 
+  filter(patient_facility_type == &quot;Inpatient&quot;) %&gt;%
+  case_fatality_rate_df(deaths = DIED, mergeCI = TRUE) %&gt;%
+  rename(&quot;Deaths&quot; = deaths,
+         &quot;Cases&quot; = population,
+         &quot;CFR (%)&quot; = cfr,
+         &quot;95%CI&quot; = ci)</code></pre>
+<pre><code>## Error in ~DIED: object &#39;DIED&#39; not found</code></pre>
+<pre class="r"><code>  knitr::kable(overall_cfr, digits = 2)         # print nicely with 2 digits</code></pre>
+<pre><code>## Error in knitr::kable(overall_cfr, digits = 2): object &#39;overall_cfr&#39; not found</code></pre>
+<p>We can also do CFR by sex</p>
+<pre class="r"><code>linelist_cleaned %&gt;%
+  filter(patient_facility_type == &quot;Inpatient&quot;) %&gt;%
+  mutate(sex = forcats::fct_explicit_na(sex, &quot;-&quot;)) %&gt;%
+  case_fatality_rate_df(deaths = DIED, group = sex, mergeCI = TRUE, add_total = TRUE) %&gt;%
+  rename(&quot;Sex&quot; = sex, 
+         &quot;Deaths&quot; = deaths, 
+         &quot;Cases&quot; = population, 
+         &quot;CFR (%)&quot; = cfr, 
+         &quot;95%CI&quot; = ci) %&gt;% 
+  knitr::kable(digits = 2)</code></pre>
+<pre><code>## Error in ~DIED: object &#39;DIED&#39; not found</code></pre>
+<p>…and by age_group:</p>
+<p>CFR by age group among inpatients with known outcomes</p>
+<pre class="r"><code>linelist_cleaned %&gt;%
+  filter(patient_facility_type == &quot;Inpatient&quot;) %&gt;%
+  case_fatality_rate_df(deaths = DIED, group = age_group, mergeCI = TRUE, add_total = TRUE) %&gt;%
+  tidyr::complete(age_group, 
+                  fill = list(deaths = 0, population = 0, cfr = 0, ci = 0)) %&gt;% # Ensure all levels are represented
+  rename(&quot;Age Group&quot; = age_group, 
+         &quot;Deaths&quot; = deaths, 
+         &quot;Cases&quot; = population, 
+         &quot;CFR (%)&quot; = cfr, 
+         &quot;95%CI&quot; = ci) %&gt;% 
+  knitr::kable(digits = 2)</code></pre>
+<pre><code>## Error in ~DIED: object &#39;DIED&#39; not found</code></pre>
+<p>CFR by case definition (not enough to do)</p>
+<pre class="r"><code># Use if you have enough confirmed cases for comparative analysis 
+#
+ linelist_cleaned %&gt;%
+   filter(patient_facility_type == &quot;Inpatient&quot;) %&gt;%
+   case_fatality_rate_df(deaths = DIED, group = case_def, mergeCI = TRUE, add_total = TRUE) %&gt;%
+   rename(&quot;Case Definition&quot; = case_def, 
+          &quot;Deaths&quot; = deaths, 
+          &quot;Cases&quot; = population, 
+          &quot;CFR (%)&quot; = cfr, 
+          &quot;95%CI&quot; = ci) %&gt;% 
+   knitr::kable(digits = 2)</code></pre>
+<pre><code>## Error: Column `case_def` is unknown</code></pre>
+</div>
+<div id="attack-rate" class="section level2">
+<h2>Attack Rate</h2>
+<p>To use the attack rate section, we need to modify the first code slightly. An object “population” is created from the sum of population counts in the population figures. Because we only imported region-based population counts, we must change this command to reflect that we do not have population_data_age, but rather population_data_region</p>
+<pre class="r"><code># OLD define population 
+# population &lt;- sum(population_data_age$population)</code></pre>
+<p>Running the correct command and printing the value of population, we see that the sum population across regions is estimated to be 62336.</p>
+<pre class="r"><code># Correct command for this exercise
+population &lt;- sum(population_data_region$population)
+
+population</code></pre>
+<pre><code>## [1] 62336</code></pre>
+<p>Below gives the attack rate per 10,000 population (N = 62,336)</p>
+<pre class="r"><code># calculate the ar
+# store as AR to be able to use output for automating text below (inline functions)
+ar &lt;- attack_rate(nrow(linelist_cleaned), population, multiplier = 10000)
+
+ar %&gt;%
+  merge_ci_df(e = 3) %&gt;% # merge the lower and upper CI into one column
+  rename(&quot;Cases (n)&quot; = cases, 
+         &quot;Population&quot; = population, 
+         &quot;AR (per 100,000)&quot; = ar, 
+         &quot;95%CI&quot; = ci) %&gt;% 
+  select(-Population) %&gt;% # drop the population column as it is not changing
+  knitr::kable(digits = 2, align = &quot;r&quot;)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">Cases (n)</th>
+<th align="right">AR (per 100,000)</th>
+<th align="right">95%CI</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1447</td>
+<td align="right">232.13</td>
+<td align="right">(220.60–244.25)</td>
+</tr>
+</tbody>
+</table>
+<p>We are unable to calculate the attack rate by age group, because we do not have population counts for each age group.</p>
+<p>Mortality attributable to AJS - not appropriate for this example because…</p>
+</div>
+<div id="time" class="section level2">
+<h2>Time</h2>
+<pre class="r"><code># This code creates case counts for each week of your outbreak, overall
+# As with aweek, you can change the start of your week to e.g. &quot;Sunday week&quot;
+inc_week_7 &lt;- incidence(linelist_cleaned$date_of_onset, interval = &quot;Monday week&quot;)
+
+# this sets the theme in ggplot for epicurves
+epicurve_theme &lt;- theme(
+  axis.text.x = element_text(angle = 45, hjust = 1, vjust = 1), 
+  legend.title = element_blank(),
+  panel.grid.major.x = element_line(color = &quot;grey60&quot;, linetype = 3),
+  panel.grid.major.y = element_line(color = &quot;grey60&quot;, linetype = 3)
+)
+# This sets the labels in ggplot for the epicurves
+epicurve_labels &lt;- labs(x = &quot;Calendar week&quot;, 
+                        y = &quot;Cases (n)&quot;, 
+                        title = &quot;Cases by week of onset&quot;,
+                        subtitle = sprintf(&quot;Source: MSF data from %s&quot;, reporting_week)
+                       ) </code></pre>
+<pre class="r"><code># plot your epicurve as a ggplot (incidence::plot is different to base::plot)
+basic_curve &lt;- plot(inc_week_7, show_cases = TRUE, border = &quot;black&quot;, n_breaks = nrow(inc_week_7)) + 
+  scale_y_continuous(expand = c(0, 0)) +  # set origin for axes
+  # add labels to axes and below chart
+  epicurve_labels +
+  # change visuals of dates and remove legend title
+  epicurve_theme
+
+# show your plot (stored for later use) 
+basic_curve</code></pre>
+<p><img src="/training/AJS_Walkthrough_Analyses_files/figure-html/epicurve-1.png" width="720" /></p>
+<pre class="r"><code>basic_curve + scale_x_incidence(inc_week_7, n_breaks = 6)</code></pre>
+<p><img src="/training/AJS_Walkthrough_Analyses_files/figure-html/epicurve-2.png" width="720" /></p>
+<p>Other possible variants on the epi curve:<br />
+* Option 1<br />
+* Option 2<br />
+* Option 3</p>
+<p>The below gives the attack rate per week.</p>
+<pre class="r"><code># counts and cumulative counts by week
+cases &lt;- linelist_cleaned %&gt;%
+  arrange(date_of_onset) %&gt;%        # arrange by date of onset
+  count(epiweek, .drop = FALSE) %&gt;% # count all epiweeks and include zero counts
+  mutate(cumulative = cumsum(n))    # add a cumulative sum
+
+# attack rate for each week
+ar &lt;- attack_rate(cases$n, population, multiplier = 100000) %&gt;% 
+  bind_cols(select(cases, epiweek), .) # add the epiweek column to table
+
+ar %&gt;%
+  merge_ci_df(e = 4) %&gt;% # merge the lower and upper CI into one column
+  rename(&quot;Epiweek&quot; = epiweek, 
+         &quot;Cases (n)&quot; = cases, 
+         &quot;Population&quot; = population, 
+         &quot;AR (per 100,000)&quot; = ar, 
+         &quot;95%CI&quot; = ci) %&gt;% 
+  knitr::kable(digits = 2, align = &quot;r&quot;)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">Epiweek</th>
+<th align="right">Cases (n)</th>
+<th align="right">Population</th>
+<th align="right">AR (per 100,000)</th>
+<th align="right">95%CI</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">2016-W23</td>
+<td align="right">1</td>
+<td align="right">62336</td>
+<td align="right">1.60</td>
+<td align="right">(0.28–9.09)</td>
+</tr>
+<tr class="even">
+<td align="right">2016-W24</td>
+<td align="right">0</td>
+<td align="right">62336</td>
+<td align="right">0.00</td>
+<td align="right">(0.00–6.16)</td>
+</tr>
+<tr class="odd">
+<td align="right">2016-W25</td>
+<td align="right">0</td>
+<td align="right">62336</td>
+<td align="right">0.00</td>
+<td align="right">(0.00–6.16)</td>
+</tr>
+<tr class="even">
+<td align="right">2016-W26</td>
+<td align="right">0</td>
+<td align="right">62336</td>
+<td align="right">0.00</td>
+<td align="right">(0.00–6.16)</td>
+</tr>
+<tr class="odd">
+<td align="right">2016-W27</td>
+<td align="right">0</td>
+<td align="right">62336</td>
+<td align="right">0.00</td>
+<td align="right">(0.00–6.16)</td>
+</tr>
+<tr class="even">
+<td align="right">2016-W28</td>
+<td align="right">0</td>
+<td align="right">62336</td>
+<td align="right">0.00</td>
+<td align="right">(0.00–6.16)</td>
+</tr>
+<tr class="odd">
+<td align="right">2016-W29</td>
+<td align="right">1</td>
+<td align="right">62336</td>
+<td align="right">1.60</td>
+<td align="right">(0.28–9.09)</td>
+</tr>
+<tr class="even">
+<td align="right">2016-W30</td>
+<td align="right">2</td>
+<td align="right">62336</td>
+<td align="right">3.21</td>
+<td align="right">(0.88–11.70)</td>
+</tr>
+<tr class="odd">
+<td align="right">2016-W31</td>
+<td align="right">0</td>
+<td align="right">62336</td>
+<td align="right">0.00</td>
+<td align="right">(0.00–6.16)</td>
+</tr>
+<tr class="even">
+<td align="right">2016-W32</td>
+<td align="right">0</td>
+<td align="right">62336</td>
+<td align="right">0.00</td>
+<td align="right">(0.00–6.16)</td>
+</tr>
+<tr class="odd">
+<td align="right">2016-W33</td>
+<td align="right">3</td>
+<td align="right">62336</td>
+<td align="right">4.81</td>
+<td align="right">(1.64–14.15)</td>
+</tr>
+<tr class="even">
+<td align="right">2016-W34</td>
+<td align="right">7</td>
+<td align="right">62336</td>
+<td align="right">11.23</td>
+<td align="right">(5.44–23.18)</td>
+</tr>
+<tr class="odd">
+<td align="right">2016-W35</td>
+<td align="right">1</td>
+<td align="right">62336</td>
+<td align="right">1.60</td>
+<td align="right">(0.28–9.09)</td>
+</tr>
+<tr class="even">
+<td align="right">2016-W36</td>
+<td align="right">2</td>
+<td align="right">62336</td>
+<td align="right">3.21</td>
+<td align="right">(0.88–11.70)</td>
+</tr>
+<tr class="odd">
+<td align="right">2016-W37</td>
+<td align="right">17</td>
+<td align="right">62336</td>
+<td align="right">27.27</td>
+<td align="right">(17.03–43.67)</td>
+</tr>
+<tr class="even">
+<td align="right">2016-W38</td>
+<td align="right">12</td>
+<td align="right">62336</td>
+<td align="right">19.25</td>
+<td align="right">(11.01–33.65)</td>
+</tr>
+<tr class="odd">
+<td align="right">2016-W39</td>
+<td align="right">9</td>
+<td align="right">62336</td>
+<td align="right">14.44</td>
+<td align="right">(7.60–27.44)</td>
+</tr>
+<tr class="even">
+<td align="right">2016-W40</td>
+<td align="right">10</td>
+<td align="right">62336</td>
+<td align="right">16.04</td>
+<td align="right">(8.71–29.53)</td>
+</tr>
+<tr class="odd">
+<td align="right">2016-W41</td>
+<td align="right">3</td>
+<td align="right">62336</td>
+<td align="right">4.81</td>
+<td align="right">(1.64–14.15)</td>
+</tr>
+<tr class="even">
+<td align="right">2016-W42</td>
+<td align="right">5</td>
+<td align="right">62336</td>
+<td align="right">8.02</td>
+<td align="right">(3.43–18.78)</td>
+</tr>
+<tr class="odd">
+<td align="right">2016-W43</td>
+<td align="right">5</td>
+<td align="right">62336</td>
+<td align="right">8.02</td>
+<td align="right">(3.43–18.78)</td>
+</tr>
+<tr class="even">
+<td align="right">2016-W44</td>
+<td align="right">3</td>
+<td align="right">62336</td>
+<td align="right">4.81</td>
+<td align="right">(1.64–14.15)</td>
+</tr>
+<tr class="odd">
+<td align="right">2016-W45</td>
+<td align="right">5</td>
+<td align="right">62336</td>
+<td align="right">8.02</td>
+<td align="right">(3.43–18.78)</td>
+</tr>
+<tr class="even">
+<td align="right">2016-W46</td>
+<td align="right">12</td>
+<td align="right">62336</td>
+<td align="right">19.25</td>
+<td align="right">(11.01–33.65)</td>
+</tr>
+<tr class="odd">
+<td align="right">2016-W47</td>
+<td align="right">13</td>
+<td align="right">62336</td>
+<td align="right">20.85</td>
+<td align="right">(12.19–35.68)</td>
+</tr>
+<tr class="even">
+<td align="right">2016-W48</td>
+<td align="right">23</td>
+<td align="right">62336</td>
+<td align="right">36.90</td>
+<td align="right">(24.59–55.36)</td>
+</tr>
+<tr class="odd">
+<td align="right">2016-W49</td>
+<td align="right">19</td>
+<td align="right">62336</td>
+<td align="right">30.48</td>
+<td align="right">(19.51–47.60)</td>
+</tr>
+<tr class="even">
+<td align="right">2016-W50</td>
+<td align="right">35</td>
+<td align="right">62336</td>
+<td align="right">56.15</td>
+<td align="right">(40.38–78.07)</td>
+</tr>
+<tr class="odd">
+<td align="right">2016-W51</td>
+<td align="right">22</td>
+<td align="right">62336</td>
+<td align="right">35.29</td>
+<td align="right">(23.31–53.43)</td>
+</tr>
+<tr class="even">
+<td align="right">2016-W52</td>
+<td align="right">31</td>
+<td align="right">62336</td>
+<td align="right">49.73</td>
+<td align="right">(35.04–70.58)</td>
+</tr>
+<tr class="odd">
+<td align="right">2017-W01</td>
+<td align="right">16</td>
+<td align="right">62336</td>
+<td align="right">25.67</td>
+<td align="right">(15.80–41.69)</td>
+</tr>
+<tr class="even">
+<td align="right">2017-W02</td>
+<td align="right">22</td>
+<td align="right">62336</td>
+<td align="right">35.29</td>
+<td align="right">(23.31–53.43)</td>
+</tr>
+<tr class="odd">
+<td align="right">2017-W03</td>
+<td align="right">14</td>
+<td align="right">62336</td>
+<td align="right">22.46</td>
+<td align="right">(13.38–37.70)</td>
+</tr>
+<tr class="even">
+<td align="right">2017-W04</td>
+<td align="right">20</td>
+<td align="right">62336</td>
+<td align="right">32.08</td>
+<td align="right">(20.77–49.56)</td>
+</tr>
+<tr class="odd">
+<td align="right">2017-W05</td>
+<td align="right">16</td>
+<td align="right">62336</td>
+<td align="right">25.67</td>
+<td align="right">(15.80–41.69)</td>
+</tr>
+<tr class="even">
+<td align="right">2017-W06</td>
+<td align="right">118</td>
+<td align="right">62336</td>
+<td align="right">189.30</td>
+<td align="right">(158.11–226.63)</td>
+</tr>
+<tr class="odd">
+<td align="right">2017-W07</td>
+<td align="right">20</td>
+<td align="right">62336</td>
+<td align="right">32.08</td>
+<td align="right">(20.77–49.56)</td>
+</tr>
+<tr class="even">
+<td align="right">2017-W08</td>
+<td align="right">41</td>
+<td align="right">62336</td>
+<td align="right">65.77</td>
+<td align="right">(48.49–89.21)</td>
+</tr>
+<tr class="odd">
+<td align="right">2017-W09</td>
+<td align="right">15</td>
+<td align="right">62336</td>
+<td align="right">24.06</td>
+<td align="right">(14.58–39.70)</td>
+</tr>
+<tr class="even">
+<td align="right">2017-W10</td>
+<td align="right">40</td>
+<td align="right">62336</td>
+<td align="right">64.17</td>
+<td align="right">(47.13–87.36)</td>
+</tr>
+<tr class="odd">
+<td align="right">2017-W11</td>
+<td align="right">8</td>
+<td align="right">62336</td>
+<td align="right">12.83</td>
+<td align="right">(6.50–25.32)</td>
+</tr>
+<tr class="even">
+<td align="right">2017-W12</td>
+<td align="right">14</td>
+<td align="right">62336</td>
+<td align="right">22.46</td>
+<td align="right">(13.38–37.70)</td>
+</tr>
+<tr class="odd">
+<td align="right">2017-W13</td>
+<td align="right">8</td>
+<td align="right">62336</td>
+<td align="right">12.83</td>
+<td align="right">(6.50–25.32)</td>
+</tr>
+<tr class="even">
+<td align="right">2017-W14</td>
+<td align="right">11</td>
+<td align="right">62336</td>
+<td align="right">17.65</td>
+<td align="right">(9.85–31.60)</td>
+</tr>
+<tr class="odd">
+<td align="right">2017-W15</td>
+<td align="right">3</td>
+<td align="right">62336</td>
+<td align="right">4.81</td>
+<td align="right">(1.64–14.15)</td>
+</tr>
+<tr class="even">
+<td align="right">2017-W16</td>
+<td align="right">7</td>
+<td align="right">62336</td>
+<td align="right">11.23</td>
+<td align="right">(5.44–23.18)</td>
+</tr>
+<tr class="odd">
+<td align="right">-</td>
+<td align="right">833</td>
+<td align="right">62336</td>
+<td align="right">1336.31</td>
+<td align="right">(1249.12–1429.49)</td>
+</tr>
+</tbody>
+</table>
+<p>And cumulatively:</p>
+<pre class="r"><code># cumulative attack rate by week
+attack_rate(cases$cumulative, population, multiplier = 100000) %&gt;% 
+  bind_cols(select(cases, epiweek), .) %&gt;% # add the epiweek column to table
+  merge_ci_df(e = 4) %&gt;% # merge the lower and upper CI into one column
+  rename(&quot;Epiweek&quot; = epiweek, 
+         &quot;Cases (n)&quot; = cases, 
+         &quot;Population&quot; = population, 
+         &quot;AR (per 100,000)&quot; = ar, 
+         &quot;95%CI&quot; = ci) %&gt;% 
+  knitr::kable(digits = 2, align = &quot;r&quot;)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">Epiweek</th>
+<th align="right">Cases (n)</th>
+<th align="right">Population</th>
+<th align="right">AR (per 100,000)</th>
+<th align="right">95%CI</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">2016-W23</td>
+<td align="right">1</td>
+<td align="right">62336</td>
+<td align="right">1.60</td>
+<td align="right">(0.28–9.09)</td>
+</tr>
+<tr class="even">
+<td align="right">2016-W24</td>
+<td align="right">1</td>
+<td align="right">62336</td>
+<td align="right">1.60</td>
+<td align="right">(0.28–9.09)</td>
+</tr>
+<tr class="odd">
+<td align="right">2016-W25</td>
+<td align="right">1</td>
+<td align="right">62336</td>
+<td align="right">1.60</td>
+<td align="right">(0.28–9.09)</td>
+</tr>
+<tr class="even">
+<td align="right">2016-W26</td>
+<td align="right">1</td>
+<td align="right">62336</td>
+<td align="right">1.60</td>
+<td align="right">(0.28–9.09)</td>
+</tr>
+<tr class="odd">
+<td align="right">2016-W27</td>
+<td align="right">1</td>
+<td align="right">62336</td>
+<td align="right">1.60</td>
+<td align="right">(0.28–9.09)</td>
+</tr>
+<tr class="even">
+<td align="right">2016-W28</td>
+<td align="right">1</td>
+<td align="right">62336</td>
+<td align="right">1.60</td>
+<td align="right">(0.28–9.09)</td>
+</tr>
+<tr class="odd">
+<td align="right">2016-W29</td>
+<td align="right">2</td>
+<td align="right">62336</td>
+<td align="right">3.21</td>
+<td align="right">(0.88–11.70)</td>
+</tr>
+<tr class="even">
+<td align="right">2016-W30</td>
+<td align="right">4</td>
+<td align="right">62336</td>
+<td align="right">6.42</td>
+<td align="right">(2.50–16.50)</td>
+</tr>
+<tr class="odd">
+<td align="right">2016-W31</td>
+<td align="right">4</td>
+<td align="right">62336</td>
+<td align="right">6.42</td>
+<td align="right">(2.50–16.50)</td>
+</tr>
+<tr class="even">
+<td align="right">2016-W32</td>
+<td align="right">4</td>
+<td align="right">62336</td>
+<td align="right">6.42</td>
+<td align="right">(2.50–16.50)</td>
+</tr>
+<tr class="odd">
+<td align="right">2016-W33</td>
+<td align="right">7</td>
+<td align="right">62336</td>
+<td align="right">11.23</td>
+<td align="right">(5.44–23.18)</td>
+</tr>
+<tr class="even">
+<td align="right">2016-W34</td>
+<td align="right">14</td>
+<td align="right">62336</td>
+<td align="right">22.46</td>
+<td align="right">(13.38–37.70)</td>
+</tr>
+<tr class="odd">
+<td align="right">2016-W35</td>
+<td align="right">15</td>
+<td align="right">62336</td>
+<td align="right">24.06</td>
+<td align="right">(14.58–39.70)</td>
+</tr>
+<tr class="even">
+<td align="right">2016-W36</td>
+<td align="right">17</td>
+<td align="right">62336</td>
+<td align="right">27.27</td>
+<td align="right">(17.03–43.67)</td>
+</tr>
+<tr class="odd">
+<td align="right">2016-W37</td>
+<td align="right">34</td>
+<td align="right">62336</td>
+<td align="right">54.54</td>
+<td align="right">(39.04–76.21)</td>
+</tr>
+<tr class="even">
+<td align="right">2016-W38</td>
+<td align="right">46</td>
+<td align="right">62336</td>
+<td align="right">73.79</td>
+<td align="right">(55.33–98.41)</td>
+</tr>
+<tr class="odd">
+<td align="right">2016-W39</td>
+<td align="right">55</td>
+<td align="right">62336</td>
+<td align="right">88.23</td>
+<td align="right">(67.80–114.82)</td>
+</tr>
+<tr class="even">
+<td align="right">2016-W40</td>
+<td align="right">65</td>
+<td align="right">62336</td>
+<td align="right">104.27</td>
+<td align="right">(81.83–132.87)</td>
+</tr>
+<tr class="odd">
+<td align="right">2016-W41</td>
+<td align="right">68</td>
+<td align="right">62336</td>
+<td align="right">109.09</td>
+<td align="right">(86.07–138.26)</td>
+</tr>
+<tr class="even">
+<td align="right">2016-W42</td>
+<td align="right">73</td>
+<td align="right">62336</td>
+<td align="right">117.11</td>
+<td align="right">(93.16–147.20)</td>
+</tr>
+<tr class="odd">
+<td align="right">2016-W43</td>
+<td align="right">78</td>
+<td align="right">62336</td>
+<td align="right">125.13</td>
+<td align="right">(100.28–156.12)</td>
+</tr>
+<tr class="even">
+<td align="right">2016-W44</td>
+<td align="right">81</td>
+<td align="right">62336</td>
+<td align="right">129.94</td>
+<td align="right">(104.57–161.46)</td>
+</tr>
+<tr class="odd">
+<td align="right">2016-W45</td>
+<td align="right">86</td>
+<td align="right">62336</td>
+<td align="right">137.96</td>
+<td align="right">(111.74–170.33)</td>
+</tr>
+<tr class="even">
+<td align="right">2016-W46</td>
+<td align="right">98</td>
+<td align="right">62336</td>
+<td align="right">157.21</td>
+<td align="right">(129.03–191.54)</td>
+</tr>
+<tr class="odd">
+<td align="right">2016-W47</td>
+<td align="right">111</td>
+<td align="right">62336</td>
+<td align="right">178.07</td>
+<td align="right">(147.90–214.38)</td>
+</tr>
+<tr class="even">
+<td align="right">2016-W48</td>
+<td align="right">134</td>
+<td align="right">62336</td>
+<td align="right">214.96</td>
+<td align="right">(181.55–254.52)</td>
+</tr>
+<tr class="odd">
+<td align="right">2016-W49</td>
+<td align="right">153</td>
+<td align="right">62336</td>
+<td align="right">245.44</td>
+<td align="right">(209.55–287.47)</td>
+</tr>
+<tr class="even">
+<td align="right">2016-W50</td>
+<td align="right">188</td>
+<td align="right">62336</td>
+<td align="right">301.59</td>
+<td align="right">(261.50–347.81)</td>
+</tr>
+<tr class="odd">
+<td align="right">2016-W51</td>
+<td align="right">210</td>
+<td align="right">62336</td>
+<td align="right">336.88</td>
+<td align="right">(294.36–385.53)</td>
+</tr>
+<tr class="even">
+<td align="right">2016-W52</td>
+<td align="right">241</td>
+<td align="right">62336</td>
+<td align="right">386.61</td>
+<td align="right">(340.86–438.48)</td>
+</tr>
+<tr class="odd">
+<td align="right">2017-W01</td>
+<td align="right">257</td>
+<td align="right">62336</td>
+<td align="right">412.28</td>
+<td align="right">(364.95–465.73)</td>
+</tr>
+<tr class="even">
+<td align="right">2017-W02</td>
+<td align="right">279</td>
+<td align="right">62336</td>
+<td align="right">447.57</td>
+<td align="right">(398.14–503.12)</td>
+</tr>
+<tr class="odd">
+<td align="right">2017-W03</td>
+<td align="right">293</td>
+<td align="right">62336</td>
+<td align="right">470.03</td>
+<td align="right">(419.31–526.86)</td>
+</tr>
+<tr class="even">
+<td align="right">2017-W04</td>
+<td align="right">313</td>
+<td align="right">62336</td>
+<td align="right">502.12</td>
+<td align="right">(449.60–560.74)</td>
+</tr>
+<tr class="odd">
+<td align="right">2017-W05</td>
+<td align="right">329</td>
+<td align="right">62336</td>
+<td align="right">527.78</td>
+<td align="right">(473.87–587.79)</td>
+</tr>
+<tr class="even">
+<td align="right">2017-W06</td>
+<td align="right">447</td>
+<td align="right">62336</td>
+<td align="right">717.08</td>
+<td align="right">(653.81–786.42)</td>
+</tr>
+<tr class="odd">
+<td align="right">2017-W07</td>
+<td align="right">467</td>
+<td align="right">62336</td>
+<td align="right">749.17</td>
+<td align="right">(684.44–819.96)</td>
+</tr>
+<tr class="even">
+<td align="right">2017-W08</td>
+<td align="right">508</td>
+<td align="right">62336</td>
+<td align="right">814.94</td>
+<td align="right">(747.33–888.61)</td>
+</tr>
+<tr class="odd">
+<td align="right">2017-W09</td>
+<td align="right">523</td>
+<td align="right">62336</td>
+<td align="right">839.00</td>
+<td align="right">(770.37–913.70)</td>
+</tr>
+<tr class="even">
+<td align="right">2017-W10</td>
+<td align="right">563</td>
+<td align="right">62336</td>
+<td align="right">903.17</td>
+<td align="right">(831.87–980.52)</td>
+</tr>
+<tr class="odd">
+<td align="right">2017-W11</td>
+<td align="right">571</td>
+<td align="right">62336</td>
+<td align="right">916.00</td>
+<td align="right">(844.18–993.87)</td>
+</tr>
+<tr class="even">
+<td align="right">2017-W12</td>
+<td align="right">585</td>
+<td align="right">62336</td>
+<td align="right">938.46</td>
+<td align="right">(865.74–1017.23)</td>
+</tr>
+<tr class="odd">
+<td align="right">2017-W13</td>
+<td align="right">593</td>
+<td align="right">62336</td>
+<td align="right">951.30</td>
+<td align="right">(878.06–1030.58)</td>
+</tr>
+<tr class="even">
+<td align="right">2017-W14</td>
+<td align="right">604</td>
+<td align="right">62336</td>
+<td align="right">968.94</td>
+<td align="right">(895.01–1048.92)</td>
+</tr>
+<tr class="odd">
+<td align="right">2017-W15</td>
+<td align="right">607</td>
+<td align="right">62336</td>
+<td align="right">973.76</td>
+<td align="right">(899.63–1053.92)</td>
+</tr>
+<tr class="even">
+<td align="right">2017-W16</td>
+<td align="right">614</td>
+<td align="right">62336</td>
+<td align="right">984.98</td>
+<td align="right">(910.42–1065.59)</td>
+</tr>
+<tr class="odd">
+<td align="right">-</td>
+<td align="right">1447</td>
+<td align="right">62336</td>
+<td align="right">2321.29</td>
+<td align="right">(2205.99–2442.47)</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code># group by known outcome and case definition 
+cfr &lt;- linelist_cleaned %&gt;%
+  filter(patient_facility_type == &quot;Inpatient&quot;) %&gt;%
+  case_fatality_rate_df(grepl(&quot;Dead&quot;, exit_status), group = epiweek)
+
+cfr %&gt;%
+  merge_ci_df(e = 4) %&gt;% # merge the lower and upper CI into one column
+  rename(&quot;Epiweek&quot; = epiweek, 
+         &quot;Deaths&quot; = deaths, 
+         &quot;Cases&quot; = population, 
+         &quot;CFR (%)&quot; = cfr, 
+         &quot;95%CI&quot; = ci) %&gt;% 
+  knitr::kable(digits = 2, align = &quot;r&quot;)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">Epiweek</th>
+<th align="right">Deaths</th>
+<th align="right">Cases</th>
+<th align="right">CFR (%)</th>
+<th align="right">95%CI</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">-</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">-</td>
+<td align="right">(NaN–NaN)</td>
+</tr>
+</tbody>
+</table>
+<p>You could plot the AR (in the population) and CFR (among inpatients only) together as line graphs by epiweek.</p>
+<pre class="r"><code>ar_plot &lt;- ggplot(ar, aes(x = week2date(epiweek) + (7 * 0.5), group = 1)) +
+  geom_ribbon(aes(ymin = lower, ymax = upper), 
+              color = &quot;blue&quot;, fill = &quot;blue&quot;, linetype = 2, alpha = 0.2, show.legend = FALSE) +
+  geom_line(aes(y = ar), color = &quot;blue&quot;, show.legend = FALSE) +
+  scale_y_continuous(expand = c(0, 0)) +  # set origin for axes
+  # scale the x axis the same as the incidence curve. Expand forces it to align. 
+  incidence::scale_x_incidence(inc_week_7, n_breaks = nrow(inc_week_7), expand = c(0, 7 * 1.5)) +
+  # add labels to axes and below chart
+  labs(x = &quot;Calendar week&quot;, y = &quot;AR [95% CI]&quot;, subtitle = &quot;Attack Rate (per 100,000)&quot;) + 
+  # change visuals of dates and remove legend title
+  epicurve_theme</code></pre>
+<p>To plot CFR you must first make the CFR table using above code</p>
+<pre class="r"><code>cfr_plot &lt;- ggplot(cfr, aes(x = week2date(epiweek) + (7 * 0.5), group = 1)) +
+  geom_ribbon(aes(ymin = lower, ymax = upper), 
+              color = &quot;red&quot;, fill = &quot;red&quot;, linetype = 2, alpha = 0.2, show.legend = FALSE) +
+  geom_line(aes(y = cfr), color = &quot;red&quot;, show.legend = FALSE) +
+  scale_y_continuous(expand = c(0, 0)) +  # set origin for axes
+  # scale the x axis the same as the incidence curve. Expand forces it to align. 
+  incidence::scale_x_incidence(inc_week_7, n_breaks = nrow(inc_week_7), expand = c(0, 7 * 1.5)) +
+  # add labels to axes and below chart
+  labs(x = &quot;Calendar week&quot;, y = &quot;CFR [95% CI]&quot;, 
+       subtitle = &quot;Case Fatality Ratio [95% CI] Among Inpatients&quot;) + 
+  # change visuals of dates and remove legend title
+  epicurve_theme </code></pre>
+<p>You could then also add the AR and CFR by week on to an epicurve.</p>
+<pre class="r"><code>nofx &lt;- theme(axis.text.x = element_blank(),
+              axis.title.x = element_blank())
+cowplot::plot_grid(
+  basic_curve + nofx,
+  ar_plot + nofx,
+  cfr_plot,
+  align = &quot;v&quot;, # align plots vertically
+  axis = &quot;lr&quot;, # only by their left and right margins
+  ncol = 1     # allow only one column
+)</code></pre>
+<pre><code>## Warning: Removed 1 rows containing missing values (geom_path).</code></pre>
+<pre><code>## Error in if (zero_range(as.numeric(limits))) {: missing value where TRUE/FALSE needed</code></pre>
+<p>more optins…</p>
+</div>
+<div id="place" class="section level2">
+<h2>Place</h2>
+<p>Basic descriptive table:</p>
+<pre class="r"><code># get counts and props of region by facility 
+# include column and row totals 
+
+descriptive(linelist_cleaned, &quot;patient_origin&quot;, 
+            &quot;patient_facility_type&quot;,
+            coltotals = TRUE, rowtotals = TRUE) %&gt;% 
+  rename(&quot;Region&quot; = &quot;patient_origin&quot;) %&gt;%
+  augment_redundant(&quot;_n$&quot; = &quot; (n)&quot;) %&gt;% # modify _n to (n)
+  rename_redundant(&quot;prop&quot; = &quot;%&quot;)    %&gt;% # rename proportions to %
+  kable(digits = 2)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Region</th>
+<th align="right">Non (n)</th>
+<th align="right">%</th>
+<th align="right">Oui (n)</th>
+<th align="right">%</th>
+<th align="right">Missing (n)</th>
+<th align="right">%</th>
+<th align="right">Total</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Ab Gara</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+<td align="right">0.15</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">Ablelaye</td>
+<td align="right">1</td>
+<td align="right">0.14</td>
+<td align="right">5</td>
+<td align="right">5.81</td>
+<td align="right">2</td>
+<td align="right">0.30</td>
+<td align="right">8</td>
+</tr>
+<tr class="odd">
+<td align="left">Aboudea</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+<td align="right">1.16</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">Adamre</td>
+<td align="right">22</td>
+<td align="right">3.15</td>
+<td align="right">2</td>
+<td align="right">2.33</td>
+<td align="right">24</td>
+<td align="right">3.63</td>
+<td align="right">48</td>
+</tr>
+<tr class="odd">
+<td align="left">Adjabona</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">2</td>
+<td align="right">0.30</td>
+<td align="right">2</td>
+</tr>
+<tr class="even">
+<td align="left">Affousse</td>
+<td align="right">1</td>
+<td align="right">0.14</td>
+<td align="right">1</td>
+<td align="right">1.16</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">Al-freche</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+<td align="right">1.16</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">Al-Hougna</td>
+<td align="right">10</td>
+<td align="right">1.43</td>
+<td align="right">1</td>
+<td align="right">1.16</td>
+<td align="right">10</td>
+<td align="right">1.51</td>
+<td align="right">21</td>
+</tr>
+<tr class="odd">
+<td align="left">Al-Moura</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+<td align="right">1.16</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">Al alak</td>
+<td align="right">1</td>
+<td align="right">0.14</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">Al houa</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+<td align="right">0.15</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">Al kouck</td>
+<td align="right">1</td>
+<td align="right">0.14</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">Al midodil</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+<td align="right">1.16</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">Albayadi</td>
+<td align="right">1</td>
+<td align="right">0.14</td>
+<td align="right">1</td>
+<td align="right">1.16</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">Alboukhass</td>
+<td align="right">6</td>
+<td align="right">0.86</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">6</td>
+<td align="right">0.91</td>
+<td align="right">12</td>
+</tr>
+<tr class="even">
+<td align="left">Alkassé</td>
+<td align="right">16</td>
+<td align="right">2.29</td>
+<td align="right">4</td>
+<td align="right">4.65</td>
+<td align="right">5</td>
+<td align="right">0.76</td>
+<td align="right">25</td>
+</tr>
+<tr class="odd">
+<td align="left">Am-douma</td>
+<td align="right">1</td>
+<td align="right">0.14</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">Am assala</td>
+<td align="right">1</td>
+<td align="right">0.14</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">Am badaro 1</td>
+<td align="right">1</td>
+<td align="right">0.14</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">Am kifeo</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+<td align="right">1.16</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">Amanasisse</td>
+<td align="right">1</td>
+<td align="right">0.14</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">Ambarite</td>
+<td align="right">3</td>
+<td align="right">0.43</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+<td align="right">0.15</td>
+<td align="right">4</td>
+</tr>
+<tr class="odd">
+<td align="left">Amchoka</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+<td align="right">1.16</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">Amdiredimat</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+<td align="right">1.16</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">Amdjalat</td>
+<td align="right">2</td>
+<td align="right">0.29</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">2</td>
+<td align="right">0.30</td>
+<td align="right">4</td>
+</tr>
+<tr class="even">
+<td align="left">Ammanasis</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">2</td>
+<td align="right">0.30</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">Amsinene</td>
+<td align="right">5</td>
+<td align="right">0.72</td>
+<td align="right">3</td>
+<td align="right">3.49</td>
+<td align="right">5</td>
+<td align="right">0.76</td>
+<td align="right">13</td>
+</tr>
+<tr class="even">
+<td align="left">Anala</td>
+<td align="right">3</td>
+<td align="right">0.43</td>
+<td align="right">2</td>
+<td align="right">2.33</td>
+<td align="right">4</td>
+<td align="right">0.60</td>
+<td align="right">9</td>
+</tr>
+<tr class="odd">
+<td align="left">Anfandock</td>
+<td align="right">26</td>
+<td align="right">3.72</td>
+<td align="right">5</td>
+<td align="right">5.81</td>
+<td align="right">19</td>
+<td align="right">2.87</td>
+<td align="right">50</td>
+</tr>
+<tr class="even">
+<td align="left">Anguitei</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+<td align="right">0.15</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">Anguiteye</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+<td align="right">0.15</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">Ardo</td>
+<td align="right">2</td>
+<td align="right">0.29</td>
+<td align="right">3</td>
+<td align="right">3.49</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">5</td>
+</tr>
+<tr class="odd">
+<td align="left">Atetal</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+<td align="right">0.15</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">Atoua</td>
+<td align="right">1</td>
+<td align="right">0.14</td>
+<td align="right">1</td>
+<td align="right">1.16</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">Badina</td>
+<td align="right">1</td>
+<td align="right">0.14</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">Bandjadid</td>
+<td align="right">1</td>
+<td align="right">0.14</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">Baune</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+<td align="right">1.16</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">Bir tagal</td>
+<td align="right">1</td>
+<td align="right">0.14</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">Brano</td>
+<td align="right">1</td>
+<td align="right">0.14</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">Chatau</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+<td align="right">0.15</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">Commercant</td>
+<td align="right">3</td>
+<td align="right">0.43</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">15</td>
+<td align="right">2.27</td>
+<td align="right">18</td>
+</tr>
+<tr class="even">
+<td align="left">Coubo Abnimir</td>
+<td align="right">1</td>
+<td align="right">0.14</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">Darasalam</td>
+<td align="right">26</td>
+<td align="right">3.72</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">25</td>
+<td align="right">3.78</td>
+<td align="right">51</td>
+</tr>
+<tr class="even">
+<td align="left">Darwal</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+<td align="right">1.16</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">Delebae</td>
+<td align="right">1</td>
+<td align="right">0.14</td>
+<td align="right">1</td>
+<td align="right">1.16</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">2</td>
+</tr>
+<tr class="even">
+<td align="left">Diffir</td>
+<td align="right">2</td>
+<td align="right">0.29</td>
+<td align="right">2</td>
+<td align="right">2.33</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">4</td>
+</tr>
+<tr class="odd">
+<td align="left">Dijekhiné</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+<td align="right">1.16</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">Dilema</td>
+<td align="right">22</td>
+<td align="right">3.15</td>
+<td align="right">3</td>
+<td align="right">3.49</td>
+<td align="right">18</td>
+<td align="right">2.72</td>
+<td align="right">43</td>
+</tr>
+<tr class="odd">
+<td align="left">Dinguess</td>
+<td align="right">2</td>
+<td align="right">0.29</td>
+<td align="right">2</td>
+<td align="right">2.33</td>
+<td align="right">3</td>
+<td align="right">0.45</td>
+<td align="right">7</td>
+</tr>
+<tr class="even">
+<td align="left">Djambalbahar</td>
+<td align="right">9</td>
+<td align="right">1.29</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">6</td>
+<td align="right">0.91</td>
+<td align="right">15</td>
+</tr>
+<tr class="odd">
+<td align="left">Djogo</td>
+<td align="right">1</td>
+<td align="right">0.14</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">Ganatir</td>
+<td align="right">116</td>
+<td align="right">16.60</td>
+<td align="right">5</td>
+<td align="right">5.81</td>
+<td align="right">104</td>
+<td align="right">15.71</td>
+<td align="right">225</td>
+</tr>
+<tr class="odd">
+<td align="left">Ganatir 1</td>
+<td align="right">2</td>
+<td align="right">0.29</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">7</td>
+<td align="right">1.06</td>
+<td align="right">9</td>
+</tr>
+<tr class="even">
+<td align="left">Ganatir 2</td>
+<td align="right">7</td>
+<td align="right">1.00</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">5</td>
+<td align="right">0.76</td>
+<td align="right">12</td>
+</tr>
+<tr class="odd">
+<td align="left">Gardole</td>
+<td align="right">1</td>
+<td align="right">0.14</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">2</td>
+<td align="right">0.30</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="left">Gourmouday</td>
+<td align="right">2</td>
+<td align="right">0.29</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+<td align="right">0.15</td>
+<td align="right">3</td>
+</tr>
+<tr class="odd">
+<td align="left">Goz-Tamadja</td>
+<td align="right">2</td>
+<td align="right">0.29</td>
+<td align="right">1</td>
+<td align="right">1.16</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="left">Goz Djarat</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+<td align="right">1.16</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">Goz mabile</td>
+<td align="right">3</td>
+<td align="right">0.43</td>
+<td align="right">1</td>
+<td align="right">1.16</td>
+<td align="right">11</td>
+<td align="right">1.66</td>
+<td align="right">15</td>
+</tr>
+<tr class="even">
+<td align="left">Goz Mabile</td>
+<td align="right">4</td>
+<td align="right">0.57</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">4</td>
+</tr>
+<tr class="odd">
+<td align="left">Goz mabile 2</td>
+<td align="right">5</td>
+<td align="right">0.72</td>
+<td align="right">1</td>
+<td align="right">1.16</td>
+<td align="right">8</td>
+<td align="right">1.21</td>
+<td align="right">14</td>
+</tr>
+<tr class="even">
+<td align="left">Grédaï</td>
+<td align="right">1</td>
+<td align="right">0.14</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">Habilé</td>
+<td align="right">1</td>
+<td align="right">0.14</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">Haraza</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+<td align="right">1.16</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">Hile Bara</td>
+<td align="right">13</td>
+<td align="right">1.86</td>
+<td align="right">2</td>
+<td align="right">2.33</td>
+<td align="right">5</td>
+<td align="right">0.76</td>
+<td align="right">20</td>
+</tr>
+<tr class="even">
+<td align="left">Hile Odaa</td>
+<td align="right">2</td>
+<td align="right">0.29</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">Himeda</td>
+<td align="right">1</td>
+<td align="right">0.14</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">Ideter</td>
+<td align="right">1</td>
+<td align="right">0.14</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">Kachkacha</td>
+<td align="right">1</td>
+<td align="right">0.14</td>
+<td align="right">3</td>
+<td align="right">3.49</td>
+<td align="right">2</td>
+<td align="right">0.30</td>
+<td align="right">6</td>
+</tr>
+<tr class="even">
+<td align="left">Koubo Amnimire</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">3</td>
+<td align="right">0.45</td>
+<td align="right">3</td>
+</tr>
+<tr class="odd">
+<td align="left">Mabrouka</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+<td align="right">0.15</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">Matar</td>
+<td align="right">2</td>
+<td align="right">0.29</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">2</td>
+<td align="right">0.30</td>
+<td align="right">4</td>
+</tr>
+<tr class="odd">
+<td align="left">Mina</td>
+<td align="right">3</td>
+<td align="right">0.43</td>
+<td align="right">2</td>
+<td align="right">2.33</td>
+<td align="right">8</td>
+<td align="right">1.21</td>
+<td align="right">13</td>
+</tr>
+<tr class="even">
+<td align="left">Mirékike</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+<td align="right">1.16</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">Mirer</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+<td align="right">1.16</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">Mouray</td>
+<td align="right">1</td>
+<td align="right">0.14</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">Nougra Karo</td>
+<td align="right">1</td>
+<td align="right">0.14</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">Oum-alkhoura</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">2</td>
+<td align="right">0.30</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">Pedis</td>
+<td align="right">1</td>
+<td align="right">0.14</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">Rassafil Chateau</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+<td align="right">0.15</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">Rassalfil</td>
+<td align="right">6</td>
+<td align="right">0.86</td>
+<td align="right">3</td>
+<td align="right">3.49</td>
+<td align="right">2</td>
+<td align="right">0.30</td>
+<td align="right">11</td>
+</tr>
+<tr class="even">
+<td align="left">Riad</td>
+<td align="right">37</td>
+<td align="right">5.29</td>
+<td align="right">3</td>
+<td align="right">3.49</td>
+<td align="right">46</td>
+<td align="right">6.95</td>
+<td align="right">86</td>
+</tr>
+<tr class="odd">
+<td align="left">RiaD</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+<td align="right">0.15</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">Ridina</td>
+<td align="right">72</td>
+<td align="right">10.30</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">75</td>
+<td align="right">11.33</td>
+<td align="right">147</td>
+</tr>
+<tr class="odd">
+<td align="left">Ridina 1</td>
+<td align="right">2</td>
+<td align="right">0.29</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">9</td>
+<td align="right">1.36</td>
+<td align="right">11</td>
+</tr>
+<tr class="even">
+<td align="left">Ridina 2</td>
+<td align="right">7</td>
+<td align="right">1.00</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">19</td>
+<td align="right">2.87</td>
+<td align="right">26</td>
+</tr>
+<tr class="odd">
+<td align="left">Rimelie</td>
+<td align="right">1</td>
+<td align="right">0.14</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">Salamat</td>
+<td align="right">22</td>
+<td align="right">3.15</td>
+<td align="right">2</td>
+<td align="right">2.33</td>
+<td align="right">23</td>
+<td align="right">3.47</td>
+<td align="right">47</td>
+</tr>
+<tr class="odd">
+<td align="left">Siheba</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+<td align="right">1.16</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">Taradona</td>
+<td align="right">136</td>
+<td align="right">19.46</td>
+<td align="right">2</td>
+<td align="right">2.33</td>
+<td align="right">97</td>
+<td align="right">14.65</td>
+<td align="right">235</td>
+</tr>
+<tr class="odd">
+<td align="left">Taradona 1</td>
+<td align="right">14</td>
+<td align="right">2.00</td>
+<td align="right">1</td>
+<td align="right">1.16</td>
+<td align="right">19</td>
+<td align="right">2.87</td>
+<td align="right">34</td>
+</tr>
+<tr class="even">
+<td align="left">Taradona 2</td>
+<td align="right">40</td>
+<td align="right">5.72</td>
+<td align="right">5</td>
+<td align="right">5.81</td>
+<td align="right">20</td>
+<td align="right">3.02</td>
+<td align="right">65</td>
+</tr>
+<tr class="odd">
+<td align="left">Taradona 3</td>
+<td align="right">6</td>
+<td align="right">0.86</td>
+<td align="right">1</td>
+<td align="right">1.16</td>
+<td align="right">26</td>
+<td align="right">3.93</td>
+<td align="right">33</td>
+</tr>
+<tr class="even">
+<td align="left">Zongo</td>
+<td align="right">3</td>
+<td align="right">0.43</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+<td align="right">0.15</td>
+<td align="right">4</td>
+</tr>
+<tr class="odd">
+<td align="left">Missing</td>
+<td align="right">7</td>
+<td align="right">1.00</td>
+<td align="right">3</td>
+<td align="right">3.49</td>
+<td align="right">7</td>
+<td align="right">1.06</td>
+<td align="right">17</td>
+</tr>
+<tr class="even">
+<td align="left">Total</td>
+<td align="right">699</td>
+<td align="right">100.00</td>
+<td align="right">86</td>
+<td align="right">100.00</td>
+<td align="right">662</td>
+<td align="right">100.00</td>
+<td align="right">1447</td>
+</tr>
+</tbody>
+</table>
+<p>And attack rates by region.<br />
+Note: changed population_data_region to population_data in line 2. Error received on left_join: Error in tbl_vars(y) : object ‘population_data_region’ not found</p>
+<p>Then, Error received from merge to create cases. Turns out that in population counts the regions are ALL CAPITALS but in linelist the are lowercase. Need to add line to make that solved.</p>
+<pre class="r"><code># Converts patient_origin variable to uppercase, to match with population_data
+linelist_cleaned$patient_origin &lt;- toupper(linelist_cleaned$patient_origin)</code></pre>
+<p>Also need fix in proportion() function in sitrep to is.na(n)</p>
+<pre class="r"><code>## - [ ] consider facet wrapping by an overarching unit if have many regions (e.g. by province)
+
+
+cases &lt;- count(linelist_cleaned, patient_origin) %&gt;%   # cases for each region
+  left_join(population_data, by = &quot;patient_origin&quot;)    # merge population data </code></pre>
+<pre><code>## Error in tbl_vars(y): object &#39;population_data&#39; not found</code></pre>
+<pre class="r"><code># attack rate for region
+ar &lt;- attack_rate(cases$n, cases$population, multiplier = 100) %&gt;% 
+  # add the region column to table
+  bind_cols(select(cases, patient_origin), .) %&gt;% 
+  rename(&quot;Region&quot; = patient_origin, 
+         &quot;Cases (n)&quot; = cases, 
+         &quot;Population&quot; = population, 
+         &quot;AR (per 100,000)&quot; = ar, 
+         &quot;Lower 95%CI&quot; = lower,
+         &quot;Upper 95%CI&quot; = upper) </code></pre>
+<pre><code>## Warning: Unknown or uninitialised column: &#39;population&#39;.</code></pre>
+<pre><code>## Error in if (any(out)) {: missing value where TRUE/FALSE needed</code></pre>
+<pre class="r"><code>ar %&gt;% 
+  merge_ci_df(e = 4) %&gt;% # merge lower and upper CI in to one column 
+  rename(&quot;95%CI&quot; = ci) %&gt;%  # rename single 95%CI column
+  kable(digits = 2, align = &quot;r&quot;, format.args = list(big.mark = &quot;,&quot;)) # set thousands separator</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">epiweek</th>
+<th align="right">cases</th>
+<th align="right">population</th>
+<th align="right">ar</th>
+<th align="right">95%CI</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">2016-W23</td>
+<td align="right">1</td>
+<td align="right">62,336</td>
+<td align="right">1.60</td>
+<td align="right">(0.28–9.09)</td>
+</tr>
+<tr class="even">
+<td align="right">2016-W24</td>
+<td align="right">0</td>
+<td align="right">62,336</td>
+<td align="right">0.00</td>
+<td align="right">(0.00–6.16)</td>
+</tr>
+<tr class="odd">
+<td align="right">2016-W25</td>
+<td align="right">0</td>
+<td align="right">62,336</td>
+<td align="right">0.00</td>
+<td align="right">(0.00–6.16)</td>
+</tr>
+<tr class="even">
+<td align="right">2016-W26</td>
+<td align="right">0</td>
+<td align="right">62,336</td>
+<td align="right">0.00</td>
+<td align="right">(0.00–6.16)</td>
+</tr>
+<tr class="odd">
+<td align="right">2016-W27</td>
+<td align="right">0</td>
+<td align="right">62,336</td>
+<td align="right">0.00</td>
+<td align="right">(0.00–6.16)</td>
+</tr>
+<tr class="even">
+<td align="right">2016-W28</td>
+<td align="right">0</td>
+<td align="right">62,336</td>
+<td align="right">0.00</td>
+<td align="right">(0.00–6.16)</td>
+</tr>
+<tr class="odd">
+<td align="right">2016-W29</td>
+<td align="right">1</td>
+<td align="right">62,336</td>
+<td align="right">1.60</td>
+<td align="right">(0.28–9.09)</td>
+</tr>
+<tr class="even">
+<td align="right">2016-W30</td>
+<td align="right">2</td>
+<td align="right">62,336</td>
+<td align="right">3.21</td>
+<td align="right">(0.88–11.70)</td>
+</tr>
+<tr class="odd">
+<td align="right">2016-W31</td>
+<td align="right">0</td>
+<td align="right">62,336</td>
+<td align="right">0.00</td>
+<td align="right">(0.00–6.16)</td>
+</tr>
+<tr class="even">
+<td align="right">2016-W32</td>
+<td align="right">0</td>
+<td align="right">62,336</td>
+<td align="right">0.00</td>
+<td align="right">(0.00–6.16)</td>
+</tr>
+<tr class="odd">
+<td align="right">2016-W33</td>
+<td align="right">3</td>
+<td align="right">62,336</td>
+<td align="right">4.81</td>
+<td align="right">(1.64–14.15)</td>
+</tr>
+<tr class="even">
+<td align="right">2016-W34</td>
+<td align="right">7</td>
+<td align="right">62,336</td>
+<td align="right">11.23</td>
+<td align="right">(5.44–23.18)</td>
+</tr>
+<tr class="odd">
+<td align="right">2016-W35</td>
+<td align="right">1</td>
+<td align="right">62,336</td>
+<td align="right">1.60</td>
+<td align="right">(0.28–9.09)</td>
+</tr>
+<tr class="even">
+<td align="right">2016-W36</td>
+<td align="right">2</td>
+<td align="right">62,336</td>
+<td align="right">3.21</td>
+<td align="right">(0.88–11.70)</td>
+</tr>
+<tr class="odd">
+<td align="right">2016-W37</td>
+<td align="right">17</td>
+<td align="right">62,336</td>
+<td align="right">27.27</td>
+<td align="right">(17.03–43.67)</td>
+</tr>
+<tr class="even">
+<td align="right">2016-W38</td>
+<td align="right">12</td>
+<td align="right">62,336</td>
+<td align="right">19.25</td>
+<td align="right">(11.01–33.65)</td>
+</tr>
+<tr class="odd">
+<td align="right">2016-W39</td>
+<td align="right">9</td>
+<td align="right">62,336</td>
+<td align="right">14.44</td>
+<td align="right">(7.60–27.44)</td>
+</tr>
+<tr class="even">
+<td align="right">2016-W40</td>
+<td align="right">10</td>
+<td align="right">62,336</td>
+<td align="right">16.04</td>
+<td align="right">(8.71–29.53)</td>
+</tr>
+<tr class="odd">
+<td align="right">2016-W41</td>
+<td align="right">3</td>
+<td align="right">62,336</td>
+<td align="right">4.81</td>
+<td align="right">(1.64–14.15)</td>
+</tr>
+<tr class="even">
+<td align="right">2016-W42</td>
+<td align="right">5</td>
+<td align="right">62,336</td>
+<td align="right">8.02</td>
+<td align="right">(3.43–18.78)</td>
+</tr>
+<tr class="odd">
+<td align="right">2016-W43</td>
+<td align="right">5</td>
+<td align="right">62,336</td>
+<td align="right">8.02</td>
+<td align="right">(3.43–18.78)</td>
+</tr>
+<tr class="even">
+<td align="right">2016-W44</td>
+<td align="right">3</td>
+<td align="right">62,336</td>
+<td align="right">4.81</td>
+<td align="right">(1.64–14.15)</td>
+</tr>
+<tr class="odd">
+<td align="right">2016-W45</td>
+<td align="right">5</td>
+<td align="right">62,336</td>
+<td align="right">8.02</td>
+<td align="right">(3.43–18.78)</td>
+</tr>
+<tr class="even">
+<td align="right">2016-W46</td>
+<td align="right">12</td>
+<td align="right">62,336</td>
+<td align="right">19.25</td>
+<td align="right">(11.01–33.65)</td>
+</tr>
+<tr class="odd">
+<td align="right">2016-W47</td>
+<td align="right">13</td>
+<td align="right">62,336</td>
+<td align="right">20.85</td>
+<td align="right">(12.19–35.68)</td>
+</tr>
+<tr class="even">
+<td align="right">2016-W48</td>
+<td align="right">23</td>
+<td align="right">62,336</td>
+<td align="right">36.90</td>
+<td align="right">(24.59–55.36)</td>
+</tr>
+<tr class="odd">
+<td align="right">2016-W49</td>
+<td align="right">19</td>
+<td align="right">62,336</td>
+<td align="right">30.48</td>
+<td align="right">(19.51–47.60)</td>
+</tr>
+<tr class="even">
+<td align="right">2016-W50</td>
+<td align="right">35</td>
+<td align="right">62,336</td>
+<td align="right">56.15</td>
+<td align="right">(40.38–78.07)</td>
+</tr>
+<tr class="odd">
+<td align="right">2016-W51</td>
+<td align="right">22</td>
+<td align="right">62,336</td>
+<td align="right">35.29</td>
+<td align="right">(23.31–53.43)</td>
+</tr>
+<tr class="even">
+<td align="right">2016-W52</td>
+<td align="right">31</td>
+<td align="right">62,336</td>
+<td align="right">49.73</td>
+<td align="right">(35.04–70.58)</td>
+</tr>
+<tr class="odd">
+<td align="right">2017-W01</td>
+<td align="right">16</td>
+<td align="right">62,336</td>
+<td align="right">25.67</td>
+<td align="right">(15.80–41.69)</td>
+</tr>
+<tr class="even">
+<td align="right">2017-W02</td>
+<td align="right">22</td>
+<td align="right">62,336</td>
+<td align="right">35.29</td>
+<td align="right">(23.31–53.43)</td>
+</tr>
+<tr class="odd">
+<td align="right">2017-W03</td>
+<td align="right">14</td>
+<td align="right">62,336</td>
+<td align="right">22.46</td>
+<td align="right">(13.38–37.70)</td>
+</tr>
+<tr class="even">
+<td align="right">2017-W04</td>
+<td align="right">20</td>
+<td align="right">62,336</td>
+<td align="right">32.08</td>
+<td align="right">(20.77–49.56)</td>
+</tr>
+<tr class="odd">
+<td align="right">2017-W05</td>
+<td align="right">16</td>
+<td align="right">62,336</td>
+<td align="right">25.67</td>
+<td align="right">(15.80–41.69)</td>
+</tr>
+<tr class="even">
+<td align="right">2017-W06</td>
+<td align="right">118</td>
+<td align="right">62,336</td>
+<td align="right">189.30</td>
+<td align="right">(158.11–226.63)</td>
+</tr>
+<tr class="odd">
+<td align="right">2017-W07</td>
+<td align="right">20</td>
+<td align="right">62,336</td>
+<td align="right">32.08</td>
+<td align="right">(20.77–49.56)</td>
+</tr>
+<tr class="even">
+<td align="right">2017-W08</td>
+<td align="right">41</td>
+<td align="right">62,336</td>
+<td align="right">65.77</td>
+<td align="right">(48.49–89.21)</td>
+</tr>
+<tr class="odd">
+<td align="right">2017-W09</td>
+<td align="right">15</td>
+<td align="right">62,336</td>
+<td align="right">24.06</td>
+<td align="right">(14.58–39.70)</td>
+</tr>
+<tr class="even">
+<td align="right">2017-W10</td>
+<td align="right">40</td>
+<td align="right">62,336</td>
+<td align="right">64.17</td>
+<td align="right">(47.13–87.36)</td>
+</tr>
+<tr class="odd">
+<td align="right">2017-W11</td>
+<td align="right">8</td>
+<td align="right">62,336</td>
+<td align="right">12.83</td>
+<td align="right">(6.50–25.32)</td>
+</tr>
+<tr class="even">
+<td align="right">2017-W12</td>
+<td align="right">14</td>
+<td align="right">62,336</td>
+<td align="right">22.46</td>
+<td align="right">(13.38–37.70)</td>
+</tr>
+<tr class="odd">
+<td align="right">2017-W13</td>
+<td align="right">8</td>
+<td align="right">62,336</td>
+<td align="right">12.83</td>
+<td align="right">(6.50–25.32)</td>
+</tr>
+<tr class="even">
+<td align="right">2017-W14</td>
+<td align="right">11</td>
+<td align="right">62,336</td>
+<td align="right">17.65</td>
+<td align="right">(9.85–31.60)</td>
+</tr>
+<tr class="odd">
+<td align="right">2017-W15</td>
+<td align="right">3</td>
+<td align="right">62,336</td>
+<td align="right">4.81</td>
+<td align="right">(1.64–14.15)</td>
+</tr>
+<tr class="even">
+<td align="right">2017-W16</td>
+<td align="right">7</td>
+<td align="right">62,336</td>
+<td align="right">11.23</td>
+<td align="right">(5.44–23.18)</td>
+</tr>
+<tr class="odd">
+<td align="right">-</td>
+<td align="right">833</td>
+<td align="right">62,336</td>
+<td align="right">1,336.31</td>
+<td align="right">(1249.12–1429.49)</td>
+</tr>
+</tbody>
+</table>
+<p>You could then also plot this on a bar chart with confidence intervals.</p>
+<pre class="r"><code># plot with the region on the x axis sorted by increasing ar
+# ar value on the y axis 
+ggplot(ar, aes(x = reorder(Region, `AR (per 100,000)`),
+               y = `AR (per 100,000)`)) + 
+  geom_bar(stat = &quot;identity&quot;, col = &quot;black&quot;, fill = &quot;red&quot;) + # plot as bars (identity = as is)
+  geom_errorbar(aes(ymin = `Lower 95%CI`, ymax = `Upper 95%CI`), width = 0.2) + # add CIs
+  scale_y_continuous(expand = c(0,0)) +  # set origin for axes
+  # add labels to axes and below chart
+  labs(x = &quot;Region&quot;, y = &quot;AR (per 100,000)&quot;, 
+       captions = paste0(&quot;Source: MSF data from &quot;, reporting_week)) + 
+  epicurve_theme</code></pre>
+<pre><code>## Error in reorder(Region, `AR (per 100,000)`): object &#39;Region&#39; not found</code></pre>
+<p><img src="/training/AJS_Walkthrough_Analyses_files/figure-html/bar_attack_rate_by_region-1.png" width="720" /></p>
+<p>Mortality Rates by region Changed population_data_region to population_data</p>
+<p>Changed “Dead” to “Décédé” in grepl</p>
+<pre class="r"><code>deaths &lt;- group_by(linelist_cleaned, patient_origin) %&gt;%
+  filter(grepl(&quot;Décédé&quot;, exit_status)) %&gt;% 
+  summarise(deaths = n()) %&gt;% # count deaths by region
+  left_join(population_data, by = &quot;patient_origin&quot;) # merge population data </code></pre>
+<pre><code>## Error in tbl_vars(y): object &#39;population_data&#39; not found</code></pre>
+<pre class="r"><code>mortality_rate(deaths$deaths, deaths$population, multiplier = 10000) %&gt;%
+  # add the region column to table
+  bind_cols(select(deaths, patient_origin), .) %&gt;% 
+  merge_ci_df(e = 4) %&gt;% # merge the lower and upper CI into one column
+  rename(&quot;Region&quot; = patient_origin, 
+         &quot;Deaths&quot; = deaths, 
+         &quot;Population&quot; = population, 
+         &quot;Mortality (per 10,000)&quot; = `mortality per 10 000`, 
+         &quot;95%CI&quot; = ci) %&gt;% 
+  kable(digits = 2)</code></pre>
+<pre><code>## Error in proportion(deaths, population, conf_level = conf_level, multiplier = multiplier): object &#39;deaths&#39; not found</code></pre>
+</div>
