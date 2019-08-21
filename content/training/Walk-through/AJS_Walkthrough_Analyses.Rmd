@@ -19,12 +19,15 @@ options(knitr.kable.NA = "-")
 required_packages <- c("knitr",       # create output docs
                        "dplyr",       # clean/shape data
                        "forcats",     # clean/shape data
+                       "stringr",     # clean text
+                       "rio",         # read in data
                        "ggplot2",     # create plots and charts
                        "sitrep",      # MSF field epi functions
                        "linelist",    # Functions for cleaning/standardising data
                        "incidence",   # create epicurves
                        "aweek",       # define epi weeks
                        "epitools",    # 2x2 tables and other epi goodness
+                       "epitrix",     # epi helpers and tricks
                        "sf",          # encode spatial vector data
                        "ggspatial")   # plot maps
 
