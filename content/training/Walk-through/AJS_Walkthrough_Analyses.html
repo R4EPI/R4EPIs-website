@@ -209,7 +209,7 @@ plot_age_pyramid(linelist_cleaned,
         legend.title = element_blank(), # remove title
         text = element_text(size = 18)  # change text size
        )</code></pre>
-<p><img src="/training/AJS_Walkthrough_Analyses_files/figure-html/age_pyramid-1.png" width="720" /></p>
+<p><img src="/training/Walk-through/AJS_Walkthrough_Analyses_files/figure-html/age_pyramid-1.png" width="720" /></p>
 <pre class="r"><code># get counts and proportions for all variables named in SYMPTOMS
 tab_linelist(linelist_cleaned, SYMPTOMS, keep = &quot;Yes&quot;) %&gt;% 
   select(-value) %&gt;%
@@ -242,7 +242,17 @@ tab_linelist(linelist_cleaned, SYMPTOMS, keep = &quot;Yes&quot;) %&gt;%
 ## prop_total, : Removing 691 missing values</code></pre>
 <pre><code>## Warning in descriptive(x, counter = !!i, grouper = !!stra, proptotal =
 ## prop_total, : Removing 1387 missing values</code></pre>
-<pre><code>## Error in str_to_sentence(gsub(&quot;_&quot;, &quot; &quot;, variable)): could not find function &quot;str_to_sentence&quot;</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">variable</th>
+<th align="right">n</th>
+<th align="right">%</th>
+</tr>
+</thead>
+<tbody>
+</tbody>
+</table>
 <pre class="r"><code># get counts and proportions for all variables named in LABS
 multi_descriptive(linelist_cleaned, LABS, .id = &quot;Lab test&quot;) %&gt;% 
   # re-order columns (drop total_prop too)
@@ -521,9 +531,9 @@ basic_curve &lt;- plot(inc_week_7, show_cases = TRUE, border = &quot;black&quot;
 
 # show your plot (stored for later use) 
 basic_curve</code></pre>
-<p><img src="/training/AJS_Walkthrough_Analyses_files/figure-html/epicurve-1.png" width="720" /></p>
+<p><img src="/training/Walk-through/AJS_Walkthrough_Analyses_files/figure-html/epicurve-1.png" width="720" /></p>
 <pre class="r"><code>basic_curve + scale_x_incidence(inc_week_7, n_breaks = 6)</code></pre>
-<p><img src="/training/AJS_Walkthrough_Analyses_files/figure-html/epicurve-2.png" width="720" /></p>
+<p><img src="/training/Walk-through/AJS_Walkthrough_Analyses_files/figure-html/epicurve-2.png" width="720" /></p>
 <p>Other possible variants on the epi curve:<br />
 * Option 1<br />
 * Option 2<br />
@@ -1517,7 +1527,7 @@ cowplot::plot_grid(
 <pre><code>## Warning: Removed 1 rows containing missing values (geom_path).
 
 ## Warning: Removed 1 rows containing missing values (geom_path).</code></pre>
-<p><img src="/training/AJS_Walkthrough_Analyses_files/figure-html/epicurve_ar_cfr-1.png" width="720" /></p>
+<p><img src="/training/Walk-through/AJS_Walkthrough_Analyses_files/figure-html/epicurve_ar_cfr-1.png" width="720" /></p>
 <p>more optins…</p>
 </div>
 <div id="place" class="section level2">
@@ -2892,7 +2902,7 @@ ggplot(ar, aes(x = reorder(Region, `AR (per 100,000)`),
        captions = paste0(&quot;Source: MSF data from &quot;, reporting_week)) + 
   epicurve_theme</code></pre>
 <pre><code>## Error in reorder(Region, `AR (per 100,000)`): object &#39;Region&#39; not found</code></pre>
-<p><img src="/training/AJS_Walkthrough_Analyses_files/figure-html/bar_attack_rate_by_region-1.png" width="720" /></p>
+<p><img src="/training/Walk-through/AJS_Walkthrough_Analyses_files/figure-html/bar_attack_rate_by_region-1.png" width="720" /></p>
 <p>Mortality Rates by region Changed population_data_region to population_data</p>
 <p>Changed “Dead” to “Décédé” in grepl</p>
 <pre class="r"><code>deaths &lt;- group_by(linelist_cleaned, patient_origin) %&gt;%

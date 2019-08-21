@@ -1,0 +1,84 @@
+---
+date: "2019-08-21T09:22:02+02:00"
+title: Template_setup
+weight: 6
+---
+
+
+
+<div id="overview-of-template" class="section level2">
+<h2>Overview of template</h2>
+<p><strong>TODO: Graphic or VIDEO? showing big-picture overview of template parts - waiting until final arrangement of chunks in template</strong></p>
+</div>
+<div id="header-and-introduction" class="section level2">
+<h2>Header and introduction</h2>
+<p>The very top of the template consists of a header surrounded by <code>---</code> lines. Here you may want to edit the title of your document. The other settings in the header define the default document type produced (Microsoft Word) when the RMarkdown is “knit”.</p>
+<p>The “Introduction to this template” section is for your information only and this text can be deleted before knitting the document.</p>
+<p><img src="/images/AJS_Intro.png" alt="AJS Header and Introduction snip", width = "75%"></p>
+</div>
+<div id="installation-and-loading-packages" class="section level2">
+<h2>Installation and loading packages</h2>
+<p><strong>The text which explains the purpose of this code chunk may be deleted, but you must keep the code chunk!</strong> The code will run without producing any output in your final report, but it is required to install (or load using library(), if already installed) the packages necessary to produce the report.</p>
+<p>This “setup” code chunk does the following:</p>
+<ul>
+<li><p>Set default settings for tables such as size, error handling, and display of missing values</p></li>
+<li><p>Create a vector of names of packages required for the template to run, each of which is installed if it is not already installed, and then is loaded using library() for use in the current R session.</p></li>
+<li><p>Set default text size in graphic plots</p></li>
+<li><p>Set epidemiological weeks to begin on Mondays</p></li>
+</ul>
+<p><img src="/images/Package_Installation.png" alt="Package installation chunk snip", width = "75%"></p>
+<div id="about-the-packages-used-in-this-template" class="section level3">
+<h3>About the packages used in this template</h3>
+<div id="generic-packages" class="section level4">
+<h4>Generic packages</h4>
+<ul>
+<li>knitr used to create the output document (pdf, doc, html)<br />
+</li>
+<li>dplyr used to clean and shape the data<br />
+</li>
+<li>forcats used to clean and shape the data<br />
+</li>
+<li>stringr used to clean text/characters<br />
+</li>
+<li>rio used to read in data<br />
+</li>
+<li>epitrix used for data cleaning and variable standardisation<br />
+</li>
+<li>ggplot2 used to visualise your data using different plotting methods</li>
+</ul>
+</div>
+<div id="more-epidemiology-specific-packages" class="section level4">
+<h4>More epidemiology-specific packages</h4>
+<ul>
+<li>sitrep includes a variety of useful field epidemiology functions</li>
+<li>linelist used for cleaning and standardising data<br />
+</li>
+<li>incidence used for creating epicurves<br />
+</li>
+<li>aweek used for creating epiweeks<br />
+</li>
+<li>epitools used for creating 2by2 tables<br />
+</li>
+<li>epitrix used for helpful epidemiological tasks</li>
+</ul>
+</div>
+<div id="mapping-packages" class="section level4">
+<h4>Mapping packages</h4>
+<ul>
+<li>ggspatial used for selecting basemap tiles<br />
+</li>
+<li>sf used for manipulating spatial objects (e.g. polygons) easily</li>
+</ul>
+</div>
+</div>
+</div>
+<div id="set-current-epi-week" class="section level2">
+<h2>Set current epi week</h2>
+<p>Set the epidemiological week for the report. <strong>This value is used in later code chunks, for example when producing epidemic curves.</strong> Note that you may want to specify the most recent <strong>complete</strong> epi week. Follow the format in the code below (within quotes give the 4-digit year, a hyphen (-), capital W, then the 2-digit epi week number).</p>
+<p>By default in the templates epi weeks begin on Mondays (this can be changed at the bottom of the “setup” code chunk). See the documentation of the <a href="https://cran.r-project.org/web/packages/aweek/vignettes/introduction.html">package “aweek”</a> for more information.</p>
+<p>To determine which epi week of a date you can use the date2week() function. Let’s assume the date of this analysis is 20 April, 2017.</p>
+<pre class="r"><code>date2week(&quot;2017-04-20&quot;)      #Sys.Date() uses the current date from your computer</code></pre>
+<pre><code>## &lt;aweek start: Monday&gt;
+## [1] &quot;2017-W16-4&quot;</code></pre>
+<pre class="r"><code>reporting_week &lt;- &quot;2017-W16&quot;  # Set the reporting week</code></pre>
+</div>
