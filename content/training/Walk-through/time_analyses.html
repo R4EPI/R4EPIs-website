@@ -1,0 +1,350 @@
+---
+date: "2019-08-21T11:00:29+02:00"
+title: Time analyses
+weight: 13
+---
+
+
+
+<pre class="r"><code># This code creates case counts for each week of your outbreak, overall
+# As with aweek, you can change the start of your week to e.g. &quot;Sunday week&quot;
+inc_week_7 &lt;- incidence(linelist_cleaned$date_of_onset, interval = &quot;Monday week&quot;)
+
+# this sets the theme in ggplot for epicurves
+epicurve_theme &lt;- theme(
+  axis.text.x = element_text(angle = 45, hjust = 1, vjust = 1), 
+  legend.title = element_blank(),
+  panel.grid.major.x = element_line(color = &quot;grey60&quot;, linetype = 3),
+  panel.grid.major.y = element_line(color = &quot;grey60&quot;, linetype = 3)
+)
+# This sets the labels in ggplot for the epicurves
+epicurve_labels &lt;- labs(x = &quot;Calendar week&quot;, 
+                        y = &quot;Cases (n)&quot;, 
+                        title = &quot;Cases by week of onset&quot;,
+                        subtitle = sprintf(&quot;Source: MSF data from %s&quot;, reporting_week)
+                       ) </code></pre>
+<pre class="r"><code># plot your epicurve as a ggplot (incidence::plot is different to base::plot)
+basic_curve &lt;- plot(inc_week_7, show_cases = TRUE, border = &quot;black&quot;, n_breaks = nrow(inc_week_7)) + 
+  scale_y_continuous(expand = c(0, 0)) +  # set origin for axes
+  # add labels to axes and below chart
+  epicurve_labels +
+  # change visuals of dates and remove legend title
+  epicurve_theme
+
+# show your plot (stored for later use) 
+basic_curve</code></pre>
+<p><img src="/training/Walk-through/time_analyses_files/figure-html/epicurve-1.png" width="720" /></p>
+<pre class="r"><code>basic_curve + scale_x_incidence(inc_week_7, n_breaks = 6)</code></pre>
+<p><img src="/training/Walk-through/time_analyses_files/figure-html/epicurve-2.png" width="720" /></p>
+<p>Other possible variants on the epi curve:<br />
+* Option 1<br />
+* Option 2<br />
+* Option 3</p>
+<p>The below gives the attack rate per week.</p>
+<pre class="r"><code># counts and cumulative counts by week
+cases &lt;- linelist_cleaned %&gt;%
+  arrange(date_of_onset) %&gt;%        # arrange by date of onset
+  count(epiweek, .drop = FALSE) %&gt;% # count all epiweeks and include zero counts
+  mutate(cumulative = cumsum(n))    # add a cumulative sum
+
+# attack rate for each week
+ar &lt;- attack_rate(cases$n, population, multiplier = 100000) %&gt;% 
+  bind_cols(select(cases, epiweek), .) # add the epiweek column to table</code></pre>
+<pre><code>## Error in proportion(cases, population, multiplier = multiplier, conf_level = conf_level): object &#39;population&#39; not found</code></pre>
+<pre class="r"><code>ar %&gt;%
+  merge_ci_df(e = 4) %&gt;% # merge the lower and upper CI into one column
+  rename(&quot;Epiweek&quot; = epiweek, 
+         &quot;Cases (n)&quot; = cases, 
+         &quot;Population&quot; = population, 
+         &quot;AR (per 100,000)&quot; = ar, 
+         &quot;95%CI&quot; = ci) %&gt;% 
+  knitr::kable(digits = 2, align = &quot;r&quot;)</code></pre>
+<pre><code>## Error in x[[e]]: object of type &#39;closure&#39; is not subsettable</code></pre>
+<p>And cumulatively:</p>
+<pre class="r"><code># cumulative attack rate by week
+attack_rate(cases$cumulative, population, multiplier = 100000) %&gt;% 
+  bind_cols(select(cases, epiweek), .) %&gt;% # add the epiweek column to table
+  merge_ci_df(e = 4) %&gt;% # merge the lower and upper CI into one column
+  rename(&quot;Epiweek&quot; = epiweek, 
+         &quot;Cases (n)&quot; = cases, 
+         &quot;Population&quot; = population, 
+         &quot;AR (per 100,000)&quot; = ar, 
+         &quot;95%CI&quot; = ci) %&gt;% 
+  knitr::kable(digits = 2, align = &quot;r&quot;)</code></pre>
+<pre><code>## Error in proportion(cases, population, multiplier = multiplier, conf_level = conf_level): object &#39;population&#39; not found</code></pre>
+<pre class="r"><code># group by known outcome and case definition 
+cfr &lt;- linelist_cleaned %&gt;%
+  filter(patient_facility_type == &quot;Inpatient&quot;) %&gt;%
+  case_fatality_rate_df(grepl(&quot;Dead&quot;, exit_status), group = epiweek)
+
+cfr %&gt;%
+  merge_ci_df(e = 4) %&gt;% # merge the lower and upper CI into one column
+  rename(&quot;Epiweek&quot; = epiweek, 
+         &quot;Deaths&quot; = deaths, 
+         &quot;Cases&quot; = population, 
+         &quot;CFR (%)&quot; = cfr, 
+         &quot;95%CI&quot; = ci) %&gt;% 
+  knitr::kable(digits = 2, align = &quot;r&quot;)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">Epiweek</th>
+<th align="right">Deaths</th>
+<th align="right">Cases</th>
+<th align="right">CFR (%)</th>
+<th align="right">95%CI</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">2016-W30</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">(0.00–79.35)</td>
+</tr>
+<tr class="even">
+<td align="right">2016-W33</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">(0.00–79.35)</td>
+</tr>
+<tr class="odd">
+<td align="right">2016-W37</td>
+<td align="right">0</td>
+<td align="right">4</td>
+<td align="right">0</td>
+<td align="right">(0.00–48.99)</td>
+</tr>
+<tr class="even">
+<td align="right">2016-W38</td>
+<td align="right">0</td>
+<td align="right">3</td>
+<td align="right">0</td>
+<td align="right">(0.00–56.15)</td>
+</tr>
+<tr class="odd">
+<td align="right">2016-W39</td>
+<td align="right">0</td>
+<td align="right">2</td>
+<td align="right">0</td>
+<td align="right">(0.00–65.76)</td>
+</tr>
+<tr class="even">
+<td align="right">2016-W40</td>
+<td align="right">0</td>
+<td align="right">5</td>
+<td align="right">0</td>
+<td align="right">(0.00–43.45)</td>
+</tr>
+<tr class="odd">
+<td align="right">2016-W41</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">(0.00–79.35)</td>
+</tr>
+<tr class="even">
+<td align="right">2016-W42</td>
+<td align="right">0</td>
+<td align="right">5</td>
+<td align="right">0</td>
+<td align="right">(0.00–43.45)</td>
+</tr>
+<tr class="odd">
+<td align="right">2016-W43</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">(0.00–79.35)</td>
+</tr>
+<tr class="even">
+<td align="right">2016-W44</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">(0.00–79.35)</td>
+</tr>
+<tr class="odd">
+<td align="right">2016-W45</td>
+<td align="right">0</td>
+<td align="right">3</td>
+<td align="right">0</td>
+<td align="right">(0.00–56.15)</td>
+</tr>
+<tr class="even">
+<td align="right">2016-W46</td>
+<td align="right">0</td>
+<td align="right">4</td>
+<td align="right">0</td>
+<td align="right">(0.00–48.99)</td>
+</tr>
+<tr class="odd">
+<td align="right">2016-W47</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">(0.00–79.35)</td>
+</tr>
+<tr class="even">
+<td align="right">2016-W48</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">(0.00–79.35)</td>
+</tr>
+<tr class="odd">
+<td align="right">2016-W50</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">(0.00–79.35)</td>
+</tr>
+<tr class="even">
+<td align="right">2016-W51</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">(0.00–79.35)</td>
+</tr>
+<tr class="odd">
+<td align="right">2016-W52</td>
+<td align="right">0</td>
+<td align="right">2</td>
+<td align="right">0</td>
+<td align="right">(0.00–65.76)</td>
+</tr>
+<tr class="even">
+<td align="right">2017-W01</td>
+<td align="right">0</td>
+<td align="right">2</td>
+<td align="right">0</td>
+<td align="right">(0.00–65.76)</td>
+</tr>
+<tr class="odd">
+<td align="right">2017-W02</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">(0.00–79.35)</td>
+</tr>
+<tr class="even">
+<td align="right">2017-W03</td>
+<td align="right">0</td>
+<td align="right">2</td>
+<td align="right">0</td>
+<td align="right">(0.00–65.76)</td>
+</tr>
+<tr class="odd">
+<td align="right">2017-W04</td>
+<td align="right">0</td>
+<td align="right">4</td>
+<td align="right">0</td>
+<td align="right">(0.00–48.99)</td>
+</tr>
+<tr class="even">
+<td align="right">2017-W05</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">(0.00–79.35)</td>
+</tr>
+<tr class="odd">
+<td align="right">2017-W06</td>
+<td align="right">0</td>
+<td align="right">5</td>
+<td align="right">0</td>
+<td align="right">(0.00–43.45)</td>
+</tr>
+<tr class="even">
+<td align="right">2017-W07</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">(0.00–79.35)</td>
+</tr>
+<tr class="odd">
+<td align="right">2017-W08</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">(0.00–79.35)</td>
+</tr>
+<tr class="even">
+<td align="right">2017-W09</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">(0.00–79.35)</td>
+</tr>
+<tr class="odd">
+<td align="right">2017-W10</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">(0.00–79.35)</td>
+</tr>
+<tr class="even">
+<td align="right">2017-W13</td>
+<td align="right">0</td>
+<td align="right">2</td>
+<td align="right">0</td>
+<td align="right">(0.00–65.76)</td>
+</tr>
+<tr class="odd">
+<td align="right">2017-W14</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">(0.00–79.35)</td>
+</tr>
+<tr class="even">
+<td align="right">-</td>
+<td align="right">0</td>
+<td align="right">27</td>
+<td align="right">0</td>
+<td align="right">(0.00–12.46)</td>
+</tr>
+</tbody>
+</table>
+<p>You could plot the AR (in the population) and CFR (among inpatients only) together as line graphs by epiweek.</p>
+<pre class="r"><code>ar_plot &lt;- ggplot(ar, aes(x = week2date(epiweek) + (7 * 0.5), group = 1)) +
+  geom_ribbon(aes(ymin = lower, ymax = upper), 
+              color = &quot;blue&quot;, fill = &quot;blue&quot;, linetype = 2, alpha = 0.2, show.legend = FALSE) +
+  geom_line(aes(y = ar), color = &quot;blue&quot;, show.legend = FALSE) +
+  scale_y_continuous(expand = c(0, 0)) +  # set origin for axes
+  # scale the x axis the same as the incidence curve. Expand forces it to align. 
+  incidence::scale_x_incidence(inc_week_7, n_breaks = nrow(inc_week_7), expand = c(0, 7 * 1.5)) +
+  # add labels to axes and below chart
+  labs(x = &quot;Calendar week&quot;, y = &quot;AR [95% CI]&quot;, subtitle = &quot;Attack Rate (per 100,000)&quot;) + 
+  # change visuals of dates and remove legend title
+  epicurve_theme</code></pre>
+<pre><code>## Error: You&#39;re passing a function as global data.
+## Have you misspelled the `data` argument in `ggplot()`</code></pre>
+<p>To plot CFR you must first make the CFR table using above code</p>
+<pre class="r"><code>cfr_plot &lt;- ggplot(cfr, aes(x = week2date(epiweek) + (7 * 0.5), group = 1)) +
+  geom_ribbon(aes(ymin = lower, ymax = upper), 
+              color = &quot;red&quot;, fill = &quot;red&quot;, linetype = 2, alpha = 0.2, show.legend = FALSE) +
+  geom_line(aes(y = cfr), color = &quot;red&quot;, show.legend = FALSE) +
+  scale_y_continuous(expand = c(0, 0)) +  # set origin for axes
+  # scale the x axis the same as the incidence curve. Expand forces it to align. 
+  incidence::scale_x_incidence(inc_week_7, n_breaks = nrow(inc_week_7), expand = c(0, 7 * 1.5)) +
+  # add labels to axes and below chart
+  labs(x = &quot;Calendar week&quot;, y = &quot;CFR [95% CI]&quot;, 
+       subtitle = &quot;Case Fatality Ratio [95% CI] Among Inpatients&quot;) + 
+  # change visuals of dates and remove legend title
+  epicurve_theme </code></pre>
+<p>You could then also add the AR and CFR by week on to an epicurve.</p>
+<pre class="r"><code>nofx &lt;- theme(axis.text.x = element_blank(),
+              axis.title.x = element_blank())
+cowplot::plot_grid(
+  basic_curve + nofx,
+  ar_plot + nofx,
+  cfr_plot,
+  align = &quot;v&quot;, # align plots vertically
+  axis = &quot;lr&quot;, # only by their left and right margins
+  ncol = 1     # allow only one column
+)</code></pre>
+<pre><code>## Error in cowplot::plot_grid(basic_curve + nofx, ar_plot + nofx, cfr_plot, : object &#39;ar_plot&#39; not found</code></pre>
+<p>more optins…</p>

@@ -1,0 +1,237 @@
+---
+date: "2019-08-21T11:00:29+02:00"
+title: Time analyses
+weight: 13
+---
+
+
+
+
+```{r setup, include=FALSE, results='hide', message=FALSE, warning=FALSE}
+# hide all code chunks in the output, but show errors
+knitr::opts_chunk$set(echo = TRUE,       # hide all code chunks in output
+                      error = TRUE,       # show errors if they appear, but don't stop
+                      fig.width = 6*1.25, # Figure width
+                      fig.height = 6      # Figure height
+                     )
+# set default NA to - in output, define figure width/height
+options(knitr.kable.NA = "-")
+
+# Installing required packages for this template
+required_packages <- c("knitr",       # create output docs
+                       "dplyr",       # clean/shape data
+                       "forcats",     # clean/shape data
+                       "stringr",     # clean text
+                       "rio",         # read in data
+                       "ggplot2",     # create plots and charts
+                       "sitrep",      # MSF field epi functions
+                       "linelist",    # Functions for cleaning/standardising data
+                       "incidence",   # create epicurves
+                       "aweek",       # define epi weeks
+                       "epitools",    # 2x2 tables and other epi goodness
+                       "epitrix",     # epi helpers and tricks
+                       "sf",          # encode spatial vector data
+                       "ggspatial")   # plot maps
+
+for (pkg in required_packages) {
+  # install packages if not already present
+  if (!pkg %in% rownames(installed.packages())) {
+    install.packages(pkg)
+  }
+  
+  # load packages to this current session 
+  library(pkg, character.only = TRUE)
+}
+
+
+# set default text size to 16 for plots
+# give classic black/white axes for plots
+ggplot2::theme_set(theme_classic(base_size = 18))
+
+# Set the day that defines the beginning of your epiweek.
+# you can start the week on any day of the week
+# (the ISO standard is to start on Monday) 
+aweek::set_week_start("Monday")
+
+
+
+date2week("2017-04-20")      #Sys.Date() uses the current date from your computer
+
+
+reporting_week <- readRDS("data/reporting_week.rds") # Set the reporting week
+
+# Read in the R objects that were defined in previous pages
+linelist_cleaned <- readRDS("data/linelist_person_cleaned.rds")
+
+population_data_region <- readRDS("data/population_data.rds")
+
+SYMPTOMS <- readRDS("data/SYMPTOMS.rds")
+LABS <- readRDS("data/LABS.rds")
+first_week <- readRDS("data/first_week.rds")
+obs_start <- readRDS("data/obs_start.rds")
+obs_end <- readRDS("data/obs_end.rds")
+
+```
+
+
+
+
+
+```{r create_incidence, message = FALSE}
+# This code creates case counts for each week of your outbreak, overall
+# As with aweek, you can change the start of your week to e.g. "Sunday week"
+inc_week_7 <- incidence(linelist_cleaned$date_of_onset, interval = "Monday week")
+
+# this sets the theme in ggplot for epicurves
+epicurve_theme <- theme(
+  axis.text.x = element_text(angle = 45, hjust = 1, vjust = 1), 
+  legend.title = element_blank(),
+  panel.grid.major.x = element_line(color = "grey60", linetype = 3),
+  panel.grid.major.y = element_line(color = "grey60", linetype = 3)
+)
+# This sets the labels in ggplot for the epicurves
+epicurve_labels <- labs(x = "Calendar week", 
+                        y = "Cases (n)", 
+                        title = "Cases by week of onset",
+                        subtitle = sprintf("Source: MSF data from %s", reporting_week)
+                       ) 
+```
+
+
+```{r epicurve, message = FALSE}
+# plot your epicurve as a ggplot (incidence::plot is different to base::plot)
+basic_curve <- plot(inc_week_7, show_cases = TRUE, border = "black", n_breaks = nrow(inc_week_7)) + 
+  scale_y_continuous(expand = c(0, 0)) +  # set origin for axes
+  # add labels to axes and below chart
+  epicurve_labels +
+  # change visuals of dates and remove legend title
+  epicurve_theme
+
+# show your plot (stored for later use) 
+basic_curve
+basic_curve + scale_x_incidence(inc_week_7, n_breaks = 6)
+```
+
+
+Other possible variants on the epi curve:  
+* Option 1  
+* Option 2  
+* Option 3  
+
+
+The below gives the attack rate per week. 
+
+```{r attack_rate_per_week, warning = FALSE, message = FALSE}
+# counts and cumulative counts by week
+cases <- linelist_cleaned %>%
+  arrange(date_of_onset) %>%        # arrange by date of onset
+  count(epiweek, .drop = FALSE) %>% # count all epiweeks and include zero counts
+  mutate(cumulative = cumsum(n))    # add a cumulative sum
+
+# attack rate for each week
+ar <- attack_rate(cases$n, population, multiplier = 100000) %>% 
+  bind_cols(select(cases, epiweek), .) # add the epiweek column to table
+
+ar %>%
+  merge_ci_df(e = 4) %>% # merge the lower and upper CI into one column
+  rename("Epiweek" = epiweek, 
+         "Cases (n)" = cases, 
+         "Population" = population, 
+         "AR (per 100,000)" = ar, 
+         "95%CI" = ci) %>% 
+  knitr::kable(digits = 2, align = "r")
+```
+
+And cumulatively:  
+
+
+```{r cumulative_attack_rate_per_week}
+# cumulative attack rate by week
+attack_rate(cases$cumulative, population, multiplier = 100000) %>% 
+  bind_cols(select(cases, epiweek), .) %>% # add the epiweek column to table
+  merge_ci_df(e = 4) %>% # merge the lower and upper CI into one column
+  rename("Epiweek" = epiweek, 
+         "Cases (n)" = cases, 
+         "Population" = population, 
+         "AR (per 100,000)" = ar, 
+         "95%CI" = ci) %>% 
+  knitr::kable(digits = 2, align = "r")
+```
+
+```{r cfr_per_week, warning = FALSE, message = FALSE}
+# group by known outcome and case definition 
+cfr <- linelist_cleaned %>%
+  filter(patient_facility_type == "Inpatient") %>%
+  case_fatality_rate_df(grepl("Dead", exit_status), group = epiweek)
+
+cfr %>%
+  merge_ci_df(e = 4) %>% # merge the lower and upper CI into one column
+  rename("Epiweek" = epiweek, 
+         "Deaths" = deaths, 
+         "Cases" = population, 
+         "CFR (%)" = cfr, 
+         "95%CI" = ci) %>% 
+  knitr::kable(digits = 2, align = "r")
+```
+
+You could plot the AR (in the population) and CFR (among inpatients only) together as line graphs by epiweek. 
+
+```{r ar_line_graph}
+ar_plot <- ggplot(ar, aes(x = week2date(epiweek) + (7 * 0.5), group = 1)) +
+  geom_ribbon(aes(ymin = lower, ymax = upper), 
+              color = "blue", fill = "blue", linetype = 2, alpha = 0.2, show.legend = FALSE) +
+  geom_line(aes(y = ar), color = "blue", show.legend = FALSE) +
+  scale_y_continuous(expand = c(0, 0)) +  # set origin for axes
+  # scale the x axis the same as the incidence curve. Expand forces it to align. 
+  incidence::scale_x_incidence(inc_week_7, n_breaks = nrow(inc_week_7), expand = c(0, 7 * 1.5)) +
+  # add labels to axes and below chart
+  labs(x = "Calendar week", y = "AR [95% CI]", subtitle = "Attack Rate (per 100,000)") + 
+  # change visuals of dates and remove legend title
+  epicurve_theme
+```
+
+To plot CFR you must first make the CFR table using above code
+
+```{r cfr_line_graph}
+cfr_plot <- ggplot(cfr, aes(x = week2date(epiweek) + (7 * 0.5), group = 1)) +
+  geom_ribbon(aes(ymin = lower, ymax = upper), 
+              color = "red", fill = "red", linetype = 2, alpha = 0.2, show.legend = FALSE) +
+  geom_line(aes(y = cfr), color = "red", show.legend = FALSE) +
+  scale_y_continuous(expand = c(0, 0)) +  # set origin for axes
+  # scale the x axis the same as the incidence curve. Expand forces it to align. 
+  incidence::scale_x_incidence(inc_week_7, n_breaks = nrow(inc_week_7), expand = c(0, 7 * 1.5)) +
+  # add labels to axes and below chart
+  labs(x = "Calendar week", y = "CFR [95% CI]", 
+       subtitle = "Case Fatality Ratio [95% CI] Among Inpatients") + 
+  # change visuals of dates and remove legend title
+  epicurve_theme 
+
+```
+
+
+You could then also add the AR and CFR by week on to an epicurve. 
+
+```{r epicurve_ar_cfr, message = FALSE, fig.height = 10}
+nofx <- theme(axis.text.x = element_blank(),
+              axis.title.x = element_blank())
+cowplot::plot_grid(
+  basic_curve + nofx,
+  ar_plot + nofx,
+  cfr_plot,
+  align = "v", # align plots vertically
+  axis = "lr", # only by their left and right margins
+  ncol = 1     # allow only one column
+)
+```
+
+
+more optins...
+
+
+
+```{r, include=FALSE, results='hide', message=FALSE, warning=FALSE}
+# Save linelist_cleaned for use in the next page (time analyses).
+saveRDS(linelist_cleaned, "data/linelist_time_cleaned.rds")
+```
+
+
