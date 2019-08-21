@@ -63,6 +63,7 @@ reporting_week <- readRDS("data/reporting_week.rds") # Set the reporting week
 linelist_cleaned <- readRDS("data/linelist_time_cleaned.rds")
 
 population_data_region <- readRDS("data/population_data.rds")
+population <- readRDS("data/population.rds")
 
 SYMPTOMS <- readRDS("data/SYMPTOMS.rds")
 LABS <- readRDS("data/LABS.rds")

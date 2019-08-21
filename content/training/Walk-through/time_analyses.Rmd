@@ -64,6 +64,7 @@ reporting_week <- readRDS("data/reporting_week.rds") # Set the reporting week
 linelist_cleaned <- readRDS("data/linelist_person_cleaned.rds")
 
 population_data_region <- readRDS("data/population_data.rds")
+population <- readRDS("data/population.rds")
 
 SYMPTOMS <- readRDS("data/SYMPTOMS.rds")
 LABS <- readRDS("data/LABS.rds")
@@ -77,11 +78,11 @@ obs_end <- readRDS("data/obs_end.rds")
 TODO: Introduction to time analyses...  
 
 
-### Classic epidemic curve  
+### Basic epidemic curve  
 
-The first code chunk (create_incidence) is about setting-up the data for the epidemic curves. **There will not be output from this first code chunk.**  
+The first code chunk (create_incidence) is about setting-up the data for the epidemic curves. *There will not be output from this first code chunk.*  
 
-**First**, the function incidence() **counts the number of cases** for each week, by date_of_onset. It stores this information in the object inc_week_7.  
+**First**, the function incidence() **counts the number of cases** for each week, by date_of_onset. It stores this information in the object inc_week_7. Read more about incidence() in the Help pane. 
 
 **Second**, the **theme elements** are set that ggplot2() will use when plotting the epidemic curves (you can read more about ggplot2 and theme elements HERE TODO). This includes the angle and placement of x-axis label text, having no title in the legend, and setting colors and type for x and y gridlines.  
 
@@ -115,7 +116,7 @@ epicurve_labels <- labs(x = "Calendar week",
 
 *Note that the plot() function used here is from the package incidence(), not the base R plot() function. This one uses ggplot2() and so has different syntax and structure. As with ggplot2, layers of the graphic are added sequentially using the + symbol at the end of each sub-command.*  
 
-In this case, the data from inc_week_7 are plotted first, then y-axis origin is set, then the labels, and finally the theme parameters. All of these elements are stored in the object "basic_curve", which is finally run to display the result.
+In the example below, the weekly count data from inc_week_7 are plotted first, then miscellaneous settings are specified: the y-axis origin is set, the labels, and finally the theme parameters. All of these elements are stored in the object "basic_curve", which is finally run to display the plot.
 
 **Note: It is necessary to use the "full name" of variables for this to work correctly - this means date_of_onset should be listed in incidence() as `linelist_cleaned$date_of_onset`.** Otherwise you may get an error such as "object 'date_of_onset' not found". 
 
@@ -132,15 +133,15 @@ basic_curve
 
 ```
 
-The x-axis is visually quite busy with every week displayed. To increase read-ability we can uncomment and use the helper code at the bottom of the code chunk. This code modifies the already-defined basic_curve (with a +) to specify that the x-axis shows only a specified number of breaks/dates (in this case 6).  
+This x-axis is difficult to read with every week displayed. To increase read-ability we can uncomment and use the helper code at the bottom of that code chunk. This modifies the already-defined "basic_curve" object (with a +) to specify that the x-axis shows only a specified number of breaks/dates (in this case 6). Note: A warning that a scale for x is being replaced is okay.  
 
 *Note that the data are still shown by week - it is only the labels on the scale that have changed.*   
 
-```{r, warning=FALSE}
+```{r, warning=FALSE, message=FALSE}
 # Modifies basic_curve to show only 6 breaks in the x-axis 
 basic_curve + scale_x_incidence(inc_week_7, n_breaks = 6)
 ```
-**To change the intervals used for the data aggregation themselves**, use the `interval =` argument in the original incidence() command. There are the options to do this biweekl, by month, quarter or year (see the Help guidance for the incidence() function in the incidence package. **This is a biweekly example**.  
+**To change the intervals used for the data aggregation themselves**, use the `interval =` argument in the original incidence() command. There are the options to do this biweekly, by month, quarter or year (search the Help pane for the incidence() function in the incidence package). **Below is a biweekly example** (the axes labels have been returned to default - showing each two-week increment).  
 
 *Note: In the code below, the plot is not saved to an object and simply prints when the plot() command and it's various added (+) elements such as scale, labels, and theme are run.*
 
@@ -157,7 +158,7 @@ plot(inc_week_14, show_cases = TRUE, border = "black", n_breaks = nrow(inc_week_
   epicurve_theme
 ```
 
-To **stratify the epidemic curve** by a categorical variable (such as gender), the `groups = ` argument is added to the incidence() function. Additionally, the `show_cases = ` argument of plot() is set to FALSE to aid the aesthetics.  
+To **stratify the epidemic curve** by a categorical variable (such as gender), the `groups = ` argument is added to the incidence() function. Additionally, the `show_cases = ` argument of plot() can be set to FALSE to improve aesthetics.  
 
 **Note: Remember that if listing a variable, the plot() function expects its "full name", such as `linelist_cleaned$sex`**. Otherwise you may get an error such as "object 'sex' not found".  
 
@@ -176,9 +177,9 @@ plot(inc_week_7_gender, show_cases = FALSE, border = "black", n_breaks = nrow(in
   epicurve_theme
 ```
 
-Lastly, we can limit the entire plot to a subset of observations by first filtering the dataset and passing the result to the incidence() function.  
+Lastly, we can **limit the entire plot to a subset of observations** by first filtering the dataset and passing the result to the incidence() function.  
 
-The example below creates the object inc_week_7_sex_fac, as defined as the result of incidence() operating upon a filtered version of linelist_cleaned. The filter used means only Inpatient observations are included. Note how fewer cases there are.  
+In the example below, incidence() operates upon a filtered version of linelist_cleaned that only includes inpatients. The resulting object is used, as before, in plot() in the step below.  
 
 
 ```{r incidence_by_sex_facility, message = FALSE}
@@ -197,12 +198,19 @@ plot(inc_week_7_sex_fac, show_cases = TRUE, border = "black", n_breaks = nrow(in
 ```
 
 
-### Plotting other indicators by time  
+### Analysis of other indicators by time  
 
 
 #### Attack rate by week  
 
-The code below  
+The code below produces a table of the attack rates by epiweek.  
+
+**First**, the object "cases" is defined as linelist observations counted and arranged/ordered by epiweek, accompanied by a cumulative sum column.  
+
+**Second**, the object "ar" is defined using the attack_rate() function, which looks with "cases" at counts for each week (column "n") and the denominator "population" which was defined earlier as the sum of the regional populations (62336). The rate multiplier is set to 10000 but is changeable. The epiweeks are also attached to "ar" as a column.  
+
+**Third**, aesthetic operations are done to "ar" to improve column names. Finally, the table is produced.  
+
 
 ```{r attack_rate_per_week, warning = FALSE, message = FALSE}
 # counts and cumulative counts by week
@@ -212,40 +220,45 @@ cases <- linelist_cleaned %>%
   mutate(cumulative = cumsum(n))    # add a cumulative sum
 
 # attack rate for each week
-ar <- attack_rate(cases$n, population, multiplier = 100000) %>% 
+ar <- attack_rate(cases$n, population, multiplier = 10000) %>% 
   bind_cols(select(cases, epiweek), .) # add the epiweek column to table
 
+# Display the table
 ar %>%
   merge_ci_df(e = 4) %>% # merge the lower and upper CI into one column
   rename("Epiweek" = epiweek, 
          "Cases (n)" = cases, 
          "Population" = population, 
-         "AR (per 100,000)" = ar, 
+         "AR (per 10,000)" = ar, 
          "95%CI" = ci) %>% 
   knitr::kable(digits = 2, align = "r")
 ```
+ 
 
-And cumulatively:  
+This code produces the *cumulative* attack rate, by week. In the attack_rate() command it references the `cases$cumulative` column, instead of `cases$n column`.
 
 
 ```{r cumulative_attack_rate_per_week}
 # cumulative attack rate by week
-attack_rate(cases$cumulative, population, multiplier = 100000) %>% 
+attack_rate(cases$cumulative, population, multiplier = 10000) %>% 
   bind_cols(select(cases, epiweek), .) %>% # add the epiweek column to table
   merge_ci_df(e = 4) %>% # merge the lower and upper CI into one column
   rename("Epiweek" = epiweek, 
          "Cases (n)" = cases, 
          "Population" = population, 
-         "AR (per 100,000)" = ar, 
+         "AR (per 10,000)" = ar, 
          "95%CI" = ci) %>% 
   knitr::kable(digits = 2, align = "r")
 ```
+
+This next code chunk applies a filter for only inpatient observations. It also uses a different function, case_fatality_rate_df(), to produce a table showing deaths, cases, CFR, and CFR confidence intervals.  
 
 ```{r cfr_per_week, warning = FALSE, message = FALSE}
 # group by known outcome and case definition 
 cfr <- linelist_cleaned %>%
   filter(patient_facility_type == "Inpatient") %>%
   case_fatality_rate_df(grepl("Dead", exit_status), group = epiweek)
+
 
 cfr %>%
   merge_ci_df(e = 4) %>% # merge the lower and upper CI into one column
@@ -257,7 +270,13 @@ cfr %>%
   knitr::kable(digits = 2, align = "r")
 ```
 
-You could plot the AR (in the population) and CFR (among inpatients only) together as line graphs by epiweek. 
+#### Plotting AR, CFR, and Epidemic Curve together  
+
+These code chunks produce plots of the AR (in the population), CFR (among inpatients only), and the AF and CFR as line graphs together with the Epidemic Curve.  
+
+**The first chunk prepares a plot of attack rate by epiweek, but does not yet print it.** You can print it alone by running a command of its name `ar_plot`.
+
+*Note: this ar_plot depends on you having already run the attack_rate_per_week chunk. If you have not, you may see "Error: epiweek not found"*  
 
 ```{r ar_line_graph}
 ar_plot <- ggplot(ar, aes(x = week2date(epiweek) + (7 * 0.5), group = 1)) +
@@ -268,12 +287,14 @@ ar_plot <- ggplot(ar, aes(x = week2date(epiweek) + (7 * 0.5), group = 1)) +
   # scale the x axis the same as the incidence curve. Expand forces it to align. 
   incidence::scale_x_incidence(inc_week_7, n_breaks = nrow(inc_week_7), expand = c(0, 7 * 1.5)) +
   # add labels to axes and below chart
-  labs(x = "Calendar week", y = "AR [95% CI]", subtitle = "Attack Rate (per 100,000)") + 
+  labs(x = "Calendar week", y = "AR [95% CI]", subtitle = "Attack Rate (per 10,000)") + 
   # change visuals of dates and remove legend title
   epicurve_theme
 ```
 
-To plot CFR you must first make the CFR table using above code
+**The second code chunk prepares a plot of CFR by epiweek, but does not yet print it.** You can print it alone by running a command with its name `cfr_plot`.  
+
+*Note: this cfr_plot depends on you having already run the cfr_per_week chunk. If you have not, you may see "Error: epiweek not found".*  
 
 ```{r cfr_line_graph}
 cfr_plot <- ggplot(cfr, aes(x = week2date(epiweek) + (7 * 0.5), group = 1)) +
@@ -288,15 +309,17 @@ cfr_plot <- ggplot(cfr, aes(x = week2date(epiweek) + (7 * 0.5), group = 1)) +
        subtitle = "Case Fatality Ratio [95% CI] Among Inpatients") + 
   # change visuals of dates and remove legend title
   epicurve_theme 
-
 ```
 
 
-You could then also add the AR and CFR by week on to an epicurve. 
+**Adding the AR and CFR plots with an Epidemic Curve** and plotting them all together is now possible with the function cowplot(), which nicely combines different plots. 
 
-```{r epicurve_ar_cfr, message = FALSE, fig.height = 10}
+```{r epicurve_ar_cfr, message = FALSE, fig.height = 10, warning=FALSE}
+# Define no specified axis text or title over the combined plot
 nofx <- theme(axis.text.x = element_blank(),
               axis.title.x = element_blank())
+
+# Combine the three plots together
 cowplot::plot_grid(
   basic_curve + nofx,
   ar_plot + nofx,
@@ -308,7 +331,40 @@ cowplot::plot_grid(
 ```
 
 
-more optins...
+#### Admission and exits by epiweek  
+
+This next code chunk describes each epiweek's admission by their case definition status. It uses tab_linelist() again to look at linelist_cleaned, with rows as epiweek, and columns as case_def, with row and column totals.  
+
+
+```{r describe_admissions_by_epiweek, warning = FALSE}
+# get counts and props of admissions by epiweek and case definition 
+# include column and row totals 
+tab_linelist(linelist_cleaned, epiweek, strata = case_def,
+             col_total = TRUE,
+             row_total = TRUE) %>% 
+  select(-variable) %>%
+  rename_redundant("%" = proportion) %>%
+  augment_redundant(" (n)" = " n$") %>%
+  kable(digits = 2)
+```
+
+Finally, this produces the same table as above but uses exit_status2 as the strata/column variable to display exits per epiweek. Note that this is also filtered to only include inpatient observations.  
+
+
+```{r describe_exits_by_epiweek, warning = FALSE}
+# get counts and props of admissions by epiweek among inpatients
+# include column and row totals 
+linelist_cleaned %>% 
+  filter(patient_facility_type == "Inpatient") %>%
+  tab_linelist(epiweek, strata = exit_status2, 
+               col_total = TRUE, row_total = TRUE) %>% 
+  select(-variable) %>%
+  rename("Week" = value) %>%
+  rename_redundant("%" = proportion) %>%
+  augment_redundant(" (n)" = " n$") %>%
+  kable(digits = 2)
+```
+
 
 
 

@@ -321,8 +321,10 @@ Mortality attributable to AJS - not appropriate for this example because... TODO
 
 
 ```{r, include=FALSE, results='hide', message=FALSE, warning=FALSE}
-# Save linelist_cleaned for use in the next page (time analyses).
+# Save objects for use in the next page (time analyses).
 saveRDS(linelist_cleaned, "data/linelist_person_cleaned.rds")
+
+saveRDS(population, "data/population.rds")
 ```
 
 
