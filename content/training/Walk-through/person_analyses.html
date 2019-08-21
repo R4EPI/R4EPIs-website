@@ -38,6 +38,8 @@ tab_linelist(linelist_cleaned,
 <thead>
 <tr class="header">
 <th align="left">Age group</th>
+<th align="right">Confirmed cases (n)</th>
+<th align="right">%</th>
 <th align="right">Suspected cases (n)</th>
 <th align="right">%</th>
 <th align="right">Missing cases (n)</th>
@@ -48,47 +50,59 @@ tab_linelist(linelist_cleaned,
 <tbody>
 <tr class="odd">
 <td align="left">0-2</td>
-<td align="right">45</td>
-<td align="right">5.57</td>
+<td align="right">4</td>
+<td align="right">4.04</td>
+<td align="right">41</td>
+<td align="right">5.78</td>
 <td align="right">23</td>
 <td align="right">3.65</td>
 <td align="right">68</td>
 </tr>
 <tr class="even">
 <td align="left">3-14</td>
-<td align="right">320</td>
-<td align="right">39.60</td>
+<td align="right">30</td>
+<td align="right">30.30</td>
+<td align="right">290</td>
+<td align="right">40.90</td>
 <td align="right">321</td>
 <td align="right">50.87</td>
 <td align="right">641</td>
 </tr>
 <tr class="odd">
 <td align="left">15-29</td>
-<td align="right">296</td>
-<td align="right">36.63</td>
+<td align="right">46</td>
+<td align="right">46.46</td>
+<td align="right">250</td>
+<td align="right">35.26</td>
 <td align="right">181</td>
 <td align="right">28.68</td>
 <td align="right">477</td>
 </tr>
 <tr class="even">
 <td align="left">30-44</td>
-<td align="right">113</td>
-<td align="right">13.99</td>
+<td align="right">15</td>
+<td align="right">15.15</td>
+<td align="right">98</td>
+<td align="right">13.82</td>
 <td align="right">76</td>
 <td align="right">12.04</td>
 <td align="right">189</td>
 </tr>
 <tr class="odd">
 <td align="left">45+</td>
-<td align="right">34</td>
-<td align="right">4.21</td>
+<td align="right">4</td>
+<td align="right">4.04</td>
+<td align="right">30</td>
+<td align="right">4.23</td>
 <td align="right">30</td>
 <td align="right">4.75</td>
 <td align="right">64</td>
 </tr>
 <tr class="even">
 <td align="left">Total</td>
-<td align="right">808</td>
+<td align="right">99</td>
+<td align="right">100.00</td>
+<td align="right">709</td>
 <td align="right">100.00</td>
 <td align="right">631</td>
 <td align="right">100.00</td>
@@ -313,11 +327,11 @@ tab_linelist(linelist_cleaned, LABS,
 <th align="left">Lab test</th>
 <th align="right">neg (n)</th>
 <th align="right">%</th>
-<th align="right">Neg (n)</th>
+<th align="right">Negative (n)</th>
 <th align="right">%</th>
 <th align="right">pos (n)</th>
 <th align="right">%</th>
-<th align="right">Pos (n)</th>
+<th align="right">Positive (n)</th>
 <th align="right">%</th>
 <th align="right">Weakly pos (n)</th>
 <th align="right">%</th>
@@ -631,10 +645,16 @@ tab_linelist(linelist_cleaned, LABS,
 </div>
 <div id="case-fatality-ratio-cfr" class="section level2">
 <h2>Case Fatality Ratio (CFR)</h2>
-<p>The opening text with in-line code must be edited to match our Am Timan data.</p>
-<p>Time to death not applicable.</p>
-<p>The case fatality ratio among inpatients with known outcomes is below.</p>
-<p>Case Fatality Ratio - note that this requires there to be a variable patient_facilit_type, the value “Inpatient”, and the DIED variable created earlier.</p>
+<p>The opening text with in-line code must be edited to match our Am Timan data. The second in-line code references the variable exit_status and the value “Dead” - <strong>we know that it must now reference the variable exit_status2 and the value “Died”</strong>. Also, we do not have Dead on Arrival recorded in our dataset. Likewise, <strong>the section on time-to-death does not apply to our dataset and can be deleted.</strong></p>
+<p>TODO: PNG image of in-line code edited to be correct</p>
+<p>Overall CFR is produced with the code below. Note the following:</p>
+<ul>
+<li>This code requires the variable patient_facility_type, that it has a value “Inpatient”, and the DIED variable.<br />
+</li>
+<li>A filter is applied that restricts this table to Inpatient observations only.<br />
+</li>
+<li>rename() is used to change the column labels in the table</li>
+</ul>
 <pre class="r"><code># use arguments from above to produce overal CFR
 overall_cfr &lt;- linelist_cleaned %&gt;% 
   filter(patient_facility_type == &quot;Inpatient&quot;) %&gt;%
@@ -643,7 +663,6 @@ overall_cfr &lt;- linelist_cleaned %&gt;%
          &quot;Cases&quot; = population,
          &quot;CFR (%)&quot; = cfr,
          &quot;95%CI&quot; = ci)
-
   knitr::kable(overall_cfr, digits = 2)         # print nicely with 2 digits</code></pre>
 <table>
 <thead>
@@ -663,7 +682,7 @@ overall_cfr &lt;- linelist_cleaned %&gt;%
 </tr>
 </tbody>
 </table>
-<p>We can also do CFR by sex</p>
+<p>The next code adds arguments to case_fatality_rate_df() such as <code>group = sex</code> (which stratified the CFR by sex), and <code>add_total = TRUE</code> (which makes a total row across the sex groups).</p>
 <pre class="r"><code>linelist_cleaned %&gt;%
   filter(patient_facility_type == &quot;Inpatient&quot;) %&gt;%
   mutate(sex = forcats::fct_explicit_na(sex, &quot;-&quot;)) %&gt;%
@@ -708,14 +727,16 @@ overall_cfr &lt;- linelist_cleaned %&gt;%
 </tr>
 </tbody>
 </table>
-<p>…and by age_group:</p>
-<p>CFR by age group among inpatients with known outcomes</p>
+<p>When creating a table of CFR by age groups, one additional step, using the function complete() is required to ensure that all age_group levels are shown even if they have no observations.</p>
 <pre class="r"><code>linelist_cleaned %&gt;%
   filter(patient_facility_type == &quot;Inpatient&quot;) %&gt;%
   case_fatality_rate_df(deaths = DIED, group = age_group, mergeCI = TRUE, add_total = TRUE) %&gt;%
   tidyr::complete(age_group, 
-                  fill = list(deaths = 0, population = 0, cfr = 0, ci = 0)) %&gt;% # Ensure all levels are represented
-  rename(&quot;Age Group&quot; = age_group, 
+                  fill = list(deaths = 0, 
+                              population = 0, 
+                              cfr = 0, 
+                              ci = 0)) %&gt;% # Ensure all levels are represented
+  rename(&quot;Age group&quot; = age_group, 
          &quot;Deaths&quot; = deaths, 
          &quot;Cases&quot; = population, 
          &quot;CFR (%)&quot; = cfr, 
@@ -724,7 +745,7 @@ overall_cfr &lt;- linelist_cleaned %&gt;%
 <table>
 <thead>
 <tr class="header">
-<th align="left">Age Group</th>
+<th align="left">Age group</th>
 <th align="right">Deaths</th>
 <th align="right">Cases</th>
 <th align="right">CFR (%)</th>
@@ -783,13 +804,13 @@ overall_cfr &lt;- linelist_cleaned %&gt;%
 </tr>
 </tbody>
 </table>
-<p>CFR by case definition (not enough to do)</p>
+<p>The commented code below examines <strong>CFR by case definition</strong>. Note that this is dependant upon our working case_def variable.</p>
 <pre class="r"><code># Use if you have enough confirmed cases for comparative analysis 
-#
+
  linelist_cleaned %&gt;%
    filter(patient_facility_type == &quot;Inpatient&quot;) %&gt;%
    case_fatality_rate_df(deaths = DIED, group = case_def, mergeCI = TRUE, add_total = TRUE) %&gt;%
-   rename(&quot;Case Definition&quot; = case_def, 
+   rename(&quot;Case definition&quot; = case_def, 
           &quot;Deaths&quot; = deaths, 
           &quot;Cases&quot; = population, 
           &quot;CFR (%)&quot; = cfr, 
@@ -798,7 +819,7 @@ overall_cfr &lt;- linelist_cleaned %&gt;%
 <table>
 <thead>
 <tr class="header">
-<th align="left">Case Definition</th>
+<th align="left">Case definition</th>
 <th align="right">Deaths</th>
 <th align="right">Cases</th>
 <th align="right">CFR (%)</th>
@@ -807,13 +828,20 @@ overall_cfr &lt;- linelist_cleaned %&gt;%
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">Suspected</td>
-<td align="right">13</td>
-<td align="right">86</td>
-<td align="right">15.12</td>
-<td align="left">(9.05–24.16)</td>
+<td align="left">Confirmed</td>
+<td align="right">8</td>
+<td align="right">44</td>
+<td align="right">18.18</td>
+<td align="left">(9.51–31.96)</td>
 </tr>
 <tr class="even">
+<td align="left">Suspected</td>
+<td align="right">5</td>
+<td align="right">42</td>
+<td align="right">11.90</td>
+<td align="left">(5.19–25.00)</td>
+</tr>
+<tr class="odd">
 <td align="left">Total</td>
 <td align="right">13</td>
 <td align="right">86</td>

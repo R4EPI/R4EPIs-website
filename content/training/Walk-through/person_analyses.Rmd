@@ -208,18 +208,15 @@ tab_linelist(linelist_cleaned, LABS,
 
 ## Case Fatality Ratio (CFR)
 
-The opening text with in-line code must be edited to match our Am Timan data. 
+The opening text with in-line code must be edited to match our Am Timan data. The second in-line code references the variable exit_status and the value "Dead" - **we know that it must now reference the variable exit_status2 and the value "Died"**. Also, we do not have Dead on Arrival recorded in our dataset. Likewise, **the section on time-to-death does not apply to our dataset and can be deleted.**  
 
+TODO: PNG image of in-line code edited to be correct  
 
-Time to death not applicable. 
+Overall CFR is produced with the code below. Note the following:  
 
-
-
-The case fatality ratio among inpatients with known outcomes is below.
-
-
-
-Case Fatality Ratio - note that this requires there to be a variable patient_facilit_type, the value "Inpatient", and the DIED variable created earlier. 
+* This code requires the variable patient_facility_type, that it has a value "Inpatient", and the DIED variable.  
+* A filter is applied that restricts this table to Inpatient observations only.  
+* rename() is used to change the column labels in the table  
 
 ```{r overall_cfr, warning = FALSE, message = FALSE}
 # use arguments from above to produce overal CFR
@@ -230,13 +227,10 @@ overall_cfr <- linelist_cleaned %>%
          "Cases" = population,
          "CFR (%)" = cfr,
          "95%CI" = ci)
-
   knitr::kable(overall_cfr, digits = 2)         # print nicely with 2 digits
 ```
 
-
-
-We can also do CFR by sex
+The next code adds arguments to case_fatality_rate_df() such as `group = sex` (which stratified the CFR by sex), and `add_total = TRUE` (which makes a total row across the sex groups).  
 
 ```{r cfr_by_sex, warning = FALSE, message = FALSE}
 linelist_cleaned %>%
@@ -251,20 +245,19 @@ linelist_cleaned %>%
   knitr::kable(digits = 2)
 ```
 
+When creating a table of CFR by age groups, one additional step, using the function complete() is required to ensure that all age_group levels are shown even if they have no observations.  
 
-...and by age_group:
-
-
-CFR by age group among inpatients with known outcomes
 
 ```{r cfr_by_age_group, warning = FALSE, message = FALSE}
-
 linelist_cleaned %>%
   filter(patient_facility_type == "Inpatient") %>%
   case_fatality_rate_df(deaths = DIED, group = age_group, mergeCI = TRUE, add_total = TRUE) %>%
   tidyr::complete(age_group, 
-                  fill = list(deaths = 0, population = 0, cfr = 0, ci = 0)) %>% # Ensure all levels are represented
-  rename("Age Group" = age_group, 
+                  fill = list(deaths = 0, 
+                              population = 0, 
+                              cfr = 0, 
+                              ci = 0)) %>% # Ensure all levels are represented
+  rename("Age group" = age_group, 
          "Deaths" = deaths, 
          "Cases" = population, 
          "CFR (%)" = cfr, 
@@ -273,22 +266,21 @@ linelist_cleaned %>%
 ```
 
 
-CFR by case definition (not enough to do)
+The commented code below examines **CFR by case definition**. Note that this is dependant upon our working case_def variable.
 
 ```{r cfr_by_case_def, warning = FALSE, message = FALSE}
 # Use if you have enough confirmed cases for comparative analysis 
-#
+
  linelist_cleaned %>%
    filter(patient_facility_type == "Inpatient") %>%
    case_fatality_rate_df(deaths = DIED, group = case_def, mergeCI = TRUE, add_total = TRUE) %>%
-   rename("Case Definition" = case_def, 
+   rename("Case definition" = case_def, 
           "Deaths" = deaths, 
           "Cases" = population, 
           "CFR (%)" = cfr, 
           "95%CI" = ci) %>% 
    knitr::kable(digits = 2)
 ```
-
 
 ## Attack Rate
 To use the attack rate section, we need to modify the first code slightly. An object "population" is created from the sum of population counts in the population figures. Because we only imported region-based population counts, we must change this command to reflect that we do not have population_data_age, but rather population_data_region
