@@ -40,6 +40,8 @@ tab_linelist(linelist_cleaned,
 <th align="left">Age group</th>
 <th align="right">Confirmed cases (n)</th>
 <th align="right">%</th>
+<th align="right">Probable cases (n)</th>
+<th align="right">%</th>
 <th align="right">Suspected cases (n)</th>
 <th align="right">%</th>
 <th align="right">Missing cases (n)</th>
@@ -52,8 +54,10 @@ tab_linelist(linelist_cleaned,
 <td align="left">0-2</td>
 <td align="right">4</td>
 <td align="right">4.04</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
 <td align="right">41</td>
-<td align="right">5.78</td>
+<td align="right">5.83</td>
 <td align="right">23</td>
 <td align="right">3.65</td>
 <td align="right">68</td>
@@ -62,8 +66,10 @@ tab_linelist(linelist_cleaned,
 <td align="left">3-14</td>
 <td align="right">30</td>
 <td align="right">30.30</td>
-<td align="right">290</td>
-<td align="right">40.90</td>
+<td align="right">1</td>
+<td align="right">16.67</td>
+<td align="right">289</td>
+<td align="right">41.11</td>
 <td align="right">321</td>
 <td align="right">50.87</td>
 <td align="right">641</td>
@@ -72,8 +78,10 @@ tab_linelist(linelist_cleaned,
 <td align="left">15-29</td>
 <td align="right">46</td>
 <td align="right">46.46</td>
-<td align="right">250</td>
-<td align="right">35.26</td>
+<td align="right">2</td>
+<td align="right">33.33</td>
+<td align="right">248</td>
+<td align="right">35.28</td>
 <td align="right">181</td>
 <td align="right">28.68</td>
 <td align="right">477</td>
@@ -82,8 +90,10 @@ tab_linelist(linelist_cleaned,
 <td align="left">30-44</td>
 <td align="right">15</td>
 <td align="right">15.15</td>
-<td align="right">98</td>
-<td align="right">13.82</td>
+<td align="right">2</td>
+<td align="right">33.33</td>
+<td align="right">96</td>
+<td align="right">13.66</td>
 <td align="right">76</td>
 <td align="right">12.04</td>
 <td align="right">189</td>
@@ -92,8 +102,10 @@ tab_linelist(linelist_cleaned,
 <td align="left">45+</td>
 <td align="right">4</td>
 <td align="right">4.04</td>
-<td align="right">30</td>
-<td align="right">4.23</td>
+<td align="right">1</td>
+<td align="right">16.67</td>
+<td align="right">29</td>
+<td align="right">4.13</td>
 <td align="right">30</td>
 <td align="right">4.75</td>
 <td align="right">64</td>
@@ -102,7 +114,9 @@ tab_linelist(linelist_cleaned,
 <td align="left">Total</td>
 <td align="right">99</td>
 <td align="right">100.00</td>
-<td align="right">709</td>
+<td align="right">6</td>
+<td align="right">100.00</td>
+<td align="right">703</td>
 <td align="right">100.00</td>
 <td align="right">631</td>
 <td align="right">100.00</td>
@@ -853,25 +867,25 @@ overall_cfr &lt;- linelist_cleaned %&gt;%
 </div>
 <div id="attack-rate" class="section level2">
 <h2>Attack Rate</h2>
-<p>To use the attack rate section, we need to modify the first code slightly. An object “population” is created from the sum of population counts in the population figures. Because we only imported region-based population counts, we must change this command to reflect that we do not have population_data_age, but rather population_data_region</p>
-<pre class="r"><code># OLD define population 
+<p>To use the attack rate section, we need to modify the first code slightly. An object “population” is created from the sum of population counts in the population figures. <strong>Because we only imported region-based population counts, we must change this command</strong> to reflect that we do not have population_data_age, but rather population_data_region.</p>
+<pre class="r"><code># OLD command from template 
 # population &lt;- sum(population_data_age$population)</code></pre>
 <p>Running the correct command and printing the value of population, we see that the sum population across regions is estimated to be 62336.</p>
-<pre class="r"><code># Correct command for this exercise
+<pre class="r"><code># Corrected command for Am Timan exercise
 population &lt;- sum(population_data_region$population)
 
 population</code></pre>
 <pre><code>## [1] 62336</code></pre>
-<p>Below gives the attack rate per 10,000 population (N = 62,336)</p>
-<pre class="r"><code># calculate the ar
-# store as AR to be able to use output for automating text below (inline functions)
+<p>The first line of code below creates a multi-part object <code>ar</code> with the number of cases, population, attack rate per 10,000, and lower and upper confidence intervals (you can run just this line to verify yourself). The subsequent commands alter the aesthetics of to produce a neat table with appropriate column names.</p>
+<pre class="r"><code># calculate the attack rate information and store them in object &quot;ar&quot;&quot;
 ar &lt;- attack_rate(nrow(linelist_cleaned), population, multiplier = 10000)
 
+# Create table from the information in the object &quot;ar&quot;&quot;
 ar %&gt;%
   merge_ci_df(e = 3) %&gt;% # merge the lower and upper CI into one column
   rename(&quot;Cases (n)&quot; = cases, 
          &quot;Population&quot; = population, 
-         &quot;AR (per 100,000)&quot; = ar, 
+         &quot;AR (per 10,000)&quot; = ar, 
          &quot;95%CI&quot; = ci) %&gt;% 
   select(-Population) %&gt;% # drop the population column as it is not changing
   knitr::kable(digits = 2, align = &quot;r&quot;)</code></pre>
@@ -879,7 +893,7 @@ ar %&gt;%
 <thead>
 <tr class="header">
 <th align="right">Cases (n)</th>
-<th align="right">AR (per 100,000)</th>
+<th align="right">AR (per 10,000)</th>
 <th align="right">95%CI</th>
 </tr>
 </thead>
@@ -892,5 +906,5 @@ ar %&gt;%
 </tbody>
 </table>
 <p>We are unable to calculate the attack rate by age group, because we do not have population counts for each age group.</p>
-<p>Mortality attributable to AJS - not appropriate for this example because…</p>
+<p>Mortality attributable to AJS - not appropriate for this example because… TODO</p>
 </div>

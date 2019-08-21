@@ -283,32 +283,33 @@ The commented code below examines **CFR by case definition**. Note that this is 
 ```
 
 ## Attack Rate
-To use the attack rate section, we need to modify the first code slightly. An object "population" is created from the sum of population counts in the population figures. Because we only imported region-based population counts, we must change this command to reflect that we do not have population_data_age, but rather population_data_region
+To use the attack rate section, we need to modify the first code slightly. An object "population" is created from the sum of population counts in the population figures. **Because we only imported region-based population counts, we must change this command** to reflect that we do not have population_data_age, but rather population_data_region.
 
 ```{r eval=FALSE}
-# OLD define population 
+# OLD command from template 
 # population <- sum(population_data_age$population)
 ```
 
 Running the correct command and printing the value of population, we see that the sum population across regions is estimated to be 62336.
 ```{r}
-# Correct command for this exercise
+# Corrected command for Am Timan exercise
 population <- sum(population_data_region$population)
 
 population
 ```
 
-Below gives the attack rate per 10,000 population (N = `r format(population, big.mark = ",")`)
+The first line of code below creates a multi-part object `ar` with the number of cases, population, attack rate per 10,000, and lower and upper confidence intervals (you can run just this line to verify yourself). The subsequent commands alter the aesthetics of to produce a neat table with appropriate column names. 
+
 ```{r attack_rate}
-# calculate the ar
-# store as AR to be able to use output for automating text below (inline functions)
+# calculate the attack rate information and store them in object "ar""
 ar <- attack_rate(nrow(linelist_cleaned), population, multiplier = 10000)
 
+# Create table from the information in the object "ar""
 ar %>%
   merge_ci_df(e = 3) %>% # merge the lower and upper CI into one column
   rename("Cases (n)" = cases, 
          "Population" = population, 
-         "AR (per 100,000)" = ar, 
+         "AR (per 10,000)" = ar, 
          "95%CI" = ci) %>% 
   select(-Population) %>% # drop the population column as it is not changing
   knitr::kable(digits = 2, align = "r")
@@ -316,7 +317,7 @@ ar %>%
 
 We are unable to calculate the attack rate by age group, because we do not have population counts for each age group.
 
-Mortality attributable to AJS - not appropriate for this example because...
+Mortality attributable to AJS - not appropriate for this example because... TODO
 
 
 ```{r, include=FALSE, results='hide', message=FALSE, warning=FALSE}
