@@ -1,0 +1,216 @@
+---
+date: "2019-08-21T10:16:12+02:00"
+title: Align variables with data dictionary
+menuTitle: Clean variable names
+weight: 8
+---
+
+
+```{r setup, include=FALSE, results='hide', message=FALSE, warning=FALSE}
+# hide all code chunks in the output, but show errors
+knitr::opts_chunk$set(echo = TRUE,       # hide all code chunks in output
+                      error = TRUE,       # show errors if they appear, but don't stop
+                      fig.width = 6*1.25, # Figure width
+                      fig.height = 6      # Figure height
+                     )
+# set default NA to - in output, define figure width/height
+options(knitr.kable.NA = "-")
+
+# Installing required packages for this template
+required_packages <- c("knitr",       # create output docs
+                       "dplyr",       # clean/shape data
+                       "forcats",     # clean/shape data
+                       "stringr",     # clean text
+                       "rio",         # read in data
+                       "ggplot2",     # create plots and charts
+                       "sitrep",      # MSF field epi functions
+                       "linelist",    # Functions for cleaning/standardising data
+                       "incidence",   # create epicurves
+                       "aweek",       # define epi weeks
+                       "epitools",    # 2x2 tables and other epi goodness
+                       "epitrix",     # epi helpers and tricks
+                       "sf",          # encode spatial vector data
+                       "ggspatial")   # plot maps
+
+for (pkg in required_packages) {
+  # install packages if not already present
+  if (!pkg %in% rownames(installed.packages())) {
+    install.packages(pkg)
+  }
+  
+  # load packages to this current session 
+  library(pkg, character.only = TRUE)
+}
+
+
+# set default text size to 16 for plots
+# give classic black/white axes for plots
+ggplot2::theme_set(theme_classic(base_size = 18))
+
+# Set the day that defines the beginning of your epiweek.
+# you can start the week on any day of the week
+# (the ISO standard is to start on Monday) 
+aweek::set_week_start("Monday")
+
+
+
+date2week("2017-04-20")      #Sys.Date() uses the current date from your computer
+
+
+reporting_week <- "2017-W16"  # Set the reporting week
+
+# Read in the R object linelist_cleaned that is defined and saved 
+# in the AJS_Walkthrough_Cleaning script
+linelist_raw <- readRDS("data/linelist_raw.rds")
+
+
+```
+
+
+
+
+
+## Align the dataset with the data dictionary  
+When using a non-standardized dataset, the variable names and values must be aligned with the data dictionary. **This process can take some time** and requires looking back-and-forth between your dataset, RStudio, and the MSF data dictionary. In this example, here are the steps taken:  
+
+### Review the MSF data dictionary
+Uncomment and run this command, found in the read_nonDHIS_data chunk, to view the MSF data dictionary for the disease ("AJS" in this example).
+
+```{r eval = FALSE}
+# Creates object linelist_dict using the msf_dict function from the sitrep package
+linelist_dict <- msf_dict("AJS", compact = FALSE) %>%
+  select(option_code, option_name, everything())
+```
+
+The dataframe linelist_dict should appear in your Environment pane. You can view the data dictionary by running the command `View(linelist_dict)` (note capital V), or by clicking linelist_dict in the Environment pane.  
+
+![](/images/AJS_Data_Dictionary.png)
+
+### Clean the variable names  
+These steps standardize how your variable names are written, such as changing spaces and dots to underscores ("_"). **Uncomment these lines of code in the read_nonDHIS_data chunk**.  
+
+**First, make a copy of the dataframe linelist_raw but with a new name: linelist_cleaned.** Throughout the template you will modify and improve this linelist_cleaned dataframe. However, you can always return to the linelist_raw version for reference.  
+
+```{r}
+## make a copy of your orginal dataset and name it linelist_cleaned
+linelist_cleaned <- linelist_raw
+```
+
+**Second, use the clean_labels() function** from the epitrix package to fix any variable names with non-standard syntax. These code lines take the column names, clean them, and then store the cleaned names in the vector cleaned_colnames. The second code line over-writes the old column names of linelist_cleaned with the improved ones.
+
+```{r}
+# Store cleaned column names
+cleaned_colnames <- epitrix::clean_labels(colnames(linelist_raw))
+
+# Overwrite variable column names with clean ones
+colnames(linelist_cleaned) <- cleaned_colnames
+```
+
+### Re-name variables to align with data dictionary  
+
+Standardized variable names are required for this template to work smoothly, and the variable names in our Am Timan dataset do not align with the names this template expects. The template offers code that you can uncomment if you only have to change a few variable names (see below). **However, in this example we need to change many variable names. For this scenario, MSF developed a special function to help map our variables to the expected variable names.**  
+
+* **Paste the disease-specific rename helper into the script.** This command is found in the template near the end of the "read_nonDHIS_data"" chunk. For our example we run the command `msf_dict_rename_helper("AJS")` and a block of code text is copied to our clipboard. Return to the template script and *paste* from the clipboard into the template. For the AJS template, the code that is pasted will look like the code below. This code uses the function rename() to change variable names.  
+
+*Note: Be sure to paste the code into an existing R code chunk, not into the white space of the RMarkdown script. 
+
+<img src="/images/Variable_Helper_Paste.gif" alt="rename variables empty snip", width = "100%">
+
+* **Complete the mapping of variable names.** To the right of the equals sign, and before the comma, type the *exact* names of the variables from your dataset that correspond to the expected MSF data dictionary variables on the left. *If there is a data dictionary variable that is not present in your dataset, be sure to comment (#) out that line, as shown in the GIF below.*
+
+![](/images/AJS_Variable_Names.gif)  
+
+**Tip: **If you see this error:  
+`Error in is_symbol(expr) : argument "expr" is missing, with no default`  
+then you likely forgot to comment (#) the line for a variable you did not use.  
+
+And now you can see the result:  
+
+<img src="/images/AJS_Rename_Variables_Proof.png" alt="rename variables proof", width = "100%">
+
+
+```{r include=FALSE, results='hide', message=FALSE, warning=FALSE}
+## Add the appropriate column names after the equals signs
+
+linelist_cleaned <- rename(linelist_cleaned,
+#  event_file_type                   =   , # TEXT                # (Not in dataset)
+  case_number                       =   hevid, # TEXT
+  date_of_admission                 =   dtmedical, # DATE
+  detected_by                       =   referredby, # TEXT
+  patient_facility_type             =   hospitalised, # TEXT
+#  msf_involvement                   =   , # TEXT                # (Not in dataset)
+  age_years                         =   age, # INTEGER_POSITIVE
+#  age_months                        =   , # INTEGER_POSITIVE   # (Dataset only has years)
+#  age_days                          =   , # INTEGER_POSITIVE   # (Dataset only has years)
+  sex                               =   sex, # TEXT
+  patient_origin                    =   quartier, # ORG UNIT
+#  residential_status_brief          =   , # TEXT               # (Not in dataset)
+#  arrival_date_in_area_if_3m        =   , # DATE               # (Not in dataset)
+#  ever_received_hepatitis_e_vaccine =   , # TEXT               # (Not in dataset)
+#  date_of_last_vaccination          =   , # DATE               # (Not in dataset)
+  date_of_onset                     =   dtjaundice, # DATE
+#  history_of_fever                  =   , # BOOLEAN            # (Not in dataset)
+  fever                             =   medfever, # BOOLEAN
+  nausea_anorexia                   =   mednausea, # BOOLEAN
+  vomiting                          =   medvomit, # BOOLEAN
+  epigastric_pain_heartburn         =   medepigastric, # BOOLEAN
+  generalized_itch                  =   meditching, # BOOLEAN
+  headache                          =   medheadache, # BOOLEAN
+  joint_pains                       =   medarthralgia, # BOOLEAN
+  diarrhoea                         =   meddiar, # BOOLEAN
+  bleeding                          =   medbleeding, # BOOLEAN
+#  convulsions                       =   , # BOOLEAN            # (Not in dataset)
+  mental_state                      =   medmental, # BOOLEAN    # !(Needs value cleaning)
+  other_symptoms                    =   medother, # BOOLEAN
+  other_cases_in_hh                 =   medothhhajs, # BOOLEAN
+#  traditional_medicines             =   , # BOOLEAN            # (Not in dataset)
+#  traditional_medicine_details      =   , # TEXT               # (Not in dataset)
+#  recent_travel                     =   , # BOOLEAN            # (Not in dataset)
+#  water_source                      =   , # TEXT               # !(Split across many variables)
+  malaria_rdt_at_admission          =   medmalrdt, # TEXT
+  hep_b_rdt                         =   medhepb, # TEXT
+  hep_c_rdt                         =   medhepc, # TEXT
+  hep_e_rdt                         =   medhevrdt, # TEXT
+#  dengue_rdt                        =   , # TEXT               # (Not in dataset)
+  date_lab_sample_taken             =   medblooddt, # DATE
+  test_hepatitis_a                  =   medhavelisa, # TEXT
+  test_hepatitis_b                  =   medhbvelisa, # TEXT
+  test_hepatitis_c                  =   medhcvelisa, # TEXT
+  test_hepatitis_e_virus            =   medhevelisa, # TEXT
+  test_hepatitis_e_igm              =   hevrecent, # TEXT
+#  test_hepatitis_e_igg              =   , # TEXT               # (In same variable as elisa result)
+  test_hepatitis_e_genotype         =   hevgenotype, # TEXT
+#  malaria_blood_film                =   , # TEXT               # (Not in dataset)
+  dengue                            =   dengue, # TEXT
+  yellow_fever                      =   yf, # TEXT
+#  lassa_fever                       =   , # TEXT               # (Not in dataset)
+#  typhoid                           =   , # TEXT               # (Not in dataset)
+  chikungunya_onyongnyong           =   chik, # TEXT
+#  ebola_marburg                     =   , # TEXT               # (Not in dataset)
+  other_arthropod_transmitted_virus =   arbovpcr, # TEXT
+#  other_pathogen                    =   , # TEXT               # (Not in dataset)
+#  lab_comments                      =   , # TEXT               # (Not in dataset)
+  pregnant                          =   medpreg, # TEXT
+  trimester                         =   medpregtri, # TEXT
+#  foetus_alive_at_admission         =   , # TEXT               # (Not in dataset)
+#  delivery_event                    =   , # TRUE_ONLY          # (Not in dataset)
+  pregnancy_outcome_at_exit         =   medppoutcome, # TEXT
+  exit_status                       =   outcomehp, # TEXT
+#  date_of_exit                      =   , # DATE               # (Not in dataset)
+#  time_to_death                     =   , # TEXT               # (Not in dataset)
+  treatment_facility_site           =   hpid, # TEXT
+#  treatment_location                =   , # ORGANISATION_UNIT  # (Not in dataset)
+  patient_origin_free_text          =   block # TEXT
+)
+```
+
+
+
+
+```{r, include=FALSE, results='hide', message=FALSE, warning=FALSE}
+# Save linelist_cleaned for use in the next pages.
+saveRDS(linelist_cleaned, "data/linelist_aligned.rds")
+```
+
+
+
