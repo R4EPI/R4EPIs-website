@@ -6,6 +6,11 @@ weight: 13
 
 
 
+<p>TODO: Introduction to time analyses…</p>
+<p>The first code chunk (create_incidence) is about setting-up the data for the epidemic curves. There will not be output from this first code chunk.</p>
+<p><strong>First</strong>, the function incidence() counts the number of cases for each week, by date_of_onset. It stores this information in the object inc_week_7.</p>
+<p><strong>Second</strong>, the theme elements are set that ggplot2() will use when plotting the epidemic curves (you can read more about ggplot2 and theme elements HERE TODO). This includes the angle and placement of x-axis label text, having no title in the legend, and setting colors and type for x and y gridlines.</p>
+<p><strong>Third</strong>, the text labels for the x and y axes, title, and subtitle (subtitle automatically using the reporting week defined at the top of the template). These are stored in the object epicurve_labels.</p>
 <pre class="r"><code># This code creates case counts for each week of your outbreak, overall
 # As with aweek, you can change the start of your week to e.g. &quot;Sunday week&quot;
 inc_week_7 &lt;- incidence(linelist_cleaned$date_of_onset, interval = &quot;Monday week&quot;)
@@ -17,12 +22,15 @@ epicurve_theme &lt;- theme(
   panel.grid.major.x = element_line(color = &quot;grey60&quot;, linetype = 3),
   panel.grid.major.y = element_line(color = &quot;grey60&quot;, linetype = 3)
 )
+
 # This sets the labels in ggplot for the epicurves
 epicurve_labels &lt;- labs(x = &quot;Calendar week&quot;, 
                         y = &quot;Cases (n)&quot;, 
                         title = &quot;Cases by week of onset&quot;,
                         subtitle = sprintf(&quot;Source: MSF data from %s&quot;, reporting_week)
                        ) </code></pre>
+<p>In this next chunk (epicurve), the plot of the epidemic curve is finalized and displayed. note that the plot() function from the package incidence(), that is used here, uses ggplot() and is different than the base R plot() function.</p>
+<p>As with ggplot2, layers of the graphic are added using the + symbol. In this case, the plot from incidence() is stored first, then the axes, then the labels, and finally the theme parameters. All of these are stored in the object basic_curve, which is finally run to display the result.</p>
 <pre class="r"><code># plot your epicurve as a ggplot (incidence::plot is different to base::plot)
 basic_curve &lt;- plot(inc_week_7, show_cases = TRUE, border = &quot;black&quot;, n_breaks = nrow(inc_week_7)) + 
   scale_y_continuous(expand = c(0, 0)) +  # set origin for axes
@@ -30,12 +38,20 @@ basic_curve &lt;- plot(inc_week_7, show_cases = TRUE, border = &quot;black&quot;
   epicurve_labels +
   # change visuals of dates and remove legend title
   epicurve_theme
-
 # show your plot (stored for later use) 
 basic_curve</code></pre>
 <p><img src="/training/Walk-through/time_analyses_files/figure-html/epicurve-1.png" width="720" /></p>
-<pre class="r"><code>basic_curve + scale_x_incidence(inc_week_7, n_breaks = 6)</code></pre>
-<p><img src="/training/Walk-through/time_analyses_files/figure-html/epicurve-2.png" width="720" /></p>
+<pre class="r"><code>## if the outbreak has been going on for a while, your x-axis might look messy.
+# to reduce the number of labels, uncomment the below.
+# you can customize the number of breaks by changing n_breaks.
+#
+#basic_curve + scale_x_incidence(inc_week_7, n_breaks = 6)</code></pre>
+<p>The x-axis is quite crowded, so we can uncomment and use the helper code at the bottom of the code chunk. This modifies the already-defined basic_curve (using a +) to change the x-axis to show a specified number of dates (6 in this case).</p>
+<pre class="r"><code># Modifies basic_curve to show only 6 x-axis breaks 
+basic_curve + scale_x_incidence(inc_week_7, n_breaks = 6)</code></pre>
+<pre><code>## Scale for &#39;x&#39; is already present. Adding another scale for &#39;x&#39;, which
+## will replace the existing scale.</code></pre>
+<p><img src="/training/Walk-through/time_analyses_files/figure-html/unnamed-chunk-1-1.png" width="720" /></p>
 <p>Other possible variants on the epi curve:<br />
 * Option 1<br />
 * Option 2<br />
