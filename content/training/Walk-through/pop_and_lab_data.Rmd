@@ -1,0 +1,51 @@
+---
+date: "2019-08-21T10:27:23+02:00"
+title: Population and lab data
+weight: 9
+---
+
+
+
+## Provide population counts  
+The population estimates for regions and age groups are collected in order to calculate attack and mortality rates. **The template allows several ways to provide population estimates, but importantly, the data must be stored under specific variable names.** In your real-use case, the specific age groupings and region names in your data may differ from the examples, but the variable names must follow the expected standard.  
+
+You can do one of the following:  
+1) Enter the estimates directly **[need clarification here as this is not yet built]**  
+2) Use the function gen_population() to derive the estimates from proportions  
+3) Import a spreadsheet file with the estimates in the correct format  
+
+![](/images/AJS_Population_Counts.png)  
+
+For the AJS example, we can use an Excel spreadsheet containing population figures by region. Uncomment this line of code in the read_population_data chunk and modify it to import the Excel spreadsheet (link for spreadsheet download at top of this webpage). Note that the spreadsheet variables names have already been edited to match the expected names ("patient_origin" and "population").  
+
+As they will not be used, delete or comment (#) all the code lines in the chunk that create fake data for population_data_region, population_data_age, and population_data_age_months.
+
+>The file path you provide to the function may differ. A few notes about file paths:  
+* If copying a file path from Microsoft computer, you will need to reverse any slashes from \ to /.  
+* [NOTES ON USING HERE and RIO::IMPORT]  
+
+```{r}
+population_data_region <- rio::import("AJS_AmTiman_population_revised_for_template.xlsx", which="quartier")
+```
+
+
+**If you choose not to complete the population estimates section, delete the default gen_population() code, and expect that later sections on attack and mortality rates will not produce output.**
+
+
+
+
+```{r, include=FALSE, results='hide', message=FALSE, warning=FALSE}
+# Save population_data_region for this website page as "population_data" for use in the next page.
+saveRDS(population_data_region, "data/population_data.rds")
+```
+
+
+
+
+## Provide laboratory testing data  
+
+**TODO: [Paragraph about lab data here - how it is used]**  
+
+
+
+
