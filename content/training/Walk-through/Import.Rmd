@@ -1,0 +1,91 @@
+---
+date: "2019-08-21T09:36:04+02:00"
+title: Import
+weight: 7
+---
+
+
+```{r setup, include=FALSE, results='hide', message=FALSE, warning=FALSE}
+# hide all code chunks in the output, but show errors
+knitr::opts_chunk$set(echo = TRUE,       # hide all code chunks in output
+                      error = TRUE,       # show errors if they appear, but don't stop
+                      fig.width = 6*1.25, # Figure width
+                      fig.height = 6      # Figure height
+                     )
+# set default NA to - in output, define figure width/height
+options(knitr.kable.NA = "-")
+
+# Installing required packages for this template
+required_packages <- c("knitr",       # create output docs
+                       "dplyr",       # clean/shape data
+                       "forcats",     # clean/shape data
+                       "stringr",     # clean text
+                       "rio",         # read in data
+                       "ggplot2",     # create plots and charts
+                       "sitrep",      # MSF field epi functions
+                       "linelist",    # Functions for cleaning/standardising data
+                       "incidence",   # create epicurves
+                       "aweek",       # define epi weeks
+                       "epitools",    # 2x2 tables and other epi goodness
+                       "epitrix",     # epi helpers and tricks
+                       "sf",          # encode spatial vector data
+                       "ggspatial")   # plot maps
+
+for (pkg in required_packages) {
+  # install packages if not already present
+  if (!pkg %in% rownames(installed.packages())) {
+    install.packages(pkg)
+  }
+  
+  # load packages to this current session 
+  library(pkg, character.only = TRUE)
+}
+
+
+# set default text size to 16 for plots
+# give classic black/white axes for plots
+ggplot2::theme_set(theme_classic(base_size = 18))
+
+# Set the day that defines the beginning of your epiweek.
+# you can start the week on any day of the week
+# (the ISO standard is to start on Monday) 
+aweek::set_week_start("Monday")
+```
+
+## Import the dataset
+
+**In this template section you choose the appropriate code chunk to importing your dataset.** 
+
+<img src="/images/AJS_Data_Import.png" alt="Data import options snip", width = "75%">
+
+For this exercise our dataset is a **non-standardized Excel file** from MSF's response an outbreak of AJS in Am Timan, Chad, so we use the `read_nonDHIS_data` code chunk. We will specifically use the line that uses the import() function of the rio package to import an Excel file that is not password protected. Note that errors can occur if you provide an incorrect file name or path. Tlink for dataset download is at the top of this webpage. 
+
+Either **delete or comment out (#)** all lines of code in the other data import chunks (read_fake_data, read_DHIS_excel_data, and read_DHIS_csv_data).  
+
+
+```{r eval=FALSE}
+## Read data ------------------------------------
+# Excel file
+# to read in a specific sheet use "which"
+linelist_raw <- rio::import("AJS_AmTiman.xlsx", which = "linelist")
+```
+
+There should now be a dataframe object named "linelist_raw" in your environment pane, consisting of 1447 observations and 122 variables.  
+
+<img src="/images/linelist_raw_imported.png" alt="Environment snip with linelist_raw", width = "50%">
+
+
+
+```{r include=FALSE, results='hide', message=FALSE, warning=FALSE}
+# This code chunk runs in the background and actually imports the dataset while transforming "." to NA.
+# The import code chunk above (with eval=FALSE) does not run, but shows the viewer the default import code.
+linelist_raw <- rio::import("AJS_AmTiman.xlsx", which = "linelist", na=".")
+```
+
+
+```{r, include=FALSE, results='hide', message=FALSE, warning=FALSE}
+# Save linelist_raw as "linelist_raw" for use in the next page (dataset alignment).
+saveRDS(linelist_raw, "data/linelist_raw.rds")
+```
+
+
