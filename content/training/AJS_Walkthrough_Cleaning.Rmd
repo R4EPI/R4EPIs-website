@@ -19,12 +19,15 @@ options(knitr.kable.NA = "-")
 required_packages <- c("knitr",       # create output docs
                        "dplyr",       # clean/shape data
                        "forcats",     # clean/shape data
+                       "stringr",     # clean text
+                       "rio",         # read in data
                        "ggplot2",     # create plots and charts
                        "sitrep",      # MSF field epi functions
                        "linelist",    # Functions for cleaning/standardising data
                        "incidence",   # create epicurves
                        "aweek",       # define epi weeks
                        "epitools",    # 2x2 tables and other epi goodness
+                       "epitrix",     # epi helpers and tricks
                        "sf",          # encode spatial vector data
                        "ggspatial")   # plot maps
 
@@ -134,15 +137,20 @@ This "setup" code chunk does the following:
 
 * knitr used to create the output document (pdf, doc, html)  
 * dplyr used to clean and shape the data  
+* forcats used to clean and shape the data  
+* stringr used to clean text/characters  
+* rio used to read in data  
 * epitrix used for data cleaning and variable standardisation  
 * ggplot2 used to visualise your data using different plotting methods  
 
 #### More epidemiology-specific packages  
 
-* sitrep includes a variety of useful field epidemiology functions  
+* sitrep includes a variety of useful field epidemiology functions
+* linelist used for cleaning and standardising data  
 * incidence used for creating epicurves  
-* ISOweek used for creating epiweeks  
+* aweek used for creating epiweeks  
 * epitools used for creating 2by2 tables  
+* epitrix used for helpful epidemiological tasks  
 
 #### Mapping packages  
 
