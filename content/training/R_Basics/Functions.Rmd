@@ -1,0 +1,110 @@
+---
+date: "2019-08-22T13:56:39+02:00"
+title: Functions
+weight: 5
+---
+
+
+```{r include=FALSE, results='hide', message=FALSE, warning=FALSE}
+# Silently read AJS example dataset
+
+library(sitrep)
+library(dplyr)
+
+linelist_raw <- gen_data("AJS")
+linelist_cleaned <- linelist_raw
+```
+
+
+## Functions  
+
+### Simple Functions  
+
+Most tasks in R are performed through functions. **A function is like a machine that receives inputs, does some action with those inputs, and produces an output.** What the output is depends on the function.  
+  
+  
+On installation, R contains "base" functions that perform common tasks. Specialized functions have been created by R users, verified by the R community, and can be downloaded within "packages" to your RStudio for use. One of the more challenging aspects of R is that there are often many functions to choose from to complete a given task.  
+  
+  
+**Functions typically operate upon some object placed within the function's parentheses**. For example, when the function summary() is used on a variable of class numeric, the output is a summary of the variable's numeric and missing values.
+
+```{r}
+summary(linelist_raw$age_years)
+```
+
+### Functions with Multiple Arguments  
+
+Functions often ask for several inputs. **Each piece of information needed is called an argument**. Some arguments are required for the function to work correctly, some are optional. Arguments can take character, numeric, logical (TRUE/FALSE), and other inputs. Optional arguments have default settings if they are not specified. **Arguments are located within the parentheses of the function, usually separated by commas**.  
+  
+  
+>**For example**, this descriptive() command in the templates creates a descriptive summary table of counts and proportions. In this command the function is given three arguments, establishing linelist_cleaned as the data frame to use, age_group as the variable to count, and sex as the variable to use for groupings.
+
+```{r include=FALSE, results='hide', message=FALSE, warning=FALSE}
+## create an age group variable by specifying categorical breaks
+linelist_cleaned$age_group <- age_categories(linelist_cleaned$age_years, 
+                                             breakers = c(0, 3, 15, 30, 45))
+
+```
+
+
+
+```{r}
+# Creates a descriptive table by specifying the dataframe and two columns
+descriptive(df = linelist_cleaned, counter = "age_group", grouper = "sex")
+```
+
+> Often, the first half of argument assignment (e.g. `df = `) does not need to be specified if the arguments are written in a specific order (specified in the function's documentation). The below code produces the exact same table as above, because the function expects the argument order: data frame, counter variable, grouper variable. 
+```{r eval = FALSE}
+# This command will produce the same table as above
+descriptive(linelist_cleaned, "age_group", "sex")
+```
+
+**A more complex descriptive() command might include the optional arguments to add a Total column and row to the table.** This is done by including the argument coltotals and rowtotals, both set to equal TRUE (their default is FALSE).
+
+*Note: For arguments specified with an equals symbol (e.g. coltotals = ...), their order among the arguments is not important (must still be within the parentheses and separated by commas).* 
+
+```{r}
+descriptive(linelist_cleaned, "age_group", "sex", coltotals = TRUE, rowtotals = TRUE)
+```
+
+### Using Additional Functions  
+
+R comes with "base" functions, but the R community has created and verified many other specialized functions that are available to you. These *functions* are contained within **packages** that can be downloaded to your computer. Once downloaded, you access the functions within a package by calling the package with the library() command at the beginning of each R session.
+
+**Note: While you only have to install packages once, you must load them at the beginning of every R session using library().** There is a code chunk at the beginning of each template that loads the necessary packages. 
+
+Think of R as your personal library: When you download a package your library gains a book of functions, but each time you want to use a function in that book, you must borrow that book from your library.  
+
+For clarity in the templates, functions are often preceeded by the name of their package using the :: symbol in the following way:  
+
+package_name::function_name()
+ 
+```{r eval=FALSE}
+#This line uses the package "rio"" and it's function "import" to import a dataset
+linelist_raw <- rio::import("linelist.xlsx", which = "Sheet1")
+```
+
+
+
+### The Pipe Operator %>% between functions 
+
+Within the template scripts you will see the pipe operator `%>%`. Simply explained, the pipe operator passes an intermediate output from one function to the next. You can think of it as saying "then". Many functions can be linked together with `%>%`.  
+
+Piping is not a base function. To use piping, the dplyr package must be installed and loaded. Near the top of every template script is a code chunk that installs and loads the necessary packages, including dplyr. You can read more about piping [here](https://magrittr.tidyverse.org/)
+
+> **As an example:** The following code chunk from the AJD template data cleaning section can be read as "linelist_cleaned is defined as linelist_cleaned, filtered to remove the rows where the variables case_number and date_of_admission are missing"  
+
+``` {r eval=FALSE}
+# only keep variables with a case ID and a date of consultation
+linelist_cleaned <- linelist_cleaned %>% 
+  filter(!is.na(case_number) & !is.na(date_of_admission))
+```
+
+**Note: Remember that even when using piping to link functions, if the assignment operator (`<-`) is present, the object to the left will still be over-written (re-defined) by the right side.** In the code above, linelist_cleaned will be replaced by the new linelist_cleaned which likely has fewer observations.  
+
+
+### Help with functions  
+To read more about a function, you can try searching online for resources OR use the Help tab in the lower-right R pane.  
+
+![](/images/Function_Help.gif)
+

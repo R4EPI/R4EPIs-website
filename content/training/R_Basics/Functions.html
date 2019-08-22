@@ -1,0 +1,85 @@
+---
+date: "2019-08-22T13:56:39+02:00"
+title: Functions
+weight: 5
+---
+
+
+
+<div id="functions" class="section level2">
+<h2>Functions</h2>
+<div id="simple-functions" class="section level3">
+<h3>Simple Functions</h3>
+<p>Most tasks in R are performed through functions. <strong>A function is like a machine that receives inputs, does some action with those inputs, and produces an output.</strong> What the output is depends on the function.</p>
+<p>On installation, R contains “base” functions that perform common tasks. Specialized functions have been created by R users, verified by the R community, and can be downloaded within “packages” to your RStudio for use. One of the more challenging aspects of R is that there are often many functions to choose from to complete a given task.</p>
+<p><strong>Functions typically operate upon some object placed within the function’s parentheses</strong>. For example, when the function summary() is used on a variable of class numeric, the output is a summary of the variable’s numeric and missing values.</p>
+<pre class="r"><code>summary(linelist_raw$age_years)</code></pre>
+<pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA&#39;s 
+##    3.00   32.00   60.00   60.55   90.00  120.00       7</code></pre>
+</div>
+<div id="functions-with-multiple-arguments" class="section level3">
+<h3>Functions with Multiple Arguments</h3>
+<p>Functions often ask for several inputs. <strong>Each piece of information needed is called an argument</strong>. Some arguments are required for the function to work correctly, some are optional. Arguments can take character, numeric, logical (TRUE/FALSE), and other inputs. Optional arguments have default settings if they are not specified. <strong>Arguments are located within the parentheses of the function, usually separated by commas</strong>.</p>
+<blockquote>
+<p><strong>For example</strong>, this descriptive() command in the templates creates a descriptive summary table of counts and proportions. In this command the function is given three arguments, establishing linelist_cleaned as the data frame to use, age_group as the variable to count, and sex as the variable to use for groupings.</p>
+</blockquote>
+<pre class="r"><code># Creates a descriptive table by specifying the dataframe and two columns
+descriptive(df = linelist_cleaned, counter = &quot;age_group&quot;, grouper = &quot;sex&quot;)</code></pre>
+<pre><code>## # A tibble: 5 x 7
+##   age_group `M n` `M proportion` `F n` `F proportion` `U n` `U proportion`
+##   &lt;fct&gt;     &lt;dbl&gt;          &lt;dbl&gt; &lt;dbl&gt;          &lt;dbl&gt; &lt;dbl&gt;          &lt;dbl&gt;
+## 1 3-14         14            14.    13          12.6     10          10.3 
+## 2 15-29        10            10     12          11.7      7           7.22
+## 3 30-44        12            12     15          14.6     11          11.3 
+## 4 45+          60            60     61          59.2     68          70.1 
+## 5 Missing       4             4      2           1.94     1           1.03</code></pre>
+<blockquote>
+<p>Often, the first half of argument assignment (e.g. <code>df =</code>) does not need to be specified if the arguments are written in a specific order (specified in the function’s documentation). The below code produces the exact same table as above, because the function expects the argument order: data frame, counter variable, grouper variable.</p>
+</blockquote>
+<pre class="r"><code># This command will produce the same table as above
+descriptive(linelist_cleaned, &quot;age_group&quot;, &quot;sex&quot;)</code></pre>
+<p><strong>A more complex descriptive() command might include the optional arguments to add a Total column and row to the table.</strong> This is done by including the argument coltotals and rowtotals, both set to equal TRUE (their default is FALSE).</p>
+<p><em>Note: For arguments specified with an equals symbol (e.g. coltotals = …), their order among the arguments is not important (must still be within the parentheses and separated by commas).</em></p>
+<pre class="r"><code>descriptive(linelist_cleaned, &quot;age_group&quot;, &quot;sex&quot;, coltotals = TRUE, rowtotals = TRUE)</code></pre>
+<pre><code>## # A tibble: 6 x 8
+##   age_group `M n` `M proportion` `F n` `F proportion` `U n` `U proportion`
+##   &lt;chr&gt;     &lt;dbl&gt;          &lt;dbl&gt; &lt;dbl&gt;          &lt;dbl&gt; &lt;dbl&gt;          &lt;dbl&gt;
+## 1 3-14         14            14.    13          12.6     10          10.3 
+## 2 15-29        10            10     12          11.7      7           7.22
+## 3 30-44        12            12     15          14.6     11          11.3 
+## 4 45+          60            60     61          59.2     68          70.1 
+## 5 Missing       4             4      2           1.94     1           1.03
+## 6 Total       100           100    103         100.      97         100.  
+## # ... with 1 more variable: Total &lt;dbl&gt;</code></pre>
+</div>
+<div id="using-additional-functions" class="section level3">
+<h3>Using Additional Functions</h3>
+<p>R comes with “base” functions, but the R community has created and verified many other specialized functions that are available to you. These <em>functions</em> are contained within <strong>packages</strong> that can be downloaded to your computer. Once downloaded, you access the functions within a package by calling the package with the library() command at the beginning of each R session.</p>
+<p><strong>Note: While you only have to install packages once, you must load them at the beginning of every R session using library().</strong> There is a code chunk at the beginning of each template that loads the necessary packages.</p>
+<p>Think of R as your personal library: When you download a package your library gains a book of functions, but each time you want to use a function in that book, you must borrow that book from your library.</p>
+<p>For clarity in the templates, functions are often preceeded by the name of their package using the :: symbol in the following way:</p>
+<p>package_name::function_name()</p>
+<pre class="r"><code>#This line uses the package &quot;rio&quot;&quot; and it&#39;s function &quot;import&quot; to import a dataset
+linelist_raw &lt;- rio::import(&quot;linelist.xlsx&quot;, which = &quot;Sheet1&quot;)</code></pre>
+</div>
+<div id="the-pipe-operator-between-functions" class="section level3">
+<h3>The Pipe Operator %&gt;% between functions</h3>
+<p>Within the template scripts you will see the pipe operator <code>%&gt;%</code>. Simply explained, the pipe operator passes an intermediate output from one function to the next. You can think of it as saying “then”. Many functions can be linked together with <code>%&gt;%</code>.</p>
+<p>Piping is not a base function. To use piping, the dplyr package must be installed and loaded. Near the top of every template script is a code chunk that installs and loads the necessary packages, including dplyr. You can read more about piping <a href="https://magrittr.tidyverse.org/">here</a></p>
+<blockquote>
+<p><strong>As an example:</strong> The following code chunk from the AJD template data cleaning section can be read as “linelist_cleaned is defined as linelist_cleaned, filtered to remove the rows where the variables case_number and date_of_admission are missing”</p>
+</blockquote>
+<pre class="r"><code># only keep variables with a case ID and a date of consultation
+linelist_cleaned &lt;- linelist_cleaned %&gt;% 
+  filter(!is.na(case_number) &amp; !is.na(date_of_admission))</code></pre>
+<p><strong>Note: Remember that even when using piping to link functions, if the assignment operator (<code>&lt;-</code>) is present, the object to the left will still be over-written (re-defined) by the right side.</strong> In the code above, linelist_cleaned will be replaced by the new linelist_cleaned which likely has fewer observations.</p>
+</div>
+<div id="help-with-functions" class="section level3">
+<h3>Help with functions</h3>
+<p>To read more about a function, you can try searching online for resources OR use the Help tab in the lower-right R pane.</p>
+<div class="figure">
+<img src="/images/Function_Help.gif" />
+
+</div>
+</div>
+</div>
