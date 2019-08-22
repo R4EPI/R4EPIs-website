@@ -26,7 +26,7 @@ linelist_cleaned$age_group <- age_categories(linelist_cleaned$age_years,
 ```
 
 
-## The Here functions  
+## The Here packge and here() function  
 
 The templates use the **Here package to assist with locating local files**. The Here package and its function here() work well with R projects. It automatically considers the top-level folder of your R project as "here". Then, in your script, if you want to import or reference a file saved in your R project's folders, you can use here() to tell R where it is.  
 
@@ -57,7 +57,7 @@ linelist_raw <- rio::import(here("data", "linelists", "linelist.xlsx"), which = 
 
 You can read more about Here and here() at [this site](https://github.com/jennybc/here_here) and [this one](https://here.r-lib.org/)  
 
-
+*Note: by using the Here package and here() function with R projects, it is not necessary to worry about your "working directory", setwd(), or getwd() commands.*
 
 ## Joins  
 

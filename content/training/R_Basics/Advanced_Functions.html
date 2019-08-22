@@ -6,8 +6,8 @@ weight: 11
 
 
 
-<div id="the-here-functions" class="section level2">
-<h2>The Here functions</h2>
+<div id="the-here-packge-and-here-function" class="section level2">
+<h2>The Here packge and here() function</h2>
 <p>The templates use the <strong>Here package to assist with locating local files</strong>. The Here package and its function here() work well with R projects. It automatically considers the top-level folder of your R project as “here”. Then, in your script, if you want to import or reference a file saved in your R project’s folders, you can use here() to tell R where it is.</p>
 <p>Below is an example of importing the file “linelist.xlsx”. The import() function from the rio package does the importing, but it needs to be told where to look on your computer to find the file. Normally, it accepts a filepath in quotes, but it is easy to make mistakes.</p>
 <p>Instead, import() is wrapped around here(). The here() function knows where “here” is (the top folder of the R project). If you are unsure where “here” is set to, run this command:</p>
@@ -19,6 +19,7 @@ here()</code></pre>
 <p><strong>If however, your file is within subfolders of the folder designated as “here”</strong> - let’s say it is in the subfolder “data” and then the sub-subfolder “linelists” - <strong>you write these folder names before the file name, in quotes, and separated by commas</strong>, as below:</p>
 <pre class="r"><code>linelist_raw &lt;- rio::import(here(&quot;data&quot;, &quot;linelists&quot;, &quot;linelist.xlsx&quot;), which = &quot;Sheet1&quot;)</code></pre>
 <p>You can read more about Here and here() at <a href="https://github.com/jennybc/here_here">this site</a> and <a href="https://here.r-lib.org/">this one</a></p>
+<p><em>Note: by using the Here package and here() function with R projects, it is not necessary to worry about your “working directory”, setwd(), or getwd() commands.</em></p>
 </div>
 <div id="joins" class="section level2">
 <h2>Joins</h2>
