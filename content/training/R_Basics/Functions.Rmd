@@ -13,6 +13,12 @@ library(dplyr)
 
 linelist_raw <- gen_data("AJS")
 linelist_cleaned <- linelist_raw
+
+#Clean sex for age pyramid graphic
+linelist_cleaned$sex[linelist_cleaned$sex == "U"] <- NA
+
+#Create age groups for pyramid graphic
+linelist_cleaned$age_groups <- 
 ```
 
 
@@ -49,14 +55,14 @@ linelist_cleaned$age_group <- age_categories(linelist_cleaned$age_years,
 
 
 ```{r}
-# Creates a descriptive table by specifying the dataframe and two columns
-descriptive(df = linelist_cleaned, counter = "age_group", grouper = "sex")
+# Creates an age pyramid by specifying the dataframe, age group variable, and a variable to split the pyramid
+plot_age_pyramid(data = linelist_cleaned, age_group = "age_group", split_by = "sex")
 ```
 
-> Often, the first half of argument assignment (e.g. `df = `) does not need to be specified if the arguments are written in a specific order (specified in the function's documentation). The below code produces the exact same table as above, because the function expects the argument order: data frame, counter variable, grouper variable. 
+> Often, the first half of argument assignment (e.g. `data = `) does not need to be specified if the arguments are written in a specific order (specified in the function's documentation). The below code produces the exact same pyramid as above, because the function expects the argument order: data frame, age_group variable, split_by variable. 
 ```{r eval = FALSE}
 # This command will produce the same table as above
-descriptive(linelist_cleaned, "age_group", "sex")
+plot_age_pyramid(linelist_cleaned, "age_group", "sex")
 ```
 
 **A more complex descriptive() command might include the optional arguments to add a Total column and row to the table.** This is done by including the argument coltotals and rowtotals, both set to equal TRUE (their default is FALSE).
