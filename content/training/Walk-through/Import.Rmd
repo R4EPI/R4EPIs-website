@@ -29,7 +29,8 @@ required_packages <- c("knitr",       # create output docs
                        "epitools",    # 2x2 tables and other epi goodness
                        "epitrix",     # epi helpers and tricks
                        "sf",          # encode spatial vector data
-                       "ggspatial")   # plot maps
+                       "ggspatial",
+                       "here")   # plot maps
 
 for (pkg in required_packages) {
   # install packages if not already present

@@ -30,7 +30,8 @@ required_packages <- c("knitr",       # create output docs
                        "epitools",    # 2x2 tables and other epi goodness
                        "epitrix",     # epi helpers and tricks
                        "sf",          # encode spatial vector data
-                       "ggspatial")   # plot maps
+                       "ggspatial",
+                       "here")   # plot maps
 
 for (pkg in required_packages) {
   # install packages if not already present
@@ -194,7 +195,7 @@ mortality_rate(deaths$deaths, deaths$population, multiplier = 10000) %>%
 
 Mapping in R can be intimidating at first because it is different than ArcGIS, QGIS, or other mapping software that primarily use a point-and-click interface. However, you will see that using commands to create maps can be much faster, more replicable, and transparent for whomever you share code with.  
 
-TODO: Here are the basics about shapefile, you can read more HERE.  
+TODO: Here are the basics about shapefile, you can read more HERE. diferent parts are read together. 
 
 We do have shapefiles for the Am Timan exercise. You can download them from the case study overview page of this website.  
 
@@ -205,11 +206,13 @@ Note the checklist for using shapefiles:
 * Your shapefile can be a polygon or points (and polygons do not have to be contiguous - they do not have to touch each other)  
 * Ensure that the region names in the shapefile match *exactly* the region names in linelist_cleaned. (in most shapefiles there is an ID or NAME variable in the spreadsheet file)  
 * Make sure the coordinate reference system (CRS) of the shapefile is WGS84 (this is the standard coordinate system used by most GPS systems, but it is good to ask whomever collected to data to be sure)  
-
+ 
+ 
+TODO: Note when using here() list the .shp filename.
 
 ```{r read_shapefiles, message=FALSE}
 ## reading in a shapefile 
-# map <- read_sf(here("mapfolder", "region.shp"))
+map <- read_sf(here("mapfolder", "quartiersshape.shp"))
 ## check the coordinate reference system (CRS)
 # st_crs(map)
 ## set the CRS if not present using EPSG value
