@@ -1,7 +1,7 @@
 ---
 date: "2019-08-22T13:56:39+02:00"
 title: Functions
-weight: 5
+weight: 7
 ---
 
 
@@ -15,7 +15,7 @@ weight: 5
 <p><strong>Functions typically operate upon some object placed within the function’s parentheses</strong>. For example, when the function summary() is used on a variable of class numeric, the output is a summary of the variable’s numeric and missing values.</p>
 <pre class="r"><code>summary(linelist_raw$age_years)</code></pre>
 <pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA&#39;s 
-##    3.00   32.00   60.00   60.55   90.00  120.00       7</code></pre>
+##    3.00   33.00   62.00   62.11   90.00  120.00       6</code></pre>
 </div>
 <div id="functions-with-multiple-arguments" class="section level3">
 <h3>Functions with Multiple Arguments</h3>
@@ -28,11 +28,11 @@ descriptive(df = linelist_cleaned, counter = &quot;age_group&quot;, grouper = &q
 <pre><code>## # A tibble: 5 x 7
 ##   age_group `M n` `M proportion` `F n` `F proportion` `U n` `U proportion`
 ##   &lt;fct&gt;     &lt;dbl&gt;          &lt;dbl&gt; &lt;dbl&gt;          &lt;dbl&gt; &lt;dbl&gt;          &lt;dbl&gt;
-## 1 3-14         14            14.    13          12.6     10          10.3 
-## 2 15-29        10            10     12          11.7      7           7.22
-## 3 30-44        12            12     15          14.6     11          11.3 
-## 4 45+          60            60     61          59.2     68          70.1 
-## 5 Missing       4             4      2           1.94     1           1.03</code></pre>
+## 1 3-14         13          11.9      6           6.19     7           7.45
+## 2 15-29        10           9.17    11          11.3     19          20.2 
+## 3 30-44        14          12.8     11          11.3      7           7.45
+## 4 45+          69          63.3     67          69.1     60          63.8 
+## 5 Missing       3           2.75     2           2.06     1           1.06</code></pre>
 <blockquote>
 <p>Often, the first half of argument assignment (e.g. <code>df =</code>) does not need to be specified if the arguments are written in a specific order (specified in the function’s documentation). The below code produces the exact same table as above, because the function expects the argument order: data frame, counter variable, grouper variable.</p>
 </blockquote>
@@ -44,12 +44,12 @@ descriptive(linelist_cleaned, &quot;age_group&quot;, &quot;sex&quot;)</code></pr
 <pre><code>## # A tibble: 6 x 8
 ##   age_group `M n` `M proportion` `F n` `F proportion` `U n` `U proportion`
 ##   &lt;chr&gt;     &lt;dbl&gt;          &lt;dbl&gt; &lt;dbl&gt;          &lt;dbl&gt; &lt;dbl&gt;          &lt;dbl&gt;
-## 1 3-14         14            14.    13          12.6     10          10.3 
-## 2 15-29        10            10     12          11.7      7           7.22
-## 3 30-44        12            12     15          14.6     11          11.3 
-## 4 45+          60            60     61          59.2     68          70.1 
-## 5 Missing       4             4      2           1.94     1           1.03
-## 6 Total       100           100    103         100.      97         100.  
+## 1 3-14         13          11.9      6           6.19     7           7.45
+## 2 15-29        10           9.17    11          11.3     19          20.2 
+## 3 30-44        14          12.8     11          11.3      7           7.45
+## 4 45+          69          63.3     67          69.1     60          63.8 
+## 5 Missing       3           2.75     2           2.06     1           1.06
+## 6 Total       109         100       97         100       94         100   
 ## # ... with 1 more variable: Total &lt;dbl&gt;</code></pre>
 </div>
 <div id="using-additional-functions" class="section level3">

@@ -1,0 +1,188 @@
+---
+date: "2019-08-22T14:00:39+02:00"
+title: Operators
+weight: 8
+---
+
+
+
+<div id="relational-and-logical-operators" class="section level2">
+<h2>Relational and logical operators</h2>
+<p><strong>Relational operators compare values</strong> and are often used when defining new variables and subsets of datasets. Here are the common relational operators in R:</p>
+<table style="width:88%;">
+<colgroup>
+<col width="20%" />
+<col width="15%" />
+<col width="16%" />
+<col width="34%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Function</th>
+<th>Operator</th>
+<th>Example</th>
+<th>Result</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Equal to</td>
+<td><code>==</code></td>
+<td><code>&quot;A&quot; == &quot;a&quot;</code></td>
+<td><code>FALSE</code> (because R is case sensitive) <em>Note that == (double equals) is different from = (single equals), which acts like the assignment operator &lt;-</em></td>
+</tr>
+<tr class="even">
+<td>Not equal to</td>
+<td><code>!=</code></td>
+<td><code>2 != 0</code></td>
+<td><code>TRUE</code></td>
+</tr>
+<tr class="odd">
+<td>Greater than</td>
+<td><code>&gt;</code></td>
+<td><code>4 &gt; 2</code></td>
+<td><code>TRUE</code></td>
+</tr>
+<tr class="even">
+<td>Less than</td>
+<td><code>&lt;</code></td>
+<td><code>4 &lt; 2</code></td>
+<td><code>FALSE</code></td>
+</tr>
+<tr class="odd">
+<td>Greater than or equal to</td>
+<td><code>&gt;=</code></td>
+<td><code>6 &gt;= 4</code></td>
+<td><code>TRUE</code></td>
+</tr>
+<tr class="even">
+<td>Less than or equal to</td>
+<td><code>&lt;=</code></td>
+<td><code>6 &lt;= 4</code></td>
+<td><code>FALSE</code></td>
+</tr>
+<tr class="odd">
+<td>Value is missing</td>
+<td><code>is.na()</code></td>
+<td><code>is.na(7)</code></td>
+<td><code>FALSE</code> (special case, see section on missing values)</td>
+</tr>
+<tr class="even">
+<td>Value is not missing</td>
+<td><code>!is.na()</code></td>
+<td><code>!is.na(7)</code></td>
+<td><code>TRUE</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Logical operators, such as AND and OR, are often used to connect relational operators and create more complicated criteria</strong>. Complex statements might require parentheses ( ) for grouping and order of application.</p>
+<table>
+<thead>
+<tr class="header">
+<th>Function</th>
+<th>Operator</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>AND</td>
+<td><code>&amp;</code></td>
+</tr>
+<tr class="even">
+<td>OR</td>
+<td><code>|</code> (vertical bar)</td>
+</tr>
+<tr class="odd">
+<td>Parentheses</td>
+<td>( ) Used to group criteria together and clarify order</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>For example, the command below use the function case_when to create the new variable “case_def” such that:</p>
+</blockquote>
+<pre class="r"><code>linelist_cleaned &lt;- linelist_cleaned %&gt;%
+  mutate(case_def = case_when(
+    is.na(hep_e_rdt) &amp; is.na(other_cases_in_hh)           ~ NA_character_,
+    hep_e_rdt == &quot;Positive&quot;                               ~ &quot;Confirmed&quot;,
+    hep_e_rdt != &quot;Positive&quot; &amp; other_cases_in_hh == &quot;Yes&quot;  ~ &quot;Probable&quot;,
+    TRUE                                                  ~ &quot;Suspected&quot;
+  ))</code></pre>
+<table>
+<colgroup>
+<col width="53%" />
+<col width="46%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Criteria in example above</th>
+<th>Resulting value in new variable “case_def”“</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>If the value for variables hep_e_rdt and other_cases_in_hh are missing</td>
+<td>NA (missing)</td>
+</tr>
+<tr class="even">
+<td>If the value in hep_e_rdt is “Positive”</td>
+<td>“Confirmed”</td>
+</tr>
+<tr class="odd">
+<td>If the value in hep_e_rdt is NOT “Positive” AND the value in other_cases_in_hh is “Yes”</td>
+<td>“Probable”</td>
+</tr>
+<tr class="even">
+<td>If one of the above criteria are not met</td>
+<td>“Suspected”</td>
+</tr>
+</tbody>
+</table>
+<p><em>Note that R is case-sensitive, so “Positive” is different than “positive”…</em></p>
+</div>
+<div id="missing-values" class="section level2">
+<h2>Missing Values</h2>
+<p><strong>In R, missing values are represented by the special value NA</strong> (capital letters N and A - not in quotation marks). If you import data that records missing data in another way (e.g. 99, “Missing”, or .), you may want to re-code those values to NA.</p>
+<p><strong>To test whether a value is NA, use the special function is.na()</strong>, which returns TRUE or FALSE.</p>
+<pre class="r"><code>rdt_result &lt;- NA   # Assigns the object rdt_result with the value NA (missing)
+is.na(rdt_result)  # Tests whether the value of rdt_result is NA</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+</div>
+<div id="mathematical-operators" class="section level2">
+<h2>Mathematical operators</h2>
+<p>Mathematical operators are often used to perform addition, division, to create new columns, etc. Below are common mathematical operators in R. Whether you put spaces around the operators is not important.</p>
+<table>
+<thead>
+<tr class="header">
+<th>Objective</th>
+<th>Example in R</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>addition</td>
+<td>2+3</td>
+</tr>
+<tr class="even">
+<td>subtraction</td>
+<td>2-3</td>
+</tr>
+<tr class="odd">
+<td>multiplication</td>
+<td>2*3</td>
+</tr>
+<tr class="even">
+<td>division</td>
+<td>30/5</td>
+</tr>
+<tr class="odd">
+<td>exponent</td>
+<td>2^3 or 2**3</td>
+</tr>
+<tr class="even">
+<td>order of operations</td>
+<td>( )</td>
+</tr>
+</tbody>
+</table>
+</div>

@@ -1,0 +1,112 @@
+---
+date: "2019-08-22T14:02:22+02:00"
+title: Dates
+weight: 9
+---
+
+```{r include=FALSE, results='hide', message=FALSE, warning=FALSE}
+# Silently read AJS example dataset
+
+library(sitrep)
+library(dplyr)
+
+linelist_raw <- gen_data("AJS")
+linelist_cleaned <- linelist_raw
+```
+
+
+## Working with Dates
+
+### Converting date variables to the date class
+It is important to make R recognize when a variable contains dates. Dates are an object class and can be tricky to work with. The templates provides some code for converting variables to class date, but if your data are not standardized to a MSF data dictionary this process can require attention. **The templates often use the function `guess_dates()`, but this guide will also demonstrate converting a variable to class date using the function as.Date().** 
+
+#### The function guess_dates() 
+
+**The function guess_dates() attempts to read a "messy" date variable containing dates in many different formats and convert the dates to a standard format.** You can read more about guess_dates(), which is in the "linelist" package, [here](https://rdrr.io/github/reconhub/linelist/man/guess_dates.html).  
+
+>For example, guess_dates would see the following dates "03 Jan 2018" "07/03/1982" "08/20/85" and convert them in the class Date to: 2018-01-03 1982-03-07 1985-08-20. 
+
+*Some optional arguments for guess_dates() that you might include are:*  
+
+* error_tolerance - The proportion of entries which cannot be identified as dates to be tolerated (defaults to 0.1 or 10%)
+* last_date - the last valid date (defaults to current date)  
+* first_date - the first valid date. Defaults to fifty years before the last_date.
+
+
+```{r eval=FALSE}
+# An example using guess_dates on the variable dtdeath
+linelist_cleaned$dtdeath <- linelist::guess_dates(linelist_cleaned$dtdeath)
+
+# An example from the template using guess_dates over multiple date variables, with piping, error tolerance of 50%, and the earliest accepted date of 1 Jan 2016.
+linelist_cleaned <- linelist_cleaned %>%
+   mutate_at(vars(matches("date|Date")), linelist::guess_dates,
+           error_tolerance = 0.5, first_date = "2016-01-01")
+```
+
+
+
+#### The function as.Date()  
+
+If guess_dates() is not working for you, you can use the base function as.Date() to convert a variable to class Date. **as.Date() cannot guess dates, and therefore requires that all the date values be in the same format before converting.** Read more about using as.Date() [here](https://www.stat.berkeley.edu/~s133/dates.html).
+
+It can be easiest to first convert the variable to character class, and then convert to date class:  
+
+  1. Turn the variable into character values using the function `as.character()`
+```{r eval=F}
+linelist_cleaned$date_of_onset <- as.character(linelist_cleaned$date_of_onset)
+```
+  2. Convert the variable from character values into date values, using the function `as.Date()`  
+  (note the capital "D" in this function)  
+  + Within the `as.Date()` function, you must use the format= argument to tell R which characters are which date components - which characters refer to the month, the day, and the year. If your values are already in one of R's standard formats (YYYY-MM-DD or YYYY/MM/DD) the format= argument is not necessary.  
+    
+    + The codes are:  
+         %d = Day # (of the month e.g. 16, 17, 18...)  
+         %a = abbreviated weekday (Mon, Tues, Wed, etc.)  
+         %A = full weekday (Monday, Tuesday, etc.)  
+         %m = # of month (e.g. 01, 02, 03, 04)  
+         %b = abbreviated month (Jan, Feb, etc.)  
+         %B = Full Month (January, February, etc.)  
+         %y = 2-digit year  (e.g. 89)  
+         %Y = 4-digit year  (e.g. 1989)  
+
+For example, if your character dates are in the format DD/MM/YYYY, like "24/04/1968", then your command to turn the values into dates will be as below. **Putting the format in quotation marks is necessary.**  
+```{r eval=F}
+linelist_cleaned$date_of_onset <- as.Date(linelist_cleaned$date_of_onset, format = "%d/%m/%Y")
+```
+**Note: the format= argument is *not* telling R the format you want the dates to be, but rather how to identify the date parts as they are *before* you run the command.**  
+
+*Note: Be sure that in the format= argument you use the date-part separator (e.g. /, space, or -) that is present in your dates.*
+
+```{r}
+# Convert the variable to class Date by providing the format of the variable
+linelist_cleaned$date_of_onset <- as.Date(linelist_cleaned$date_of_onset, format="%Y-%m-%d")
+
+# Check the class of the variable again
+class(linelist_cleaned$date_of_onset)  
+```
+Once the values are in class Date, R will present them in it's standard format, which is YYYY-MM-DD.
+
+#### Excel Dates
+
+Excel stores dates as the number of days since December 30, 1899. If the dataset you imported from Excel has a date variable showing numbers like "41369"... use the as.Date() function to convert, but **instead of supplying a format as above, supply an origin date**. Note that the origin date must be given in the default date format for R ("YYYY-MM-DD").
+```{r, eval=FALSE}
+# An example of providing an origin date when converting to class Date
+linelist_cleaned$date_of_onset <- as.Date(linelist_cleaned$date_of_onset, origin = "1899-12-30")
+```
+
+#### Changing the format of displayed dates 
+
+Once dates are the correct class, you often want them to display differently. For example, "Monday 05 Jan" instead of 2018-01-05. You can do this with the function format() in a similar was to as.Date(). Read more about it [here](https://www.statmethods.net/input/dates.html) 
+
+#### Calculating distance between dates
+
+The difference between dates can be calculated by:  
+  
+  
+1. Correctly formating *both* date variable as class date (see instructions above)  
+2. Creating a new variable that is defined as one date variable subtracted from the other
+3. Converting the result to numeric class (default is class "datediff"). This ensures that subsequent mathematical calculations can be performed.  
+
+### Epidemiological weeks  
+
+The templates use the very flexible package "aweek"" to set epidemiological weeks. You can read more about it [here](https://www.repidemicsconsortium.org/aweek/)
