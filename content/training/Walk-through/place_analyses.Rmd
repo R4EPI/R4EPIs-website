@@ -208,17 +208,25 @@ Note the checklist for using shapefiles:
 * Make sure the coordinate reference system (CRS) of the shapefile is WGS84 (this is the standard coordinate system used by most GPS systems, but it is good to ask whomever collected to data to be sure)  
  
  
-TODO: Note when using here() list the .shp filename.
+TODO: Note when using here() list the .shp filename. Link to discussion of here().
 
 ```{r read_shapefiles, message=FALSE}
 ## reading in a shapefile 
-map <- read_sf(here("mapfolder", "quartiersshape.shp"))
+map <- read_sf(here("content", "training", "Walk-through", "mapfolder", "quartiersshape.shp"))
+```
+The next code will check the coordinate reference system (CRS) of the shapefile, as it was read-in. In our exercise, we see an EPSG code of 4326, which is the correct code for WGS84 (you can also see below the EPSG code that the datum is WGS84).
+```{r}
 ## check the coordinate reference system (CRS)
-# st_crs(map)
+st_crs(map)
+```
+
+If there is no CRS specified for your shapefile, you can set the CRS to WGS84 with the following command, which uses the EPSG code of 4326.   
+```{r, eval=FALSE}
 ## set the CRS if not present using EPSG value
 ## this is the most commonly used 
-# map <- st_set_crs(map, value = 4326) # Sets to WGS84
+map <- st_set_crs(map, value = 4326) # Sets to WGS84
 ```
+
 
 The following will plot a map based on the attack rate table. 
 
