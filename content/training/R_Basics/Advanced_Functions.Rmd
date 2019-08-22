@@ -1,6 +1,6 @@
 ---
 date: "2019-08-22T15:33:00+02:00"
-title: Advanced_Functions
+title: Advanced Functions
 weight: 11
 ---
 
@@ -59,4 +59,19 @@ You can read more about Here and here() at [this site](https://github.com/jennyb
 
 
 
-## Joins
+## Joins  
+
+The animations below can be acccessed [here](https://github.com/gadenbuie/tidyexplain).
+
+### Left join  
+
+An example of a left join from the AJS outbreak template occurs in the TODO
+
+![](/images/left-join.gif)
+
+![](/images/right-join.gif)
+
+![](/images/full-join.gif)
+
+![](/images/inner-join.gif)
+
