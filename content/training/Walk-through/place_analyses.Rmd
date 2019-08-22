@@ -76,93 +76,106 @@ obs_end <- readRDS("data/obs_end.rds")
 
 
 
-## Place
+TODO: introduction to place analyses
 
+### Non-map place analyses
 
-Basic descriptive table:
+To get a basic **descriptive table of cases by region** (which in our case was originally the variable *quartier* from the raw linelist), we use tab_linelist() on the variable patient_origin, with columns by patient_facility_type (inpatient, outpatient, or missing). 
+
 
 ```{r describe_by_region_facility}
-# get counts and props of region by facility 
-# include column and row totals 
+# Descriptive table of cases by region and facility type
+tab_linelist(linelist_cleaned, patient_origin, 
+             strata = patient_facility_type,
+             col_total = TRUE, row_total = TRUE) %>% 
+  select(-variable) %>%
+  rename("Region" = value) %>%
+  rename_redundant("%" = proportion) %>%
+  augment_redundant(" (n)" = " n$") %>%
+  kable(digits = 2)
+```
 
-descriptive(linelist_cleaned, "patient_origin", 
-            "patient_facility_type",
-            coltotals = TRUE, rowtotals = TRUE) %>% 
-  rename("Region" = "patient_origin") %>%
-  augment_redundant("_n$" = " (n)") %>% # modify _n to (n)
-  rename_redundant("prop" = "%")    %>% # rename proportions to %
+To get a **descriptive table by patient outcome** we set `strata = exit_status2`. We can also restrict the analysis to inpatients only by inserting the function filter() into the first argument of tab_linelist. tab_linelist() expects a data frame for it's first argument, and it receives the filtered linelist_cleaned - this is an example of "nested"" functions (one function inside another).
+
+```{r describe_by_region_outcome}
+# get counts and props of region by outcome among inpatients
+# include column and row totals 
+tab_linelist(filter(linelist_cleaned,
+                    patient_facility_type == "Inpatient"),
+             patient_origin, strata = exit_status2,
+             col_total = TRUE, row_total = TRUE) %>% 
+  select(-variable) %>%
+  rename("Region" = value) %>%
+  rename_redundant("%" = proportion) %>%
+  augment_redundant(" (n)" = " n$") %>%
   kable(digits = 2)
 ```
 
 
-And attack rates by region.   
-Note: changed population_data_region to population_data in line 2.
-Error received on left_join: Error in tbl_vars(y) : object 'population_data_region' not found
+**A table of attack rates by region may be useful**  
 
-Then, Error received from merge to create cases. Turns out that in population counts the regions are ALL CAPITALS but in linelist the are lowercase. Need to add line to make that solved.
+**First**, like when we calculated attack rate by epiweek in the time_analysis section, the cases are counted by patient_origin. This list of counts is then **joined** to the imported population data for each region **joined by patient_origin (the name of the region/quartier)**. These data are stored in the object `cases`.  
 
-```{r}
-# Converts patient_origin variable to uppercase, to match with population_data
-linelist_cleaned$patient_origin <- toupper(linelist_cleaned$patient_origin)
-```
+*Recall that this **join** requires **exact matches** between patient_origin values in `linelist_cleaned$patient_origin` and `population_data_region$patient_origin` to match a region's cases to its population (read more about joins TODO HERE). In the data cleaning steps we converted the values in linelist_cleaned to all capital letters to match those in population_data_region.   
 
-Also need fix in proportion() function in sitrep to is.na(n)
+**TODO - Note: the attack_rate function currently does not show cases in the table if there is no population denominator. For example, the table below shows TARADONA quartier with no cases, when in reality it has 235. Also, for those regions with no cases or no population, the attack rate defaults to 10,000 - which is obviously not true.** 
+   
+The "ar" object saves the counts, population, and attack rate calculations along with modified column names.  
+
+Finally, the table is created with kable() and displayed.
 
 ```{r attack_rate_by_region}
-
 ## - [ ] consider facet wrapping by an overarching unit if have many regions (e.g. by province)
-
-
 cases <- count(linelist_cleaned, patient_origin) %>%   # cases for each region
-  left_join(population_data, by = "patient_origin")    # merge population data 
+  left_join(population_data_region, by = "patient_origin")    # merge population data 
 # attack rate for region
-ar <- attack_rate(cases$n, cases$population, multiplier = 100) %>% 
+ar <- attack_rate(cases$n, cases$population, multiplier = 10000) %>% 
   # add the region column to table
   bind_cols(select(cases, patient_origin), .) %>% 
   rename("Region" = patient_origin, 
          "Cases (n)" = cases, 
          "Population" = population, 
-         "AR (per 100,000)" = ar, 
+         "AR (per 10,000)" = ar, 
          "Lower 95%CI" = lower,
          "Upper 95%CI" = upper) 
-
 ar %>% 
   merge_ci_df(e = 4) %>% # merge lower and upper CI in to one column 
   rename("95%CI" = ci) %>%  # rename single 95%CI column
   kable(digits = 2, align = "r", format.args = list(big.mark = ",")) # set thousands separator
 ```
 
+You could then also plot this on a bar chart with confidence intervals.  
 
-You could then also plot this on a bar chart with confidence intervals. 
+**TODO: Note: Until the bug in attack_rate() is fixed, the bar chart will not appear correctly, as it shows all the regions that are missing attack rates as having ARs of 10,000.**
 
 ```{r bar_attack_rate_by_region}
 # plot with the region on the x axis sorted by increasing ar
 # ar value on the y axis 
-ggplot(ar, aes(x = reorder(Region, `AR (per 100,000)`),
-               y = `AR (per 100,000)`)) + 
+ggplot(ar, aes(x = reorder(Region, `AR (per 10,000)`),
+               y = `AR (per 10,000)`)) + 
   geom_bar(stat = "identity", col = "black", fill = "red") + # plot as bars (identity = as is)
   geom_errorbar(aes(ymin = `Lower 95%CI`, ymax = `Upper 95%CI`), width = 0.2) + # add CIs
   scale_y_continuous(expand = c(0,0)) +  # set origin for axes
   # add labels to axes and below chart
-  labs(x = "Region", y = "AR (per 100,000)", 
+  labs(x = "Region", y = "AR (per 10,000)", 
        captions = paste0("Source: MSF data from ", reporting_week)) + 
   epicurve_theme
 ```
 
 
 
-Mortality Rates by region
-Changed population_data_region to population_data
+You could also **table mortality rate by region**. A few things to note:  
 
-Changed "Dead" to "Décédé" in grepl
+* The first command uses group_by() to count cases by patient_origin. Then, filter() is applied based on the character search function grepl() from the package stringr, which looks for "Dead" within the variable exit_status - **note: we must change this to reflect our data and have grepl() look for "Died" in exit_status2.** (otherwise, the object "deaths" has 0 rows and mortality_rate() produces an error)  
+* The mortality_rate() step calculates mortality rates for the regions that had a death.  
 
+**TODO: Note: The table only shows the regions that had a death, but there is a bug and the deaths show as missing if there is no population denominator.**
 
 ```{r mortality_rate_region}
-
 deaths <- group_by(linelist_cleaned, patient_origin) %>%
-  filter(grepl("Décédé", exit_status)) %>% 
+  filter(grepl("Died", exit_status2)) %>% 
   summarise(deaths = n()) %>% # count deaths by region
-  left_join(population_data, by = "patient_origin") # merge population data 
+  left_join(population_data_region, by = "patient_origin") # merge population data 
 
 mortality_rate(deaths$deaths, deaths$population, multiplier = 10000) %>%
   # add the region column to table
@@ -175,3 +188,81 @@ mortality_rate(deaths$deaths, deaths$population, multiplier = 10000) %>%
          "95%CI" = ci) %>% 
   kable(digits = 2)
 ```
+
+
+#### Maps 
+
+Mapping in R can be intimidating at first because it is different than ArcGIS, QGIS, or other mapping software that primarily use a point-and-click interface. However, you will see that using commands to create maps can be much faster, more replicable, and transparent for whomever you share code with.  
+
+TODO: Here are the basics about shapefile, you can read more HERE.  
+
+We do have shapefiles for the Am Timan exercise. You can download them from the case study overview page of this website.  
+
+Because we have shapefiles, we **must delete the line generating the fake shapefile** (`map <- gen_polygon(regions = unique(linelist_cleaned$patient_origin))`).  
+
+Note the checklist for using shapefiles:  
+
+* Your shapefile can be a polygon or points (and polygons do not have to be contiguous - they do not have to touch each other)  
+* Ensure that the region names in the shapefile match *exactly* the region names in linelist_cleaned. (in most shapefiles there is an ID or NAME variable in the spreadsheet file)  
+* Make sure the coordinate reference system (CRS) of the shapefile is WGS84 (this is the standard coordinate system used by most GPS systems, but it is good to ask whomever collected to data to be sure)  
+
+
+```{r read_shapefiles, message=FALSE}
+## reading in a shapefile 
+# map <- read_sf(here("mapfolder", "region.shp"))
+## check the coordinate reference system (CRS)
+# st_crs(map)
+## set the CRS if not present using EPSG value
+## this is the most commonly used 
+# map <- st_set_crs(map, value = 4326) # Sets to WGS84
+```
+
+The following will plot a map based on the attack rate table. 
+
+
+```{r choropleth_maps, message = FALSE, warning = FALSE}
+## Checklist for plotting ----------------------------------------------
+## - [ ] consider making categorical groupings of your AR or counts variable
+## - [ ] merge your attack rate or counts table with your shapefile 
+## - [ ] Choose the appropriate section below depending on if you are plotting polygons or points
+## - [ ] Choose what variable you would like to fill (for polygons) or colour (for points) with (counts or AR)
+## - [ ] DELETE OR COMMENT OUT THE SECTION YOU WONT BE USING
+## create a categorical variable for plotting 
+max_ar    <- max(ar$`Upper 95%CI`, na.rm = TRUE) # define your highest AR
+breakers <- as.integer(c(0, # include zero as a standalone group
+             seq(1, max_ar, by = max_ar/4) # 1 to maximum with four divisions
+             ))
+## add a categorical variable using the age_categories function 
+## nb in this case we arent using ages - but it functions the same way!
+ar <- mutate(ar, 
+             categories = age_categories(`AR (per 10,000)`, 
+                                         breakers = breakers)
+             )
+## join your ar or case counts based on matching shapefile names with regions in your ar table
+mapsub <- left_join(map, ar, by = c("name" = "Region"))
+## plotting with polygons ------------------------------------------------------
+## choropleth 
+## you could also fill by cases using `Cases (n)` in the fill option instead of `AR (per 10,000)`
+ggplot() +
+  geom_sf(data = mapsub, aes(fill = categories), col = "grey50") + # shapefile as polygon
+  coord_sf(datum = NA) + # needed to avoid gridlines being drawn
+  annotation_scale() + # add a scalebar
+  # color the scale to be perceptually uniform 
+  # drop FALSE keeps all levels 
+  # name allows you to change the legend title 
+  scale_fill_brewer(drop = FALSE, palette = "OrRd", name = "AR (per 10,000)") + 
+  geom_sf_text(data = mapsub, aes(label = name), colour = "grey50") + # label polygons
+  theme_void() # remove coordinates and axes
+## plotting with points --------------------------------------------------------
+# ggplot() +
+#   # plot shapefile as point 
+#   # shape 21 allows fill variable and colour border (e.g. black ring around circle)
+#   # size allows you to make it bigger 
+#   geom_sf(data = mapsub, aes(fill = categories), shape = 21, size = 5, color = "black") + 
+#   coord_sf(datum = NA) + # needed to avoid gridlines being drawn
+#   annotation_scale() + # add a scalebar
+#     scale_fill_brewer(drop = FALSE, palette = "OrRd", name = "AR (per 10,000)") + 
+ # color the scale to be perceptually uniform
+#   theme_void() # remove coordinates and axes
+```
+

@@ -311,6 +311,15 @@ linelist_cleaned <- linelist_cleaned %>%
   ))
 ```
 
+### Cleaning patient origin  
+
+The variable patient_origin was originally the variable *quartier* in the raw dataset. **patient_origin is referenced in the place analyses chunks**, for example when calculating attack rates by region. In these steps, the variable patient_origin in linelist_cleaned is *joined to* the patient_origin variable of the data frame *population_data_region*, which was imported in the population and lab data steps.  
+
+**However, the place names in population_data_region are ALL CAPITAL LETTERS and this is not true in linelist_cleaned - the join will not register any matches.** The easiest way to solve this problem is to redefine the linelist_cleaned variable into all capital letters as well, using the base R function toupper():  
+
+```{r}
+linelist_cleaned$patient_origin <- toupper(linelist_cleaned$patient_origin)
+```
 
 ### Create lists of variables  
 
