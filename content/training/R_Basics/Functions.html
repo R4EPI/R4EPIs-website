@@ -15,42 +15,37 @@ weight: 7
 <p><strong>Functions typically operate upon some object placed within the function’s parentheses</strong>. For example, when the function summary() is used on a variable of class numeric, the output is a summary of the variable’s numeric and missing values.</p>
 <pre class="r"><code>summary(linelist_raw$age_years)</code></pre>
 <pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA&#39;s 
-##    3.00   33.00   62.00   62.11   90.00  120.00       6</code></pre>
+##    3.00   31.00   62.50   63.58   97.00  120.00       8</code></pre>
 </div>
 <div id="functions-with-multiple-arguments" class="section level3">
 <h3>Functions with Multiple Arguments</h3>
 <p>Functions often ask for several inputs. <strong>Each piece of information needed is called an argument</strong>. Some arguments are required for the function to work correctly, some are optional. Arguments can take character, numeric, logical (TRUE/FALSE), and other inputs. Optional arguments have default settings if they are not specified. <strong>Arguments are located within the parentheses of the function, usually separated by commas</strong>.</p>
 <blockquote>
-<p><strong>For example</strong>, this descriptive() command in the templates creates a descriptive summary table of counts and proportions. In this command the function is given three arguments, establishing linelist_cleaned as the data frame to use, age_group as the variable to count, and sex as the variable to use for groupings.</p>
+<p><strong>For example</strong>, this plot_age_pyramid() command in the templates produces an age pyramid graphic based on defined age groups and a binary split variable, such as sex. The function is given three arguments within the parentheses,, separated by commas. The values supplied to the arguments establish linelist_cleaned as the data frame to use, age_group as the variable to count, and sex as the binary variable to use for splitting the pyramid</p>
 </blockquote>
-<pre class="r"><code># Creates a descriptive table by specifying the dataframe and two columns
-descriptive(df = linelist_cleaned, counter = &quot;age_group&quot;, grouper = &quot;sex&quot;)</code></pre>
-<pre><code>## # A tibble: 5 x 7
-##   age_group `M n` `M proportion` `F n` `F proportion` `U n` `U proportion`
-##   &lt;fct&gt;     &lt;dbl&gt;          &lt;dbl&gt; &lt;dbl&gt;          &lt;dbl&gt; &lt;dbl&gt;          &lt;dbl&gt;
-## 1 3-14         13          11.9      6           6.19     7           7.45
-## 2 15-29        10           9.17    11          11.3     19          20.2 
-## 3 30-44        14          12.8     11          11.3      7           7.45
-## 4 45+          69          63.3     67          69.1     60          63.8 
-## 5 Missing       3           2.75     2           2.06     1           1.06</code></pre>
+<pre class="r"><code># Creates an age pyramid by specifying the dataframe, age group variable, and a variable to split the pyramid
+plot_age_pyramid(data = linelist_cleaned, age_group = &quot;age_group&quot;, split_by = &quot;sex&quot;)</code></pre>
+<pre><code>## Warning in count_age_categories(data, age_group, split_by, stack_by,
+## proportional, : removing 88 observations with missing values between the
+## sex and sex columns.</code></pre>
+<p><img src="/training/R_Basics/Functions_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
 <blockquote>
-<p>Often, the first half of argument assignment (e.g. <code>df =</code>) does not need to be specified if the arguments are written in a specific order (specified in the function’s documentation). The below code produces the exact same table as above, because the function expects the argument order: data frame, counter variable, grouper variable.</p>
+<p>Often, the first half of argument assignment (e.g. <code>data =</code>) does not need to be specified if the arguments are written in a specific order (specified in the function’s documentation). The below code produces the exact same pyramid as above, because the function expects the argument order: data frame, age_group variable, split_by variable.</p>
 </blockquote>
 <pre class="r"><code># This command will produce the same table as above
-descriptive(linelist_cleaned, &quot;age_group&quot;, &quot;sex&quot;)</code></pre>
-<p><strong>A more complex descriptive() command might include the optional arguments to add a Total column and row to the table.</strong> This is done by including the argument coltotals and rowtotals, both set to equal TRUE (their default is FALSE).</p>
+plot_age_pyramid(linelist_cleaned, &quot;age_group&quot;, &quot;sex&quot;)</code></pre>
+<p><strong>A more complex plot_age_pyramid command might include the optional arguments to:</strong></p>
+<ul>
+<li>Show proportions instead of counts (set <code>proportional = TRUE</code> when the default is <code>FALSE</code>)<br />
+</li>
+<li>Specify the two colors to use (<code>pal =</code> is short for “palette” and is supplied with a vector of two color names. See the Objects page for how the function c() makes a vector)</li>
+</ul>
 <p><em>Note: For arguments specified with an equals symbol (e.g. coltotals = …), their order among the arguments is not important (must still be within the parentheses and separated by commas).</em></p>
-<pre class="r"><code>descriptive(linelist_cleaned, &quot;age_group&quot;, &quot;sex&quot;, coltotals = TRUE, rowtotals = TRUE)</code></pre>
-<pre><code>## # A tibble: 6 x 8
-##   age_group `M n` `M proportion` `F n` `F proportion` `U n` `U proportion`
-##   &lt;chr&gt;     &lt;dbl&gt;          &lt;dbl&gt; &lt;dbl&gt;          &lt;dbl&gt; &lt;dbl&gt;          &lt;dbl&gt;
-## 1 3-14         13          11.9      6           6.19     7           7.45
-## 2 15-29        10           9.17    11          11.3     19          20.2 
-## 3 30-44        14          12.8     11          11.3      7           7.45
-## 4 45+          69          63.3     67          69.1     60          63.8 
-## 5 Missing       3           2.75     2           2.06     1           1.06
-## 6 Total       109         100       97         100       94         100   
-## # ... with 1 more variable: Total &lt;dbl&gt;</code></pre>
+<pre class="r"><code>plot_age_pyramid(linelist_cleaned, &quot;age_group&quot;, &quot;sex&quot;, proportional = TRUE, pal = c(&quot;orange&quot;, &quot;purple&quot;))</code></pre>
+<pre><code>## Warning in count_age_categories(data, age_group, split_by, stack_by,
+## proportional, : removing 88 observations with missing values between the
+## sex and sex columns.</code></pre>
+<p><img src="/training/R_Basics/Functions_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
 </div>
 <div id="using-additional-functions" class="section level3">
 <h3>Using Additional Functions</h3>
