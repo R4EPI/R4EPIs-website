@@ -15,7 +15,7 @@ weight: 7
 <p><strong>Functions typically operate upon some object placed within the function’s parentheses</strong>. For example, when the function summary() is used on a variable of class numeric, the output is a summary of the variable’s numeric and missing values.</p>
 <pre class="r"><code>summary(linelist_raw$age_years)</code></pre>
 <pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA&#39;s 
-##    3.00   31.00   62.50   63.58   97.00  120.00       8</code></pre>
+##    3.00   33.00   61.00   61.98   93.50  120.00       5</code></pre>
 </div>
 <div id="functions-with-multiple-arguments" class="section level3">
 <h3>Functions with Multiple Arguments</h3>
@@ -25,9 +25,6 @@ weight: 7
 </blockquote>
 <pre class="r"><code># Creates an age pyramid by specifying the dataframe, age group variable, and a variable to split the pyramid
 plot_age_pyramid(data = linelist_cleaned, age_group = &quot;age_group&quot;, split_by = &quot;sex&quot;)</code></pre>
-<pre><code>## Warning in count_age_categories(data, age_group, split_by, stack_by,
-## proportional, : removing 88 observations with missing values between the
-## sex and sex columns.</code></pre>
 <p><img src="/training/R_Basics/Functions_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
 <blockquote>
 <p>Often, the first half of argument assignment (e.g. <code>data =</code>) does not need to be specified if the arguments are written in a specific order (specified in the function’s documentation). The below code produces the exact same pyramid as above, because the function expects the argument order: data frame, age_group variable, split_by variable.</p>
@@ -42,9 +39,6 @@ plot_age_pyramid(linelist_cleaned, &quot;age_group&quot;, &quot;sex&quot;)</code
 </ul>
 <p><em>Note: For arguments specified with an equals symbol (e.g. coltotals = …), their order among the arguments is not important (must still be within the parentheses and separated by commas).</em></p>
 <pre class="r"><code>plot_age_pyramid(linelist_cleaned, &quot;age_group&quot;, &quot;sex&quot;, proportional = TRUE, pal = c(&quot;orange&quot;, &quot;purple&quot;))</code></pre>
-<pre><code>## Warning in count_age_categories(data, age_group, split_by, stack_by,
-## proportional, : removing 88 observations with missing values between the
-## sex and sex columns.</code></pre>
 <p><img src="/training/R_Basics/Functions_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
 </div>
 <div id="using-additional-functions" class="section level3">
