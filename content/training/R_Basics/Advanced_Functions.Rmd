@@ -28,18 +28,19 @@ linelist_cleaned$age_group <- age_categories(linelist_cleaned$age_years,
 
 ## The Here packge and here() function  
 
-The templates use the **Here package to assist with locating local files**. The Here package and its function here() work well with R projects. It automatically considers the top-level folder of your R project as "here". Then, in your script, if you want to import or reference a file saved in your R project's folders, you can use here() to tell R where it is.  
+The templates use the **Here package to assist with locating local files**. The Here package and its function here() work well with R projects.  
 
+**How it works:** When the package "Here" is loaded, it automatically considers the top-level folder of your R project as "here" - as a benchmark for all other files in the Project. In your script, if you want to import or reference a file saved in your R project's folders, you use the function here() to tell R where the file is in relation to "here".  
 
-Below is an example of importing the file "linelist.xlsx". The import() function from the rio package does the importing, but it needs to be told where to look on your computer to find the file. Normally, it accepts a filepath in quotes, but it is easy to make mistakes.  
-
-Instead, import() is wrapped around here(). The here() function knows where "here" is (the top folder of the R project). If you are unsure where "here" is set to, run this command:
-
+If you are unsure where "here" is set to, run this command:
 
 ```{r eval=FALSE}
 # This command tells you the folder path that "here" is set to 
 here()
 ```
+
+
+**Below is an example** of importing the file "linelist.xlsx". The import() function from the rio package does the importing, but **import() needs to be told where to look on your computer** to find the file. Normally, it accepts a filepath in quotes, but it is easy to make mistakes. Instead, **import() is wrapped around the function here()**. 
 
 If the file you want is in the folder designated as "here", all you have to do is provide the name of the file in quotes (with the appropriate ending). 
 
@@ -47,7 +48,7 @@ If the file you want is in the folder designated as "here", all you have to do i
 linelist_raw <- rio::import(here("linelist.xlsx"), which = "Sheet1")
 ```
 
-*Note: After the closing parenthes of here() the import() function continues. There is a comma and the optional argument `which = `, that specifies which sheet of the Excel file to import.*  
+*Note: After the closing parenthes of here() the import() function continues. There is a comma and import()'s optional argument `which = `, specifying which sheet of the Excel file to import.*  
 
 **If however, your file is within subfolders of the folder designated as "here"** - let's say it is in the subfolder "data" and then the sub-subfolder "linelists" - **you write these folder names before the file name, in quotes, and separated by commas**, as below:  
 
@@ -75,3 +76,8 @@ An example of a left join from the AJS outbreak template occurs in the TODO
 
 ![](/images/inner-join.gif)
 
+
+
+### The %in% operator  
+
+TODO

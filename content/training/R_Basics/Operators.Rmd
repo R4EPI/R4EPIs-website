@@ -8,15 +8,15 @@ weight: 9
 
 **Relational operators compare values** and are often used when defining new variables and subsets of datasets. Here are the common relational operators in R:  
 
-Function | Operator	| Example	| Result
--------------- | ---------- | ----------- | ------------------------  
+Function | Operator	| Example	| Example Result
+-------------- | ------------- | -------------- | ---------------------------  
 Equal to |	`==` | `"A" == "a"`	| `FALSE` (because R is case sensitive) *Note that == (double equals) is different from = (single equals), which acts like the assignment operator <-*  
 Not equal to | `!=`	| `2 != 0` | `TRUE`  
 Greater than | `>` | `4 > 2` | `TRUE`  
 Less than | `<` | `4 < 2` | `FALSE`  
 Greater than or equal to | `>=` | `6 >= 4` | `TRUE`  
 Less than or equal to	| `<=` | `6 <= 4` | `FALSE`  
-Value is missing | `is.na()` | `is.na(7)` | `FALSE` (special case, see section on missing values)
+Value is missing | `is.na()` | `is.na(7)` | `FALSE` (see section on missing values)
 Value is not missing | `!is.na()` | `!is.na(7)` | `TRUE`
 
 **Logical operators, such as AND and OR, are often used to connect relational operators and create more complicated criteria**. Complex statements might require parentheses ( ) for grouping and order of application.  

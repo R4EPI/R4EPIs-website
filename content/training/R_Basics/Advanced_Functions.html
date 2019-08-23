@@ -8,14 +8,15 @@ weight: 12
 
 <div id="the-here-packge-and-here-function" class="section level2">
 <h2>The Here packge and here() function</h2>
-<p>The templates use the <strong>Here package to assist with locating local files</strong>. The Here package and its function here() work well with R projects. It automatically considers the top-level folder of your R project as “here”. Then, in your script, if you want to import or reference a file saved in your R project’s folders, you can use here() to tell R where it is.</p>
-<p>Below is an example of importing the file “linelist.xlsx”. The import() function from the rio package does the importing, but it needs to be told where to look on your computer to find the file. Normally, it accepts a filepath in quotes, but it is easy to make mistakes.</p>
-<p>Instead, import() is wrapped around here(). The here() function knows where “here” is (the top folder of the R project). If you are unsure where “here” is set to, run this command:</p>
+<p>The templates use the <strong>Here package to assist with locating local files</strong>. The Here package and its function here() work well with R projects.</p>
+<p><strong>How it works:</strong> When the package “Here” is loaded, it automatically considers the top-level folder of your R project as “here” - as a benchmark for all other files in the Project. In your script, if you want to import or reference a file saved in your R project’s folders, you use the function here() to tell R where the file is in relation to “here”.</p>
+<p>If you are unsure where “here” is set to, run this command:</p>
 <pre class="r"><code># This command tells you the folder path that &quot;here&quot; is set to 
 here()</code></pre>
+<p><strong>Below is an example</strong> of importing the file “linelist.xlsx”. The import() function from the rio package does the importing, but <strong>import() needs to be told where to look on your computer</strong> to find the file. Normally, it accepts a filepath in quotes, but it is easy to make mistakes. Instead, <strong>import() is wrapped around the function here()</strong>.</p>
 <p>If the file you want is in the folder designated as “here”, all you have to do is provide the name of the file in quotes (with the appropriate ending).</p>
 <pre class="r"><code>linelist_raw &lt;- rio::import(here(&quot;linelist.xlsx&quot;), which = &quot;Sheet1&quot;)</code></pre>
-<p><em>Note: After the closing parenthes of here() the import() function continues. There is a comma and the optional argument <code>which =</code>, that specifies which sheet of the Excel file to import.</em></p>
+<p><em>Note: After the closing parenthes of here() the import() function continues. There is a comma and import()’s optional argument <code>which =</code>, specifying which sheet of the Excel file to import.</em></p>
 <p><strong>If however, your file is within subfolders of the folder designated as “here”</strong> - let’s say it is in the subfolder “data” and then the sub-subfolder “linelists” - <strong>you write these folder names before the file name, in quotes, and separated by commas</strong>, as below:</p>
 <pre class="r"><code>linelist_raw &lt;- rio::import(here(&quot;data&quot;, &quot;linelists&quot;, &quot;linelist.xlsx&quot;), which = &quot;Sheet1&quot;)</code></pre>
 <p>You can read more about Here and here() at <a href="https://github.com/jennybc/here_here">this site</a> and <a href="https://here.r-lib.org/">this one</a></p>
@@ -43,5 +44,9 @@ here()</code></pre>
 <img src="/images/inner-join.gif" />
 
 </div>
+</div>
+<div id="the-in-operator" class="section level3">
+<h3>The %in% operator</h3>
+<p>TODO</p>
 </div>
 </div>

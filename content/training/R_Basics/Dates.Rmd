@@ -9,6 +9,7 @@ weight: 10
 
 library(sitrep)
 library(dplyr)
+library(linelist)
 
 linelist_raw <- gen_data("AJS")
 linelist_cleaned <- linelist_raw
@@ -24,7 +25,11 @@ It is important to make R recognize when a variable contains dates. Dates are an
 
 **The function guess_dates() attempts to read a "messy" date variable containing dates in many different formats and convert the dates to a standard format.** You can read more about guess_dates(), which is in the "linelist" package, [here](https://rdrr.io/github/reconhub/linelist/man/guess_dates.html).  
 
->For example, guess_dates would see the following dates "03 Jan 2018" "07/03/1982" "08/20/85" and convert them in the class Date to: 2018-01-03 1982-03-07 1985-08-20. 
+>For example, guess_dates would see the following dates "03 Jan 2018", "07/03/1982", and "08/20/85" and convert them in the class Date to: 2018-01-03, 1982-03-07, and 1985-08-20.  
+
+```{r}
+guess_dates(c("03 Jan 2018", "07/03/1982", "08/20/85"))
+```
 
 *Some optional arguments for guess_dates() that you might include are:*  
 
