@@ -47,6 +47,17 @@ here()</code></pre>
 </div>
 <div id="the-in-operator" class="section level3">
 <h3>The %in% operator</h3>
-<p>TODO</p>
+<p>The operator %in% looks to see if a value is present within a vector. A vector can be created with the function c(), and a variable in a data frame is also a vector.</p>
+<p>In the simple example below, R is asked if the number 4 is present in the vector “numbers”:</p>
+<pre class="r"><code># Vector is defined
+numbers &lt;- c(4, 10, 5, 365, 12, 0.5, 9)
+
+# Test if 5 is in the vector
+5 %in% numbers</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<p>In the templates, %in% can be used when creating the valued “DIED” (when a patient died). The variable DIED is logical (either TRUE or FALSE). It will be TRUE if the value in exit_status is either “DD” or “DOA” - those are the two character values present in the vector. You can add to or change the terms listed in the vector.</p>
+<pre class="r"><code>#DIED == TRUE if value in exit_status is &quot;DD&quot; or &quot;DOA&quot;
+linelist_cleaned$DIED &lt;- linelist_cleaned$exit_status %in% c(&quot;DD&quot;, &quot;DOA&quot;))</code></pre>
+<p>You can read more abouth %in% <a href="http://www.datasciencemadesimple.com/in-operator-in-r/">here</a></p>
 </div>
 </div>

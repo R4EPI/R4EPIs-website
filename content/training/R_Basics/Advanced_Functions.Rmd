@@ -80,4 +80,23 @@ An example of a left join from the AJS outbreak template occurs in the TODO
 
 ### The %in% operator  
 
-TODO
+The operator %in% looks to see if a value is present within a vector. A vector can be created with the function c(), and a variable in a data frame is also a vector. 
+
+In the simple example below, R is asked if the number 4 is present in the vector "numbers":
+
+```{r}
+# Vector is defined
+numbers <- c(4, 10, 5, 365, 12, 0.5, 9)
+
+# Test if 5 is in the vector
+5 %in% numbers
+```
+
+In the templates, %in% can be used when creating the valued "DIED" (when a patient died). The variable DIED is logical (either TRUE or FALSE). It will be TRUE if the value in exit_status is either "DD" or "DOA" - those are the two character values present in the vector. You can add to or change the terms listed in the vector.
+
+```{r eval=FALSE}
+#DIED == TRUE if value in exit_status is "DD" or "DOA"
+linelist_cleaned$DIED <- linelist_cleaned$exit_status %in% c("DD", "DOA"))
+```
+
+You can read more abouth %in% [here](http://www.datasciencemadesimple.com/in-operator-in-r/)
