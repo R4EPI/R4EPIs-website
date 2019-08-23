@@ -87,3 +87,11 @@ linelist_raw <- gen_data("AJS") # generates a fake dataset for use in this templ
 Any script (RMarkdown or otherwise) will give clues when you have made a mistake. For example, if you forgot to write a comma where it is needed, or to close a parentheses, RStudio will raise a flag on that line, on the right side of the script, to warn you.  
 
 ![](/images/Warnings_and_Errors.png)
+
+### Producing/"Knitting" the RMarkdown document  
+
+**Producing the final RMarksdown report is called "knitting"**. When you are editing a RMarkdown script, you will see a special option to "Knit"" at the top of the script, near the save shortcut button. Clicking "Knit" will begin the process of creating the final document. The option to "Knit" does not appear for normal R scripts, only RMarkdown scripts. Note the following:  
+
+* You can use the arrow next to the word "Knit" to select the type of document you want to produce: Microsoft Word, PDF, or HTML (HTML opens the file in an offline web browser). Note that to knit to a PDF *directly*, additional packages may have to be installed.  
+
+* The default document type is specified in the header of the RMarkdown script, and for the templates it is Microsoft Word.
