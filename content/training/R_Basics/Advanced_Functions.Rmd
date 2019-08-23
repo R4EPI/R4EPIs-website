@@ -1,7 +1,7 @@
 ---
 date: "2019-08-22T15:33:00+02:00"
 title: Advanced Functions
-weight: 11
+weight: 12
 ---
 
 

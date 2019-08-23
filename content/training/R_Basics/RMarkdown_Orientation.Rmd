@@ -1,7 +1,7 @@
 ---
 date: "2019-07-30T13:30:45+02:00"
 title: Reading a RMarkdown Script
-weight: 12
+weight: 6
 ---
 ## What is a script?  
 Scripts are files that:  

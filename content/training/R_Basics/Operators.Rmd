@@ -1,7 +1,7 @@
 ---
 date: "2019-08-22T14:00:39+02:00"
 title: Operators
-weight: 8
+weight: 9
 ---
 
 ## Relational and logical operators  
