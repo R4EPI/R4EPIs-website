@@ -372,6 +372,7 @@ linelist_cleaned %>%
 ```{r, include=FALSE, results='hide', message=FALSE, warning=FALSE}
 # Save linelist_cleaned for use in the next page (time analyses).
 saveRDS(linelist_cleaned, "data/linelist_time_cleaned.rds")
+saveRDS(epicurve_theme, "data/epicurve_theme.rds")
 ```
 
 

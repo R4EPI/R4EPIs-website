@@ -2239,7 +2239,8 @@ ggplot(ar, aes(x = reorder(Region, `AR (per 10,000)`),
   labs(x = &quot;Region&quot;, y = &quot;AR (per 10,000)&quot;, 
        captions = paste0(&quot;Source: MSF data from &quot;, reporting_week)) + 
   epicurve_theme</code></pre>
-<pre><code>## Error in eval(expr, envir, enclos): object &#39;epicurve_theme&#39; not found</code></pre>
+<pre><code>## Warning: Removed 81 rows containing missing values (geom_errorbar).</code></pre>
+<p><img src="/training/Walk-through/place_analyses_files/figure-html/bar_attack_rate_by_region-1.png" width="720" /></p>
 <p>You could also <strong>table mortality rate by region</strong>. A few things to note:</p>
 <ul>
 <li>The first command uses group_by() to count cases by patient_origin. Then, filter() is applied based on the character search function grepl() from the package stringr, which looks for “Dead” within the variable exit_status - <strong>note: we must change this to reflect our data and have grepl() look for “Died” in exit_status2.</strong> (otherwise, the object “deaths” has 0 rows and mortality_rate() produces an error)<br />
@@ -2418,30 +2419,118 @@ ar &lt;- mutate(ar,
 <p>The resulting object ‘mapsub’ is a product of this <strong>left join</strong>. A left join will include all values from the Left-hand Side (LHS) and only inlcude values from the Right-hand Side (RHS) if they match to LHS values. Now, the attack rates are joined to the region names and to their GIS geometries. You can verify this by Viewing the object mapsub (click on it in the Environment pane).</p>
 <pre class="r"><code>## join your ar or case counts based on matching shapefile names with regions in your ar table
 mapsub &lt;- left_join(map, ar, by = c(&quot;Name&quot; = &quot;Region&quot;))</code></pre>
-<p>Here, ggplot() is used to create the map. Remember that ggplot() subcommands must be connected by plus symbols at the end of each line (+) (except the last line). Read more about ggplot2 and ggplot() in the R Basics pages.</p>
+<p><strong>Now, ggplot() is used to create the map.</strong> Remember that ggplot() subcommands must be connected by plus symbols at the end of each line (+) (except the last line). Read more about ggplot2 and ggplot() in the R Basics pages.</p>
 <p><strong>geom_sf()</strong> identifies ‘mapsub’ as providing the data for the map, and filling the polygons by values in the variable ‘categories’.</p>
 <p><strong>coord_sf()</strong> set to NA prevents gridlines from being drawn on the map.</p>
 <p><strong>annotation_scale()</strong> adds a scalebar at the bottom of the map.</p>
-<p><strong>scale_fill_brewer()</strong> uses a color palatte from orange to red (“OrRd”), and specifies a title for the legend. If you want a different color scale, use this code from the package RColorBrewer to see the possible options, and replace “OrRd” with the desired code:</p>
-<pre class="r"><code>display.brewer.all()</code></pre>
-<pre><code>## Error in display.brewer.all(): could not find function &quot;display.brewer.all&quot;</code></pre>
+<p><strong>scale_fill_brewer()</strong> uses a color palatte from orange to red (“OrRd”), keeps all color levels even if there are no polygons at that level (<code>drop=FALSE</code>), and specifies a title for the legend. If you want a different color scale, use this code from the package RColorBrewer to see the possible options (hint: after running this code click “Zoom” in your Plot/Viewer pane to see more clearly). Then replace “OrRd” with your desired code. You can read more about colors <a href="http://www.sthda.com/english/wiki/print.php?id=85">here</a>.</p>
+<pre class="r"><code>library(RColorBrewer)
+display.brewer.all()</code></pre>
+<p><img src="/training/Walk-through/place_analyses_files/figure-html/unnamed-chunk-5-1.png" width="720" /></p>
 <p><strong>geom_sf_text()</strong> specifies labels for the polygons, including which variable to use for labels (“Name”), and the text colour. <strong>Again, we need to modify this ggplot() reference to the variable “name” to now reference “Name” with a capital N. In your data the variable may be completely different.</strong></p>
 <p><strong>theme_void()</strong> specifies a theme for the map that does not include coordinates or axes.</p>
 <pre class="r"><code>## plotting with polygons ------------------------------------------------------
-## choropleth 
-## you could also fill by cases using `Cases (n)` in the fill option instead of `AR (per 10,000)`
+
 ggplot() +
   geom_sf(data = mapsub, aes(fill = categories), col = &quot;grey50&quot;) + # shapefile as polygon
   coord_sf(datum = NA) + # needed to avoid gridlines being drawn
   annotation_scale() + # add a scalebar
-  # color the scale to be perceptually uniform 
-  # drop FALSE keeps all levels 
-  # name allows you to change the legend title 
   scale_fill_brewer(drop = FALSE, palette = &quot;OrRd&quot;, name = &quot;AR (per 10,000)&quot;) + 
   geom_sf_text(data = mapsub, aes(label = Name), colour = &quot;grey50&quot;) + # label polygons
   theme_void() # remove coordinates and axes</code></pre>
 <pre><code>## Warning in st_point_on_surface.sfc(sf::st_zm(x)): st_point_on_surface may
 ## not give correct results for longitude/latitude data</code></pre>
 <p><img src="/training/Walk-through/place_analyses_files/figure-html/unnamed-chunk-6-1.png" width="720" /></p>
+<p>Lastly, <strong>there is an efficient way to create attack rate maps and bar plots of incidence for each epiweek</strong>. Use a <strong>“for loop”</strong> to run the same code for every epi week.</p>
+<p><strong>A for loop is used to iterate over (perform the same actions to) every value in a vector.</strong> In this case, we want to make the map and bar chart for each region. You can read more about for loops in the Advanced section of the R Basics pages, or <a href="">here</a>.</p>
+<p>A few things to note about this chunk:</p>
+<ul>
+<li>The first half is very similar to the set-up of the previous map.<br />
+</li>
+<li>You must also modify the <code>left_join</code> command to list the correct variable names (e.g. Name instead of name)</li>
+<li>These maps are not labeled with region names.<br />
+</li>
+<li>The creation of the barplots depends on the object epicurve_theme, which was defined in the Time section of the template. If that section is not created, then this object will be missing and cause errors.</li>
+</ul>
+<pre class="r"><code>## Checklist for plotting in for-loop ------------------------------------------
+## - [ ] decide if you would like to show counts, AR or categories of those
+## - [ ] define appropriate breaks to ensure legend is uniform by week
+## - [ ] replace `Cases (n)` and `AR (per 10,000)` or &quot;categories&quot;, appropriately
+## - [ ] consider facet wrapping by an overarching unit if have many regions (e.g. by province)
+
+# change region variable to a factor so that zero counts can be included
+linelist_cleaned$patient_origin &lt;- as.factor(linelist_cleaned$patient_origin)
+
+# case counts
+cases &lt;- linelist_cleaned %&gt;% 
+  group_by(epiweek) %&gt;%
+  count(patient_origin, .drop = FALSE) %&gt;%   # cases for each week by region
+  left_join(population_data_region, by = &quot;patient_origin&quot;)    # merge population data 
+
+# attack rate for region
+ar &lt;- attack_rate(cases$n, cases$population, multiplier = 10000) %&gt;% 
+  # add the region column to table
+  bind_cols(select(cases, epiweek, patient_origin), .) %&gt;% 
+  rename(&quot;Region&quot; = patient_origin, 
+         &quot;Cases (n)&quot; = cases, 
+         &quot;Population&quot; = population, 
+         &quot;AR (per 10,000)&quot; = ar, 
+         &quot;Lower 95%CI&quot; = lower,
+         &quot;Upper 95%CI&quot; = upper)
+max_cases &lt;- max(cases$n, na.rm = TRUE) # define the maximum number of cases for the color palette 
+max_ar    &lt;- max(ar$`Upper 95%CI`, na.rm = TRUE)
+
+## define breaks for standardising color palette
+breakers &lt;- as.integer(c(0, # include zero as a standalone group
+             find_breaks(max_ar, breaks = 4, snap = 100) # four breaks rounded to nearest 100
+             ))
+
+## add a categorical variable using the age_categories function 
+## nb in this case we arent using ages - but it functions the same way!
+ar &lt;- mutate(ar, 
+             categories = age_categories(`AR (per 10,000)`, 
+                                         breakers = breakers)
+             )
+
+# go through each epiweek, filter and plot the data
+for (i in unique(cases$epiweek)) {
+  this_ar &lt;- filter(ar, epiweek == i)
+  
+  # map 
+  mapsub &lt;- left_join(map, this_ar, by = c(&quot;Name&quot; = &quot;Region&quot;))
+  
+  # choropleth 
+  map_plot &lt;- ggplot() +
+    geom_sf(data = mapsub, aes(fill = categories), col = &quot;grey50&quot;) + # shapefile as polygon
+    coord_sf(datum = NA) + # needed to avoid gridlines being drawn
+    annotation_scale() + # add a scalebar
+  scale_fill_brewer(drop = FALSE, 
+                    palette = &quot;OrRd&quot;, 
+                    name = &quot;AR (per 10,000)&quot;) +  # color the scale to be perceptually uniform (keep levels)
+    theme_void() # remove coordinates and axes
+  
+  # plot with the region on the x axis sorted by increasing ar
+  # ar value on the y axis 
+  barplot &lt;- ggplot(this_ar, aes(x = reorder(Region, `AR (per 10,000)`),
+                                 y = `AR (per 10,000)`)) + 
+    geom_bar(stat = &quot;identity&quot;, col = &quot;black&quot;, fill = &quot;red&quot;) + # plot as bars (identity = as is)
+    geom_errorbar(aes(ymin = `Lower 95%CI`, ymax = `Upper 95%CI`), width = 0.2) + # add CIs
+    scale_y_continuous(expand = c(0, 0), limits = c(0, max_ar)) +  # set origin for axes
+    # add labels to axes and below chart
+    labs(x = &quot;Region&quot;, y = &quot;AR (per 10,000)&quot;, 
+         captions = paste0(&quot;Source: MSF data from &quot;, reporting_week)) + 
+    epicurve_theme
+  # combine the barplot and map plot into one
+  print(
+    cowplot::plot_grid(
+      barplot + labs(title = paste0(&quot;Epiweek: &quot;, i)),
+      map_plot,
+      nrow = 1,
+      align = &quot;h&quot;,
+      axis = &quot;tb&quot;
+    )
+  )
+}</code></pre>
+<p><img src="/training/Walk-through/place_analyses_files/figure-html/map_for_loop_epiweek-1.png" width="1152" /><img src="/training/Walk-through/place_analyses_files/figure-html/map_for_loop_epiweek-2.png" width="1152" /><img src="/training/Walk-through/place_analyses_files/figure-html/map_for_loop_epiweek-3.png" width="1152" /><img src="/training/Walk-through/place_analyses_files/figure-html/map_for_loop_epiweek-4.png" width="1152" /><img src="/training/Walk-through/place_analyses_files/figure-html/map_for_loop_epiweek-5.png" width="1152" /><img src="/training/Walk-through/place_analyses_files/figure-html/map_for_loop_epiweek-6.png" width="1152" /><img src="/training/Walk-through/place_analyses_files/figure-html/map_for_loop_epiweek-7.png" width="1152" /><img src="/training/Walk-through/place_analyses_files/figure-html/map_for_loop_epiweek-8.png" width="1152" /><img src="/training/Walk-through/place_analyses_files/figure-html/map_for_loop_epiweek-9.png" width="1152" /><img src="/training/Walk-through/place_analyses_files/figure-html/map_for_loop_epiweek-10.png" width="1152" /><img src="/training/Walk-through/place_analyses_files/figure-html/map_for_loop_epiweek-11.png" width="1152" /><img src="/training/Walk-through/place_analyses_files/figure-html/map_for_loop_epiweek-12.png" width="1152" /><img src="/training/Walk-through/place_analyses_files/figure-html/map_for_loop_epiweek-13.png" width="1152" /><img src="/training/Walk-through/place_analyses_files/figure-html/map_for_loop_epiweek-14.png" width="1152" /><img src="/training/Walk-through/place_analyses_files/figure-html/map_for_loop_epiweek-15.png" width="1152" /><img src="/training/Walk-through/place_analyses_files/figure-html/map_for_loop_epiweek-16.png" width="1152" /><img src="/training/Walk-through/place_analyses_files/figure-html/map_for_loop_epiweek-17.png" width="1152" /><img src="/training/Walk-through/place_analyses_files/figure-html/map_for_loop_epiweek-18.png" width="1152" /><img src="/training/Walk-through/place_analyses_files/figure-html/map_for_loop_epiweek-19.png" width="1152" /><img src="/training/Walk-through/place_analyses_files/figure-html/map_for_loop_epiweek-20.png" width="1152" /><img src="/training/Walk-through/place_analyses_files/figure-html/map_for_loop_epiweek-21.png" width="1152" /><img src="/training/Walk-through/place_analyses_files/figure-html/map_for_loop_epiweek-22.png" width="1152" /><img src="/training/Walk-through/place_analyses_files/figure-html/map_for_loop_epiweek-23.png" width="1152" /><img src="/training/Walk-through/place_analyses_files/figure-html/map_for_loop_epiweek-24.png" width="1152" /><img src="/training/Walk-through/place_analyses_files/figure-html/map_for_loop_epiweek-25.png" width="1152" /><img src="/training/Walk-through/place_analyses_files/figure-html/map_for_loop_epiweek-26.png" width="1152" /><img src="/training/Walk-through/place_analyses_files/figure-html/map_for_loop_epiweek-27.png" width="1152" /><img src="/training/Walk-through/place_analyses_files/figure-html/map_for_loop_epiweek-28.png" width="1152" /><img src="/training/Walk-through/place_analyses_files/figure-html/map_for_loop_epiweek-29.png" width="1152" /><img src="/training/Walk-through/place_analyses_files/figure-html/map_for_loop_epiweek-30.png" width="1152" /><img src="/training/Walk-through/place_analyses_files/figure-html/map_for_loop_epiweek-31.png" width="1152" /><img src="/training/Walk-through/place_analyses_files/figure-html/map_for_loop_epiweek-32.png" width="1152" /><img src="/training/Walk-through/place_analyses_files/figure-html/map_for_loop_epiweek-33.png" width="1152" /><img src="/training/Walk-through/place_analyses_files/figure-html/map_for_loop_epiweek-34.png" width="1152" /><img src="/training/Walk-through/place_analyses_files/figure-html/map_for_loop_epiweek-35.png" width="1152" /><img src="/training/Walk-through/place_analyses_files/figure-html/map_for_loop_epiweek-36.png" width="1152" /><img src="/training/Walk-through/place_analyses_files/figure-html/map_for_loop_epiweek-37.png" width="1152" /><img src="/training/Walk-through/place_analyses_files/figure-html/map_for_loop_epiweek-38.png" width="1152" /><img src="/training/Walk-through/place_analyses_files/figure-html/map_for_loop_epiweek-39.png" width="1152" /><img src="/training/Walk-through/place_analyses_files/figure-html/map_for_loop_epiweek-40.png" width="1152" /><img src="/training/Walk-through/place_analyses_files/figure-html/map_for_loop_epiweek-41.png" width="1152" /><img src="/training/Walk-through/place_analyses_files/figure-html/map_for_loop_epiweek-42.png" width="1152" /><img src="/training/Walk-through/place_analyses_files/figure-html/map_for_loop_epiweek-43.png" width="1152" /><img src="/training/Walk-through/place_analyses_files/figure-html/map_for_loop_epiweek-44.png" width="1152" /><img src="/training/Walk-through/place_analyses_files/figure-html/map_for_loop_epiweek-45.png" width="1152" /><img src="/training/Walk-through/place_analyses_files/figure-html/map_for_loop_epiweek-46.png" width="1152" /><img src="/training/Walk-through/place_analyses_files/figure-html/map_for_loop_epiweek-47.png" width="1152" /></p>
 </div>
 </div>
