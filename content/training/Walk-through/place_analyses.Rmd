@@ -195,11 +195,13 @@ mortality_rate(deaths$deaths, deaths$population, multiplier = 10000) %>%
 
 Mapping in R can be intimidating at first because it is different than ArcGIS, QGIS, or other mapping software that primarily use a point-and-click interface. However, you will see that using commands to create maps can be much faster, more replicable, and transparent for whomever you share code with.  
 
-TODO: Here are the basics about shapefile, you can read more HERE. diferent parts are read together. 
-
 We do have shapefiles for the Am Timan exercise. You can download them from the case study overview page of this website.  
 
-Because we have shapefiles, we **must delete the line generating the fake shapefile** (`map <- gen_polygon(regions = unique(linelist_cleaned$patient_origin))`).  
+*Shapefiles are a format for storing geometric location and attribute data for geographic features - for example **either points (e.g. GPS points of cases or households surveyed), lines (e.g. road network), or polygons (e.g. district boundaries)** *  
+
+*Note: a shapefile is actually made of several files. Viewing the shapefile in your computer's internal folders you will often see 4 or 5 files with the same name but different extensions (e.g. .shp, .prj, etc.). As long as these files are located in the same folder the shapefile will load correctly when you import with the .shp extension.*  
+
+Because we have shapefiles for this exercise, we **must delete the command that generates the fake shapefile** (`map <- gen_polygon(regions = unique(linelist_cleaned$patient_origin))`).  
 
 Note the checklist for using shapefiles:  
 
@@ -207,13 +209,23 @@ Note the checklist for using shapefiles:
 * Ensure that the region names in the shapefile match *exactly* the region names in linelist_cleaned. (in most shapefiles there is an ID or NAME variable in the spreadsheet file)  
 * Make sure the coordinate reference system (CRS) of the shapefile is WGS84 (this is the standard coordinate system used by most GPS systems, but it is good to ask whomever collected to data to be sure)  
  
- 
-TODO: Note when using here() list the .shp filename. Link to discussion of here().
+*Note that when giving the name of a shapefile to here(), list the file name with a .shp extension.*  
 
-```{r read_shapefiles, message=FALSE}
+*The import() function is wrapped around the here() function. The here() function makes it easy for R to locate files on your computer. It is best to save the dataset within your R project, and to provide here() with any R project subfolder names. You can read more about the here() function in the data import page of the R Basics tutorial.* 
+   
+
+
+```{r read_shapefiles, include=FALSE, results='hide', message=FALSE, warning=FALSE }
 ## reading in a shapefile 
 map <- read_sf(here("content", "training", "Walk-through", "mapfolder", "quartiersshape.shp"))
 ```
+
+
+```{r read_shapefiles, eval=FALSE}
+## reading in a shapefile 
+map <- read_sf(here("quartiersshape.shp"))
+```
+
 The next code will check the coordinate reference system (CRS) of the shapefile, as it was read-in. In our exercise, we see an EPSG code of 4326, which is the correct code for WGS84 (you can also see below the EPSG code that the datum is WGS84).
 ```{r}
 ## check the coordinate reference system (CRS)
