@@ -112,3 +112,27 @@ linelist_cleaned$DIED <- linelist_cleaned$exit_status %in% c("DD", "DOA"))
 ```
 
 You can read more abouth %in% [here](http://www.datasciencemadesimple.com/in-operator-in-r/)
+
+
+### Factors and the forcats() package  
+
+#### Factors
+Factors are a special variable class in which data are stored as integers, but each integer *level* has a corresponding character value that is used when the data are displayed. TODO: Factors are similar to XXXX in Stata.  
+
+TODO EXAMPLE  
+
+You can read more about factors [here](https://www.stat.berkeley.edu/~s133/factors.html). 
+
+#### forcats and dropping factor levels  
+
+If a variable is already a factor, it can be difficult to remove value levels without any observations. These levels will continue to appear in graphs, tables, etc. For example, 
+
+TODO Example  
+
+The package forcats and its function fct_drop() will drop "unusued" levels of a factor, in effect cleaning it of unused levels. See this example:  
+
+TODO follow-up example.
+
+
+
+
