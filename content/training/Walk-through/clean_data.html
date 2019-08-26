@@ -73,6 +73,8 @@ linelist_cleaned &lt;- mutate(linelist_cleaned,
 linelist_cleaned$epiweek &lt;- aweek::date2week(linelist_cleaned$date_of_onset, 
                                              floor_day = TRUE, 
                                              factor = TRUE)</code></pre>
+<p><em>A note on the epiweek variable and factors:<br />
+Notice that we converted dates to NA that were clearly errors <strong>before</strong> creating the epiweek variable. This is because the epiweek variable is created as a <strong>factor</strong>, and once a factor is created it is more difficult to remove factor levels. YOu can read more about factors and dropping unused factor levels here TODO Advanced Functions R Guide link.</em></p>
 </div>
 <div id="clean-numeric-variables" class="section level3">
 <h3>Clean numeric variables</h3>
@@ -189,6 +191,12 @@ linelist_cleaned &lt;- linelist_cleaned %&gt;%
     hep_e_rdt != &quot;Positive&quot; &amp; other_cases_in_hh == &quot;Oui&quot;  ~ &quot;Probable&quot;,
     TRUE                                                  ~ &quot;Suspected&quot;
   ))</code></pre>
+</div>
+<div id="cleaning-patient-origin" class="section level3">
+<h3>Cleaning patient origin</h3>
+<p>The variable patient_origin was originally the variable <em>quartier</em> in the raw dataset. <strong>patient_origin is referenced in the place analyses chunks</strong>, for example when calculating attack rates by region. In these steps, the variable patient_origin in linelist_cleaned is <em>joined to</em> the patient_origin variable of the data frame <em>population_data_region</em>, which was imported in the population and lab data steps.</p>
+<p><strong>However, the place names in population_data_region are ALL CAPITAL LETTERS and this is not true in linelist_cleaned - the join will not register any matches.</strong> The easiest way to solve this problem is to redefine the linelist_cleaned variable into all capital letters as well, using the base R function toupper():</p>
+<pre class="r"><code>linelist_cleaned$patient_origin &lt;- toupper(linelist_cleaned$patient_origin)</code></pre>
 </div>
 <div id="create-lists-of-variables" class="section level3">
 <h3>Create lists of variables</h3>

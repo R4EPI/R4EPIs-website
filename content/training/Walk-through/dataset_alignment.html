@@ -29,6 +29,7 @@ linelist_dict &lt;- msf_dict(&quot;AJS&quot;, compact = FALSE) %&gt;%
 <pre class="r"><code>## make a copy of your orginal dataset and name it linelist_cleaned
 linelist_cleaned &lt;- linelist_raw</code></pre>
 <p><strong>Second, use the clean_labels() function</strong> from the epitrix package to fix any variable names with non-standard syntax. These code lines take the column names, clean them, and then store the cleaned names in the vector cleaned_colnames. The second code line over-writes the old column names of linelist_cleaned with the improved ones.</p>
+<p><em>Note: if you have a variable named “#” it may be removed by the clean_labels() function. You can protect it by adding the argument <code>protect = &quot;#&quot;</code>.</em></p>
 <pre class="r"><code># Store cleaned column names
 cleaned_colnames &lt;- epitrix::clean_labels(colnames(linelist_raw))
 

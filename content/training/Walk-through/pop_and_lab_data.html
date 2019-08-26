@@ -19,12 +19,8 @@ weight: 9
 </div>
 <p>For the AJS example, we can use an Excel spreadsheet containing population figures by region. Uncomment this line of code in the read_population_data chunk and modify it to import the Excel spreadsheet (link for spreadsheet download at top of this webpage). Note that the spreadsheet variables names have already been edited to match the expected names (“patient_origin” and “population”).</p>
 <p>As they will not be used, delete or comment (#) all the code lines in the chunk that create fake data for population_data_region, population_data_age, and population_data_age_months.</p>
-<blockquote>
-<p>The file path you provide to the function may differ. A few notes about file paths:<br />
-* If copying a file path from Microsoft computer, you will need to reverse any slashes from  to /.<br />
-* [NOTES ON USING HERE and RIO::IMPORT]</p>
-</blockquote>
-<pre class="r"><code>population_data_region &lt;- rio::import(&quot;AJS_AmTiman_population_revised_for_template.xlsx&quot;, which=&quot;quartier&quot;)</code></pre>
+<p><em>The import() function is wrapped around the here() function. The here() function makes it easy for R to locate files on your computer. It is best to save the dataset within your R project, and to provide here() with any R project subfolder names. You can read more about the here() function in the data import page of the R Basics tutorial.</em></p>
+<pre class="r"><code>population_data_region &lt;- rio::import(here(&quot;AJS_AmTiman_population_revised_for_template.xlsx&quot;), which=&quot;quartier&quot;)</code></pre>
 <p><strong>If you choose not to complete the population estimates section, delete the default gen_population() code, and expect that later sections on attack and mortality rates will not produce output.</strong></p>
 </div>
 <div id="provide-laboratory-testing-data" class="section level2">
