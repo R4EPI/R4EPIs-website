@@ -79,9 +79,7 @@ For the AJS example, we can use an Excel spreadsheet containing population figur
 
 As they will not be used, delete or comment (#) all the code lines in the chunk that create fake data for population_data_region, population_data_age, and population_data_age_months.
 
->The file path you provide to the function may differ. A few notes about file paths:  
-* If copying a file path from Microsoft computer, you will need to reverse any slashes from \ to /.  
-* [NOTES ON USING HERE and RIO::IMPORT]  
+>The import command is wrapped around the here() function. You can read more about this function in the data import page of the R Basics tutorial.   
 
 ```{r include=FALSE, results='hide', message=FALSE, warning=FALSE}
 population_data_region <- rio::import(here("content", "training", "Walk-through", "AJS_AmTiman_population_revised_for_template.xlsx"), which="quartier")
