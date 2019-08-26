@@ -83,8 +83,12 @@ As they will not be used, delete or comment (#) all the code lines in the chunk 
 * If copying a file path from Microsoft computer, you will need to reverse any slashes from \ to /.  
 * [NOTES ON USING HERE and RIO::IMPORT]  
 
-```{r}
-population_data_region <- rio::import("AJS_AmTiman_population_revised_for_template.xlsx", which="quartier")
+```{r include=FALSE, results='hide', message=FALSE, warning=FALSE}
+population_data_region <- rio::import(here("content", "training", "Walk-through", "AJS_AmTiman_population_revised_for_template.xlsx"), which="quartier")
+```
+
+```{r eval=FALSE}
+population_data_region <- rio::import(here("AJS_AmTiman_population_revised_for_template.xlsx"), which="quartier")
 ```
 
 
