@@ -2490,9 +2490,10 @@ breakers &lt;- as.integer(c(0, # include zero as a standalone group
 ar &lt;- mutate(ar, 
              categories = age_categories(`AR (per 10,000)`, 
                                          breakers = breakers)
-             )
-
-# go through each epiweek, filter and plot the data
+             )</code></pre>
+<p><strong>Note: Only results for the first 5 epiweeks are shown.</strong></p>
+<p>testing</p>
+<pre class="r"><code># go through each epiweek, filter and plot the data
 for (i in unique(cases$epiweek)) {
   this_ar &lt;- filter(ar, epiweek == i)
   
@@ -2531,6 +2532,22 @@ for (i in unique(cases$epiweek)) {
     )
   )
 }</code></pre>
-<p><img src="/training/Walk-through/place_analyses_files/figure-html/map_for_loop_epiweek-1.png" width="1152" /><img src="/training/Walk-through/place_analyses_files/figure-html/map_for_loop_epiweek-2.png" width="1152" /><img src="/training/Walk-through/place_analyses_files/figure-html/map_for_loop_epiweek-3.png" width="1152" /><img src="/training/Walk-through/place_analyses_files/figure-html/map_for_loop_epiweek-4.png" width="1152" /><img src="/training/Walk-through/place_analyses_files/figure-html/map_for_loop_epiweek-5.png" width="1152" /><img src="/training/Walk-through/place_analyses_files/figure-html/map_for_loop_epiweek-6.png" width="1152" /><img src="/training/Walk-through/place_analyses_files/figure-html/map_for_loop_epiweek-7.png" width="1152" /><img src="/training/Walk-through/place_analyses_files/figure-html/map_for_loop_epiweek-8.png" width="1152" /><img src="/training/Walk-through/place_analyses_files/figure-html/map_for_loop_epiweek-9.png" width="1152" /><img src="/training/Walk-through/place_analyses_files/figure-html/map_for_loop_epiweek-10.png" width="1152" /><img src="/training/Walk-through/place_analyses_files/figure-html/map_for_loop_epiweek-11.png" width="1152" /><img src="/training/Walk-through/place_analyses_files/figure-html/map_for_loop_epiweek-12.png" width="1152" /><img src="/training/Walk-through/place_analyses_files/figure-html/map_for_loop_epiweek-13.png" width="1152" /><img src="/training/Walk-through/place_analyses_files/figure-html/map_for_loop_epiweek-14.png" width="1152" /><img src="/training/Walk-through/place_analyses_files/figure-html/map_for_loop_epiweek-15.png" width="1152" /><img src="/training/Walk-through/place_analyses_files/figure-html/map_for_loop_epiweek-16.png" width="1152" /><img src="/training/Walk-through/place_analyses_files/figure-html/map_for_loop_epiweek-17.png" width="1152" /><img src="/training/Walk-through/place_analyses_files/figure-html/map_for_loop_epiweek-18.png" width="1152" /><img src="/training/Walk-through/place_analyses_files/figure-html/map_for_loop_epiweek-19.png" width="1152" /><img src="/training/Walk-through/place_analyses_files/figure-html/map_for_loop_epiweek-20.png" width="1152" /><img src="/training/Walk-through/place_analyses_files/figure-html/map_for_loop_epiweek-21.png" width="1152" /><img src="/training/Walk-through/place_analyses_files/figure-html/map_for_loop_epiweek-22.png" width="1152" /><img src="/training/Walk-through/place_analyses_files/figure-html/map_for_loop_epiweek-23.png" width="1152" /><img src="/training/Walk-through/place_analyses_files/figure-html/map_for_loop_epiweek-24.png" width="1152" /><img src="/training/Walk-through/place_analyses_files/figure-html/map_for_loop_epiweek-25.png" width="1152" /><img src="/training/Walk-through/place_analyses_files/figure-html/map_for_loop_epiweek-26.png" width="1152" /><img src="/training/Walk-through/place_analyses_files/figure-html/map_for_loop_epiweek-27.png" width="1152" /><img src="/training/Walk-through/place_analyses_files/figure-html/map_for_loop_epiweek-28.png" width="1152" /><img src="/training/Walk-through/place_analyses_files/figure-html/map_for_loop_epiweek-29.png" width="1152" /><img src="/training/Walk-through/place_analyses_files/figure-html/map_for_loop_epiweek-30.png" width="1152" /><img src="/training/Walk-through/place_analyses_files/figure-html/map_for_loop_epiweek-31.png" width="1152" /><img src="/training/Walk-through/place_analyses_files/figure-html/map_for_loop_epiweek-32.png" width="1152" /><img src="/training/Walk-through/place_analyses_files/figure-html/map_for_loop_epiweek-33.png" width="1152" /><img src="/training/Walk-through/place_analyses_files/figure-html/map_for_loop_epiweek-34.png" width="1152" /><img src="/training/Walk-through/place_analyses_files/figure-html/map_for_loop_epiweek-35.png" width="1152" /><img src="/training/Walk-through/place_analyses_files/figure-html/map_for_loop_epiweek-36.png" width="1152" /><img src="/training/Walk-through/place_analyses_files/figure-html/map_for_loop_epiweek-37.png" width="1152" /><img src="/training/Walk-through/place_analyses_files/figure-html/map_for_loop_epiweek-38.png" width="1152" /><img src="/training/Walk-through/place_analyses_files/figure-html/map_for_loop_epiweek-39.png" width="1152" /><img src="/training/Walk-through/place_analyses_files/figure-html/map_for_loop_epiweek-40.png" width="1152" /><img src="/training/Walk-through/place_analyses_files/figure-html/map_for_loop_epiweek-41.png" width="1152" /><img src="/training/Walk-through/place_analyses_files/figure-html/map_for_loop_epiweek-42.png" width="1152" /><img src="/training/Walk-through/place_analyses_files/figure-html/map_for_loop_epiweek-43.png" width="1152" /><img src="/training/Walk-through/place_analyses_files/figure-html/map_for_loop_epiweek-44.png" width="1152" /><img src="/training/Walk-through/place_analyses_files/figure-html/map_for_loop_epiweek-45.png" width="1152" /><img src="/training/Walk-through/place_analyses_files/figure-html/map_for_loop_epiweek-46.png" width="1152" /><img src="/training/Walk-through/place_analyses_files/figure-html/map_for_loop_epiweek-47.png" width="1152" /></p>
+<pre><code>## Warning: Removed 80 rows containing missing values (position_stack).</code></pre>
+<pre><code>## Warning: Removed 81 rows containing missing values (geom_errorbar).</code></pre>
+<pre><code>## Warning: Removed 80 rows containing missing values (position_stack).</code></pre>
+<pre><code>## Warning: Removed 81 rows containing missing values (geom_errorbar).</code></pre>
+<p><img src="/training/Walk-through/place_analyses_files/figure-html/unnamed-chunk-7-1.png" width="720" /></p>
+<pre><code>## Warning: Removed 80 rows containing missing values (position_stack).
+
+## Warning: Removed 81 rows containing missing values (geom_errorbar).</code></pre>
+<p><img src="/training/Walk-through/place_analyses_files/figure-html/unnamed-chunk-7-2.png" width="720" /></p>
+<pre><code>## Warning: Removed 80 rows containing missing values (position_stack).
+
+## Warning: Removed 81 rows containing missing values (geom_errorbar).</code></pre>
+<p><img src="/training/Walk-through/place_analyses_files/figure-html/unnamed-chunk-7-3.png" width="720" /></p>
+<pre><code>## Warning: Removed 80 rows containing missing values (position_stack).
+
+## Warning: Removed 81 rows containing missing values (geom_errorbar).</code></pre>
+<p><img src="/training/Walk-through/place_analyses_files/figure-html/unnamed-chunk-7-4.png" width="720" /><img src="/training/Walk-through/place_analyses_files/figure-html/unnamed-chunk-7-5.png" width="720" /><img src="/training/Walk-through/place_analyses_files/figure-html/unnamed-chunk-7-6.png" width="720" /></p>
 </div>
 </div>
