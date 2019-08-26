@@ -266,7 +266,7 @@ ar <- mutate(ar,
 
 **Join the object 'ar' to the map (shapefile)** 'map' is joined to 'ar' with a **left join** (see the R Basics page on Advanced Function to learn more about joins). Both of these objects contain tables (you can click them in the Environment pane to see this). In the command, they are linked by the "Name" variable in 'ar' and the "Region" variable in 'map'.  
 
-**Note: make sure your `left_join` code uses "Name" with a capital N, as that is how the variable is spelled in the object 'map'.**  
+**Note: make sure your `left_join` code uses "Name" with a capital N, as that is how the variable is spelled in the object 'map'. In your data these variable names may be completely different and must be changed**  
 
 The resulting object 'mapsub' is a product of this **left join**. A left join will include all values from the Left-hand Side (LHS) and only inlcude values from the Right-hand Side (RHS) if they match to LHS values. Now, the attack rates are joined to the region names and to their GIS geometries. You can verify this by Viewing the object mapsub (click on it in the Environment pane).
 
@@ -275,7 +275,24 @@ The resulting object 'mapsub' is a product of this **left join**. A left join wi
 mapsub <- left_join(map, ar, by = c("Name" = "Region"))
 ```
 
-Here, ggplot() is used to create the map. Again, we need to modify any ggplot() reference to "name" to now reference "Name" with a capital N, as it is capitalized in our data. 
+Here, ggplot() is used to create the map. Remember that ggplot() subcommands must be connected by plus symbols at the end of each line (+) (except the last line). Read more about ggplot2 and ggplot() in the R Basics pages.  
+
+**geom_sf()** identifies 'mapsub' as providing the data for the map, and filling the polygons by values in the variable 'categories'.  
+
+**coord_sf()** set to NA prevents gridlines from being drawn on the map.  
+
+**annotation_scale()** adds a scalebar at the bottom of the map.  
+
+**scale_fill_brewer()** uses a color palatte from orange to red ("OrRd"), and specifies a title for the legend. If you want a different color scale, use this code from the package RColorBrewer to see the possible options, and replace "OrRd" with the desired code:  
+
+```{r}
+display.brewer.all()
+```
+
+**geom_sf_text()** specifies labels for the polygons, including which variable to use for labels ("Name"), and the text colour. **Again, we need to modify this ggplot() reference to the variable "name" to now reference "Name" with a capital N. In your data the variable may be completely different.**
+
+**theme_void()** specifies a theme for the map that does not include coordinates or axes.  
+ 
 ```{r}
 ## plotting with polygons ------------------------------------------------------
 ## choropleth 
@@ -291,16 +308,5 @@ ggplot() +
   geom_sf_text(data = mapsub, aes(label = Name), colour = "grey50") + # label polygons
   theme_void() # remove coordinates and axes
 
-## plotting with points --------------------------------------------------------
-# ggplot() +
-#   # plot shapefile as point 
-#   # shape 21 allows fill variable and colour border (e.g. black ring around circle)
-#   # size allows you to make it bigger 
-#   geom_sf(data = mapsub, aes(fill = categories), shape = 21, size = 5, color = "black") + 
-#   coord_sf(datum = NA) + # needed to avoid gridlines being drawn
-#   annotation_scale() + # add a scalebar
-#     scale_fill_brewer(drop = FALSE, palette = "OrRd", name = "AR (per 10,000)") + 
- # color the scale to be perceptually uniform
-#   theme_void() # remove coordinates and axes
 ```
 
