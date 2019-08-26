@@ -165,6 +165,10 @@ linelist_cleaned$epiweek <- aweek::date2week(linelist_cleaned$date_of_onset,
                                              factor = TRUE)
 ```
 
+*A note on the epiweek variable and factors:  
+Notice that we converted dates to NA that were clearly errors **before** creating the epiweek variable. This is because the epiweek variable is created as a **factor**, and once a factor is created it is more difficult to remove factor levels. YOu can read more about factors and dropping unused factor levels here TODO Advanced Functions R Guide link.*  
+
+
 ### Clean numeric variables  
 
 We can **comment out/ignore the code that makes a new numeric variable "obs_days"**, because we do not have a date_of_exit in our dataset.  
