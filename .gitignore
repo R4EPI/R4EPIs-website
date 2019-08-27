@@ -39,5 +39,5 @@ vignettes/*.pdf
 public/*
 
 # Editor files
-*.swp # vim
+^.*.swp # vim
 *~     # emacs
