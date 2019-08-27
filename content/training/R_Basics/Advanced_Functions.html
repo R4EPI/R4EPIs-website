@@ -1,0 +1,63 @@
+---
+date: "2019-08-22T15:33:00+02:00"
+title: Advanced Functions
+weight: 12
+---
+
+
+
+<div id="the-here-packge-and-here-function" class="section level2">
+<h2>The Here packge and here() function</h2>
+<p>The templates use the <strong>Here package to assist with locating local files</strong>. The Here package and its function here() work well with R projects.</p>
+<p><strong>How it works:</strong> When the package “Here” is loaded, it automatically considers the top-level folder of your R project as “here” - as a benchmark for all other files in the Project. In your script, if you want to import or reference a file saved in your R project’s folders, you use the function here() to tell R where the file is in relation to “here”.</p>
+<p>If you are unsure where “here” is set to, run this command:</p>
+<pre class="r"><code># This command tells you the folder path that &quot;here&quot; is set to 
+here()</code></pre>
+<p><strong>Below is an example</strong> of importing the file “linelist.xlsx”. The import() function from the rio package does the importing, but <strong>import() needs to be told where to look on your computer</strong> to find the file. Normally, it accepts a filepath in quotes, but it is easy to make mistakes. Instead, <strong>import() is wrapped around the function here()</strong>.</p>
+<p>If the file you want is in the folder designated as “here”, all you have to do is provide the name of the file in quotes (with the appropriate ending).</p>
+<pre class="r"><code>linelist_raw &lt;- rio::import(here(&quot;linelist.xlsx&quot;), which = &quot;Sheet1&quot;)</code></pre>
+<p><em>Note: After the closing parenthes of here() the import() function continues. There is a comma and import()’s optional argument <code>which =</code>, specifying which sheet of the Excel file to import.</em></p>
+<p><strong>If however, your file is within subfolders of the folder designated as “here”</strong> - let’s say it is in the subfolder “data” and then the sub-subfolder “linelists” - <strong>you write these folder names before the file name, in quotes, and separated by commas</strong>, as below:</p>
+<pre class="r"><code>linelist_raw &lt;- rio::import(here(&quot;data&quot;, &quot;linelists&quot;, &quot;linelist.xlsx&quot;), which = &quot;Sheet1&quot;)</code></pre>
+<p>You can read more about Here and here() at <a href="https://github.com/jennybc/here_here">this site</a> and <a href="https://here.r-lib.org/">this one</a></p>
+<p><em>Note: by using the Here package and here() function with R projects, it is not necessary to worry about your “working directory”, setwd(), or getwd() commands.</em></p>
+</div>
+<div id="joins" class="section level2">
+<h2>Joins</h2>
+<p>The animations below can be acccessed <a href="https://github.com/gadenbuie/tidyexplain">here</a>.</p>
+<div id="left-join" class="section level3">
+<h3>Left join</h3>
+<p>An example of a left join from the AJS outbreak template occurs in the TODO</p>
+<div class="figure">
+<img src="/images/left-join.gif" />
+
+</div>
+<div class="figure">
+<img src="/images/right-join.gif" />
+
+</div>
+<div class="figure">
+<img src="/images/full-join.gif" />
+
+</div>
+<div class="figure">
+<img src="/images/inner-join.gif" />
+
+</div>
+</div>
+<div id="the-in-operator" class="section level3">
+<h3>The %in% operator</h3>
+<p>The operator %in% looks to see if a value is present within a vector. A vector can be created with the function c(), and a variable in a data frame is also a vector.</p>
+<p>In the simple example below, R is asked if the number 4 is present in the vector “numbers”:</p>
+<pre class="r"><code># Vector is defined
+numbers &lt;- c(4, 10, 5, 365, 12, 0.5, 9)
+
+# Test if 5 is in the vector
+5 %in% numbers</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<p>In the templates, %in% can be used when creating the valued “DIED” (when a patient died). The variable DIED is logical (either TRUE or FALSE). It will be TRUE if the value in exit_status is either “DD” or “DOA” - those are the two character values present in the vector. You can add to or change the terms listed in the vector.</p>
+<pre class="r"><code>#DIED == TRUE if value in exit_status is &quot;DD&quot; or &quot;DOA&quot;
+linelist_cleaned$DIED &lt;- linelist_cleaned$exit_status %in% c(&quot;DD&quot;, &quot;DOA&quot;))</code></pre>
+<p>You can read more abouth %in% <a href="http://www.datasciencemadesimple.com/in-operator-in-r/">here</a></p>
+</div>
+</div>

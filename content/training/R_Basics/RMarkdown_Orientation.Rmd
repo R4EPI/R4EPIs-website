@@ -1,0 +1,97 @@
+---
+date: "2019-07-30T13:30:45+02:00"
+title: Reading a RMarkdown Script
+weight: 6
+---
+## What is a script?  
+Scripts are files that:  
+
+* Record and organize a sequence of commands in a logical manner  
+
+* Facilitate running many commands in rapid succession  
+
+* Help to reproduce and share your work with others  
+
+While it is possible to enter and run commands directly from the R Console, scripts will be the default way to work. If you are more familiar with Stata, a script is equivalent to a Do File.
+
+
+**Remember to save your script as you work!** 
+
+
+## What is a RMarkdown Script?
+
+RMarkdown scripts can contain commands such as for data import, cleaning, etc. **and are themselves the outline of an automatically-generated document** containing text, tables, and plots produced by your code.
+
+You can learn more about RMarkdowns [here](https://rmarkdown.rstudio.com/lesson-1.html) and reference this [cheatsheet](https://www.rstudio.com/wp-content/uploads/2016/03/rmarkdown-cheatsheet-2.0.pdf)  
+
+![](/images/RMarkdown_transformation.png)
+
+*In the above RMarkdown template script, the white and gray code chunks produce text and R-generated graphics, respectively, in the Word document output.*  
+
+### Understand a RMarkdown  
+
+#### Code chunks
+
+While the RMarkdown may at first look like a wall of code, notice how "chunks" of code are differentiated by their background color:  
+
+* **In chunks with WHITE background, code text will appear as text in the document.** These lines can have *italics*, **bold**, or other formating, and can display parameters derived from your data (such as epi week of outbreak peak, as in the example above).  
+
+* **In chunks with GRAY background, RMarkdown is running R commands.** The commands perform data processing and cleaning steps, or could produce visual outputs in the document.    
+
+
+#### Navigating the RMarkdown  
+
+Use the Table of Contents menu in the bottom-left of the script to easily navigate between code chunks and sections of the script. The line numbers on the left side can be helpful to reference specific commands when asking for assistance.  
+
+![](/images/Table_of_Contents.gif)
+
+#### Running code chunks  
+While editing and testing your RMarkdown, you may want to selectively run or re-run R code chunks. You have many options in the script's Run menu, including:  
+
+* Run specific code within a chunk  
+* Run one R code chunk at a time  
+* Run all R code chunks above or below the selected chunk  
+
+Progress bars and previews of chunk output/error messages help with revisions and trouble-shooting.
+
+![](/images/Running_Chunks.gif)
+
+
+#### Commented code  
+
+Every script should include helpful text that organizes commands and explains their rationale to collaborators. The **# (hash or comment) symbol** ensures that any text *after the # and on the same line* will not be executed by R as it runs the script. Such "commented" text will appear a different color than the code.  
+
+In the templates, you will see **#** serving two purposes:  
+
+* **# Explanatory text or section headers.** This commented text can be placed after code, or in the line above.
+```{r eval = FALSE}
+# An example of commented text  
+linelist_raw <- gen_data("AJS") # generates a fake dataset for use in this template
+```
+* **# Optional commands that can be uncommented as needed.** For example, you can uncomment and run the last line below if your dataset meets the relevant criteria. 
+``` {r eval = FALSE}
+# If your linelist is a csv export of data from DHIS2 use this code chunk
+# This assumes your data fits the standardised MSF data dictionary for this disease
+
+## Read data ------------------------------------------------------
+# CSV file
+# linelist_raw <- rio::import("linelist.csv")
+```
+
+![](/images/Commented_Lines.png)
+
+*Tip*: Multiple lines of code can be commented/uncommented by highlighting the lines and pressing the keys Ctrl, Shift, and C at the same time (Ctrl+Shift+C).  
+
+
+### Code assists  
+Any script (RMarkdown or otherwise) will give clues when you have made a mistake. For example, if you forgot to write a comma where it is needed, or to close a parentheses, RStudio will raise a flag on that line, on the right side of the script, to warn you.  
+
+![](/images/Warnings_and_Errors.png)
+
+### Producing/"Knitting" the RMarkdown document  
+
+**Producing the final RMarksdown report is called "knitting"**. When you are editing a RMarkdown script, you will see a special option to "Knit"" at the top of the script, near the save shortcut button. Clicking "Knit" will begin the process of creating the final document. The option to "Knit" does not appear for normal R scripts, only RMarkdown scripts. Note the following:  
+
+* You can use the arrow next to the word "Knit" to select the type of document you want to produce: Microsoft Word, PDF, or HTML (HTML opens the file in an offline web browser). Note that to knit to a PDF *directly*, additional packages may have to be installed.  
+
+* The default document type is specified in the header of the RMarkdown script, and for the templates it is Microsoft Word.

@@ -1,0 +1,140 @@
+---
+date: "2019-08-22T13:47:29+02:00"
+title: Objects
+weight: 7
+---
+
+```{r include=FALSE, results='hide', message=FALSE, warning=FALSE}
+# Silently read AJS example dataset
+
+library(sitrep)
+library(dplyr)
+
+linelist_raw <- gen_data("AJS")
+linelist_cleaned <- linelist_raw
+```
+
+## Everything is an object  
+
+Everything you store in R - datasets, variables, a list of village names, a total population number, even outputs such as graphs - are **objects** which are **assigned a name** and **can be referenced** in later commands.  
+
+An object exists when you have assigned it a value (see the assignment section below). When it is assigned a value, the object appears in the Environment (see the upper right pane of RStudio). It can then be operated upon, manipulated, changed, and re-defined.
+
+### Creating objects with the Assignment Operator <-  
+
+**You create objects *by assigning them a value* with the <- operator.** You can think of the assignment operator `<-` as the words "is defined as". Assignment commands generally follow a standard order:  
+  
+ 
+**object_name**  <-  **value** (or process/calculation that produce a value)
+
+> **As an example:** While using an outbreak template you may want to record the current reporting week for later reference. In this example, the object reporting_week is created when it is assigned the character value "2018-W10". reporting_week will appear in the R Environment (upper-right pane) and can be referenced in later commands.
+
+> See the commands and their output in the boxes below. Note the [1] in the output is simply indicating that you are viewing the first (and only) item of the output
+
+```{r}
+reporting_week <- "2018-W10"   # creates the object reporting_week by assigning a value
+
+reporting_week                 # prints the current value of reporting_week
+```
+*IMPORTANT: **An object's value can be over-written** at any time by running an assignment command to re-define its value. Thus, the **order of the commands run is very important**.*
+```{r}
+reporting_week <- "2018-W51"   # assigns a NEW value to the object reporting_week
+
+reporting_week                 # prints the current value of reporting_week
+```
+
+**Datasets are also assigned names and defined as objects when they are imported.** In the code below:  
+
+1) The object linelist_raw is created and assigned the value of an imported CSV file  
+
+2) The object linelist_cleaned is created and assigned the value of linelist_raw  
+
+3) linelist_cleaned is re-defined as itself, but mutated to include a new variable, obs_days, representing the number of days between patient admission and exit
+
+```{r eval=FALSE}
+# linelist_raw is created and assigned the value of the imported CSV file
+linelist_raw <- rio::import(here("linelist.csv"))
+
+# linelist_cleaned is created and assigned the value of linelist_raw
+linelist_cleaned <- linelist_raw
+
+# linelist_cleaned is RE-defined as itself, but modified to include a new variable
+linelist_cleaned <- mutate(linelist_cleaned, 
+                           obs_days = as.numeric(date_of_exit - date_of_admission))
+
+
+```
+
+You can read more about importing and exporting datasets with the rio package [here](https://rdrr.io/cran/rio/f/vignettes/rio.Rmd)
+
+A quick note on naming of objects:
+
+  * Object names must not contain spaces, but you should use underscore (_) or a period (.) instead of a space.  
+  * Object names are case-sensitive (meaning that Dataset_A is different from dataset_A). 
+  * Object names must begin with a letter (cannot begin with a number like 1, 2 or 3).  
+
+### Objects can have Structure  
+
+Objects can be a single piece of data (e.g. `my_number <- 24`), or they can consist of structured data. The graphic below, sourced from [this online R tutorial](http://venus.ifca.unican.es/Rintro/dataStruct.html) shows some common data structures and their names. Not included in this image is spatial data, which is discussed in another page.  
+
+![](/images/r_data_structures.png)  
+
+Using the templates, you will *most commonly* encounter data frames and vectors:  
+
+
+Common structure | Explanation | Example from templates
+------------------- | ------------------------------------ | ------------------------  
+Vectors | A container for a sequence of singular objects, all of the same class (e.g. numeric, character). | **"Variables" (columns) in data frames are vectors** (e.g. the variable age_years).  
+Data Frames | Vectors (e.g. columns) that are bound together that all have the same number of rows. | linelist_raw and linelist_cleaned are both data frames.  
+
+Note that to create a vector that "stands alone", or is not part of a data frame (such as a list of location names), the function `c()` is often used:  
+`list_of_names <- c("Ruhengeri", "Gisenyi", "Kigali", "Butare")`  
+
+
+#### Using `$` to access/call variables  
+
+**Vectors within a data frame (variables in a dataset) can be called or referenced using the $ symbol.** The `$` symbol connects the name of the column to the name of its dataset. The $ symbol must be used, otherwise R will not know where to look for or create the column.  
+
+```{r}
+# Retrieve the length of the vector age_years
+# (age_years is in the data frame linelist_cleaned)
+length(linelist_cleaned$age_years)  
+```
+
+By typing the name of the data frame followed by `$` you will also see a list of all variables in the data frame. You can scroll through them using arrow key, select one with your Enter key, and avoid spelling mistakes!  
+
+![](/images/Calling_Names.gif)  
+
+
+### Objects have Classes  
+
+All the objects stored in R have a *class* which tells R how to handle the object. There are many possible classes, but common ones include:
+
+Class |	Explanation | Examples
+------ | ------------------------------------------ |  -----------------------------
+Character	| These are text/words/sentences **"within quotation marks"**. Math cannot be done on these objects.	| "Character objects are in quotation marks"  
+Numeric	| These are numbers and **can include decimals**. If within quotation marks the will be considered character. | 23.1 or 14  
+Integer | Numbers that are **whole only** (no decimals) | -5, 14, or 2000  
+Factor | These are vectors that have a **specified order** or hierarchy of values | Variable msf_involvement with ordered values N, S, SUB, and U.  
+Date | **Once R is told that certain data are Dates**, these data can be manipulated and displayed in special ways. See the page on Dates for more information. | 2018-04-12 or 15/3/1954 or Wed 4 Jan 1980  
+Logical | Values must be one of the two special values TRUE or FALSE (note these are **not** "TRUE" and "FALSE" in quotation marks) | TRUE or FALSE  
+data.frame | A data frame is how R stores a **typical dataset**. It consists of vectors (columns) of data bound together, that all have the same number of observations (rows). | The example AJS dataset named linelist_raw contains 68 variables with 300 observations (rows) each.  
+
+**You can test the class of an object by writing it within the function class()**. Note: you can reference a specific column within a dataset using the `$` notation to separate the name of the dataset and the name of the column.
+
+```{r echo=TRUE}
+class(linelist_raw$age_years)
+class(linelist_raw$patient_origin)
+```
+
+The templates sometimes contain code converting objects between classes.
+
+Function | Action  
+----------------- | --------------------------------------------------------------    
+as.character() | Converts to character class  
+as.numeric() | Converts to numeric class  
+as.integer() | Converts to integer class
+as.Date() | Converts to Date class - Note: see section on dates for details  
+as.factor() | Converts to factor - Note: re-defining order of value levels requires extra arguments
+
+[Here](https://swcarpentry.github.io/r-novice-inflammation/13-supp-data-structures/) is more material on classes and data structures in R.  

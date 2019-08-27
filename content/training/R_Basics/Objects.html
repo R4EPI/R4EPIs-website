@@ -1,0 +1,202 @@
+---
+date: "2019-08-22T13:47:29+02:00"
+title: Objects
+weight: 7
+---
+
+
+
+<div id="everything-is-an-object" class="section level2">
+<h2>Everything is an object</h2>
+<p>Everything you store in R - datasets, variables, a list of village names, a total population number, even outputs such as graphs - are <strong>objects</strong> which are <strong>assigned a name</strong> and <strong>can be referenced</strong> in later commands.</p>
+<p>An object exists when you have assigned it a value (see the assignment section below). When it is assigned a value, the object appears in the Environment (see the upper right pane of RStudio). It can then be operated upon, manipulated, changed, and re-defined.</p>
+<div id="creating-objects-with-the-assignment-operator--" class="section level3">
+<h3>Creating objects with the Assignment Operator &lt;-</h3>
+<p><strong>You create objects <em>by assigning them a value</em> with the &lt;- operator.</strong> You can think of the assignment operator <code>&lt;-</code> as the words “is defined as”. Assignment commands generally follow a standard order:</p>
+<p><strong>object_name</strong> &lt;- <strong>value</strong> (or process/calculation that produce a value)</p>
+<blockquote>
+<p><strong>As an example:</strong> While using an outbreak template you may want to record the current reporting week for later reference. In this example, the object reporting_week is created when it is assigned the character value “2018-W10”. reporting_week will appear in the R Environment (upper-right pane) and can be referenced in later commands.</p>
+</blockquote>
+<blockquote>
+<p>See the commands and their output in the boxes below. Note the [1] in the output is simply indicating that you are viewing the first (and only) item of the output</p>
+</blockquote>
+<pre class="r"><code>reporting_week &lt;- &quot;2018-W10&quot;   # creates the object reporting_week by assigning a value
+
+reporting_week                 # prints the current value of reporting_week</code></pre>
+<pre><code>## [1] &quot;2018-W10&quot;</code></pre>
+<p><em>IMPORTANT: <strong>An object’s value can be over-written</strong> at any time by running an assignment command to re-define its value. Thus, the <strong>order of the commands run is very important</strong>.</em></p>
+<pre class="r"><code>reporting_week &lt;- &quot;2018-W51&quot;   # assigns a NEW value to the object reporting_week
+
+reporting_week                 # prints the current value of reporting_week</code></pre>
+<pre><code>## [1] &quot;2018-W51&quot;</code></pre>
+<p><strong>Datasets are also assigned names and defined as objects when they are imported.</strong> In the code below:</p>
+<ol style="list-style-type: decimal">
+<li><p>The object linelist_raw is created and assigned the value of an imported CSV file</p></li>
+<li><p>The object linelist_cleaned is created and assigned the value of linelist_raw</p></li>
+<li><p>linelist_cleaned is re-defined as itself, but mutated to include a new variable, obs_days, representing the number of days between patient admission and exit</p></li>
+</ol>
+<pre class="r"><code># linelist_raw is created and assigned the value of the imported CSV file
+linelist_raw &lt;- rio::import(here(&quot;linelist.csv&quot;))
+
+# linelist_cleaned is created and assigned the value of linelist_raw
+linelist_cleaned &lt;- linelist_raw
+
+# linelist_cleaned is RE-defined as itself, but modified to include a new variable
+linelist_cleaned &lt;- mutate(linelist_cleaned, 
+                           obs_days = as.numeric(date_of_exit - date_of_admission))</code></pre>
+<p>You can read more about importing and exporting datasets with the rio package <a href="https://rdrr.io/cran/rio/f/vignettes/rio.Rmd">here</a></p>
+<p>A quick note on naming of objects:</p>
+<ul>
+<li>Object names must not contain spaces, but you should use underscore (_) or a period (.) instead of a space.<br />
+</li>
+<li>Object names are case-sensitive (meaning that Dataset_A is different from dataset_A).</li>
+<li>Object names must begin with a letter (cannot begin with a number like 1, 2 or 3).</li>
+</ul>
+</div>
+<div id="objects-can-have-structure" class="section level3">
+<h3>Objects can have Structure</h3>
+<p>Objects can be a single piece of data (e.g. <code>my_number &lt;- 24</code>), or they can consist of structured data. The graphic below, sourced from <a href="http://venus.ifca.unican.es/Rintro/dataStruct.html">this online R tutorial</a> shows some common data structures and their names. Not included in this image is spatial data, which is discussed in another page.</p>
+<div class="figure">
+<img src="/images/r_data_structures.png" />
+
+</div>
+<p>Using the templates, you will <em>most commonly</em> encounter data frames and vectors:</p>
+<table>
+<colgroup>
+<col width="24%" />
+<col width="45%" />
+<col width="30%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Common structure</th>
+<th>Explanation</th>
+<th>Example from templates</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Vectors</td>
+<td>A container for a sequence of singular objects, all of the same class (e.g. numeric, character).</td>
+<td><strong>“Variables” (columns) in data frames are vectors</strong> (e.g. the variable age_years).</td>
+</tr>
+<tr class="even">
+<td>Data Frames</td>
+<td>Vectors (e.g. columns) that are bound together that all have the same number of rows.</td>
+<td>linelist_raw and linelist_cleaned are both data frames.</td>
+</tr>
+</tbody>
+</table>
+<p>Note that to create a vector that “stands alone”, or is not part of a data frame (such as a list of location names), the function <code>c()</code> is often used:<br />
+<code>list_of_names &lt;- c(&quot;Ruhengeri&quot;, &quot;Gisenyi&quot;, &quot;Kigali&quot;, &quot;Butare&quot;)</code></p>
+<div id="using-to-accesscall-variables" class="section level4">
+<h4>Using <code>$</code> to access/call variables</h4>
+<p><strong>Vectors within a data frame (variables in a dataset) can be called or referenced using the $ symbol.</strong> The <code>$</code> symbol connects the name of the column to the name of its dataset. The $ symbol must be used, otherwise R will not know where to look for or create the column.</p>
+<pre class="r"><code># Retrieve the length of the vector age_years
+# (age_years is in the data frame linelist_cleaned)
+length(linelist_cleaned$age_years)  </code></pre>
+<pre><code>## [1] 300</code></pre>
+<p>By typing the name of the data frame followed by <code>$</code> you will also see a list of all variables in the data frame. You can scroll through them using arrow key, select one with your Enter key, and avoid spelling mistakes!</p>
+<div class="figure">
+<img src="/images/Calling_Names.gif" />
+
+</div>
+</div>
+</div>
+<div id="objects-have-classes" class="section level3">
+<h3>Objects have Classes</h3>
+<p>All the objects stored in R have a <em>class</em> which tells R how to handle the object. There are many possible classes, but common ones include:</p>
+<table>
+<colgroup>
+<col width="8%" />
+<col width="53%" />
+<col width="37%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Class</th>
+<th>Explanation</th>
+<th>Examples</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Character</td>
+<td>These are text/words/sentences <strong>“within quotation marks”</strong>. Math cannot be done on these objects.</td>
+<td>“Character objects are in quotation marks”</td>
+</tr>
+<tr class="even">
+<td>Numeric</td>
+<td>These are numbers and <strong>can include decimals</strong>. If within quotation marks the will be considered character.</td>
+<td>23.1 or 14</td>
+</tr>
+<tr class="odd">
+<td>Integer</td>
+<td>Numbers that are <strong>whole only</strong> (no decimals)</td>
+<td>-5, 14, or 2000</td>
+</tr>
+<tr class="even">
+<td>Factor</td>
+<td>These are vectors that have a <strong>specified order</strong> or hierarchy of values</td>
+<td>Variable msf_involvement with ordered values N, S, SUB, and U.</td>
+</tr>
+<tr class="odd">
+<td>Date</td>
+<td><strong>Once R is told that certain data are Dates</strong>, these data can be manipulated and displayed in special ways. See the page on Dates for more information.</td>
+<td>2018-04-12 or 15/3/1954 or Wed 4 Jan 1980</td>
+</tr>
+<tr class="even">
+<td>Logical</td>
+<td>Values must be one of the two special values TRUE or FALSE (note these are <strong>not</strong> “TRUE” and “FALSE” in quotation marks)</td>
+<td>TRUE or FALSE</td>
+</tr>
+<tr class="odd">
+<td>data.frame</td>
+<td>A data frame is how R stores a <strong>typical dataset</strong>. It consists of vectors (columns) of data bound together, that all have the same number of observations (rows).</td>
+<td>The example AJS dataset named linelist_raw contains 68 variables with 300 observations (rows) each.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>You can test the class of an object by writing it within the function class()</strong>. Note: you can reference a specific column within a dataset using the <code>$</code> notation to separate the name of the dataset and the name of the column.</p>
+<pre class="r"><code>class(linelist_raw$age_years)</code></pre>
+<pre><code>## [1] &quot;integer&quot;</code></pre>
+<pre class="r"><code>class(linelist_raw$patient_origin)</code></pre>
+<pre><code>## [1] &quot;character&quot;</code></pre>
+<p>The templates sometimes contain code converting objects between classes.</p>
+<table>
+<colgroup>
+<col width="22%" />
+<col width="77%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Function</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>as.character()</td>
+<td>Converts to character class</td>
+</tr>
+<tr class="even">
+<td>as.numeric()</td>
+<td>Converts to numeric class</td>
+</tr>
+<tr class="odd">
+<td>as.integer()</td>
+<td>Converts to integer class</td>
+</tr>
+<tr class="even">
+<td>as.Date()</td>
+<td>Converts to Date class - Note: see section on dates for details</td>
+</tr>
+<tr class="odd">
+<td>as.factor()</td>
+<td>Converts to factor - Note: re-defining order of value levels requires extra arguments</td>
+</tr>
+</tbody>
+</table>
+<p><a href="https://swcarpentry.github.io/r-novice-inflammation/13-supp-data-structures/">Here</a> is more material on classes and data structures in R.</p>
+</div>
+</div>
