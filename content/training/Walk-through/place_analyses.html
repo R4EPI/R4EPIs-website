@@ -1,0 +1,2553 @@
+---
+date: "2019-08-21T11:04:35+02:00"
+title: Place analyses
+weight: 14
+---
+
+
+
+<p>TODO: introduction to place analyses</p>
+<div id="non-map-place-analyses" class="section level3">
+<h3>Non-map place analyses</h3>
+<p>To get a basic <strong>descriptive table of cases by region</strong> (which in our case was originally the variable <em>quartier</em> from the raw linelist), we use tab_linelist() on the variable patient_origin, with columns by patient_facility_type (inpatient, outpatient, or missing).</p>
+<pre class="r"><code># Descriptive table of cases by region and facility type
+tab_linelist(linelist_cleaned, patient_origin, 
+             strata = patient_facility_type,
+             col_total = TRUE, row_total = TRUE) %&gt;% 
+  select(-variable) %&gt;%
+  rename(&quot;Region&quot; = value) %&gt;%
+  rename_redundant(&quot;%&quot; = proportion) %&gt;%
+  augment_redundant(&quot; (n)&quot; = &quot; n$&quot;) %&gt;%
+  kable(digits = 2)</code></pre>
+<pre><code>## Warning in descriptive(x, counter = !!i, grouper = !!stra, proptotal =
+## prop_total, : Removing 17 missing values</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Region</th>
+<th align="right">Inpatient (n)</th>
+<th align="right">%</th>
+<th align="right">Outpatient (n)</th>
+<th align="right">%</th>
+<th align="right">Missing (n)</th>
+<th align="right">%</th>
+<th align="right">Total</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">AB GARA</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+<td align="right">0.15</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">ABLELAYE</td>
+<td align="right">5</td>
+<td align="right">6.02</td>
+<td align="right">1</td>
+<td align="right">0.14</td>
+<td align="right">2</td>
+<td align="right">0.31</td>
+<td align="right">8</td>
+</tr>
+<tr class="odd">
+<td align="left">ABOUDEA</td>
+<td align="right">1</td>
+<td align="right">1.20</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">ADAMRE</td>
+<td align="right">2</td>
+<td align="right">2.41</td>
+<td align="right">22</td>
+<td align="right">3.18</td>
+<td align="right">24</td>
+<td align="right">3.66</td>
+<td align="right">48</td>
+</tr>
+<tr class="odd">
+<td align="left">ADJABONA</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">2</td>
+<td align="right">0.31</td>
+<td align="right">2</td>
+</tr>
+<tr class="even">
+<td align="left">AFFOUSSE</td>
+<td align="right">1</td>
+<td align="right">1.20</td>
+<td align="right">1</td>
+<td align="right">0.14</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">AL-FRECHE</td>
+<td align="right">1</td>
+<td align="right">1.20</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">AL-HOUGNA</td>
+<td align="right">1</td>
+<td align="right">1.20</td>
+<td align="right">10</td>
+<td align="right">1.45</td>
+<td align="right">10</td>
+<td align="right">1.53</td>
+<td align="right">21</td>
+</tr>
+<tr class="odd">
+<td align="left">AL-MOURA</td>
+<td align="right">1</td>
+<td align="right">1.20</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">AL ALAK</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+<td align="right">0.14</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">AL HOUA</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+<td align="right">0.15</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">AL KOUCK</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+<td align="right">0.14</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">AL MIDODIL</td>
+<td align="right">1</td>
+<td align="right">1.20</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">ALBAYADI</td>
+<td align="right">1</td>
+<td align="right">1.20</td>
+<td align="right">1</td>
+<td align="right">0.14</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">ALBOUKHASS</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">6</td>
+<td align="right">0.87</td>
+<td align="right">6</td>
+<td align="right">0.92</td>
+<td align="right">12</td>
+</tr>
+<tr class="even">
+<td align="left">ALKASSÉ</td>
+<td align="right">4</td>
+<td align="right">4.82</td>
+<td align="right">16</td>
+<td align="right">2.31</td>
+<td align="right">5</td>
+<td align="right">0.76</td>
+<td align="right">25</td>
+</tr>
+<tr class="odd">
+<td align="left">AM-DOUMA</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+<td align="right">0.14</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">AM ASSALA</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+<td align="right">0.14</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">AM BADARO 1</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+<td align="right">0.14</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">AM KIFEO</td>
+<td align="right">1</td>
+<td align="right">1.20</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">AMANASISSE</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+<td align="right">0.14</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">AMBARITE</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">3</td>
+<td align="right">0.43</td>
+<td align="right">1</td>
+<td align="right">0.15</td>
+<td align="right">4</td>
+</tr>
+<tr class="odd">
+<td align="left">AMCHOKA</td>
+<td align="right">1</td>
+<td align="right">1.20</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">AMDIREDIMAT</td>
+<td align="right">1</td>
+<td align="right">1.20</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">AMDJALAT</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">2</td>
+<td align="right">0.29</td>
+<td align="right">2</td>
+<td align="right">0.31</td>
+<td align="right">4</td>
+</tr>
+<tr class="even">
+<td align="left">AMMANASIS</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">2</td>
+<td align="right">0.31</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">AMSINENE</td>
+<td align="right">3</td>
+<td align="right">3.61</td>
+<td align="right">5</td>
+<td align="right">0.72</td>
+<td align="right">5</td>
+<td align="right">0.76</td>
+<td align="right">13</td>
+</tr>
+<tr class="even">
+<td align="left">ANALA</td>
+<td align="right">2</td>
+<td align="right">2.41</td>
+<td align="right">3</td>
+<td align="right">0.43</td>
+<td align="right">4</td>
+<td align="right">0.61</td>
+<td align="right">9</td>
+</tr>
+<tr class="odd">
+<td align="left">ANFANDOCK</td>
+<td align="right">5</td>
+<td align="right">6.02</td>
+<td align="right">26</td>
+<td align="right">3.76</td>
+<td align="right">19</td>
+<td align="right">2.90</td>
+<td align="right">50</td>
+</tr>
+<tr class="even">
+<td align="left">ANGUITEI</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+<td align="right">0.15</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">ANGUITEYE</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+<td align="right">0.15</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">ARDO</td>
+<td align="right">3</td>
+<td align="right">3.61</td>
+<td align="right">2</td>
+<td align="right">0.29</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">5</td>
+</tr>
+<tr class="odd">
+<td align="left">ATETAL</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+<td align="right">0.15</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">ATOUA</td>
+<td align="right">1</td>
+<td align="right">1.20</td>
+<td align="right">1</td>
+<td align="right">0.14</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">BADINA</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+<td align="right">0.14</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">BANDJADID</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+<td align="right">0.14</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">BAUNE</td>
+<td align="right">1</td>
+<td align="right">1.20</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">BIR TAGAL</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+<td align="right">0.14</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">BRANO</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+<td align="right">0.14</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">CHATAU</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+<td align="right">0.15</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">COMMERCANT</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">3</td>
+<td align="right">0.43</td>
+<td align="right">15</td>
+<td align="right">2.29</td>
+<td align="right">18</td>
+</tr>
+<tr class="even">
+<td align="left">COUBO ABNIMIR</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+<td align="right">0.14</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">DARASALAM</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">26</td>
+<td align="right">3.76</td>
+<td align="right">25</td>
+<td align="right">3.82</td>
+<td align="right">51</td>
+</tr>
+<tr class="even">
+<td align="left">DARWAL</td>
+<td align="right">1</td>
+<td align="right">1.20</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">DELEBAE</td>
+<td align="right">1</td>
+<td align="right">1.20</td>
+<td align="right">1</td>
+<td align="right">0.14</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">2</td>
+</tr>
+<tr class="even">
+<td align="left">DIFFIR</td>
+<td align="right">2</td>
+<td align="right">2.41</td>
+<td align="right">2</td>
+<td align="right">0.29</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">4</td>
+</tr>
+<tr class="odd">
+<td align="left">DIJEKHINÉ</td>
+<td align="right">1</td>
+<td align="right">1.20</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">DILEMA</td>
+<td align="right">3</td>
+<td align="right">3.61</td>
+<td align="right">22</td>
+<td align="right">3.18</td>
+<td align="right">18</td>
+<td align="right">2.75</td>
+<td align="right">43</td>
+</tr>
+<tr class="odd">
+<td align="left">DINGUESS</td>
+<td align="right">2</td>
+<td align="right">2.41</td>
+<td align="right">2</td>
+<td align="right">0.29</td>
+<td align="right">3</td>
+<td align="right">0.46</td>
+<td align="right">7</td>
+</tr>
+<tr class="even">
+<td align="left">DJAMBALBAHAR</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">9</td>
+<td align="right">1.30</td>
+<td align="right">6</td>
+<td align="right">0.92</td>
+<td align="right">15</td>
+</tr>
+<tr class="odd">
+<td align="left">DJOGO</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+<td align="right">0.14</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">GANATIR</td>
+<td align="right">5</td>
+<td align="right">6.02</td>
+<td align="right">116</td>
+<td align="right">16.76</td>
+<td align="right">104</td>
+<td align="right">15.88</td>
+<td align="right">225</td>
+</tr>
+<tr class="odd">
+<td align="left">GANATIR 1</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">2</td>
+<td align="right">0.29</td>
+<td align="right">7</td>
+<td align="right">1.07</td>
+<td align="right">9</td>
+</tr>
+<tr class="even">
+<td align="left">GANATIR 2</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">7</td>
+<td align="right">1.01</td>
+<td align="right">5</td>
+<td align="right">0.76</td>
+<td align="right">12</td>
+</tr>
+<tr class="odd">
+<td align="left">GARDOLE</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+<td align="right">0.14</td>
+<td align="right">2</td>
+<td align="right">0.31</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="left">GOURMOUDAY</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">2</td>
+<td align="right">0.29</td>
+<td align="right">1</td>
+<td align="right">0.15</td>
+<td align="right">3</td>
+</tr>
+<tr class="odd">
+<td align="left">GOZ-TAMADJA</td>
+<td align="right">1</td>
+<td align="right">1.20</td>
+<td align="right">2</td>
+<td align="right">0.29</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="left">GOZ DJARAT</td>
+<td align="right">1</td>
+<td align="right">1.20</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">GOZ MABILE</td>
+<td align="right">1</td>
+<td align="right">1.20</td>
+<td align="right">7</td>
+<td align="right">1.01</td>
+<td align="right">11</td>
+<td align="right">1.68</td>
+<td align="right">19</td>
+</tr>
+<tr class="even">
+<td align="left">GOZ MABILE 2</td>
+<td align="right">1</td>
+<td align="right">1.20</td>
+<td align="right">5</td>
+<td align="right">0.72</td>
+<td align="right">8</td>
+<td align="right">1.22</td>
+<td align="right">14</td>
+</tr>
+<tr class="odd">
+<td align="left">GRÉDAÏ</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+<td align="right">0.14</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">HABILÉ</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+<td align="right">0.14</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">HARAZA</td>
+<td align="right">1</td>
+<td align="right">1.20</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">HILE BARA</td>
+<td align="right">2</td>
+<td align="right">2.41</td>
+<td align="right">13</td>
+<td align="right">1.88</td>
+<td align="right">5</td>
+<td align="right">0.76</td>
+<td align="right">20</td>
+</tr>
+<tr class="odd">
+<td align="left">HILE ODAA</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">2</td>
+<td align="right">0.29</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">2</td>
+</tr>
+<tr class="even">
+<td align="left">HIMEDA</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+<td align="right">0.14</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">IDETER</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+<td align="right">0.14</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">KACHKACHA</td>
+<td align="right">3</td>
+<td align="right">3.61</td>
+<td align="right">1</td>
+<td align="right">0.14</td>
+<td align="right">2</td>
+<td align="right">0.31</td>
+<td align="right">6</td>
+</tr>
+<tr class="odd">
+<td align="left">KOUBO AMNIMIRE</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">3</td>
+<td align="right">0.46</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="left">MABROUKA</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+<td align="right">0.15</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">MATAR</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">2</td>
+<td align="right">0.29</td>
+<td align="right">2</td>
+<td align="right">0.31</td>
+<td align="right">4</td>
+</tr>
+<tr class="even">
+<td align="left">MINA</td>
+<td align="right">2</td>
+<td align="right">2.41</td>
+<td align="right">3</td>
+<td align="right">0.43</td>
+<td align="right">8</td>
+<td align="right">1.22</td>
+<td align="right">13</td>
+</tr>
+<tr class="odd">
+<td align="left">MIRÉKIKE</td>
+<td align="right">1</td>
+<td align="right">1.20</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">MIRER</td>
+<td align="right">1</td>
+<td align="right">1.20</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">MOURAY</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+<td align="right">0.14</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">NOUGRA KARO</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+<td align="right">0.14</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">OUM-ALKHOURA</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">2</td>
+<td align="right">0.31</td>
+<td align="right">2</td>
+</tr>
+<tr class="even">
+<td align="left">PEDIS</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+<td align="right">0.14</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">RASSAFIL CHATEAU</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+<td align="right">0.15</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">RASSALFIL</td>
+<td align="right">3</td>
+<td align="right">3.61</td>
+<td align="right">6</td>
+<td align="right">0.87</td>
+<td align="right">2</td>
+<td align="right">0.31</td>
+<td align="right">11</td>
+</tr>
+<tr class="odd">
+<td align="left">RIAD</td>
+<td align="right">3</td>
+<td align="right">3.61</td>
+<td align="right">37</td>
+<td align="right">5.35</td>
+<td align="right">47</td>
+<td align="right">7.18</td>
+<td align="right">87</td>
+</tr>
+<tr class="even">
+<td align="left">RIDINA</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">72</td>
+<td align="right">10.40</td>
+<td align="right">75</td>
+<td align="right">11.45</td>
+<td align="right">147</td>
+</tr>
+<tr class="odd">
+<td align="left">RIDINA 1</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">2</td>
+<td align="right">0.29</td>
+<td align="right">9</td>
+<td align="right">1.37</td>
+<td align="right">11</td>
+</tr>
+<tr class="even">
+<td align="left">RIDINA 2</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">7</td>
+<td align="right">1.01</td>
+<td align="right">19</td>
+<td align="right">2.90</td>
+<td align="right">26</td>
+</tr>
+<tr class="odd">
+<td align="left">RIMELIE</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+<td align="right">0.14</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">SALAMAT</td>
+<td align="right">2</td>
+<td align="right">2.41</td>
+<td align="right">22</td>
+<td align="right">3.18</td>
+<td align="right">23</td>
+<td align="right">3.51</td>
+<td align="right">47</td>
+</tr>
+<tr class="odd">
+<td align="left">SIHEBA</td>
+<td align="right">1</td>
+<td align="right">1.20</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">TARADONA</td>
+<td align="right">2</td>
+<td align="right">2.41</td>
+<td align="right">136</td>
+<td align="right">19.65</td>
+<td align="right">97</td>
+<td align="right">14.81</td>
+<td align="right">235</td>
+</tr>
+<tr class="odd">
+<td align="left">TARADONA 1</td>
+<td align="right">1</td>
+<td align="right">1.20</td>
+<td align="right">14</td>
+<td align="right">2.02</td>
+<td align="right">19</td>
+<td align="right">2.90</td>
+<td align="right">34</td>
+</tr>
+<tr class="even">
+<td align="left">TARADONA 2</td>
+<td align="right">5</td>
+<td align="right">6.02</td>
+<td align="right">40</td>
+<td align="right">5.78</td>
+<td align="right">20</td>
+<td align="right">3.05</td>
+<td align="right">65</td>
+</tr>
+<tr class="odd">
+<td align="left">TARADONA 3</td>
+<td align="right">1</td>
+<td align="right">1.20</td>
+<td align="right">6</td>
+<td align="right">0.87</td>
+<td align="right">26</td>
+<td align="right">3.97</td>
+<td align="right">33</td>
+</tr>
+<tr class="even">
+<td align="left">ZONGO</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">3</td>
+<td align="right">0.43</td>
+<td align="right">1</td>
+<td align="right">0.15</td>
+<td align="right">4</td>
+</tr>
+<tr class="odd">
+<td align="left">Total</td>
+<td align="right">83</td>
+<td align="right">100.00</td>
+<td align="right">692</td>
+<td align="right">100.00</td>
+<td align="right">655</td>
+<td align="right">100.00</td>
+<td align="right">1430</td>
+</tr>
+</tbody>
+</table>
+<p>To get a <strong>descriptive table by patient outcome</strong> we set <code>strata = exit_status2</code>. We can also restrict the analysis to inpatients only by inserting the function filter() into the first argument of tab_linelist. tab_linelist() expects a data frame for it’s first argument, and it receives the filtered linelist_cleaned - this is an example of “nested”&quot; functions (one function inside another).</p>
+<pre class="r"><code># get counts and props of region by outcome among inpatients
+# include column and row totals 
+tab_linelist(filter(linelist_cleaned,
+                    patient_facility_type == &quot;Inpatient&quot;),
+             patient_origin, strata = exit_status2,
+             col_total = TRUE, row_total = TRUE) %&gt;% 
+  select(-variable) %&gt;%
+  rename(&quot;Region&quot; = value) %&gt;%
+  rename_redundant(&quot;%&quot; = proportion) %&gt;%
+  augment_redundant(&quot; (n)&quot; = &quot; n$&quot;) %&gt;%
+  kable(digits = 2)</code></pre>
+<pre><code>## Warning in descriptive(x, counter = !!i, grouper = !!stra, proptotal =
+## prop_total, : Removing 3 missing values</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Region</th>
+<th align="right">Died (n)</th>
+<th align="right">%</th>
+<th align="right">Discharged (n)</th>
+<th align="right">%</th>
+<th align="right">Left (n)</th>
+<th align="right">%</th>
+<th align="right">Missing (n)</th>
+<th align="right">%</th>
+<th align="right">Total</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">ABLELAYE</td>
+<td align="right">1</td>
+<td align="right">7.69</td>
+<td align="right">4</td>
+<td align="right">7.84</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">5</td>
+</tr>
+<tr class="even">
+<td align="left">ABOUDEA</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+<td align="right">1.96</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">ADAMRE</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+<td align="right">50</td>
+<td align="right">1</td>
+<td align="right">5.88</td>
+<td align="right">2</td>
+</tr>
+<tr class="even">
+<td align="left">AFFOUSSE</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+<td align="right">1.96</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">AL-FRECHE</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+<td align="right">1.96</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">AL-HOUGNA</td>
+<td align="right">1</td>
+<td align="right">7.69</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">AL-MOURA</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+<td align="right">1.96</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">AL MIDODIL</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+<td align="right">1.96</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">ALBAYADI</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+<td align="right">1.96</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">ALKASSÉ</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">4</td>
+<td align="right">7.84</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">4</td>
+</tr>
+<tr class="odd">
+<td align="left">AM KIFEO</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+<td align="right">1.96</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">AMCHOKA</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+<td align="right">1.96</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">AMDIREDIMAT</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+<td align="right">1.96</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">AMSINENE</td>
+<td align="right">1</td>
+<td align="right">7.69</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">2</td>
+<td align="right">11.76</td>
+<td align="right">3</td>
+</tr>
+<tr class="odd">
+<td align="left">ANALA</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+<td align="right">50</td>
+<td align="right">1</td>
+<td align="right">5.88</td>
+<td align="right">2</td>
+</tr>
+<tr class="even">
+<td align="left">ANFANDOCK</td>
+<td align="right">1</td>
+<td align="right">7.69</td>
+<td align="right">4</td>
+<td align="right">7.84</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">5</td>
+</tr>
+<tr class="odd">
+<td align="left">ARDO</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">2</td>
+<td align="right">3.92</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">5.88</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="left">ATOUA</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+<td align="right">1.96</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">BAUNE</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+<td align="right">1.96</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">DARWAL</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+<td align="right">1.96</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">DELEBAE</td>
+<td align="right">1</td>
+<td align="right">7.69</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">DIFFIR</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">2</td>
+<td align="right">3.92</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">DIJEKHINÉ</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+<td align="right">1.96</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">DILEMA</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">2</td>
+<td align="right">3.92</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">5.88</td>
+<td align="right">3</td>
+</tr>
+<tr class="odd">
+<td align="left">DINGUESS</td>
+<td align="right">1</td>
+<td align="right">7.69</td>
+<td align="right">1</td>
+<td align="right">1.96</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">2</td>
+</tr>
+<tr class="even">
+<td align="left">GANATIR</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">4</td>
+<td align="right">7.84</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">5.88</td>
+<td align="right">5</td>
+</tr>
+<tr class="odd">
+<td align="left">GOZ-TAMADJA</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">5.88</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">GOZ DJARAT</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">5.88</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">GOZ MABILE</td>
+<td align="right">1</td>
+<td align="right">7.69</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">GOZ MABILE 2</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">5.88</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">HARAZA</td>
+<td align="right">1</td>
+<td align="right">7.69</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">HILE BARA</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">2</td>
+<td align="right">3.92</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">KACHKACHA</td>
+<td align="right">2</td>
+<td align="right">15.38</td>
+<td align="right">1</td>
+<td align="right">1.96</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="left">MINA</td>
+<td align="right">1</td>
+<td align="right">7.69</td>
+<td align="right">1</td>
+<td align="right">1.96</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">MIRÉKIKE</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+<td align="right">1.96</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">MIRER</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+<td align="right">1.96</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">RASSALFIL</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">3</td>
+<td align="right">5.88</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="left">RIAD</td>
+<td align="right">1</td>
+<td align="right">7.69</td>
+<td align="right">1</td>
+<td align="right">1.96</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">5.88</td>
+<td align="right">3</td>
+</tr>
+<tr class="odd">
+<td align="left">SALAMAT</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">2</td>
+<td align="right">3.92</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">2</td>
+</tr>
+<tr class="even">
+<td align="left">SIHEBA</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+<td align="right">1.96</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">TARADONA</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1</td>
+<td align="right">1.96</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">5.88</td>
+<td align="right">2</td>
+</tr>
+<tr class="even">
+<td align="left">TARADONA 1</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">5.88</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">TARADONA 2</td>
+<td align="right">1</td>
+<td align="right">7.69</td>
+<td align="right">1</td>
+<td align="right">1.96</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">3</td>
+<td align="right">17.65</td>
+<td align="right">5</td>
+</tr>
+<tr class="even">
+<td align="left">TARADONA 3</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">5.88</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">Total</td>
+<td align="right">13</td>
+<td align="right">100.00</td>
+<td align="right">51</td>
+<td align="right">100.00</td>
+<td align="right">2</td>
+<td align="right">100</td>
+<td align="right">17</td>
+<td align="right">100.00</td>
+<td align="right">83</td>
+</tr>
+</tbody>
+</table>
+<p><strong>A table of attack rates by region may be useful</strong></p>
+<p><strong>First</strong>, like when we calculated attack rate by epiweek in the time_analysis section, the cases are counted by patient_origin. This list of counts is then <strong>joined</strong> to the imported population data for each region <strong>joined by patient_origin (the name of the region/quartier)</strong>. These data are stored in the object <code>cases</code>.</p>
+<p>*Recall that this <strong>join</strong> requires <strong>exact matches</strong> between patient_origin values in <code>linelist_cleaned$patient_origin</code> and <code>population_data_region$patient_origin</code> to match a region’s cases to its population (read more about joins TODO HERE). In the data cleaning steps we converted the values in linelist_cleaned to all capital letters to match those in population_data_region.</p>
+<p><strong>TODO - Note: the attack_rate function currently does not show cases in the table if there is no population denominator. For example, the table below shows TARADONA quartier with no cases, when in reality it has 235. Also, for those regions with no cases or no population, the attack rate defaults to 10,000 - which is obviously not true.</strong></p>
+<p>The “ar” object saves the counts, population, and attack rate calculations along with modified column names.</p>
+<p>Finally, the table is created with kable() and displayed.</p>
+<pre class="r"><code>## - [ ] consider facet wrapping by an overarching unit if have many regions (e.g. by province)
+cases &lt;- count(linelist_cleaned, patient_origin) %&gt;%   # cases for each region
+  left_join(population_data_region, by = &quot;patient_origin&quot;)    # merge population data 
+# attack rate for region
+ar &lt;- attack_rate(cases$n, cases$population, multiplier = 10000) %&gt;% 
+  # add the region column to table
+  bind_cols(select(cases, patient_origin), .) %&gt;% 
+  rename(&quot;Region&quot; = patient_origin, 
+         &quot;Cases (n)&quot; = cases, 
+         &quot;Population&quot; = population, 
+         &quot;AR (per 10,000)&quot; = ar, 
+         &quot;Lower 95%CI&quot; = lower,
+         &quot;Upper 95%CI&quot; = upper) 
+ar %&gt;% 
+  merge_ci_df(e = 4) %&gt;% # merge lower and upper CI in to one column 
+  rename(&quot;95%CI&quot; = ci) %&gt;%  # rename single 95%CI column
+  kable(digits = 2, align = &quot;r&quot;, format.args = list(big.mark = &quot;,&quot;)) # set thousands separator</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">Region</th>
+<th align="right">Cases (n)</th>
+<th align="right">Population</th>
+<th align="right">AR (per 10,000)</th>
+<th align="right">95%CI</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">10,000.00</td>
+<td align="right">(NA–NA)</td>
+</tr>
+<tr class="even">
+<td align="right">AB GARA</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">10,000.00</td>
+<td align="right">(NA–NA)</td>
+</tr>
+<tr class="odd">
+<td align="right">ABLELAYE</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">10,000.00</td>
+<td align="right">(NA–NA)</td>
+</tr>
+<tr class="even">
+<td align="right">ABOUDEA</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">10,000.00</td>
+<td align="right">(NA–NA)</td>
+</tr>
+<tr class="odd">
+<td align="right">ADAMRE</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">10,000.00</td>
+<td align="right">(NA–NA)</td>
+</tr>
+<tr class="even">
+<td align="right">ADJABONA</td>
+<td align="right">2</td>
+<td align="right">2,350</td>
+<td align="right">8.51</td>
+<td align="right">(2.33–30.98)</td>
+</tr>
+<tr class="odd">
+<td align="right">AFFOUSSE</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">10,000.00</td>
+<td align="right">(NA–NA)</td>
+</tr>
+<tr class="even">
+<td align="right">AL-FRECHE</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">10,000.00</td>
+<td align="right">(NA–NA)</td>
+</tr>
+<tr class="odd">
+<td align="right">AL-HOUGNA</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">10,000.00</td>
+<td align="right">(NA–NA)</td>
+</tr>
+<tr class="even">
+<td align="right">AL-MOURA</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">10,000.00</td>
+<td align="right">(NA–NA)</td>
+</tr>
+<tr class="odd">
+<td align="right">AL ALAK</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">10,000.00</td>
+<td align="right">(NA–NA)</td>
+</tr>
+<tr class="even">
+<td align="right">AL HOUA</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">10,000.00</td>
+<td align="right">(NA–NA)</td>
+</tr>
+<tr class="odd">
+<td align="right">AL KOUCK</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">10,000.00</td>
+<td align="right">(NA–NA)</td>
+</tr>
+<tr class="even">
+<td align="right">AL MIDODIL</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">10,000.00</td>
+<td align="right">(NA–NA)</td>
+</tr>
+<tr class="odd">
+<td align="right">ALBAYADI</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">10,000.00</td>
+<td align="right">(NA–NA)</td>
+</tr>
+<tr class="even">
+<td align="right">ALBOUKHASS</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">10,000.00</td>
+<td align="right">(NA–NA)</td>
+</tr>
+<tr class="odd">
+<td align="right">ALKASSÉ</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">10,000.00</td>
+<td align="right">(NA–NA)</td>
+</tr>
+<tr class="even">
+<td align="right">AM-DOUMA</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">10,000.00</td>
+<td align="right">(NA–NA)</td>
+</tr>
+<tr class="odd">
+<td align="right">AM ASSALA</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">10,000.00</td>
+<td align="right">(NA–NA)</td>
+</tr>
+<tr class="even">
+<td align="right">AM BADARO 1</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">10,000.00</td>
+<td align="right">(NA–NA)</td>
+</tr>
+<tr class="odd">
+<td align="right">AM KIFEO</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">10,000.00</td>
+<td align="right">(NA–NA)</td>
+</tr>
+<tr class="even">
+<td align="right">AMANASISSE</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">10,000.00</td>
+<td align="right">(NA–NA)</td>
+</tr>
+<tr class="odd">
+<td align="right">AMBARITE</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">10,000.00</td>
+<td align="right">(NA–NA)</td>
+</tr>
+<tr class="even">
+<td align="right">AMCHOKA</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">10,000.00</td>
+<td align="right">(NA–NA)</td>
+</tr>
+<tr class="odd">
+<td align="right">AMDIREDIMAT</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">10,000.00</td>
+<td align="right">(NA–NA)</td>
+</tr>
+<tr class="even">
+<td align="right">AMDJALAT</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">10,000.00</td>
+<td align="right">(NA–NA)</td>
+</tr>
+<tr class="odd">
+<td align="right">AMMANASIS</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">10,000.00</td>
+<td align="right">(NA–NA)</td>
+</tr>
+<tr class="even">
+<td align="right">AMSINENE</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">10,000.00</td>
+<td align="right">(NA–NA)</td>
+</tr>
+<tr class="odd">
+<td align="right">ANALA</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">10,000.00</td>
+<td align="right">(NA–NA)</td>
+</tr>
+<tr class="even">
+<td align="right">ANFANDOCK</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">10,000.00</td>
+<td align="right">(NA–NA)</td>
+</tr>
+<tr class="odd">
+<td align="right">ANGUITEI</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">10,000.00</td>
+<td align="right">(NA–NA)</td>
+</tr>
+<tr class="even">
+<td align="right">ANGUITEYE</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">10,000.00</td>
+<td align="right">(NA–NA)</td>
+</tr>
+<tr class="odd">
+<td align="right">ARDO</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">10,000.00</td>
+<td align="right">(NA–NA)</td>
+</tr>
+<tr class="even">
+<td align="right">ATETAL</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">10,000.00</td>
+<td align="right">(NA–NA)</td>
+</tr>
+<tr class="odd">
+<td align="right">ATOUA</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">10,000.00</td>
+<td align="right">(NA–NA)</td>
+</tr>
+<tr class="even">
+<td align="right">BADINA</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">10,000.00</td>
+<td align="right">(NA–NA)</td>
+</tr>
+<tr class="odd">
+<td align="right">BANDJADID</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">10,000.00</td>
+<td align="right">(NA–NA)</td>
+</tr>
+<tr class="even">
+<td align="right">BAUNE</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">10,000.00</td>
+<td align="right">(NA–NA)</td>
+</tr>
+<tr class="odd">
+<td align="right">BIR TAGAL</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">10,000.00</td>
+<td align="right">(NA–NA)</td>
+</tr>
+<tr class="even">
+<td align="right">BRANO</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">10,000.00</td>
+<td align="right">(NA–NA)</td>
+</tr>
+<tr class="odd">
+<td align="right">CHATAU</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">10,000.00</td>
+<td align="right">(NA–NA)</td>
+</tr>
+<tr class="even">
+<td align="right">COMMERCANT</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">10,000.00</td>
+<td align="right">(NA–NA)</td>
+</tr>
+<tr class="odd">
+<td align="right">COUBO ABNIMIR</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">10,000.00</td>
+<td align="right">(NA–NA)</td>
+</tr>
+<tr class="even">
+<td align="right">DARASALAM</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">10,000.00</td>
+<td align="right">(NA–NA)</td>
+</tr>
+<tr class="odd">
+<td align="right">DARWAL</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">10,000.00</td>
+<td align="right">(NA–NA)</td>
+</tr>
+<tr class="even">
+<td align="right">DELEBAE</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">10,000.00</td>
+<td align="right">(NA–NA)</td>
+</tr>
+<tr class="odd">
+<td align="right">DIFFIR</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">10,000.00</td>
+<td align="right">(NA–NA)</td>
+</tr>
+<tr class="even">
+<td align="right">DIJEKHINÉ</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">10,000.00</td>
+<td align="right">(NA–NA)</td>
+</tr>
+<tr class="odd">
+<td align="right">DILEMA</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">10,000.00</td>
+<td align="right">(NA–NA)</td>
+</tr>
+<tr class="even">
+<td align="right">DINGUESS</td>
+<td align="right">7</td>
+<td align="right">2,268</td>
+<td align="right">30.86</td>
+<td align="right">(14.96–63.57)</td>
+</tr>
+<tr class="odd">
+<td align="right">DJAMBALBAHAR</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">10,000.00</td>
+<td align="right">(NA–NA)</td>
+</tr>
+<tr class="even">
+<td align="right">DJOGO</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">10,000.00</td>
+<td align="right">(NA–NA)</td>
+</tr>
+<tr class="odd">
+<td align="right">GANATIR</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">10,000.00</td>
+<td align="right">(NA–NA)</td>
+</tr>
+<tr class="even">
+<td align="right">GANATIR 1</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">10,000.00</td>
+<td align="right">(NA–NA)</td>
+</tr>
+<tr class="odd">
+<td align="right">GANATIR 2</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">10,000.00</td>
+<td align="right">(NA–NA)</td>
+</tr>
+<tr class="even">
+<td align="right">GARDOLE</td>
+<td align="right">3</td>
+<td align="right">2,286</td>
+<td align="right">13.12</td>
+<td align="right">(4.46–38.51)</td>
+</tr>
+<tr class="odd">
+<td align="right">GOURMOUDAY</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">10,000.00</td>
+<td align="right">(NA–NA)</td>
+</tr>
+<tr class="even">
+<td align="right">GOZ-TAMADJA</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">10,000.00</td>
+<td align="right">(NA–NA)</td>
+</tr>
+<tr class="odd">
+<td align="right">GOZ DJARAT</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">10,000.00</td>
+<td align="right">(NA–NA)</td>
+</tr>
+<tr class="even">
+<td align="right">GOZ MABILE</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">10,000.00</td>
+<td align="right">(NA–NA)</td>
+</tr>
+<tr class="odd">
+<td align="right">GOZ MABILE 2</td>
+<td align="right">14</td>
+<td align="right">3,086</td>
+<td align="right">45.37</td>
+<td align="right">(27.04–76.01)</td>
+</tr>
+<tr class="even">
+<td align="right">GRÉDAÏ</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">10,000.00</td>
+<td align="right">(NA–NA)</td>
+</tr>
+<tr class="odd">
+<td align="right">HABILÉ</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">10,000.00</td>
+<td align="right">(NA–NA)</td>
+</tr>
+<tr class="even">
+<td align="right">HARAZA</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">10,000.00</td>
+<td align="right">(NA–NA)</td>
+</tr>
+<tr class="odd">
+<td align="right">HILE BARA</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">10,000.00</td>
+<td align="right">(NA–NA)</td>
+</tr>
+<tr class="even">
+<td align="right">HILE ODAA</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">10,000.00</td>
+<td align="right">(NA–NA)</td>
+</tr>
+<tr class="odd">
+<td align="right">HIMEDA</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">10,000.00</td>
+<td align="right">(NA–NA)</td>
+</tr>
+<tr class="even">
+<td align="right">IDETER</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">10,000.00</td>
+<td align="right">(NA–NA)</td>
+</tr>
+<tr class="odd">
+<td align="right">KACHKACHA</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">10,000.00</td>
+<td align="right">(NA–NA)</td>
+</tr>
+<tr class="even">
+<td align="right">KOUBO AMNIMIRE</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">10,000.00</td>
+<td align="right">(NA–NA)</td>
+</tr>
+<tr class="odd">
+<td align="right">MABROUKA</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">10,000.00</td>
+<td align="right">(NA–NA)</td>
+</tr>
+<tr class="even">
+<td align="right">MATAR</td>
+<td align="right">4</td>
+<td align="right">569</td>
+<td align="right">70.30</td>
+<td align="right">(27.37–179.34)</td>
+</tr>
+<tr class="odd">
+<td align="right">MINA</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">10,000.00</td>
+<td align="right">(NA–NA)</td>
+</tr>
+<tr class="even">
+<td align="right">MIRÉKIKE</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">10,000.00</td>
+<td align="right">(NA–NA)</td>
+</tr>
+<tr class="odd">
+<td align="right">MIRER</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">10,000.00</td>
+<td align="right">(NA–NA)</td>
+</tr>
+<tr class="even">
+<td align="right">MOURAY</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">10,000.00</td>
+<td align="right">(NA–NA)</td>
+</tr>
+<tr class="odd">
+<td align="right">NOUGRA KARO</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">10,000.00</td>
+<td align="right">(NA–NA)</td>
+</tr>
+<tr class="even">
+<td align="right">OUM-ALKHOURA</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">10,000.00</td>
+<td align="right">(NA–NA)</td>
+</tr>
+<tr class="odd">
+<td align="right">PEDIS</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">10,000.00</td>
+<td align="right">(NA–NA)</td>
+</tr>
+<tr class="even">
+<td align="right">RASSAFIL CHATEAU</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">10,000.00</td>
+<td align="right">(NA–NA)</td>
+</tr>
+<tr class="odd">
+<td align="right">RASSALFIL</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">10,000.00</td>
+<td align="right">(NA–NA)</td>
+</tr>
+<tr class="even">
+<td align="right">RIAD</td>
+<td align="right">87</td>
+<td align="right">6,073</td>
+<td align="right">143.26</td>
+<td align="right">(116.29–176.36)</td>
+</tr>
+<tr class="odd">
+<td align="right">RIDINA</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">10,000.00</td>
+<td align="right">(NA–NA)</td>
+</tr>
+<tr class="even">
+<td align="right">RIDINA 1</td>
+<td align="right">11</td>
+<td align="right">2,336</td>
+<td align="right">47.09</td>
+<td align="right">(26.31–84.13)</td>
+</tr>
+<tr class="odd">
+<td align="right">RIDINA 2</td>
+<td align="right">26</td>
+<td align="right">3,734</td>
+<td align="right">69.63</td>
+<td align="right">(47.56–101.83)</td>
+</tr>
+<tr class="even">
+<td align="right">RIMELIE</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">10,000.00</td>
+<td align="right">(NA–NA)</td>
+</tr>
+<tr class="odd">
+<td align="right">SALAMAT</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">10,000.00</td>
+<td align="right">(NA–NA)</td>
+</tr>
+<tr class="even">
+<td align="right">SIHEBA</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">10,000.00</td>
+<td align="right">(NA–NA)</td>
+</tr>
+<tr class="odd">
+<td align="right">TARADONA</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">10,000.00</td>
+<td align="right">(NA–NA)</td>
+</tr>
+<tr class="even">
+<td align="right">TARADONA 1</td>
+<td align="right">34</td>
+<td align="right">6,484</td>
+<td align="right">52.44</td>
+<td align="right">(37.55–73.18)</td>
+</tr>
+<tr class="odd">
+<td align="right">TARADONA 2</td>
+<td align="right">65</td>
+<td align="right">5,250</td>
+<td align="right">123.81</td>
+<td align="right">(97.26–157.49)</td>
+</tr>
+<tr class="even">
+<td align="right">TARADONA 3</td>
+<td align="right">33</td>
+<td align="right">5,416</td>
+<td align="right">60.93</td>
+<td align="right">(43.42–85.44)</td>
+</tr>
+<tr class="odd">
+<td align="right">ZONGO</td>
+<td align="right">4</td>
+<td align="right">1,607</td>
+<td align="right">24.89</td>
+<td align="right">(9.68–63.83)</td>
+</tr>
+</tbody>
+</table>
+<p>You could then also plot this on a bar chart with confidence intervals.</p>
+<p><strong>TODO: Note: Until the bug in attack_rate() is fixed, the bar chart will not appear correctly, as it shows all the regions that are missing attack rates as having ARs of 10,000.</strong></p>
+<pre class="r"><code># plot with the region on the x axis sorted by increasing ar
+# ar value on the y axis 
+ggplot(ar, aes(x = reorder(Region, `AR (per 10,000)`),
+               y = `AR (per 10,000)`)) + 
+  geom_bar(stat = &quot;identity&quot;, col = &quot;black&quot;, fill = &quot;red&quot;) + # plot as bars (identity = as is)
+  geom_errorbar(aes(ymin = `Lower 95%CI`, ymax = `Upper 95%CI`), width = 0.2) + # add CIs
+  scale_y_continuous(expand = c(0,0)) +  # set origin for axes
+  # add labels to axes and below chart
+  labs(x = &quot;Region&quot;, y = &quot;AR (per 10,000)&quot;, 
+       captions = paste0(&quot;Source: MSF data from &quot;, reporting_week)) + 
+  epicurve_theme</code></pre>
+<pre><code>## Warning: Removed 81 rows containing missing values (geom_errorbar).</code></pre>
+<p><img src="/training/Walk-through/place_analyses_files/figure-html/bar_attack_rate_by_region-1.png" width="720" /></p>
+<p>You could also <strong>table mortality rate by region</strong>. A few things to note:</p>
+<ul>
+<li>The first command uses group_by() to count cases by patient_origin. Then, filter() is applied based on the character search function grepl() from the package stringr, which looks for “Dead” within the variable exit_status - <strong>note: we must change this to reflect our data and have grepl() look for “Died” in exit_status2.</strong> (otherwise, the object “deaths” has 0 rows and mortality_rate() produces an error)<br />
+</li>
+<li>The mortality_rate() step calculates mortality rates for the regions that had a death.</li>
+</ul>
+<p><strong>TODO: Note: The table only shows the regions that had a death, but there is a bug and the deaths show as missing if there is no population denominator.</strong></p>
+<pre class="r"><code>deaths &lt;- group_by(linelist_cleaned, patient_origin) %&gt;%
+  filter(grepl(&quot;Died&quot;, exit_status2)) %&gt;% 
+  summarise(deaths = n()) %&gt;% # count deaths by region
+  left_join(population_data_region, by = &quot;patient_origin&quot;) # merge population data 
+
+mortality_rate(deaths$deaths, deaths$population, multiplier = 10000) %&gt;%
+  # add the region column to table
+  bind_cols(select(deaths, patient_origin), .) %&gt;% 
+  merge_ci_df(e = 4) %&gt;% # merge the lower and upper CI into one column
+  rename(&quot;Region&quot; = patient_origin, 
+         &quot;Deaths&quot; = deaths, 
+         &quot;Population&quot; = population, 
+         &quot;Mortality (per 10,000)&quot; = `mortality per 10 000`, 
+         &quot;95%CI&quot; = ci) %&gt;% 
+  kable(digits = 2)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Region</th>
+<th align="right">Deaths</th>
+<th align="right">Population</th>
+<th align="right">Mortality (per 10,000)</th>
+<th align="left">95%CI</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">ABLELAYE</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">10000.00</td>
+<td align="left">(NA–NA)</td>
+</tr>
+<tr class="even">
+<td align="left">AL-HOUGNA</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">10000.00</td>
+<td align="left">(NA–NA)</td>
+</tr>
+<tr class="odd">
+<td align="left">AMSINENE</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">10000.00</td>
+<td align="left">(NA–NA)</td>
+</tr>
+<tr class="even">
+<td align="left">ANFANDOCK</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">10000.00</td>
+<td align="left">(NA–NA)</td>
+</tr>
+<tr class="odd">
+<td align="left">BADINA</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">10000.00</td>
+<td align="left">(NA–NA)</td>
+</tr>
+<tr class="even">
+<td align="left">DELEBAE</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">10000.00</td>
+<td align="left">(NA–NA)</td>
+</tr>
+<tr class="odd">
+<td align="left">DINGUESS</td>
+<td align="right">1</td>
+<td align="right">2268</td>
+<td align="right">4.41</td>
+<td align="left">(0.78–24.93)</td>
+</tr>
+<tr class="even">
+<td align="left">GOZ MABILE</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">10000.00</td>
+<td align="left">(NA–NA)</td>
+</tr>
+<tr class="odd">
+<td align="left">HARAZA</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">10000.00</td>
+<td align="left">(NA–NA)</td>
+</tr>
+<tr class="even">
+<td align="left">KACHKACHA</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">10000.00</td>
+<td align="left">(NA–NA)</td>
+</tr>
+<tr class="odd">
+<td align="left">MINA</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">10000.00</td>
+<td align="left">(NA–NA)</td>
+</tr>
+<tr class="even">
+<td align="left">RIAD</td>
+<td align="right">1</td>
+<td align="right">6073</td>
+<td align="right">1.65</td>
+<td align="left">(0.29–9.32)</td>
+</tr>
+<tr class="odd">
+<td align="left">TARADONA 2</td>
+<td align="right">1</td>
+<td align="right">5250</td>
+<td align="right">1.90</td>
+<td align="left">(0.34–10.78)</td>
+</tr>
+</tbody>
+</table>
+<div id="maps" class="section level4">
+<h4>Maps</h4>
+<p>Mapping in R can be intimidating at first because it is different than ArcGIS, QGIS, or other mapping software that primarily use a point-and-click interface. However, you will see that using commands to create maps can be much faster, more replicable, and transparent for whomever you share code with.</p>
+<p>We do have shapefiles for the Am Timan exercise. You can download them from the case study overview page of this website.</p>
+<p><em>Shapefiles are a format for storing geometric location and attribute data for geographic features - for example <strong>either points (e.g. GPS points of cases or households surveyed), lines (e.g. road network), or polygons (e.g. district boundaries)</strong> </em></p>
+<p><em>Note: a shapefile is actually made of several files. Viewing the shapefile in your computer’s internal folders you will often see 4 or 5 files with the same name but different extensions (e.g. .shp, .prj, etc.). As long as these files are located in the same folder the shapefile will load correctly when you import with the .shp extension.</em></p>
+<p>Because we have shapefiles for this exercise, we <strong>must delete the command that generates the fake shapefile</strong> (<code>map &lt;- gen_polygon(regions = unique(linelist_cleaned$patient_origin))</code>).</p>
+<p>Note the checklist for using shapefiles:</p>
+<ul>
+<li>Your shapefile can be a polygon or points (and polygons do not have to be contiguous - they do not have to touch each other)<br />
+</li>
+<li>Ensure that the region names in the shapefile match <em>exactly</em> the region names in linelist_cleaned. (in most shapefiles there is an ID or NAME variable in the spreadsheet file)<br />
+</li>
+<li>Make sure the coordinate reference system (CRS) of the shapefile is WGS84 (this is the standard coordinate system used by most GPS systems, but it is good to ask whomever collected to data to be sure)</li>
+</ul>
+<p><em>Note that when giving the name of a shapefile to here(), list the file name with a .shp extension.</em></p>
+<p><em>The import() function is wrapped around the here() function. The here() function makes it easy for R to locate files on your computer. It is best to save the dataset within your R project, and to provide here() with any R project subfolder names. You can read more about the here() function in the data import page of the R Basics tutorial.</em></p>
+<pre class="r"><code>## reading in a shapefile 
+map &lt;- read_sf(here(&quot;quartiersshape.shp&quot;))</code></pre>
+<p>The next code will check the coordinate reference system (CRS) of the shapefile, as it was read-in. In our exercise, we see an EPSG code of 4326, which is the correct code for WGS84 (you can also see below the EPSG code that the datum is WGS84).</p>
+<pre class="r"><code>## check the coordinate reference system (CRS)
+st_crs(map)</code></pre>
+<pre><code>## Coordinate Reference System:
+##   EPSG: 4326 
+##   proj4string: &quot;+proj=longlat +datum=WGS84 +no_defs&quot;</code></pre>
+<p>If there is no CRS specified for your shapefile, you can set the CRS to WGS84 with the following command, which uses the EPSG code of 4326.</p>
+<pre class="r"><code>## set the CRS if not present using EPSG value
+## this is the most commonly used 
+map &lt;- st_set_crs(map, value = 4326) # Sets to WGS84</code></pre>
+<p>Below we explain each step within the this code chunk, plotting a map based on the attack rate table.</p>
+<p><strong>Create a <em>categorical</em> variable of the attack rate.</strong> These categories will appear in the map as the legend - and the regions will be colored by these groups.</p>
+<ol style="list-style-type: decimal">
+<li><p>The first command defines max_ar as the highest attack rate value in the object ar. This is referenced later.</p></li>
+<li><p>In the next command, <code>breakers</code> is defined as a sequence of integers. Zero is included by default because it should be a separate color on the final map. After zero, quartiles are determined up to the max_ar.</p></li>
+<li><p>In the last command, mutate() is used to create the categorical variable within ‘ar’, using <code>breakers</code> to define the breaks in the numeric variable in ‘ar’: AR (per 10,000).</p></li>
+</ol>
+<pre class="r"><code>## create a categorical variable for plotting 
+max_ar    &lt;- max(ar$`Upper 95%CI`, na.rm = TRUE) # define your highest AR
+breakers &lt;- as.integer(c(0, # include zero as a standalone group
+             seq(1, max_ar, by = max_ar/4) # 1 to maximum with four divisions
+             ))
+## add a categorical variable using the age_categories function 
+## nb in this case we arent using ages - but it functions the same way!
+ar &lt;- mutate(ar, 
+             categories = age_categories(`AR (per 10,000)`, 
+                                         breakers = breakers)
+             )</code></pre>
+<p><strong>Join the object ‘ar’ to the map (shapefile)</strong> ‘map’ is joined to ‘ar’ with a <strong>left join</strong> (see the R Basics page on Advanced Function to learn more about joins). Both of these objects contain tables (you can click them in the Environment pane to see this). In the command, they are linked by the “Name” variable in ‘ar’ and the “Region” variable in ‘map’.</p>
+<p><strong>Note: make sure your <code>left_join</code> code uses “Name” with a capital N, as that is how the variable is spelled in the object ‘map’. In your data these variable names may be completely different and must be changed</strong></p>
+<p>The resulting object ‘mapsub’ is a product of this <strong>left join</strong>. A left join will include all values from the Left-hand Side (LHS) and only inlcude values from the Right-hand Side (RHS) if they match to LHS values. Now, the attack rates are joined to the region names and to their GIS geometries. You can verify this by Viewing the object mapsub (click on it in the Environment pane).</p>
+<pre class="r"><code>## join your ar or case counts based on matching shapefile names with regions in your ar table
+mapsub &lt;- left_join(map, ar, by = c(&quot;Name&quot; = &quot;Region&quot;))</code></pre>
+<p><strong>Now, ggplot() is used to create the map.</strong> Remember that ggplot() subcommands must be connected by plus symbols at the end of each line (+) (except the last line). Read more about ggplot2 and ggplot() in the R Basics pages.</p>
+<p><strong>geom_sf()</strong> identifies ‘mapsub’ as providing the data for the map, and filling the polygons by values in the variable ‘categories’.</p>
+<p><strong>coord_sf()</strong> set to NA prevents gridlines from being drawn on the map.</p>
+<p><strong>annotation_scale()</strong> adds a scalebar at the bottom of the map.</p>
+<p><strong>scale_fill_brewer()</strong> uses a color palatte from orange to red (“OrRd”), keeps all color levels even if there are no polygons at that level (<code>drop=FALSE</code>), and specifies a title for the legend. If you want a different color scale, use this code from the package RColorBrewer to see the possible options (hint: after running this code click “Zoom” in your Plot/Viewer pane to see more clearly). Then replace “OrRd” with your desired code. You can read more about colors <a href="http://www.sthda.com/english/wiki/print.php?id=85">here</a>.</p>
+<pre class="r"><code>library(RColorBrewer)
+display.brewer.all()</code></pre>
+<p><img src="/training/Walk-through/place_analyses_files/figure-html/unnamed-chunk-5-1.png" width="720" /></p>
+<p><strong>geom_sf_text()</strong> specifies labels for the polygons, including which variable to use for labels (“Name”), and the text colour. <strong>Again, we need to modify this ggplot() reference to the variable “name” to now reference “Name” with a capital N. In your data the variable may be completely different.</strong></p>
+<p><strong>theme_void()</strong> specifies a theme for the map that does not include coordinates or axes.</p>
+<pre class="r"><code>## plotting with polygons ------------------------------------------------------
+
+ggplot() +
+  geom_sf(data = mapsub, aes(fill = categories), col = &quot;grey50&quot;) + # shapefile as polygon
+  coord_sf(datum = NA) + # needed to avoid gridlines being drawn
+  annotation_scale() + # add a scalebar
+  scale_fill_brewer(drop = FALSE, palette = &quot;OrRd&quot;, name = &quot;AR (per 10,000)&quot;) + 
+  geom_sf_text(data = mapsub, aes(label = Name), colour = &quot;grey50&quot;) + # label polygons
+  theme_void() # remove coordinates and axes</code></pre>
+<pre><code>## Warning in st_point_on_surface.sfc(sf::st_zm(x)): st_point_on_surface may
+## not give correct results for longitude/latitude data</code></pre>
+<p><img src="/training/Walk-through/place_analyses_files/figure-html/unnamed-chunk-6-1.png" width="720" /></p>
+<p>Lastly, <strong>there is an efficient way to create attack rate maps and bar plots of incidence for each epiweek</strong>. Use a <strong>“for loop”</strong> to run the same code for every epi week.</p>
+<p><strong>A for loop is used to iterate over (perform the same actions to) every value in a vector.</strong> In this case, we want to make the map and bar chart for each region. You can read more about for loops in the Advanced section of the R Basics pages, or <a href="">here</a>.</p>
+<p>A few things to note about this chunk:</p>
+<ul>
+<li>The first half is very similar to the set-up of the previous map.<br />
+</li>
+<li>You must also modify the <code>left_join</code> command to list the correct variable names (e.g. Name instead of name)</li>
+<li>These maps are not labeled with region names.<br />
+</li>
+<li>The creation of the barplots depends on the object epicurve_theme, which was defined in the Time section of the template. If that section is not created, then this object will be missing and cause errors.</li>
+</ul>
+<pre class="r"><code>## Checklist for plotting in for-loop ------------------------------------------
+## - [ ] decide if you would like to show counts, AR or categories of those
+## - [ ] define appropriate breaks to ensure legend is uniform by week
+## - [ ] replace `Cases (n)` and `AR (per 10,000)` or &quot;categories&quot;, appropriately
+## - [ ] consider facet wrapping by an overarching unit if have many regions (e.g. by province)
+
+# change region variable to a factor so that zero counts can be included
+linelist_cleaned$patient_origin &lt;- as.factor(linelist_cleaned$patient_origin)
+
+# case counts
+cases &lt;- linelist_cleaned %&gt;% 
+  group_by(epiweek) %&gt;%
+  count(patient_origin, .drop = FALSE) %&gt;%   # cases for each week by region
+  left_join(population_data_region, by = &quot;patient_origin&quot;)    # merge population data 
+
+# attack rate for region
+ar &lt;- attack_rate(cases$n, cases$population, multiplier = 10000) %&gt;% 
+  # add the region column to table
+  bind_cols(select(cases, epiweek, patient_origin), .) %&gt;% 
+  rename(&quot;Region&quot; = patient_origin, 
+         &quot;Cases (n)&quot; = cases, 
+         &quot;Population&quot; = population, 
+         &quot;AR (per 10,000)&quot; = ar, 
+         &quot;Lower 95%CI&quot; = lower,
+         &quot;Upper 95%CI&quot; = upper)
+max_cases &lt;- max(cases$n, na.rm = TRUE) # define the maximum number of cases for the color palette 
+max_ar    &lt;- max(ar$`Upper 95%CI`, na.rm = TRUE)
+
+## define breaks for standardising color palette
+breakers &lt;- as.integer(c(0, # include zero as a standalone group
+             find_breaks(max_ar, breaks = 4, snap = 100) # four breaks rounded to nearest 100
+             ))
+
+## add a categorical variable using the age_categories function 
+## nb in this case we arent using ages - but it functions the same way!
+ar &lt;- mutate(ar, 
+             categories = age_categories(`AR (per 10,000)`, 
+                                         breakers = breakers)
+             )</code></pre>
+<p><strong>Note: Only results for the first 5 epiweeks are shown.</strong></p>
+<p>testing</p>
+<pre class="r"><code># go through each epiweek, filter and plot the data
+for (i in unique(cases$epiweek)) {
+  this_ar &lt;- filter(ar, epiweek == i)
+  
+  # map 
+  mapsub &lt;- left_join(map, this_ar, by = c(&quot;Name&quot; = &quot;Region&quot;))
+  
+  # choropleth 
+  map_plot &lt;- ggplot() +
+    geom_sf(data = mapsub, aes(fill = categories), col = &quot;grey50&quot;) + # shapefile as polygon
+    coord_sf(datum = NA) + # needed to avoid gridlines being drawn
+    annotation_scale() + # add a scalebar
+  scale_fill_brewer(drop = FALSE, 
+                    palette = &quot;OrRd&quot;, 
+                    name = &quot;AR (per 10,000)&quot;) +  # color the scale to be perceptually uniform (keep levels)
+    theme_void() # remove coordinates and axes
+  
+  # plot with the region on the x axis sorted by increasing ar
+  # ar value on the y axis 
+  barplot &lt;- ggplot(this_ar, aes(x = reorder(Region, `AR (per 10,000)`),
+                                 y = `AR (per 10,000)`)) + 
+    geom_bar(stat = &quot;identity&quot;, col = &quot;black&quot;, fill = &quot;red&quot;) + # plot as bars (identity = as is)
+    geom_errorbar(aes(ymin = `Lower 95%CI`, ymax = `Upper 95%CI`), width = 0.2) + # add CIs
+    scale_y_continuous(expand = c(0, 0), limits = c(0, max_ar)) +  # set origin for axes
+    # add labels to axes and below chart
+    labs(x = &quot;Region&quot;, y = &quot;AR (per 10,000)&quot;, 
+         captions = paste0(&quot;Source: MSF data from &quot;, reporting_week)) + 
+    epicurve_theme
+  # combine the barplot and map plot into one
+  print(
+    cowplot::plot_grid(
+      barplot + labs(title = paste0(&quot;Epiweek: &quot;, i)),
+      map_plot,
+      nrow = 1,
+      align = &quot;h&quot;,
+      axis = &quot;tb&quot;
+    )
+  )
+}</code></pre>
+<pre><code>## Warning: Removed 80 rows containing missing values (position_stack).</code></pre>
+<pre><code>## Warning: Removed 81 rows containing missing values (geom_errorbar).</code></pre>
+<pre><code>## Warning: Removed 80 rows containing missing values (position_stack).</code></pre>
+<pre><code>## Warning: Removed 81 rows containing missing values (geom_errorbar).</code></pre>
+<p><img src="/training/Walk-through/place_analyses_files/figure-html/unnamed-chunk-7-1.png" width="720" /></p>
+<pre><code>## Warning: Removed 80 rows containing missing values (position_stack).
+
+## Warning: Removed 81 rows containing missing values (geom_errorbar).</code></pre>
+<p><img src="/training/Walk-through/place_analyses_files/figure-html/unnamed-chunk-7-2.png" width="720" /></p>
+<pre><code>## Warning: Removed 80 rows containing missing values (position_stack).
+
+## Warning: Removed 81 rows containing missing values (geom_errorbar).</code></pre>
+<p><img src="/training/Walk-through/place_analyses_files/figure-html/unnamed-chunk-7-3.png" width="720" /></p>
+<pre><code>## Warning: Removed 80 rows containing missing values (position_stack).
+
+## Warning: Removed 81 rows containing missing values (geom_errorbar).</code></pre>
+<p><img src="/training/Walk-through/place_analyses_files/figure-html/unnamed-chunk-7-4.png" width="720" /><img src="/training/Walk-through/place_analyses_files/figure-html/unnamed-chunk-7-5.png" width="720" /><img src="/training/Walk-through/place_analyses_files/figure-html/unnamed-chunk-7-6.png" width="720" /></p>
+</div>
+</div>

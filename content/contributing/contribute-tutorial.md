@@ -86,6 +86,7 @@ Now you can ceate a new RMarkdown document inside one of the folders by using:
 ```r
 blogdown::new_content("<folder>/<page>.Rmd", kind = "page")
 ```
+(be sure to remove the arrows < > when typing your folder and page names.)
 
 This should open a bare Rmarkdown document in a new window. Edit this however
 you like.  When you are finished editing your Rmarkdown document, you must

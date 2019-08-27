@@ -1,0 +1,22 @@
+---
+date: "2019-08-21T09:36:04+02:00"
+title: Import
+weight: 7
+---
+
+
+
+<div id="import-the-dataset" class="section level2">
+<h2>Import the dataset</h2>
+<p><strong>In this template section you choose the appropriate code chunk to importing your dataset.</strong></p>
+<p><img src="/images/AJS_Data_Import.png" alt="Data import options snip", width = "75%"></p>
+<p>For this exercise our dataset is a <strong>non-standardized Excel file</strong> from MSF’s response an outbreak of AJS in Am Timan, Chad, so we use the <code>read_nonDHIS_data</code> code chunk. We will specifically use the line that uses the import() function of the rio package to import an Excel file that is not password protected. Note that errors can occur if you provide an incorrect file name or path. Tlink for dataset download is at the top of this webpage.</p>
+<p>Either <strong>delete or comment out (#)</strong> all lines of code in the other data import chunks (read_fake_data, read_DHIS_excel_data, and read_DHIS_csv_data).</p>
+<p><em>The import() function is wrapped around the here() function. The here() function makes it easy for R to locate files on your computer. It is best to save the dataset within your R project, and to provide here() with any R project subfolder names. You can read more about the here() function in the data import page of the R Basics tutorial.</em></p>
+<pre class="r"><code>## Read data ------------------------------------
+# Excel file
+# to read in a specific sheet use &quot;which&quot;
+linelist_raw &lt;- rio::import(here(&quot;AJS_AmTiman.xlsx&quot;), which = &quot;linelist&quot;)</code></pre>
+<p>There should now be a dataframe object named “linelist_raw” in your environment pane, consisting of 1447 observations and 122 variables.</p>
+<p><img src="/images/linelist_raw_imported.png" alt="Environment snip with linelist_raw", width = "50%"></p>
+</div>

@@ -1,6 +1,8 @@
 ---
+
 title: Training Materials
 ---
+
 
 Welcome to the training homepage of the R4EPIs project. The purpose of these pages are to assist you in the use
 and modification of the outbreak and survey templates. 
@@ -25,3 +27,4 @@ to modify the template. Read more about the case study walk-through in its intro
 be adding more content in the coming weeks.
 
 {{% /notice %}}
+

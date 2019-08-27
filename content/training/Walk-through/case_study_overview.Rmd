@@ -1,0 +1,105 @@
+---
+date: "2019-08-21T09:20:22+02:00"
+title: Case study overview
+weight: 5
+---
+
+
+
+```{r setup, include=FALSE, results='hide', message=FALSE, warning=FALSE}
+# hide all code chunks in the output, but show errors
+knitr::opts_chunk$set(echo = TRUE,       # hide all code chunks in output
+                      error = TRUE,       # show errors if they appear, but don't stop
+                      fig.width = 6*1.25, # Figure width
+                      fig.height = 6      # Figure height
+                     )
+# set default NA to - in output, define figure width/height
+options(knitr.kable.NA = "-")
+
+# Installing required packages for this template
+required_packages <- c("knitr",       # create output docs
+                       "dplyr",       # clean/shape data
+                       "forcats",     # clean/shape data
+                       "stringr",     # clean text
+                       "rio",         # read in data
+                       "ggplot2",     # create plots and charts
+                       "sitrep",      # MSF field epi functions
+                       "linelist",    # Functions for cleaning/standardising data
+                       "incidence",   # create epicurves
+                       "aweek",       # define epi weeks
+                       "epitools",    # 2x2 tables and other epi goodness
+                       "epitrix",     # epi helpers and tricks
+                       "sf",          # encode spatial vector data
+                       "ggspatial",
+                       "here")   # plot maps
+
+for (pkg in required_packages) {
+  # install packages if not already present
+  if (!pkg %in% rownames(installed.packages())) {
+    install.packages(pkg)
+  }
+  
+  # load packages to this current session 
+  library(pkg, character.only = TRUE)
+}
+
+
+# set default text size to 16 for plots
+# give classic black/white axes for plots
+ggplot2::theme_set(theme_classic(base_size = 18))
+
+# Set the day that defines the beginning of your epiweek.
+# you can start the week on any day of the week
+# (the ISO standard is to start on Monday) 
+aweek::set_week_start("Monday")
+```
+
+## Overview of this page
+This page will demonstrate use of the Acute Jaundice Syndrome (AJS) outbreak template using data from an outbreak in Am Timan, Chad. This first page covers the initial data importation and cleaning steps in the template.  
+
+#### Getting started  
+
+**Getting started with the sitrep package and opening the correct template**
+Please review the [getting started page](https://r4epis.netlify.com/welcome/001-getting-started/) for instructions on the following start-up steps:  
+
+* Downloading and configuring R and RStudio  
+* Installing the sitrep package  
+* Opening an outbreak or survey template  
+
+**Access the datasets for this walk-through**  
+[TODO: instructions and link to dataset here]
+
+**Access the final RMarkdown script used in this walk-through**  
+[TODO: link to download Chad AJS RMarkdown here]
+
+**RMarkdown resources**  
+Review the page "Reading a RMarkdown Script", or reference these resources: [Rmarkdown introduction](https://rmarkdown.rstudio.com/articles_intro.html) and [Rmarkdown authoring basics](https://rmarkdown.rstudio.com/authoring_basics.html).  
+
+  
+
+
+#### AJS/HEV outbreak in Am Timan, Chad (2016-2017)
+
+We will be using data and examples from a real outbreak of Hepatitis E virus (HEV) infection which occurred in the Chadian town of Am Timan between October 2016 and April 2017  
+
+*DISCLAIMER: The real data from the outbreak has been used for the training materials linked to the outbreak templates of the R4epis project. The Chadian Ministry of Health (MoH) has approved the use of this data for training purposes. Please note, that some data has been adapted in order to best achieve training objectives. Also, the GPS coordinates included in the dataset do not correspond to real cases identified during this outbreak. They have been generated exclusively for training purposes.*  
+
+In early September 2016, a cluster of severely ill pregnant women with jaundice was detected at the Am Timan Hospital in the maternity ward. Following rapid tests conducted in Am Timan and confirmatory testing in the Netherlands, this was confirmed as due to HEV infection. Thus the MoH and MSF outbreak response was activated.  
+
+The response consisted of four components:  
+
+1) active community based surveillance (CBS)  
+2) clinical assessment and management of ill cases at the hospital  
+3) water chlorination activities at most water points in the town  
+4) hygiene promotion  
+
+**The outbreak linelist data was combined data from the active CBS data and the clinical data from the hospital.** The CBS functioned with community health workers visiting all households in the town every two weeks and actively searching for people with Acute Jaundice Syndrome (AJS). For this group of persons (suspected cases), only those that were visibly ill or that were pregnant were referred to the hospital for clinical assessment and admission if required. Persons that self-reported to the hospital or that arrived after referral would undergo a clinical assessment and a rapid test for HEV for diagnosis. Thus only for people assessed at the hospital were we able to capture a confirmed case status.  
+
+For the duration of the outbreak we detected 1193 suspected cases, 100 confirmed cases and discarded 150 cases with AJS who were not positive for HEV infection.  
+
+[Link to publication](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0188240)  
+
+<img src="/images/AJS_Article.png" alt="AJS Article snip", width = "40%">
+
+
+

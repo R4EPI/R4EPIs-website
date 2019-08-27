@@ -1,0 +1,112 @@
+---
+date: "2019-08-21T10:27:23+02:00"
+title: Population and lab data
+weight: 9
+---
+
+
+
+```{r setup, include=FALSE, results='hide', message=FALSE, warning=FALSE}
+# hide all code chunks in the output, but show errors
+knitr::opts_chunk$set(echo = TRUE,       # hide all code chunks in output
+                      error = TRUE,       # show errors if they appear, but don't stop
+                      fig.width = 6*1.25, # Figure width
+                      fig.height = 6      # Figure height
+                     )
+# set default NA to - in output, define figure width/height
+options(knitr.kable.NA = "-")
+
+# Installing required packages for this template
+required_packages <- c("knitr",       # create output docs
+                       "dplyr",       # clean/shape data
+                       "forcats",     # clean/shape data
+                       "stringr",     # clean text
+                       "rio",         # read in data
+                       "ggplot2",     # create plots and charts
+                       "sitrep",      # MSF field epi functions
+                       "linelist",    # Functions for cleaning/standardising data
+                       "incidence",   # create epicurves
+                       "aweek",       # define epi weeks
+                       "epitools",    # 2x2 tables and other epi goodness
+                       "epitrix",     # epi helpers and tricks
+                       "sf",          # encode spatial vector data
+                       "ggspatial",
+                       "here")   # plot maps
+
+for (pkg in required_packages) {
+  # install packages if not already present
+  if (!pkg %in% rownames(installed.packages())) {
+    install.packages(pkg)
+  }
+  
+  # load packages to this current session 
+  library(pkg, character.only = TRUE)
+}
+
+
+# set default text size to 16 for plots
+# give classic black/white axes for plots
+ggplot2::theme_set(theme_classic(base_size = 18))
+
+# Set the day that defines the beginning of your epiweek.
+# you can start the week on any day of the week
+# (the ISO standard is to start on Monday) 
+aweek::set_week_start("Monday")
+
+
+
+date2week("2017-04-20")      #Sys.Date() uses the current date from your computer
+
+
+reporting_week <- "2017-W16"  # Set the reporting week
+
+
+```
+
+
+
+## Provide population counts  
+The population estimates for regions and age groups are collected in order to calculate attack and mortality rates. **The template allows several ways to provide population estimates, but importantly, the data must be stored under specific variable names.** In your real-use case, the specific age groupings and region names in your data may differ from the examples, but the variable names must follow the expected standard.  
+
+You can do one of the following:  
+1) Enter the estimates directly **[need clarification here as this is not yet built]**  
+2) Use the function gen_population() to derive the estimates from proportions  
+3) Import a spreadsheet file with the estimates in the correct format  
+
+![](/images/AJS_Population_Counts.png)  
+
+For the AJS example, we can use an Excel spreadsheet containing population figures by region. Uncomment this line of code in the read_population_data chunk and modify it to import the Excel spreadsheet (link for spreadsheet download at top of this webpage). Note that the spreadsheet variables names have already been edited to match the expected names ("patient_origin" and "population").  
+
+As they will not be used, delete or comment (#) all the code lines in the chunk that create fake data for population_data_region, population_data_age, and population_data_age_months.
+
+*The import() function is wrapped around the here() function. The here() function makes it easy for R to locate files on your computer. It is best to save the dataset within your R project, and to provide here() with any R project subfolder names. You can read more about the here() function in the data import page of the R Basics tutorial.*   
+
+```{r include=FALSE, results='hide', message=FALSE, warning=FALSE}
+population_data_region <- rio::import(here("content", "training", "Walk-through", "AJS_AmTiman_population_revised_for_template.xlsx"), which="quartier")
+```
+
+```{r eval=FALSE}
+population_data_region <- rio::import(here("AJS_AmTiman_population_revised_for_template.xlsx"), which="quartier")
+```
+
+
+**If you choose not to complete the population estimates section, delete the default gen_population() code, and expect that later sections on attack and mortality rates will not produce output.**
+
+
+
+
+```{r, include=FALSE, results='hide', message=FALSE, warning=FALSE}
+# Save population_data_region for this website page as "population_data" for use in the next page.
+saveRDS(population_data_region, "data/population_data.rds")
+```
+
+
+
+
+## Provide laboratory testing data  
+
+**TODO: [Paragraph about lab data here - how it is used]**  
+
+
+
+
