@@ -1,0 +1,12 @@
+---
+date: "2019-08-22T16:26:31+02:00"
+title: Working within R projects
+weight: 5
+---
+
+## Opening an R project
+
+## Working within an R project
+
+## Read more
+Read more about a project-oriented workflow [here](https://www.tidyverse.org/articles/2017/12/workflow-vs-script/)  

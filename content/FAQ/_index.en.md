@@ -16,6 +16,18 @@ This might be because you have an unstable internet connection.
 Either try again when there are less people using the internet connection, use a different connection, 
 or contact one of the maintainers for alternative offline options. 
 
+# I get errors when installing sitrep or other packages  
+
+Restart your R session by clicking "Session" from the top menu and choosing "Restart R",
+or by using the keyboard shortcut CTRL+SHIFT+F10. This is sometimes necessary when updating or installing new packages.
+
+If you continue to encounter errors you may need to install the list of required packages one-by-one,
+using the command `install.packages()`, as below for the package dplyr (note the name of the package is in quotes):
+
+```r
+install.packages("dplyr")
+``` 
+
 
 ## I installed without errors---but cannot see the templates 
 

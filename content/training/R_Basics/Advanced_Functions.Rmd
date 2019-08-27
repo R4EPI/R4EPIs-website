@@ -1,0 +1,138 @@
+---
+date: "2019-08-22T15:33:00+02:00"
+title: Advanced Functions
+weight: 12
+---
+
+
+
+```{r include=FALSE, results='hide', message=FALSE, warning=FALSE}
+# Silently read AJS example dataset
+
+library(sitrep)
+library(here)
+library(dplyr)
+
+linelist_raw <- gen_data("AJS")
+linelist_cleaned <- linelist_raw
+
+#Clean sex for age pyramid graphic
+linelist_cleaned$sex[linelist_cleaned$sex == "U"] <- NA
+linelist_cleaned$sex <- factor(linelist_cleaned$sex)
+
+#Create age groups for pyramid graphic
+linelist_cleaned$age_group <- age_categories(linelist_cleaned$age_years, 
+                                             breakers = c(0, 3, 15, 30, 45))
+```
+
+
+## The Here packge and here() function  
+
+The templates use the **Here package to assist with locating local files**. The Here package and its function here() work well with R projects.  
+
+**How it works:** When the package "Here" is loaded, it automatically considers the top-level folder of your R project as "here" - as a benchmark for all other files in the Project. In your script, if you want to import or reference a file saved in your R project's folders, you use the function here() to tell R where the file is in relation to "here".  
+
+If you are unsure where "here" is set to, run this command:
+
+```{r eval=FALSE}
+# This command tells you the folder path that "here" is set to 
+here()
+```
+
+
+**Below is an example** of importing the file "linelist.xlsx". The import() function from the rio package does the importing, but **import() needs to be told where to look on your computer** to find the file. Normally, it accepts a filepath in quotes, but it is easy to make mistakes. Instead, **import() is wrapped around the function here()**. 
+
+If the file you want is in the folder designated as "here", all you have to do is provide the name of the file in quotes (with the appropriate ending). 
+
+```{r eval=FALSE}
+linelist_raw <- rio::import(here("linelist.xlsx"), which = "Sheet1")
+```
+
+*Note: After the closing parenthes of here() the import() function continues. There is a comma and import()'s optional argument `which = `, specifying which sheet of the Excel file to import.*  
+
+**If however, your file is within subfolders of the folder designated as "here"** - let's say it is in the subfolder "data" and then the sub-subfolder "linelists" - **you write these folder names before the file name, in quotes, and separated by commas**, as below:  
+
+```{r eval=FALSE}
+linelist_raw <- rio::import(here("data", "linelists", "linelist.xlsx"), which = "Sheet1")
+```
+
+You can read more about Here and here() at [this site](https://github.com/jennybc/here_here) and [this one](https://here.r-lib.org/)  
+
+*Note: by using the Here package and here() function with R projects, it is not necessary to worry about your "working directory", setwd(), or getwd() commands.*
+
+## Joins  
+
+The package dplyr contains functions that are used in the templates for joining ("merging") data frames. 
+There are many options for joins, and it is important that you use the correct one - otherwise you risk losing data unexpectedly.
+
+It is wise to verify any join by inspecting the joined data frames and the resulting data frame. 
+
+There are more reference materials on dyplr join functions [here](https://stat545.com/bit001_dplyr-cheatsheet.html) and [here](https://rpubs.com/williamsurles/293454), and the animations below can be acccessed [here](https://github.com/gadenbuie/tidyexplain).
+
+### Left join  
+
+An example of a left join from the AJS outbreak template occurs in the TODO
+
+![](/images/left-join.gif)
+
+```{r}
+cases <- count(linelist_cleaned, patient_origin) %>%   # cases for each region
+  left_join(population_data_region, by = "patient_origin")    # merge population data
+```  
+
+
+
+![](/images/right-join.gif)
+
+![](/images/full-join.gif)
+
+![](/images/inner-join.gif)
+
+
+
+### The %in% operator  
+
+The operator %in% looks to see if a value is present within a vector. A vector can be created with the function c(), and a variable in a data frame is also a vector. 
+
+In the simple example below, R is asked if the number 4 is present in the vector "numbers":
+
+```{r}
+# Vector is defined
+numbers <- c(4, 10, 5, 365, 12, 0.5, 9)
+
+# Test if 5 is in the vector
+5 %in% numbers
+```
+
+In the templates, %in% can be used when creating the valued "DIED" (when a patient died). The variable DIED is logical (either TRUE or FALSE). It will be TRUE if the value in exit_status is either "DD" or "DOA" - those are the two character values present in the vector. You can add to or change the terms listed in the vector.
+
+```{r eval=FALSE}
+#DIED == TRUE if value in exit_status is "DD" or "DOA"
+linelist_cleaned$DIED <- linelist_cleaned$exit_status %in% c("DD", "DOA"))
+```
+
+You can read more abouth %in% [here](http://www.datasciencemadesimple.com/in-operator-in-r/)
+
+
+### Factors and the forcats() package  
+
+#### Factors
+Factors are a special variable class in which data are stored as integers, but each integer *level* has a corresponding character value that is used when the data are displayed. TODO: Factors are similar to XXXX in Stata.  
+
+TODO EXAMPLE  
+
+You can read more about factors [here](https://www.stat.berkeley.edu/~s133/factors.html). 
+
+#### forcats and dropping factor levels  
+
+If a variable is already a factor, it can be difficult to remove value levels without any observations. These levels will continue to appear in graphs, tables, etc. For example, 
+
+TODO Example  
+
+The package forcats and its function fct_drop() will drop "unusued" levels of a factor, in effect cleaning it of unused levels. See this example:  
+
+TODO follow-up example.
+
+
+
+

@@ -5,35 +5,101 @@ tags: ["wiki"]
 weight: 15
 ---
 
-# Survey Templates
+![MSF Epidemiologist carrying out survey](images/msfepisurvey.jpg?width=30pc)
 
-We currently have three survey templates available in the [sitrep] package:
+**Source**: Charlotte Morris/MSF; Suzanne Moja, 36, from Madrid, Spain is an epidemologist and supervises the team of MSF researchers in Bokoro, Chad. 
 
-1. Vaccination Coverage
-2. Malnutrition
-3. Retrospective Mortality Access to Care
+The survey templates have been developed to match the data that would be collected using [MSF Ethical Review Board pre-approved surveys](https://fieldresearch.msf.org/handle/10144/618942) on: 
 
-You can access these by selecting them from the RStudio RMarkdown template menu:
+* ***Retrospective mortality and access to care***,  
+* ***Vaccination coverage*** and   
+* ***Malnutrition***.   
 
-# Concepts
+All survey templates are available in the [sitrep] package.  
 
-## Explanation of design effect from epiet ras case study: 
+You can access these by selecting them from the RStudio RMarkdown template menu.
 
-A design effect of 1.407 suggests that the variability (variance or the square
-of the standard error) of the estimate under the chosen design is 40.7% larger
-than that of the same-sized simple random sampling. Similarly, a design effect
-of 2.358 suggests that the variability of the estimate allowing for clustering,
-stratification and sampling weights is 135.8% larger than that would come from
-the same sample size if simple random sampling were used.
+# Getting started with Survey templates in R?
 
-Rearranging the formula: `deff=1+(n-1) x rho` ==> `rho=(deff-1)/(n-1)` where
-`deff=2.358` and `n=20`, you can get intraclass correlation coefficient
-`(rho)=0.071`.
+This section (TODO: INSERT LINK TO THE WALK THROUGH ON SURVEY DATA ANALYSIS) offers you a step by step guide on how to use the survey templates to fit your data and run the analysis.
 
-You may use this value of rho in sample size calculations in other similar
-surveys in the future. As mentioned earlier, the rho is the proportion of the
-total variation in the outcome that is between clusters; this measures the
-degree of similarity or correlation between subjects within the same cluster.
-The larger the rho-that is the tendency for subjects within a cluster to be
-similar-the greater the size of the design effect and the larger the additional
-number of subjects required to achieve the same precision.
+# Basic concepts of survey data analysis
+
+This website will not cover the detailed aspects of designing, implementing and analysing a survey in MSF contexts. There are many other training and briefing materials that address this aspect.
+
+We will cover a few crucial concepts which are required for the understanding and use of the templates for your survey analysis.
+
+## Sampling strategy
+There are different ways to sample populations for surveys. The most commonly used in MSF settings are:
+
+1. **Simple random sampling (SRS)**: requires a comprehensive sampling frame (i.e. total list of households inside a refugee camp or 
+GPS based sampling in a known area).
+2. **Cluster based sampling**: most commonly used in combination with sampling villages proportional to population size.
+3. **Stratified samples**: uses either SRS or cluster based sampling but in two different adminstrative areas in order to obtain
+precise prevalence estimates for them.
+
+The templates can accomodate analysis of data from all sampling designs.
+
+## Sample size
+Before implementing a survey you will need to calculate the sample size for that survey.
+
+When calculating a sample size for your survey you take the below parameters into consideration:
+
+* **Estimate of prevalence**
+* **Design effect or intraclass coefficient**
+* **Precision required around your estimate of prevalence**
+
+### Estimate of prevalence
+You will need to use an estimate of the prevalence/coverage of the your main outcome of interest in your to-be-surveyed population (prevalence of malnutrition, measles vaccination coverage etc.). You will use published or grey literature to determine a logical estimate of this parameter.
+
+{{% notice note %}}
+The largest sample size you will need will be that which is calculated using an estimate of prevalence of 50%. The closer to 0% or 100% prevalence you set your estimate, the smaller your sample size will be. Therefore, if you have no idea what your estimate of prevalence is, try and use 50% and the largest possible sample size.
+{{% /notice %}}
+
+### Design effect
+The easiest way to remember the design effect (which we usually refer to as DEFF), is that it is a measure of the variability of the outcome of interest within your clusters (if you are conducting a cluster based survey) and between your clusters. 
+
+The higher the DEFF, the higher the variability between clusters and the higher the probability that subjects within a cluster are similar.
+
+In a well designed survey, you will aim to have a calculated DEFF for your outcome of interest as close as possible to 1. This is because a DEFF of 1 means that your survey design has approached Simple Random Sampling (SRS) for your outcome of interest. SRS is the gold standard in survey design, but often not possible in MSF contexts. In general, in two-stage cluster sampling surveys, we would assume a DEFF of 2.
+
+Mathematically DEFF is calculated as:
+
+> **DEFF=1+(1-n) * rho**
+> where n=sample size of your survey and rho=intraclass coefficient
+
+When analysing your survery data, we often recalculate the DEFF for the main outcomes of interest. This because the DEFF will give you a good estimate on whether the survey design and sampling approach made sense in your survey for your outcome of interest.
+
+### Precision around your estimate
+The precision around your estimate stipulates how close to the your estimate you would like the 95% confidence interval of your prevalence estimate to fall.
+
+> **For example**: you have calculated a 72% measles vaccination coverage in your study population. You would like to ensure that the 
+> 95% confidence interval is narrow (between 70-74%); thus you would set your precision at 2% (2% above and below 72%).
+
+The lower your precision, the higher your sample size calculation will be.
+
+You only use the estimate of the precision when calculating a sample size before your survey. 
+
+## Data collection and databases
+The templates assume that data will have been collected using mobile data collection or will have been entered into an electronic database (Excel, Epi Data, Redcap etc.).
+
+We recommend that you try and establish generic data dictionaries for mobile data collection (through template questionnaires) or through template databases. This will improve the consistency of the naming of your variables and will facilitate the frequent and systematic use of the Survey Templates.
+
+## Survey analysis, the basics
+In the Survey Template Walkthrough (TODO: INSERT LINK), there is a step by step description of how to use the templates for data analysis.
+
+We have designed the templates to run through a similar series of analytical questions in the same order:
+
+1. **Description of your survey** sample and population in that survey sample
+2. **Comparison of your survey sample** to the population breakdown of that area (this will help you understand how biased your data is)
+3. **Calculation of the main outcomes of interest** (including DEFF): 
+
+  * Mortality survey template: crude mortality rate (CMR) and under 5 year mortality rate (U5MR)
+  * Vaccination coverage: vaccination coverage of vaccines of interest
+  * Malnutrition: prevalence of malnutrition in target population through MUAC and Weight for Height Scores  
+4. Calculation of **secondary outcomes of interest**
+
+{{% notice info %}}
+The sampling stratgey **MUST** be considered by the epidemiologist using the templates in order to ensure an appropriate weighting is applied to the analysis.
+{% /notice %}}
+
