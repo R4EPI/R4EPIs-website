@@ -155,8 +155,14 @@ table(linelist_cleaned$patient_facility_type, useNA = &quot;always&quot;)</code>
 </div>
 <div id="recode-values-in-lab-test-variables" class="section level3">
 <h3>Recode values in lab test variables</h3>
-<p>For later steps, we will need many of our testing variables to the values “Positive” and “Negative” instead of “Pos” and “Neg”. We can uncomment and use this helper code to make that change. Note: you may received warnings about unknown levels in some variables - this is generally okay but check the changes visually to be sure <code>View(linelist_cleaned)</code>.</p>
-<p>Tip: One variable (test_hepatitis_e_igm) has values 0 and 1 that we want to change to “Positive” and “Negative”. The fct_record() function expects <em>character</em> RHS inputs (within quotes) - so put “0” and “1” in quotes, as below, and confirm the change.</p>
+<p>For later steps, we will need many of our testing variables to the values “Positive” and “Negative” instead of “Pos” and “Neg”. We can uncomment and use this helper code to make that change. Some notes about this step:</p>
+<ul>
+<li>You may receive warnings about unknown levels in some variables - this is generally okay but check the changes visually to be sure <code>View(linelist_cleaned)</code>.<br />
+</li>
+<li>One variable (test_hepatitis_e_igm) has values 0 and 1 that we want to change to “Positive” and “Negative”. The fct_record() function expects <em>character</em> RHS inputs (within quotes) - so put “0” and “1” in quotes, as below, and confirm the change.<br />
+</li>
+<li>One variable (test_hepatitis_b) has a value recorded as “Weakly pos”. For the purposes of this exercise we re-code this to “Positive”.</li>
+</ul>
 <pre class="r"><code>## sometimes, coding is inconsistent across variables -- for example, &quot;Yes&quot; / &quot;No&quot;
 ## may be coded as Y, y, yes, 1 / N, n, no, 0. You can change them all at once!
 ## Create a list of the variables you want to change, and run the following.
@@ -172,6 +178,7 @@ change_test_vars &lt;- c(&quot;hep_e_rdt&quot;, &quot;hep_c_rdt&quot;, &quot;hep
        Positive = &quot;pos&quot;,
        Positive = &quot;yes&quot;,
        Positive = &quot;Yes&quot;,
+       Positive = &quot;Weakly pos&quot;,
        Positive = &quot;1&quot;,
        Negative = &quot;Neg&quot;,
        Negative = &quot;neg&quot;,

@@ -270,9 +270,11 @@ table(linelist_cleaned$patient_facility_type, useNA = "always")
 
 ### Recode values in lab test variables  
 
-For later steps, we will need many of our testing variables to the values "Positive" and "Negative" instead of "Pos" and "Neg". We can uncomment and use this helper code to make that change. Note: you may received warnings about unknown levels in some variables - this is generally okay but check the changes visually to be sure `View(linelist_cleaned)`.  
+For later steps, we will need many of our testing variables to the values "Positive" and "Negative" instead of "Pos" and "Neg". We can uncomment and use this helper code to make that change. Some notes about this step:  
 
-Tip: One variable (test_hepatitis_e_igm) has values 0 and 1 that we want to change to "Positive" and "Negative". The fct_record() function expects *character* RHS inputs (within quotes) - so put "0" and "1" in quotes, as below, and confirm the change.
+* You may receive warnings about unknown levels in some variables - this is generally okay but check the changes visually to be sure `View(linelist_cleaned)`.  
+* One variable (test_hepatitis_e_igm) has values 0 and 1 that we want to change to "Positive" and "Negative". The fct_record() function expects *character* RHS inputs (within quotes) - so put "0" and "1" in quotes, as below, and confirm the change.  
+* One variable (test_hepatitis_b) has a value recorded as "Weakly pos". For the purposes of this exercise we re-code this to "Positive".
 
 ```{r, warning=FALSE}
 ## sometimes, coding is inconsistent across variables -- for example, "Yes" / "No"
@@ -290,6 +292,7 @@ change_test_vars <- c("hep_e_rdt", "hep_c_rdt", "hep_b_rdt", "test_hepatitis_a",
        Positive = "pos",
        Positive = "yes",
        Positive = "Yes",
+       Positive = "Weakly pos",
        Positive = "1",
        Negative = "Neg",
        Negative = "neg",

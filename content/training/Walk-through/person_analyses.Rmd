@@ -78,7 +78,6 @@ obs_end <- readRDS("data/obs_end.rds")
 
 
 
-
 TODO [general description of person section]
 
 ### Demographic Tables:
@@ -90,7 +89,7 @@ The first demographic table presents patients by their age group (the table's ro
 * The rename() function renames the default column "value" as "Age Group"  
 * The rename_redundant() function replaces any column name that has proportion with "%"  
 * The augment_redundant() command replaces any column name with n with " cases (n)"  
-* The kable() command completes the table, in this case with two digits after each decimal
+* The kable() command completes the table, in this case with one digit after each decimal
 
 
 ```{r describe_by_age_group_and_def}
@@ -102,7 +101,7 @@ tab_linelist(linelist_cleaned,
   rename("Age group" = value) %>%
   rename_redundant("%" = proportion) %>%
   augment_redundant(" cases (n)" = " n$") %>%
-  kable(digits = 2)
+  kable(digits = 1)
 ```
 
 You can change the argument strata = to refer to any number of variables (in this next example, sex). To show proportions of the total population of observations, add the argument prop_total specified as TRUE, as below. 
@@ -115,7 +114,7 @@ tab_linelist(linelist_cleaned,
   rename("Age group" = value) %>%
 #  rename_redundant("%" = proportion) %>%
   augment_redundant(" cases (n)" = " n$") %>%
-  kable(digits = 2)
+  kable(digits = 1)
 ```
 
 You can also choose to exclude or edit the **in-line code** that gives a count of the missing cases by sex and age_group.  
@@ -184,7 +183,7 @@ tab_linelist(linelist_cleaned, SYMPTOMS, keep = "Oui") %>%
   # rename accordingly
   rename_redundant("%" = proportion) %>%
   augment_redundant(" (n)" = " n$") %>%
-  kable(digits = 2)
+  kable(digits = 1)
 ```
 
 The code for the lab table is very similar, but has this difference:  
@@ -203,7 +202,7 @@ tab_linelist(linelist_cleaned, LABS,
   rename("Lab test" = variable) %>%
   rename_redundant("%" = proportion) %>%
   augment_redundant(" (n)" = " n$") %>%
-  kable(digits = 2)
+  kable(digits = 1)
 ```
 
 ## Case Fatality Ratio (CFR)
@@ -227,7 +226,7 @@ overall_cfr <- linelist_cleaned %>%
          "Cases" = population,
          "CFR (%)" = cfr,
          "95%CI" = ci)
-  knitr::kable(overall_cfr, digits = 2)         # print nicely with 2 digits
+  knitr::kable(overall_cfr, digits = 1)         # print nicely with 1 decimal digit
 ```
 
 The next code adds arguments to case_fatality_rate_df() such as `group = sex` (which stratified the CFR by sex), and `add_total = TRUE` (which makes a total row across the sex groups).  
@@ -242,7 +241,7 @@ linelist_cleaned %>%
          "Cases" = population, 
          "CFR (%)" = cfr, 
          "95%CI" = ci) %>% 
-  knitr::kable(digits = 2)
+  knitr::kable(digits = 1)
 ```
 
 When creating a table of CFR by age groups, one additional step, using the function complete() is required to ensure that all age_group levels are shown even if they have no observations.  
@@ -262,7 +261,7 @@ linelist_cleaned %>%
          "Cases" = population, 
          "CFR (%)" = cfr, 
          "95%CI" = ci) %>% 
-  knitr::kable(digits = 2)
+  knitr::kable(digits = 1)
 ```
 
 
@@ -279,7 +278,7 @@ The commented code below examines **CFR by case definition**. Note that this is 
           "Cases" = population, 
           "CFR (%)" = cfr, 
           "95%CI" = ci) %>% 
-   knitr::kable(digits = 2)
+   knitr::kable(digits = 1)
 ```
 
 ## Attack Rate
@@ -312,7 +311,7 @@ ar %>%
          "AR (per 10,000)" = ar, 
          "95%CI" = ci) %>% 
   select(-Population) %>% # drop the population column as it is not changing
-  knitr::kable(digits = 2, align = "r")
+  knitr::kable(digits = 1, align = "r")
 ```
 
 We are unable to calculate the attack rate by age group, because we do not have population counts for each age group.
