@@ -6,7 +6,6 @@ weight: 13
 
 
 
-
 ```{r setup, include=FALSE, results='hide', message=FALSE, warning=FALSE}
 # hide all code chunks in the output, but show errors
 knitr::opts_chunk$set(echo = TRUE,       # hide all code chunks in output
@@ -74,6 +73,8 @@ obs_start <- readRDS("data/obs_start.rds")
 obs_end <- readRDS("data/obs_end.rds")
 
 ```
+
+
 
 
 TODO: Introduction to time analyses...  

@@ -316,15 +316,11 @@ tab_linelist(linelist_cleaned, SYMPTOMS, keep = &quot;Oui&quot;) %&gt;%
 </tr>
 </tbody>
 </table>
-<p>The code for the lab table is very similar, but has these differences:</p>
+<p>The code for the lab table is very similar, but has this difference:</p>
 <ul>
-<li>TODO<br />
-</li>
-<li>TODO<br />
-</li>
-<li>TODO</li>
+<li>In the initial tab_linelist() command, <code>transpose = &quot;value&quot;</code> is set because the values in the lab data are important in-and-of themselves (e.g. IgM+/IgG-, etc.) - i.e. the values should become column headers.</li>
 </ul>
-<p>TODO: Need to fix in data exploration/cleaning phase the lab values (pos, Pos, weakly pos, etc.)</p>
+<p><em>Note: This table may be large and unwieldy at first, until you clean your data. The step in data cleaning where we converted 0, 1, “yes”, “pos”, “neg”, etc. to standardized “Positive” and “Negative” was crucial towards making this table readable. Once kitted into a word document, you will likely need to adjust the font size, column widths, etc.</em></p>
 <pre class="r"><code># get counts and proportions for all variables named in LABS
 tab_linelist(linelist_cleaned, LABS, 
              transpose = &quot;value&quot;) %&gt;% 
@@ -339,19 +335,11 @@ tab_linelist(linelist_cleaned, LABS,
 <thead>
 <tr class="header">
 <th align="left">Lab test</th>
-<th align="right">neg (n)</th>
-<th align="right">%</th>
 <th align="right">Negative (n)</th>
-<th align="right">%</th>
-<th align="right">pos (n)</th>
 <th align="right">%</th>
 <th align="right">Positive (n)</th>
 <th align="right">%</th>
 <th align="right">Weakly pos (n)</th>
-<th align="right">%</th>
-<th align="right">0 (n)</th>
-<th align="right">%</th>
-<th align="right">1 (n)</th>
 <th align="right">%</th>
 <th align="right">IgG-/IgM- (n)</th>
 <th align="right">%</th>
@@ -362,18 +350,10 @@ tab_linelist(linelist_cleaned, LABS,
 <tbody>
 <tr class="odd">
 <td align="left">Hep b rdt</td>
-<td align="right">1</td>
-<td align="right">0.41</td>
-<td align="right">221</td>
-<td align="right">90.95</td>
-<td align="right">2</td>
-<td align="right">0.82</td>
-<td align="right">19</td>
-<td align="right">7.82</td>
-<td align="right">-</td>
-<td align="right">-</td>
-<td align="right">-</td>
-<td align="right">-</td>
+<td align="right">222</td>
+<td align="right">91.36</td>
+<td align="right">21</td>
+<td align="right">8.64</td>
 <td align="right">-</td>
 <td align="right">-</td>
 <td align="right">-</td>
@@ -383,18 +363,10 @@ tab_linelist(linelist_cleaned, LABS,
 </tr>
 <tr class="even">
 <td align="left">Hep c rdt</td>
-<td align="right">1</td>
-<td align="right">0.41</td>
-<td align="right">239</td>
-<td align="right">98.76</td>
-<td align="right">-</td>
-<td align="right">-</td>
+<td align="right">240</td>
+<td align="right">99.17</td>
 <td align="right">2</td>
 <td align="right">0.83</td>
-<td align="right">-</td>
-<td align="right">-</td>
-<td align="right">-</td>
-<td align="right">-</td>
 <td align="right">-</td>
 <td align="right">-</td>
 <td align="right">-</td>
@@ -404,18 +376,10 @@ tab_linelist(linelist_cleaned, LABS,
 </tr>
 <tr class="odd">
 <td align="left">Hep e rdt</td>
-<td align="right">-</td>
-<td align="right">-</td>
 <td align="right">150</td>
 <td align="right">60.00</td>
-<td align="right">-</td>
-<td align="right">-</td>
 <td align="right">100</td>
 <td align="right">40.00</td>
-<td align="right">-</td>
-<td align="right">-</td>
-<td align="right">-</td>
-<td align="right">-</td>
 <td align="right">-</td>
 <td align="right">-</td>
 <td align="right">-</td>
@@ -425,16 +389,8 @@ tab_linelist(linelist_cleaned, LABS,
 </tr>
 <tr class="even">
 <td align="left">Test hepatitis a</td>
-<td align="right">-</td>
-<td align="right">-</td>
 <td align="right">23</td>
 <td align="right">100.00</td>
-<td align="right">-</td>
-<td align="right">-</td>
-<td align="right">-</td>
-<td align="right">-</td>
-<td align="right">-</td>
-<td align="right">-</td>
 <td align="right">-</td>
 <td align="right">-</td>
 <td align="right">-</td>
@@ -446,12 +402,8 @@ tab_linelist(linelist_cleaned, LABS,
 </tr>
 <tr class="odd">
 <td align="left">Test hepatitis b</td>
-<td align="right">-</td>
-<td align="right">-</td>
 <td align="right">22</td>
 <td align="right">95.65</td>
-<td align="right">-</td>
-<td align="right">-</td>
 <td align="right">-</td>
 <td align="right">-</td>
 <td align="right">1</td>
@@ -460,23 +412,11 @@ tab_linelist(linelist_cleaned, LABS,
 <td align="right">-</td>
 <td align="right">-</td>
 <td align="right">-</td>
-<td align="right">-</td>
-<td align="right">-</td>
-<td align="right">-</td>
-<td align="right">-</td>
 </tr>
 <tr class="even">
 <td align="left">Test hepatitis c</td>
-<td align="right">-</td>
-<td align="right">-</td>
 <td align="right">23</td>
 <td align="right">100.00</td>
-<td align="right">-</td>
-<td align="right">-</td>
-<td align="right">-</td>
-<td align="right">-</td>
-<td align="right">-</td>
-<td align="right">-</td>
 <td align="right">-</td>
 <td align="right">-</td>
 <td align="right">-</td>
@@ -488,20 +428,12 @@ tab_linelist(linelist_cleaned, LABS,
 </tr>
 <tr class="odd">
 <td align="left">Test hepatitis e igm</td>
-<td align="right">-</td>
-<td align="right">-</td>
-<td align="right">-</td>
-<td align="right">-</td>
-<td align="right">-</td>
-<td align="right">-</td>
-<td align="right">-</td>
-<td align="right">-</td>
-<td align="right">-</td>
-<td align="right">-</td>
 <td align="right">21</td>
 <td align="right">33.87</td>
 <td align="right">41</td>
 <td align="right">66.13</td>
+<td align="right">-</td>
+<td align="right">-</td>
 <td align="right">-</td>
 <td align="right">-</td>
 <td align="right">-</td>
@@ -511,18 +443,10 @@ tab_linelist(linelist_cleaned, LABS,
 <td align="left">Test hepatitis e genotype</td>
 <td align="right">-</td>
 <td align="right">-</td>
-<td align="right">-</td>
-<td align="right">-</td>
-<td align="right">-</td>
-<td align="right">-</td>
-<td align="right">-</td>
-<td align="right">-</td>
-<td align="right">-</td>
-<td align="right">-</td>
-<td align="right">-</td>
-<td align="right">-</td>
 <td align="right">2</td>
 <td align="right">100.00</td>
+<td align="right">-</td>
+<td align="right">-</td>
 <td align="right">-</td>
 <td align="right">-</td>
 <td align="right">-</td>
@@ -530,18 +454,10 @@ tab_linelist(linelist_cleaned, LABS,
 </tr>
 <tr class="odd">
 <td align="left">Test hepatitis e virus</td>
-<td align="right">-</td>
-<td align="right">-</td>
 <td align="right">7</td>
 <td align="right">11.29</td>
-<td align="right">-</td>
-<td align="right">-</td>
 <td align="right">1</td>
 <td align="right">1.61</td>
-<td align="right">-</td>
-<td align="right">-</td>
-<td align="right">-</td>
-<td align="right">-</td>
 <td align="right">-</td>
 <td align="right">-</td>
 <td align="right">9</td>
@@ -551,18 +467,10 @@ tab_linelist(linelist_cleaned, LABS,
 </tr>
 <tr class="even">
 <td align="left">Malaria rdt at admission</td>
-<td align="right">-</td>
-<td align="right">-</td>
 <td align="right">161</td>
 <td align="right">63.64</td>
-<td align="right">-</td>
-<td align="right">-</td>
 <td align="right">92</td>
 <td align="right">36.36</td>
-<td align="right">-</td>
-<td align="right">-</td>
-<td align="right">-</td>
-<td align="right">-</td>
 <td align="right">-</td>
 <td align="right">-</td>
 <td align="right">-</td>
@@ -572,14 +480,6 @@ tab_linelist(linelist_cleaned, LABS,
 </tr>
 <tr class="odd">
 <td align="left">Dengue</td>
-<td align="right">-</td>
-<td align="right">-</td>
-<td align="right">-</td>
-<td align="right">-</td>
-<td align="right">-</td>
-<td align="right">-</td>
-<td align="right">-</td>
-<td align="right">-</td>
 <td align="right">-</td>
 <td align="right">-</td>
 <td align="right">-</td>
@@ -599,14 +499,6 @@ tab_linelist(linelist_cleaned, LABS,
 <td align="right">-</td>
 <td align="right">-</td>
 <td align="right">-</td>
-<td align="right">-</td>
-<td align="right">-</td>
-<td align="right">-</td>
-<td align="right">-</td>
-<td align="right">-</td>
-<td align="right">-</td>
-<td align="right">-</td>
-<td align="right">-</td>
 <td align="right">19</td>
 <td align="right">79.17</td>
 <td align="right">-</td>
@@ -620,14 +512,6 @@ tab_linelist(linelist_cleaned, LABS,
 <td align="right">-</td>
 <td align="right">-</td>
 <td align="right">-</td>
-<td align="right">-</td>
-<td align="right">-</td>
-<td align="right">-</td>
-<td align="right">-</td>
-<td align="right">-</td>
-<td align="right">-</td>
-<td align="right">-</td>
-<td align="right">-</td>
 <td align="right">21</td>
 <td align="right">87.50</td>
 <td align="right">-</td>
@@ -635,16 +519,8 @@ tab_linelist(linelist_cleaned, LABS,
 </tr>
 <tr class="even">
 <td align="left">Other arthropod transmitted virus</td>
-<td align="right">-</td>
-<td align="right">-</td>
 <td align="right">24</td>
 <td align="right">100.00</td>
-<td align="right">-</td>
-<td align="right">-</td>
-<td align="right">-</td>
-<td align="right">-</td>
-<td align="right">-</td>
-<td align="right">-</td>
 <td align="right">-</td>
 <td align="right">-</td>
 <td align="right">-</td>

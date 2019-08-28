@@ -156,23 +156,28 @@ table(linelist_cleaned$patient_facility_type, useNA = &quot;always&quot;)</code>
 <div id="recode-values-in-lab-test-variables" class="section level3">
 <h3>Recode values in lab test variables</h3>
 <p>For later steps, we will need many of our testing variables to the values “Positive” and “Negative” instead of “Pos” and “Neg”. We can uncomment and use this helper code to make that change. Note: you may received warnings about unknown levels in some variables - this is generally okay but check the changes visually to be sure <code>View(linelist_cleaned)</code>.</p>
+<p>Tip: One variable (test_hepatitis_e_igm) has values 0 and 1 that we want to change to “Positive” and “Negative”. The fct_record() function expects <em>character</em> RHS inputs (within quotes) - so put “0” and “1” in quotes, as below, and confirm the change.</p>
 <pre class="r"><code>## sometimes, coding is inconsistent across variables -- for example, &quot;Yes&quot; / &quot;No&quot;
 ## may be coded as Y, y, yes, 1 / N, n, no, 0. You can change them all at once!
 ## Create a list of the variables you want to change, and run the following.
 ## You may need to edit this code if options are different in your data.
 
 # # create list of variables
-change_test_vars &lt;- c(&quot;hep_e_rdt&quot;, &quot;hep_c_rdt&quot;, &quot;hep_b_rdt&quot;, &quot;test_hepatitis_a&quot;, &quot;test_hepatitis_b&quot;, &quot;test_hepatitis_c&quot;, &quot;malaria_rdt_at_admission&quot;, &quot;test_hepatitis_e_igm&quot;, &quot;test_hepatitis_e_virus&quot;, &quot;hevpcr&quot;, &quot;other_arthropod_transmitted_virus&quot;)
+change_test_vars &lt;- c(&quot;hep_e_rdt&quot;, &quot;hep_c_rdt&quot;, &quot;hep_b_rdt&quot;, &quot;test_hepatitis_a&quot;, &quot;test_hepatitis_b&quot;, &quot;test_hepatitis_c&quot;, &quot;malaria_rdt_at_admission&quot;, &quot;test_hepatitis_e_genotype&quot;, &quot;test_hepatitis_e_igm&quot;, &quot;test_hepatitis_e_virus&quot;, &quot;hevpcr&quot;, &quot;other_arthropod_transmitted_virus&quot;)
 
 # standardize options
   linelist_cleaned &lt;- linelist_cleaned %&gt;%  
        mutate_at(vars(change_test_vars), forcats::fct_recode,   
        Positive = &quot;Pos&quot;,
+       Positive = &quot;pos&quot;,
        Positive = &quot;yes&quot;,
        Positive = &quot;Yes&quot;,
+       Positive = &quot;1&quot;,
        Negative = &quot;Neg&quot;,
+       Negative = &quot;neg&quot;,
        Negative = &quot;no&quot;,
-       Negative = &quot;No&quot;
+       Negative = &quot;No&quot;,
+       Negative = &quot;0&quot;
      )  </code></pre>
 </div>
 <div id="other-categorical-variables" class="section level3">
@@ -200,16 +205,12 @@ linelist_cleaned &lt;- linelist_cleaned %&gt;%
 </div>
 <div id="create-lists-of-variables" class="section level3">
 <h3>Create lists of variables</h3>
-<p>These variables names are stored in vectors that are created using the function c(). These vectors of names will be referenced in later code chunks. This code creates two vectors - one for symptoms variables and one for laboratory testing variables.</p>
-<p><strong>Some of these variables do not apply to our Am Timan data and must be removed from the list or commented out (such as convulsions and history of fever).</strong> If non-existant variables are left in the list it will cause errors in later code chunks.</p>
+<p>These variables names are stored in vectors that are created using the function c(). These vectors of names will be referenced in later code chunks. This way if you want to run the same function over these variables you can simply use the named vector rather than typing out each variable individually.</p>
+<p>The default template code creates two vectors - one for symptoms variables (SYMPTOMS) and one for laboratory testing variables (LABS). However, <em>we can see that there are two rather different type of lab variables</em>: those with Positive/Negative values, and those with IgG and IgM results. To make our table of lab results more clean, we split the lab variables into these two groups.</p>
+<p><strong>Some variables do not apply to our Am Timan data and must be removed from the list or commented out (such as convulsions and history of fever).</strong> If non-existant variables are left in the list it will cause errors in later code chunks.</p>
 <pre class="r"><code># vectors of variable names ----------------------------------------------------
-
-## You may want to group the names of several variables that have the same possible 
-## values in to a named vector. 
-## This way if you want to run the same function over these variables you can 
-## simply use the named vector rather than typing out each variable individually
-
 # create a grouping of all symptoms 
+
 SYMPTOMS &lt;- c(&quot;generalized_itch&quot;, 
 #             &quot;history_of_fever&quot;, 
               &quot;fever&quot;,
@@ -223,9 +224,8 @@ SYMPTOMS &lt;- c(&quot;generalized_itch&quot;,
               &quot;mental_state&quot;,
 #              &quot;convulsions&quot;,
               &quot;other_symptoms&quot;  
-              )
-
-# create a grouping of all lab tests 
+              )</code></pre>
+<pre class="r"><code># create a grouping of all lab tests 
 LABS &lt;- c(&quot;hep_b_rdt&quot;, 
           &quot;hep_c_rdt&quot;,
           &quot;hep_e_rdt&quot;,

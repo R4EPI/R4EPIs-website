@@ -41,3 +41,4 @@ public/*
 # Editor files
 ^.*.swp # vim
 *~     # emacs
+.Rproj.user

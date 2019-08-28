@@ -175,7 +175,7 @@ This next code also uses the tab_linelist() function to **create descriptive tab
 * Also in tab_linelist(), the argument `keep = ` must represent the character value to be counted for the the table. As these Am Timan variables are still in French, we change `keep = "Yes"` to `keep = "Oui"`.  
 * The mutate() function is aesthetically changing variable names with underscores to spaces.   
 
-```{r describe_by_symptoms, warning=FALSE}
+```{r describe_by_symptoms, warning=FALSE, message=FALSE}
 # get counts and proportions for all variables named in SYMPTOMS
 tab_linelist(linelist_cleaned, SYMPTOMS, keep = "Oui") %>% 
   select(-value) %>%
@@ -187,14 +187,13 @@ tab_linelist(linelist_cleaned, SYMPTOMS, keep = "Oui") %>%
   kable(digits = 2)
 ```
 
-The code for the lab table is very similar, but has these differences:  
+The code for the lab table is very similar, but has this difference:  
 
-* TODO  
-* TODO  
-* TODO  
+* In the initial tab_linelist() command, `transpose = "value"` is set because the values in the lab data are important in-and-of themselves (e.g. IgM+/IgG-, etc.) - i.e. the values should become column headers.   
 
-TODO: Need to fix in data exploration/cleaning phase the lab values (pos, Pos, weakly pos, etc.)
-```{r describe_by_labs, warning=FALSE}
+*Note: This table may be large and unwieldy at first, until you clean your data. The step in data cleaning where we converted 0, 1, "yes", "pos", "neg", etc. to standardized "Positive" and "Negative" was crucial towards making this table readable. Once kitted into a word document, you will likely need to adjust the font size, column widths, etc.*
+
+```{r describe_by_labs, warning=FALSE, message=FALSE}
 # get counts and proportions for all variables named in LABS
 tab_linelist(linelist_cleaned, LABS, 
              transpose = "value") %>% 
