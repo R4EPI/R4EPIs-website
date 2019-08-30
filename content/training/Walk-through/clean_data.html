@@ -277,6 +277,8 @@ obs_end   &lt;- week2date(sprintf(&quot;%s-7&quot;, reporting_week))</code></pre
 <div id="export-if-desired" class="section level3">
 <h3>Export if desired</h3>
 <p>And finally, if desired you can <strong>export the cleaned dataset</strong> for other purposes.</p>
+<p>The command export() is also from the package “rio”. First, the object that you want to export is named (linelist_cleaned).</p>
+<p>Then, the function paste0() created the name for the new file by combining “AmTiman_linelist_cleaned_” with the current date and finally the extention. Don’t be confused - it is equivalen of writing rio::export(linelist_cleaned, “AmTiman_linelist_cleaned_2019-08-24.xlsx”), but using paste0() and Sys.Date() means the current date will always be used.</p>
 <pre class="r"><code>## OPTIONAL: save your cleaned dataset! 
 ## put the current date in the name so you know!
 rio::export(linelist_cleaned, paste0(&quot;AmTiman_linelist_cleaned_&quot;, Sys.Date(), &quot;.xlsx&quot;))</code></pre>

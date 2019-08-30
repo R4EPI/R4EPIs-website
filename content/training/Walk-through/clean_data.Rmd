@@ -421,7 +421,11 @@ obs_end   <- week2date(sprintf("%s-7", reporting_week))
 
 ### Export if desired  
 
-And finally, if desired you can **export the cleaned dataset** for other purposes.
+And finally, if desired you can **export the cleaned dataset** for other purposes.  
+
+The command export() is also from the package "rio". First, the object that you want to export is named (linelist_cleaned).  
+
+Then, the function paste0() created the name for the new file by combining "AmTiman_linelist_cleaned_" with the current date and finally the extention. Don't be confused - it is equivalen of writing rio::export(linelist_cleaned, "AmTiman_linelist_cleaned_2019-08-24.xlsx"), but using paste0() and Sys.Date() means the current date will always be used.
 
 ```{r save_cleaned_data, eval = FALSE}
 ## OPTIONAL: save your cleaned dataset! 
