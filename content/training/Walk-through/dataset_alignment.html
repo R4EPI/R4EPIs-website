@@ -7,9 +7,7 @@ weight: 8
 
 
 
-<div id="align-the-dataset-with-the-data-dictionary" class="section level2">
-<h2>Align the dataset with the data dictionary</h2>
-<p>When using a non-standardized dataset, the variable names and values must be aligned with the data dictionary. <strong>This process can take some time</strong> and requires looking back-and-forth between your dataset, RStudio, and the MSF data dictionary. In this example, here are the steps taken:</p>
+<p>When using a non-standardized dataset, the variable names and values must be aligned with the data dictionary. This is because later parts of the template expect certain variable names and values. <strong>This process can take some time</strong> and requires looking back-and-forth between your dataset, RStudio, and the MSF data dictionary. In this example, here are the steps taken:</p>
 <div id="review-the-msf-data-dictionary" class="section level3">
 <h3>Review the MSF data dictionary</h3>
 <p>Uncomment and run this command, found in the read_nonDHIS_data chunk, to view the MSF data dictionary for the disease (“AJS” in this example).</p>
@@ -56,5 +54,77 @@ colnames(linelist_cleaned) &lt;- cleaned_colnames</code></pre>
 then you likely forgot to comment (#) the line for a variable you did not use.</p>
 <p>And now you can see the result:</p>
 <p><img src="/images/AJS_Rename_Variables_Proof.png" alt="rename variables proof", width = "100%"></p>
-</div>
+<p>Below are the variable assignments used in this example, to reference when building your template. You can copy the entire code chunk using the copy icon in the top-right corner.</p>
+<pre class="r"><code>## Below are the column assignments used in this case study example
+
+linelist_cleaned &lt;- rename(linelist_cleaned,
+#  event_file_type                   =   , # TEXT                # (Not in dataset)
+  case_number                       =   hevid, # TEXT
+  date_of_consultation_admission    =   dtmedical, # DATE
+  detected_by                       =   referredby, # TEXT
+  patient_facility_type             =   hospitalised, # TEXT
+#  msf_involvement                   =   , # TEXT                # (Not in dataset)
+  age_years                         =   age, # INTEGER_POSITIVE
+#  age_months                        =   , # INTEGER_POSITIVE   # (Dataset only has years)
+#  age_days                          =   , # INTEGER_POSITIVE   # (Dataset only has years)
+  sex                               =   sex, # TEXT
+  patient_origin                    =   quartier, # ORG UNIT
+#  residential_status_brief          =   , # TEXT               # (Not in dataset)
+#  arrival_date_in_area_if_3m        =   , # DATE               # (Not in dataset)
+#  ever_received_hepatitis_e_vaccine =   , # TEXT               # (Not in dataset)
+#  date_of_last_vaccination          =   , # DATE               # (Not in dataset)
+  date_of_onset                     =   dtjaundice, # DATE
+#  history_of_fever                  =   , # BOOLEAN            # (Not in dataset)
+  fever                             =   medfever, # BOOLEAN
+  nausea_anorexia                   =   mednausea, # BOOLEAN
+  vomiting                          =   medvomit, # BOOLEAN
+  epigastric_pain_heartburn         =   medepigastric, # BOOLEAN
+  generalized_itch                  =   meditching, # BOOLEAN
+  headache                          =   medheadache, # BOOLEAN
+  joint_pains                       =   medarthralgia, # BOOLEAN
+  diarrhoea                         =   meddiar, # BOOLEAN
+  bleeding                          =   medbleeding, # BOOLEAN
+#  convulsions                       =   , # BOOLEAN            # (Not in dataset)
+  mental_state                      =   medmental, # BOOLEAN    # !(Needs value cleaning)
+  other_symptoms                    =   medother, # BOOLEAN
+  other_cases_in_hh                 =   medothhhajs, # BOOLEAN
+#  traditional_medicines             =   , # BOOLEAN            # (Not in dataset)
+#  traditional_medicine_details      =   , # TEXT               # (Not in dataset)
+#  recent_travel                     =   , # BOOLEAN            # (Not in dataset)
+#  water_source                      =   , # TEXT               # !(Split across many variables)
+  malaria_rdt_at_admission          =   medmalrdt, # TEXT
+  hep_b_rdt                         =   medhepb, # TEXT
+  hep_c_rdt                         =   medhepc, # TEXT
+  hep_e_rdt                         =   medhevrdt, # TEXT
+#  dengue_rdt                        =   , # TEXT               # (Not in dataset)
+  date_lab_sample_taken             =   medblooddt, # DATE
+  test_hepatitis_a                  =   medhavelisa, # TEXT
+  test_hepatitis_b                  =   medhbvelisa, # TEXT
+  test_hepatitis_c                  =   medhcvelisa, # TEXT
+  test_hepatitis_e_virus            =   medhevelisa, # TEXT
+  test_hepatitis_e_igm              =   hevrecent, # TEXT
+#  test_hepatitis_e_igg              =   , # TEXT               # (In same variable as elisa result)
+  test_hepatitis_e_genotype         =   hevgenotype, # TEXT
+#  malaria_blood_film                =   , # TEXT               # (Not in dataset)
+  dengue                            =   dengue, # TEXT
+  yellow_fever                      =   yf, # TEXT
+#  lassa_fever                       =   , # TEXT               # (Not in dataset)
+#  typhoid                           =   , # TEXT               # (Not in dataset)
+  chikungunya_onyongnyong           =   chik, # TEXT
+#  ebola_marburg                     =   , # TEXT               # (Not in dataset)
+  other_arthropod_transmitted_virus =   arbovpcr, # TEXT
+#  other_pathogen                    =   , # TEXT               # (Not in dataset)
+#  lab_comments                      =   , # TEXT               # (Not in dataset)
+  pregnant                          =   medpreg, # TEXT
+  trimester                         =   medpregtri, # TEXT
+#  foetus_alive_at_admission         =   , # TEXT               # (Not in dataset)
+#  delivery_event                    =   , # TRUE_ONLY          # (Not in dataset)
+  pregnancy_outcome_at_exit         =   medppoutcome, # TEXT
+  exit_status                       =   outcomehp, # TEXT
+#  date_of_exit                      =   , # DATE               # (Not in dataset)
+#  time_to_death                     =   , # TEXT               # (Not in dataset)
+  treatment_facility_site           =   hpid, # TEXT
+#  treatment_location                =   , # ORGANISATION_UNIT  # (Not in dataset)
+  patient_origin_free_text          =   block # TEXT
+)</code></pre>
 </div>

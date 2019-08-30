@@ -23,13 +23,13 @@ linelist_raw &lt;- rio::import(&quot;AJS_AmTiman.xlsx&quot;, which = &quot;linel
 </div>
 <div id="drop-ineligible-observations" class="section level3">
 <h3>Drop ineligible observations</h3>
-<p>The next code item in the script drops observations with missing case_number or date_of_consultation_admission. Because the Am Timan dataset contains observations for patients seen in the community and at the hospital, these criteria may not be relevant. We can check and see that of the 1447 observations, there are 0 missing case_number or dateentry, but 616 observations missing date_of_admission. These 616 community-identified cases are still of interest for our report, so we will not drop them.</p>
-<pre class="r"><code># Find the number of observations missing date_of_admission
-nrow(linelist_cleaned %&gt;% filter(is.na(date_of_admission))) </code></pre>
+<p>The next code item in the script drops observations with missing case_number or date_of_consultation_admission. Because the Am Timan dataset contains observations for patients seen in the community and at the hospital, these criteria may not be relevant. We can check and see that of the 1447 observations, there are 0 missing case_number or dateentry, but 616 observations missing date_of_consultation_admission. These 616 community-identified cases are still of interest for our report, so we will not drop them.</p>
+<pre class="r"><code># Find the number of observations missing date_of_consultation_admission
+nrow(linelist_cleaned %&gt;% filter(is.na(date_of_consultation_admission))) </code></pre>
 </div>
 <div id="convert-and-clean-date-variables" class="section level3">
 <h3>Convert and clean date variables</h3>
-<p>In linelist_cleaned there are seven variables containing dates (dateentry, epiquestdate, date_of_admission, date_of_onset, date_lab_sample_taken, dthospitalisation, dtdeath).</p>
+<p>In linelist_cleaned there are seven variables containing dates (dateentry, epiquestdate, date_of_consultation_admission, date_of_onset, date_lab_sample_taken, dthospitalisation, dtdeath).</p>
 <p>Because the Am Timan dataset contains date variables not found in the data dictionary, we will ignore and comment out the first code of the Date variables chunk (these commands convert only the date variables known to the data dictionary).</p>
 <p>Instead, we uncomment and <strong>use the commands applicable to when a dataset does not align with the data dictionary</strong>. You may see messages warning that a few dates are not in the correct timeframe - this is ok and these dates will be addressed in the next step.</p>
 <pre class="r"><code># Use this is your dataset aligns with the data dictionary
