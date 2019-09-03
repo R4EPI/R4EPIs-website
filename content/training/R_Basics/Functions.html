@@ -9,27 +9,24 @@ weight: 8
 <div id="simple-functions" class="section level3">
 <h3>Simple Functions</h3>
 <p>Most tasks in R are performed through functions. <strong>A function is like a machine that receives inputs, does some action with those inputs, and produces an output.</strong> What the output is depends on the function.</p>
-<p><strong>Functions typically operate upon some object placed within the function’s parentheses</strong>. For example, when the function summary() is used on a variable of class numeric, the output is a summary of the variable’s numeric and missing values.</p>
+<p><strong>Functions typically operate upon some object placed within the function’s parentheses</strong>. For example, when the function <code>summary()</code> is used on a variable of class numeric, the output is a summary of the variable’s numeric and missing values.</p>
 <pre class="r"><code>summary(linelist_raw$age_years)</code></pre>
 <pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA&#39;s 
-##    3.00   30.00   57.00   60.62   95.75  120.00      10</code></pre>
+##    3.00   32.00   63.00   62.58   92.00  120.00       8</code></pre>
 <p>On installation, R contains “base” functions that perform common tasks. Specialized functions have been created by R users, verified by the R community, and can be downloaded within “packages” to your RStudio for use. One of the more challenging aspects of R is that there are often many functions to choose from to complete a given task.</p>
 </div>
 <div id="functions-with-multiple-arguments" class="section level3">
 <h3>Functions with Multiple Arguments</h3>
 <p>Functions often ask for several inputs. <strong>Each piece of information needed is called an argument</strong>. Some arguments are required for the function to work correctly, some are optional. Arguments can take character, numeric, logical (TRUE/FALSE), and other inputs. Optional arguments have default settings if they are not specified. <strong>Arguments are located within the parentheses of the function, usually separated by commas</strong>.</p>
-<div class="figure">
-<img src="/images/Function_Bread_Example.png" />
-
-</div>
+<p><img src="/images/Function_Bread_Example.png" /></p>
 <blockquote>
-<p><strong>For example</strong>, this plot_age_pyramid() command in the templates produces an age pyramid graphic based on defined age groups and a binary split variable, such as sex. The function is given three arguments within the parentheses,, separated by commas. The values supplied to the arguments establish linelist_cleaned as the data frame to use, age_group as the variable to count, and sex as the binary variable to use for splitting the pyramid</p>
+<p><strong>For example</strong>, this <code>plot_age_pyramid()</code> command in the templates produces an age pyramid graphic based on defined age groups and a binary split variable, such as <code>sex</code>. The function is given three arguments within the parentheses, separated by commas. The values supplied to the arguments establish <code>linelist_cleaned</code> as the data frame to use, <code>age_group</code> as the variable to count, and <code>sex</code> as the binary variable to use for splitting the pyramid</p>
 </blockquote>
 <pre class="r"><code># Creates an age pyramid by specifying the dataframe, age group variable, and a variable to split the pyramid
 plot_age_pyramid(data = linelist_cleaned, age_group = &quot;age_group&quot;, split_by = &quot;sex&quot;)</code></pre>
 <p><img src="/training/R_Basics/Functions_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
 <blockquote>
-<p>Often, the first half of argument assignment (e.g. <code>data =</code>) does not need to be specified if the arguments are written in a specific order (specified in the function’s documentation). The below code produces the exact same pyramid as above, because the function expects the argument order: data frame, age_group variable, split_by variable.</p>
+<p>Often, the first half of argument assignment (e.g. <code>data =</code>) does not need to be specified if the arguments are written in a specific order (specified in the function’s documentation). The below code produces the exact same pyramid as above, because the function expects the argument order: data frame, <code>age_group</code> variable, <code>split_by</code> variable.</p>
 </blockquote>
 <pre class="r"><code># This command will produce the same table as above
 plot_age_pyramid(linelist_cleaned, &quot;age_group&quot;, &quot;sex&quot;)</code></pre>
@@ -37,39 +34,38 @@ plot_age_pyramid(linelist_cleaned, &quot;age_group&quot;, &quot;sex&quot;)</code
 <ul>
 <li>Show proportions instead of counts (set <code>proportional = TRUE</code> when the default is <code>FALSE</code>)<br />
 </li>
-<li>Specify the two colors to use (<code>pal =</code> is short for “palette” and is supplied with a vector of two color names. See the Objects page for how the function c() makes a vector)</li>
+<li>Specify the two colors to use (<code>pal =</code> is short for “palette” and is supplied with a vector of two color names. See the Objects page for how the function <code>c()</code> makes a vector)</li>
 </ul>
-<p><em>Note: For arguments specified with an equals symbol (e.g. coltotals = …), their order among the arguments is not important (must still be within the parentheses and separated by commas).</em></p>
+<p><em>Note: For arguments specified with an equals symbol (e.g. <code>coltotals = ...</code>), their order among the arguments is not important (must still be within the parentheses and separated by commas).</em></p>
 <pre class="r"><code>plot_age_pyramid(linelist_cleaned, &quot;age_group&quot;, &quot;sex&quot;, proportional = TRUE, pal = c(&quot;orange&quot;, &quot;purple&quot;))</code></pre>
 <p><img src="/training/R_Basics/Functions_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
 </div>
 <div id="using-additional-functions" class="section level3">
 <h3>Using Additional Functions</h3>
-<p>R comes with “base” functions, but the R community has created and verified many other specialized functions that are available to you. These <em>functions</em> are contained within <strong>packages</strong> that can be downloaded to your computer. Once downloaded, you access the functions within a package by calling the package with the library() command at the beginning of each R session.</p>
-<p><strong>Note: While you only have to install packages once, you must load them at the beginning of every R session using library().</strong> There is a code chunk at the beginning of each template that loads the necessary packages.</p>
+<p>R comes with “base” functions, but the R community has created and verified many other specialized functions that are available to you. These <em>functions</em> are contained within <strong>packages</strong> that can be downloaded to your computer. Once downloaded, you access the functions within a package by calling the package with the <code>library()</code> command at the beginning of each R session.</p>
+<p><strong>Note: While you only have to install packages once, you must load them at the beginning of every R session using <code>library()</code>.</strong> There is a code chunk at the beginning of each template that loads the necessary packages.</p>
 <p>Think of R as your personal library: When you download a package your library gains a book of functions, but each time you want to use a function in that book, you must borrow that book from your library.</p>
-<p>For clarity in the templates, functions are often preceeded by the name of their package using the :: symbol in the following way:</p>
-<p>package_name::function_name()</p>
+<p>For clarity in the templates, functions are often preceeded by the name of their package using the <code>::</code> symbol in the following way:</p>
+<p><code>package_name::function_name()</code></p>
 <pre class="r"><code>#This line uses the package &quot;rio&quot;&quot; and it&#39;s function &quot;import&quot; to import a dataset
 linelist_raw &lt;- rio::import(&quot;linelist.xlsx&quot;, which = &quot;Sheet1&quot;)</code></pre>
 </div>
 <div id="the-pipe-operator-between-functions" class="section level3">
-<h3>The Pipe Operator %&gt;% between functions</h3>
+<h3>The Pipe Operator (<code>%&gt;%</code>) between functions</h3>
 <p>Within the template scripts you will see the pipe operator <code>%&gt;%</code>. Simply explained, the pipe operator passes an intermediate output from one function to the next. You can think of it as saying “then”. Many functions can be linked together with <code>%&gt;%</code>.</p>
-<p>Piping is not a base function. To use piping, the dplyr package must be installed and loaded. Near the top of every template script is a code chunk that installs and loads the necessary packages, including dplyr. You can read more about piping <a href="https://magrittr.tidyverse.org/">here</a></p>
+<p>Piping is not a base function. To use piping, the dplyr package must be installed and loaded. Near the top of every template script is a code chunk that installs and loads the necessary packages, including dplyr. You can <a href="https://magrittr.tidyverse.org/">read more about piping in the documentation</a>.</p>
 <blockquote>
-<p><strong>As an example:</strong> The following code chunk from the AJD template data cleaning section can be read as “linelist_cleaned is defined as linelist_cleaned, filtered to remove the rows where the variables case_number and date_of_admission are missing”</p>
+<p><strong>As an example:</strong> The following code chunk from the AJD template data cleaning section can be read as “<code>linelist_cleaned</code> is defined as <code>linelist_cleaned</code>, filtered to remove the rows where the variables <code>case_number</code> and <code>date_of_admission</code> are missing”</p>
 </blockquote>
 <pre class="r"><code># only keep variables with a case ID and a date of consultation
 linelist_cleaned &lt;- linelist_cleaned %&gt;% 
   filter(!is.na(case_number) &amp; !is.na(date_of_admission))</code></pre>
-<p><strong>Note: Remember that even when using piping to link functions, if the assignment operator (<code>&lt;-</code>) is present, the object to the left will still be over-written (re-defined) by the right side.</strong> In the code above, linelist_cleaned will be replaced by the new linelist_cleaned which likely has fewer observations.</p>
+<p>{{% notice note %}}
+<strong>Remember that even when using piping to link functions, if the assignment operator (<code>&lt;-</code>) is present, the object to the left will still be over-written (re-defined) by the right side.</strong> In the code above, linelist_cleaned will be replaced by the new <code>linelist_cleaned</code> which likely has fewer observations.<br />
+{{% /notice %}}</p>
 </div>
 <div id="help-with-functions" class="section level3">
 <h3>Help with functions</h3>
 <p>To read more about a function, you can try searching online for resources OR use the Help tab in the lower-right R pane.</p>
-<div class="figure">
-<img src="/images/Function_Help.gif" />
-
-</div>
+<p><img src="/images/Function_Help.gif" /></p>
 </div>

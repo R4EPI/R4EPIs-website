@@ -15,19 +15,19 @@ weight: 6
 <h2>Header and introduction</h2>
 <p>The very top of the template consists of a header surrounded by <code>---</code> lines. Here you may want to edit the title of your document. The other settings in the header define the default document type produced (Microsoft Word) when the RMarkdown is “knit”.</p>
 <p>The “Introduction to this template” section is for your information only and this text can be deleted before knitting the document.</p>
-<p><img src="/images/AJS_Intro.png" alt="AJS Header and Introduction snip", width = "75%"></p>
+<p>&lt;img src=“/images/AJS_Intro.png” alt=“AJS Header and Introduction snip”, width = “75%”&gt;</p>
 </div>
 <div id="installation-and-loading-packages" class="section level2">
 <h2>Installation and loading packages</h2>
-<p><strong>The text which explains the purpose of this code chunk may be deleted, but you must keep the code chunk!</strong> The code will run without producing any output in your final report, but it is required to install (or load using library(), if already installed) the packages necessary to produce the report.</p>
+<p><strong>The text which explains the purpose of this code chunk may be deleted, but you must keep the code chunk!</strong> The code will run without producing any output in your final report, but it is required to install (or load using <code>library()</code>, if already installed) the packages necessary to produce the report.</p>
 <p>This “setup” code chunk does the following:</p>
 <ul>
 <li><p>Set default settings for tables such as size, error handling, and display of missing values</p></li>
-<li><p>Create a vector of names of packages required for the template to run, each of which is installed if it is not already installed, and then is loaded using library() for use in the current R session.</p></li>
+<li><p>Create a vector of names of packages required for the template to run, each of which is installed if it is not already installed, and then is loaded using <code>library()</code> for use in the current R session.</p></li>
 <li><p>Set default text size in graphic plots</p></li>
 <li><p>Set epidemiological weeks to begin on Mondays</p></li>
 </ul>
-<p><img src="/images/Package_Installation.png" alt="Package installation chunk snip", width = "75%"></p>
+<p>&lt;img src=“/images/Package_Installation.png” alt=“Package installation chunk snip”, width = “75%”&gt;</p>
 <div id="about-the-packages-used-in-this-template" class="section level3">
 <h3>About the packages used in this template</h3>
 <div id="generic-packages" class="section level4">
@@ -79,11 +79,11 @@ weight: 6
 <h2>Set current epi week</h2>
 <p>Set the epidemiological week for the report. <strong>This value is used in later code chunks, for example when producing epidemic curves.</strong> Note that you may want to specify the most recent <strong>complete</strong> epi week. Follow the format in the code below (within quotes give the 4-digit year, a hyphen (-), capital W, then the 2-digit epi week number).</p>
 <p>By default in the templates epi weeks begin on Mondays (this can be changed at the bottom of the “setup” code chunk). See the documentation of the <a href="https://cran.r-project.org/web/packages/aweek/vignettes/introduction.html">package “aweek”</a> for more information.</p>
-<p>To determine which epi week of a date you can use the date2week() function. It will tell you the year, week, and day number of the provided date. Let’s assume the date we want to use for this analysis is 20 April, 2017.</p>
-<pre class="r"><code>set_week_start(&quot;Monday&quot;)     # Define the first day of the epi week
-date2week(&quot;2017-04-20&quot;)      # Ask for the epi week of this date</code></pre>
+<p>To determine which epi week of a date you can use the <code>date2week()</code> function. It will tell you the year, week, and day number of the provided date. Let’s assume the date we want to use for this analysis is 20 April, 2017.</p>
+<pre class="r"><code>set_week_start(&quot;Monday&quot;) # Define the first day of the epi week
+date2week(&quot;2017-04-20&quot;)  # Ask for the epi week of this date</code></pre>
 <pre><code>## &lt;aweek start: Monday&gt;
 ## [1] &quot;2017-W16-4&quot;</code></pre>
 <pre class="r"><code>reporting_week &lt;- &quot;2017-W16&quot;  # Set reporting_week for our template</code></pre>
-<p><em>Note: If you want to use the automatically-updated date from your computer, use Sys.Date() like this: <code>date2week(Sys.Date())</code>.</em></p>
+<p><em>Note: If you want to use the automatically-updated date from your computer, use <code>Sys.Date()</code> like this: <code>date2week(Sys.Date())</code>.</em></p>
 </div>

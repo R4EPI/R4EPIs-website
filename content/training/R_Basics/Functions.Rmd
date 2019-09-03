@@ -29,7 +29,7 @@ linelist_cleaned$age_group <- age_categories(linelist_cleaned$age_years,
 
 Most tasks in R are performed through functions. **A function is like a machine that receives inputs, does some action with those inputs, and produces an output.** What the output is depends on the function.  
 
-**Functions typically operate upon some object placed within the function's parentheses**. For example, when the function summary() is used on a variable of class numeric, the output is a summary of the variable's numeric and missing values.
+**Functions typically operate upon some object placed within the function's parentheses**. For example, when the function `summary()` is used on a variable of class numeric, the output is a summary of the variable's numeric and missing values.
 
 ```{r}
 summary(linelist_raw$age_years)
@@ -47,7 +47,7 @@ Functions often ask for several inputs. **Each piece of information needed is ca
 
 
   
->**For example**, this plot_age_pyramid() command in the templates produces an age pyramid graphic based on defined age groups and a binary split variable, such as sex. The function is given three arguments within the parentheses,, separated by commas. The values supplied to the arguments establish linelist_cleaned as the data frame to use, age_group as the variable to count, and sex as the binary variable to use for splitting the pyramid
+>**For example**, this `plot_age_pyramid()` command in the templates produces an age pyramid graphic based on defined age groups and a binary split variable, such as `sex`. The function is given three arguments within the parentheses, separated by commas. The values supplied to the arguments establish `linelist_cleaned` as the data frame to use, `age_group` as the variable to count, and `sex` as the binary variable to use for splitting the pyramid
 
 ```{r include=FALSE, results='hide', message=FALSE, warning=FALSE}
 ## create an age group variable by specifying categorical breaks
@@ -63,7 +63,7 @@ linelist_cleaned$age_group <- age_categories(linelist_cleaned$age_years,
 plot_age_pyramid(data = linelist_cleaned, age_group = "age_group", split_by = "sex")
 ```
 
-> Often, the first half of argument assignment (e.g. `data = `) does not need to be specified if the arguments are written in a specific order (specified in the function's documentation). The below code produces the exact same pyramid as above, because the function expects the argument order: data frame, age_group variable, split_by variable.  
+> Often, the first half of argument assignment (e.g. `data = `) does not need to be specified if the arguments are written in a specific order (specified in the function's documentation). The below code produces the exact same pyramid as above, because the function expects the argument order: data frame, `age_group` variable, `split_by` variable.  
 
 ```{r eval = FALSE, warning=FALSE, message=FALSE}
 # This command will produce the same table as above
@@ -73,9 +73,9 @@ plot_age_pyramid(linelist_cleaned, "age_group", "sex")
 **A more complex plot_age_pyramid command might include the optional arguments to:**  
 
 * Show proportions instead of counts (set `proportional = TRUE` when the default is `FALSE`)  
-* Specify the two colors to use (`pal = ` is short for "palette" and is supplied with a vector of two color names. See the Objects page for how the function c() makes a vector)  
+* Specify the two colors to use (`pal = ` is short for "palette" and is supplied with a vector of two color names. See the Objects page for how the function `c()` makes a vector)  
 
-*Note: For arguments specified with an equals symbol (e.g. coltotals = ...), their order among the arguments is not important (must still be within the parentheses and separated by commas).* 
+*Note: For arguments specified with an equals symbol (e.g. `coltotals = ...`), their order among the arguments is not important (must still be within the parentheses and separated by commas).* 
 
 ```{r message=FALSE, warning=FALSE}
 plot_age_pyramid(linelist_cleaned, "age_group", "sex", proportional = TRUE, pal = c("orange", "purple"))
@@ -83,15 +83,15 @@ plot_age_pyramid(linelist_cleaned, "age_group", "sex", proportional = TRUE, pal 
 
 ### Using Additional Functions  
 
-R comes with "base" functions, but the R community has created and verified many other specialized functions that are available to you. These *functions* are contained within **packages** that can be downloaded to your computer. Once downloaded, you access the functions within a package by calling the package with the library() command at the beginning of each R session.
+R comes with "base" functions, but the R community has created and verified many other specialized functions that are available to you. These *functions* are contained within **packages** that can be downloaded to your computer. Once downloaded, you access the functions within a package by calling the package with the `library()` command at the beginning of each R session.
 
-**Note: While you only have to install packages once, you must load them at the beginning of every R session using library().** There is a code chunk at the beginning of each template that loads the necessary packages. 
+**Note: While you only have to install packages once, you must load them at the beginning of every R session using `library()`.** There is a code chunk at the beginning of each template that loads the necessary packages. 
 
 Think of R as your personal library: When you download a package your library gains a book of functions, but each time you want to use a function in that book, you must borrow that book from your library.  
 
-For clarity in the templates, functions are often preceeded by the name of their package using the :: symbol in the following way:  
+For clarity in the templates, functions are often preceeded by the name of their package using the `::` symbol in the following way:  
 
-package_name::function_name()
+`package_name::function_name()`
  
 ```{r eval=FALSE}
 #This line uses the package "rio"" and it's function "import" to import a dataset
@@ -100,13 +100,13 @@ linelist_raw <- rio::import("linelist.xlsx", which = "Sheet1")
 
 
 
-### The Pipe Operator %>% between functions 
+### The Pipe Operator (`%>%`) between functions 
 
 Within the template scripts you will see the pipe operator `%>%`. Simply explained, the pipe operator passes an intermediate output from one function to the next. You can think of it as saying "then". Many functions can be linked together with `%>%`.  
 
-Piping is not a base function. To use piping, the dplyr package must be installed and loaded. Near the top of every template script is a code chunk that installs and loads the necessary packages, including dplyr. You can read more about piping [here](https://magrittr.tidyverse.org/)
+Piping is not a base function. To use piping, the dplyr package must be installed and loaded. Near the top of every template script is a code chunk that installs and loads the necessary packages, including dplyr. You can [read more about piping in the documentation](https://magrittr.tidyverse.org/).
 
-> **As an example:** The following code chunk from the AJD template data cleaning section can be read as "linelist_cleaned is defined as linelist_cleaned, filtered to remove the rows where the variables case_number and date_of_admission are missing"  
+> **As an example:** The following code chunk from the AJD template data cleaning section can be read as "`linelist_cleaned` is defined as `linelist_cleaned`, filtered to remove the rows where the variables `case_number` and `date_of_admission` are missing"  
 
 ``` {r eval=FALSE}
 # only keep variables with a case ID and a date of consultation
@@ -114,10 +114,13 @@ linelist_cleaned <- linelist_cleaned %>%
   filter(!is.na(case_number) & !is.na(date_of_admission))
 ```
 
-**Note: Remember that even when using piping to link functions, if the assignment operator (`<-`) is present, the object to the left will still be over-written (re-defined) by the right side.** In the code above, linelist_cleaned will be replaced by the new linelist_cleaned which likely has fewer observations.  
+{{% notice note %}}
+**Remember that even when using piping to link functions, if the assignment operator (`<-`) is present, the object to the left will still be over-written (re-defined) by the right side.** In the code above, linelist_cleaned will be replaced by the new `linelist_cleaned` which likely has fewer observations.  
+{{% /notice %}}
 
 
 ### Help with functions  
+
 To read more about a function, you can try searching online for resources OR use the Help tab in the lower-right R pane.  
 
 ![](/images/Function_Help.gif)

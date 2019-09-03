@@ -7,7 +7,7 @@ weight: 5
 
 **It is strongly encouraged to organize your work within a self-contained R project**. An [R project](https://support.rstudio.com/hc/en-us/articles/200526207-Using-Projects) is a way to store all files related to one project in one place (R scripts, source files, location of the R working directory, RStudio workspace).  
 
-Read more about a project-oriented workflow [here](https://www.tidyverse.org/articles/2017/12/workflow-vs-script/)  
+Read more about a project-oriented workflow in this tidyverse article: https://www.tidyverse.org/articles/2017/12/workflow-vs-script/  
 
 
 ## Opening a new R project  
