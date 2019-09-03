@@ -113,22 +113,30 @@ fct_count(linelist_cleaned$sex)
 
 ### The `%in%` operator  
 
-The `%in%` operator looks to see if a value is present within a vector. A vector can be created with the function `c()`, and a variable in a data frame is also a vector. 
+The `%in%` operator looks to see if any elements of a vector are within another vector. **You can use this to filter your data to a specific set of values.** It's like a parallel version of `==`. A vector can be created with the function `c()`, and a variable in a data frame is also a vector. 
 
-In the simple example below, R is asked if the number 4 is present in the vector "numbers":
+Here, we show how `%in%` can be used to find which random sample of 10 letters are in the set of (a, b, c):
 
 ```{r}
-# Vector is defined
-numbers <- c(4, 10, 5, 365, 12, 0.5, 9)
+# randomly sample 10 letters from the alphabet
+set.seed(99) 
+my_letters <- sample(letters, 10) 
+my_letters
 
-# Test if 5 is in the vector
-5 %in% numbers
+# use %in% to ask "which letters are within the set of (a, b, c)?"
+abc <- my_letters %in% c("a", "b", "c") 
+
+# the result is a logical (TRUE/FALSE) vector
+abc
+
+# this vector can be used to subset our original vector, returning everything that is TRUE.
+my_letters[abc]
 ```
 
-In the templates, `%in%` can be used when creating the valued "DIED" (when a patient died). The variable DIED is logical (either TRUE or FALSE). It will be TRUE if the value in exit_status is either "DD" or "DOA" - those are the two character values present in the vector. You can add to or change the terms listed in the vector.
+In the templates, `%in%` can be used when creating the valued "DIED" (when a patient died). The variable DIED is logical (either `TRUE` or `FALSE`). It will be `TRUE` if the value in exit_status is either "DD" or "DOA" - those are the two character values present in the vector. You can add to or change the terms listed in the vector.
 
 ```{r eval=FALSE}
-# DIED == TRUE if value in exit_status is "DD" or "DOA"
+# DIED is set to TRUE if value in exit_status is "DD" or "DOA"
 linelist_cleaned$DIED <- linelist_cleaned$exit_status %in% c("DD", "DOA"))
 ```
 
@@ -147,18 +155,18 @@ The animations below were originally from https://github.com/gadenbuie/tidyexpla
 
 ### Inner join  
 
-An inner join of dataframes x and y (`inner_join(x, y)`) returns **only** the rows from x which have matching values in y, and includes all the columns from both x and y.  
+An inner join of data frames x and y (`inner_join(x, y)`) returns **only** the rows from x which have matching values in y, and includes all the columns from both x and y.  
 
-The argument `by = ` specifies the column name in both dataframes to compare for the join (it must be spelled the same in both dataframes). 
+The argument `by = ` specifies the column name in both data frames to compare for the join (it must be spelled the same in both data frames). 
 
 
 ![](/images/inner-join.gif)
 
 ### Left join  
 
-A left join of dataframes x and y (`left_join(x, y)`) prioritizes only the "left" dataframe (x), thus returning all rows from x with all columns from x and y. If a row in x has multiple matches in y, all combinations are returned as separate rows.  
+A left join of data frames x and y (`left_join(x, y)`) prioritizes only the "left" data frame (x), thus returning all rows from x with all columns from x and y. If a row in x has multiple matches in y, all combinations are returned as separate rows.  
 
-The argument `by = ` specifies the column name in both dataframes to compare for the join (it must be spelled the same in both dataframes).   
+The argument `by = ` specifies the column name in both data frames to compare for the join (it must be spelled the same in both data frames).   
 
 For example, a left join occurs in the AJS template when calculating attack rate by region, where `cases` and `population_data` are joined by their variable `patient_origin`. 
 
@@ -172,14 +180,14 @@ cases <- count(linelist_cleaned, patient_origin) %>%   # cases for each region
 
 ### Full join  
 
-A full join of dataframes x and y (`full_join(x, y)`) returns all rows from x and y. If there are any rows in x not in y (or visa-versa), the missing values are `NA`.  
+A full join of data frames x and y (`full_join(x, y)`) returns all rows from x and y. If there are any rows in x not in y (or visa-versa), the missing values are `NA`.  
    
 
 ![](/images/full-join.gif)  
 
 ### Anti join  
 
-This is often used to inspect which rows are unique to a dataframe. An anti join of dataframes x and y (`anti_join(x, y)`) returns the rows from dataframe x that *do not* have matching values in dataframe y. Only columns from x are returned.
+This is often used to inspect which rows are unique to a data frame. An anti join of data frames x and y (`anti_join(x, y)`) returns the rows from data frame x that *do not* have matching values in data frame y. Only columns from x are returned.
 
 
 ![](/images/anti-join.gif)
