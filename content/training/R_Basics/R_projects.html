@@ -6,13 +6,25 @@ weight: 5
 
 
 
-<div id="opening-an-r-project" class="section level2">
-<h2>Opening an R project</h2>
-</div>
-<div id="working-within-an-r-project" class="section level2">
-<h2>Working within an R project</h2>
-</div>
-<div id="read-more" class="section level2">
-<h2>Read more</h2>
+<p><strong>It is strongly encouraged to organize your work within a self-contained R project</strong>. An <a href="https://support.rstudio.com/hc/en-us/articles/200526207-Using-Projects">R project</a> is a way to store all files related to one project in one place (R scripts, source files, location of the R working directory, RStudio workspace).</p>
 <p>Read more about a project-oriented workflow <a href="https://www.tidyverse.org/articles/2017/12/workflow-vs-script/">here</a></p>
+<div id="opening-a-new-r-project" class="section level2">
+<h2>Opening a new R project</h2>
+<p>Select <em>File -&gt; New Project</em> from the top RStudio menu.</p>
+<p>Creating a new R project will create:</p>
+<ul>
+<li>A new project directory (folder)<br />
+</li>
+<li>A R project file (.Rproj) that serves as a shortcut to open the project<br />
+</li>
+<li>All files produced by R scripts saved to the project will also save into the project folder<br />
+</li>
+<li>You can make sub-folders for data, scripts, etc.</li>
+</ul>
+<p>Navigate and open files such as scripts using the Files tab of the lower-right RStudio pane.</p>
+<p>TODO: GIF/VIDEO</p>
+</div>
+<div id="sending-an-r-project" class="section level2">
+<h2>Sending an R project</h2>
+<p>One significant benefit of working within an R project is that all associated files (datasets, etc.) are located within the same folder. Thus, to send the project to someone else, <strong>simply zip the folder and send</strong>. All files referenced in the scripts are included and no file pathways in the script are unique to your computer.</p>
 </div>
