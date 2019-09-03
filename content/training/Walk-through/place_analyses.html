@@ -2439,8 +2439,26 @@ ggplot() +
   geom_sf_text(data = mapsub, aes(label = Name), colour = &quot;grey50&quot;) + # label polygons
   theme_void() # remove coordinates and axes</code></pre>
 <p><img src="/training/Walk-through/place_analyses_files/figure-html/unnamed-chunk-6-1.png" width="720" /></p>
+<p><strong>You can use this alternative to make the labels not overlap.</strong></p>
+<p><strong>ggrepel()</strong> arranges point/polygon labels so they do not overlap and are easier to read. You can see more examples of ggrepel <a href="https://mran.microsoft.com/snapshot/2017-08-20/web/packages/ggrepel/vignettes/ggrepel.html">here</a></p>
+<p><em>Note: the geom_sf_text() line has been replaced by ggrepel.</em></p>
+<pre class="r"><code>## plotting with polygons ------------------------------------------------------
+
+ggplot() +
+  geom_sf(data = mapsub, aes(fill = categories), col = &quot;grey50&quot;) + # shapefile as polygon
+  coord_sf(datum = NA) + # needed to avoid gridlines being drawn
+  annotation_scale() + # add a scalebar
+  scale_fill_brewer(drop = FALSE, palette = &quot;OrRd&quot;, name = &quot;AR (per 10,000)&quot;) + 
+  
+  # Optional ggrepel section to make labels appear more nicely
+  ggrepel::geom_label_repel(data = mapsub, aes(label = Name, geometry = geometry), 
+                            stat = &quot;sf_coordinates&quot;, 
+                            min.segment.length = 0) +
+
+  theme_void()  # remove coordinates and axes</code></pre>
+<p><img src="/training/Walk-through/place_analyses_files/figure-html/unnamed-chunk-7-1.png" width="720" /></p>
 <p>Lastly, <strong>there is an efficient way to create attack rate maps and bar plots of incidence for each epiweek</strong>. Use a <strong>“for loop”</strong> to run the same code for every epi week.</p>
-<p><strong>A for loop is used to iterate over (perform the same actions to) every value in a vector.</strong> In this case, we want to make the map and bar chart for each region. You can read more about for loops in the Advanced section of the R Basics pages, or <a href="">here</a>.</p>
+<p><strong>A for loop is used to iterate over (perform the same actions to) every value in a vector.</strong> In this case, we want to make the map and bar chart for each region. You can read more about for loops in the Advanced section of the R Basics pages, or <a href="https://www.datamentor.io/r-programming/for-loop/">here</a>.</p>
 <p>A few things to note about this chunk:</p>
 <ul>
 <li>The first half is very similar to the set-up of the previous map.<br />
@@ -2489,11 +2507,15 @@ ar &lt;- mutate(ar,
              categories = age_categories(`AR (per 10,000)`, 
                                          breakers = breakers)
              )</code></pre>
-<p><strong>Note: Only results for the first 5 epiweeks are shown.</strong></p>
-<pre class="r"><code># go through each epiweek, filter and plot the data
+<p><strong>Note: Only results for the first 20 epiweeks are shown. Also, the barplots are filtered to only show quartiers with non-zero attack rates.</strong></p>
+<pre class="r"><code># All the code is contained within a FOR LOOP that goes through each epiweek, filters and plots the data
+
 for (i in unique(cases$epiweek)) {
+  
+  # filters the large ar dataframe for the epiweek being examined (&quot;i&quot;)   
   this_ar &lt;- filter(ar, epiweek == i)
   
+  ### Create Map for epiweek &quot;i&quot;
   # map 
   mapsub &lt;- left_join(map, this_ar, by = c(&quot;Name&quot; = &quot;Region&quot;))
   
@@ -2507,8 +2529,12 @@ for (i in unique(cases$epiweek)) {
                     name = &quot;AR (per 10,000)&quot;) +  # color the scale to be perceptually uniform (keep levels)
     theme_void() # remove coordinates and axes
   
-  # plot with the region on the x axis sorted by increasing ar
-  # ar value on the y axis 
+  ### Create barplot for epiweek &quot;i&quot;
+
+  # Filter values in this_ar to only show quartiers with attack rates &gt; 0 in barplot
+  this_ar &lt;- filter(this_ar, `AR (per 10,000)` &gt; 0)
+  
+  # Create barplot for epiweek &quot;i&quot;
   barplot &lt;- ggplot(this_ar, aes(x = reorder(Region, `AR (per 10,000)`),
                                  y = `AR (per 10,000)`)) + 
     geom_bar(stat = &quot;identity&quot;, col = &quot;black&quot;, fill = &quot;red&quot;) + # plot as bars (identity = as is)
@@ -2518,7 +2544,9 @@ for (i in unique(cases$epiweek)) {
     labs(x = &quot;Region&quot;, y = &quot;AR (per 10,000)&quot;, 
          captions = paste0(&quot;Source: MSF data from &quot;, reporting_week)) + 
     epicurve_theme
-  # combine the barplot and map plot into one
+  
+  
+  # combine the barplot and map plot into one for epiweek &quot;i&quot;
   print(
     cowplot::plot_grid(
       barplot + labs(title = paste0(&quot;Epiweek: &quot;, i)),
@@ -2529,6 +2557,6 @@ for (i in unique(cases$epiweek)) {
     )
   )
 }</code></pre>
-<p><img src="/training/Walk-through/place_analyses_files/figure-html/unnamed-chunk-7-1.png" width="720" /><img src="/training/Walk-through/place_analyses_files/figure-html/unnamed-chunk-7-2.png" width="720" /><img src="/training/Walk-through/place_analyses_files/figure-html/unnamed-chunk-7-3.png" width="720" /><img src="/training/Walk-through/place_analyses_files/figure-html/unnamed-chunk-7-4.png" width="720" /><img src="/training/Walk-through/place_analyses_files/figure-html/unnamed-chunk-7-5.png" width="720" /><img src="/training/Walk-through/place_analyses_files/figure-html/unnamed-chunk-7-6.png" width="720" /></p>
+<p><img src="/training/Walk-through/place_analyses_files/figure-html/unnamed-chunk-8-1.png" width="720" /><img src="/training/Walk-through/place_analyses_files/figure-html/unnamed-chunk-8-2.png" width="720" /><img src="/training/Walk-through/place_analyses_files/figure-html/unnamed-chunk-8-3.png" width="720" /><img src="/training/Walk-through/place_analyses_files/figure-html/unnamed-chunk-8-4.png" width="720" /><img src="/training/Walk-through/place_analyses_files/figure-html/unnamed-chunk-8-5.png" width="720" /><img src="/training/Walk-through/place_analyses_files/figure-html/unnamed-chunk-8-6.png" width="720" /><img src="/training/Walk-through/place_analyses_files/figure-html/unnamed-chunk-8-7.png" width="720" /><img src="/training/Walk-through/place_analyses_files/figure-html/unnamed-chunk-8-8.png" width="720" /><img src="/training/Walk-through/place_analyses_files/figure-html/unnamed-chunk-8-9.png" width="720" /><img src="/training/Walk-through/place_analyses_files/figure-html/unnamed-chunk-8-10.png" width="720" /><img src="/training/Walk-through/place_analyses_files/figure-html/unnamed-chunk-8-11.png" width="720" /><img src="/training/Walk-through/place_analyses_files/figure-html/unnamed-chunk-8-12.png" width="720" /><img src="/training/Walk-through/place_analyses_files/figure-html/unnamed-chunk-8-13.png" width="720" /><img src="/training/Walk-through/place_analyses_files/figure-html/unnamed-chunk-8-14.png" width="720" /><img src="/training/Walk-through/place_analyses_files/figure-html/unnamed-chunk-8-15.png" width="720" /><img src="/training/Walk-through/place_analyses_files/figure-html/unnamed-chunk-8-16.png" width="720" /><img src="/training/Walk-through/place_analyses_files/figure-html/unnamed-chunk-8-17.png" width="720" /><img src="/training/Walk-through/place_analyses_files/figure-html/unnamed-chunk-8-18.png" width="720" /><img src="/training/Walk-through/place_analyses_files/figure-html/unnamed-chunk-8-19.png" width="720" /><img src="/training/Walk-through/place_analyses_files/figure-html/unnamed-chunk-8-20.png" width="720" /><img src="/training/Walk-through/place_analyses_files/figure-html/unnamed-chunk-8-21.png" width="720" /></p>
 </div>
 </div>

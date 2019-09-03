@@ -294,7 +294,7 @@ display.brewer.all()
 **geom_sf_text()** specifies labels for the polygons, including which variable to use for labels ("Name"), and the text colour. **Again, we need to modify this ggplot() reference to the variable "name" to now reference "Name" with a capital N. In your data the variable may be completely different.**
 
 **theme_void()** specifies a theme for the map that does not include coordinates or axes.  
- 
+
 ```{r warning=FALSE, message=FALSE}
 ## plotting with polygons ------------------------------------------------------
 
@@ -305,14 +305,36 @@ ggplot() +
   scale_fill_brewer(drop = FALSE, palette = "OrRd", name = "AR (per 10,000)") + 
   geom_sf_text(data = mapsub, aes(label = Name), colour = "grey50") + # label polygons
   theme_void() # remove coordinates and axes
-
 ```
 
+**You can use this alternative to make the labels not overlap.** 
+
+**ggrepel()** arranges point/polygon labels so they do not overlap and are easier to read. You can see more examples of ggrepel [here](https://mran.microsoft.com/snapshot/2017-08-20/web/packages/ggrepel/vignettes/ggrepel.html)  
+
+*Note: the geom_sf_text() line has been replaced by ggrepel.*  
+
+
+```{r warning=FALSE, message=FALSE}
+## plotting with polygons ------------------------------------------------------
+
+ggplot() +
+  geom_sf(data = mapsub, aes(fill = categories), col = "grey50") + # shapefile as polygon
+  coord_sf(datum = NA) + # needed to avoid gridlines being drawn
+  annotation_scale() + # add a scalebar
+  scale_fill_brewer(drop = FALSE, palette = "OrRd", name = "AR (per 10,000)") + 
+  
+  # Optional ggrepel section to make labels appear more nicely
+  ggrepel::geom_label_repel(data = mapsub, aes(label = Name, geometry = geometry), 
+                            stat = "sf_coordinates", 
+                            min.segment.length = 0) +
+
+  theme_void()  # remove coordinates and axes
+```
 
 
 Lastly, **there is an efficient way to create attack rate maps and bar plots of incidence for each epiweek**. Use a **"for loop"** to run the same code for every epi week.  
 
-**A for loop is used to iterate over (perform the same actions to) every value in a vector.** In this case, we want to make the map and bar chart for each region. You can read more about for loops in the Advanced section of the R Basics pages, or [here]().  
+**A for loop is used to iterate over (perform the same actions to) every value in a vector.** In this case, we want to make the map and bar chart for each region. You can read more about for loops in the Advanced section of the R Basics pages, or [here](https://www.datamentor.io/r-programming/for-loop/).  
 
 A few things to note about this chunk:  
 
@@ -371,18 +393,38 @@ cases <- cases[(cases$epiweek == "2016-W26" |
                cases$epiweek == "2016-W27" | 
                cases$epiweek == "2016-W28" |
                cases$epiweek == "2016-W29" |
-               cases$epiweek == "2016-W30"), ]
+               cases$epiweek == "2016-W30" | 
+               cases$epiweek == "2016-W31" |
+               cases$epiweek == "2016-W32" |
+               cases$epiweek == "2016-W33" |
+               cases$epiweek == "2016-W34" |
+               cases$epiweek == "2016-W35" |
+               cases$epiweek == "2016-W36" |
+               cases$epiweek == "2016-W37" |
+               cases$epiweek == "2016-W38" |
+               cases$epiweek == "2016-W39" |
+               cases$epiweek == "2016-W40" |
+               cases$epiweek == "2016-W41" |
+               cases$epiweek == "2016-W42" |
+               cases$epiweek == "2016-W43" |
+               cases$epiweek == "2016-W44" |
+               cases$epiweek == "2016-W45" ), ]
 forcats::fct_drop(cases$epiweek)
 ```
 
-**Note: Only results for the first 5 epiweeks are shown.**  
+**Note: Only results for the first 20 epiweeks are shown. Also, the barplots are filtered to only show quartiers with non-zero attack rates.**  
 
 
 ```{r warning=FALSE, message=FALSE}
-# go through each epiweek, filter and plot the data
+
+# All the code is contained within a FOR LOOP that goes through each epiweek, filters and plots the data
+
 for (i in unique(cases$epiweek)) {
+  
+  # filters the large ar dataframe for the epiweek being examined ("i")   
   this_ar <- filter(ar, epiweek == i)
   
+  ### Create Map for epiweek "i"
   # map 
   mapsub <- left_join(map, this_ar, by = c("Name" = "Region"))
   
@@ -396,8 +438,12 @@ for (i in unique(cases$epiweek)) {
                     name = "AR (per 10,000)") +  # color the scale to be perceptually uniform (keep levels)
     theme_void() # remove coordinates and axes
   
-  # plot with the region on the x axis sorted by increasing ar
-  # ar value on the y axis 
+  ### Create barplot for epiweek "i"
+
+  # Filter values in this_ar to only show quartiers with attack rates > 0 in barplot
+  this_ar <- filter(this_ar, `AR (per 10,000)` > 0)
+  
+  # Create barplot for epiweek "i"
   barplot <- ggplot(this_ar, aes(x = reorder(Region, `AR (per 10,000)`),
                                  y = `AR (per 10,000)`)) + 
     geom_bar(stat = "identity", col = "black", fill = "red") + # plot as bars (identity = as is)
@@ -407,7 +453,9 @@ for (i in unique(cases$epiweek)) {
     labs(x = "Region", y = "AR (per 10,000)", 
          captions = paste0("Source: MSF data from ", reporting_week)) + 
     epicurve_theme
-  # combine the barplot and map plot into one
+  
+  
+  # combine the barplot and map plot into one for epiweek "i"
   print(
     cowplot::plot_grid(
       barplot + labs(title = paste0("Epiweek: ", i)),
