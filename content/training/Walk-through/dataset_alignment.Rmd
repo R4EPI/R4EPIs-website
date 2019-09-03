@@ -99,7 +99,10 @@ linelist_cleaned <- linelist_raw
 
 **Second, use the `clean_labels()` function** from the epitrix package to fix any variable names with non-standard syntax. These code lines take the column names, clean them, and then store the cleaned names in the vector `cleaned_colnames`. The second code line over-writes the old column names of `linelist_cleaned` with the improved ones.  
 
-*Note: if you have a variable named "#" it may be removed by the `clean_labels()` function. You can protect it by adding the argument `protect = "#"`.*
+{{% notice note %}}
+If you have a variable named "#" it may be removed by the `clean_labels()` function. You can protect it by adding the argument `protect = "#"`. 
+{{% /notice %}}
+
 
 ```{r}
 # Store cleaned column names
