@@ -388,27 +388,13 @@ ar <- mutate(ar,
 ```
 
 ```{r show_only_few_epiweeks, include=FALSE, results='hide', message=FALSE, warning=FALSE}
-# Re-define epi week so that the webpage will only show first 5 weeks of maps/graphs in for loop
-cases <- cases[(cases$epiweek == "2016-W26" | 
-               cases$epiweek == "2016-W27" | 
-               cases$epiweek == "2016-W28" |
-               cases$epiweek == "2016-W29" |
-               cases$epiweek == "2016-W30" | 
-               cases$epiweek == "2016-W31" |
-               cases$epiweek == "2016-W32" |
-               cases$epiweek == "2016-W33" |
-               cases$epiweek == "2016-W34" |
-               cases$epiweek == "2016-W35" |
-               cases$epiweek == "2016-W36" |
-               cases$epiweek == "2016-W37" |
-               cases$epiweek == "2016-W38" |
-               cases$epiweek == "2016-W39" |
-               cases$epiweek == "2016-W40" |
-               cases$epiweek == "2016-W41" |
-               cases$epiweek == "2016-W42" |
-               cases$epiweek == "2016-W43" |
-               cases$epiweek == "2016-W44" |
-               cases$epiweek == "2016-W45" ), ]
+# Re-define epi week so that the webpage will only show first 20 weeks of maps/graphs in for loop
+cases <- cases %>%
+  dplyr::ungroup(epiweek) %>%
+  dplyr::mutate(epiweek = as.character(epiweek)) %>%
+  dplyr::filter(epiweek >= "2016-W26") %>%
+  dplyr::filter(epiweek <= "2016-W45") %>%
+  dplyr::mutate(epiweek = forcats::fct_inorder(epiweek))
 forcats::fct_drop(cases$epiweek)
 ```
 
