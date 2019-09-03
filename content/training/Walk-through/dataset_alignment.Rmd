@@ -75,7 +75,7 @@ linelist_raw <- readRDS("data/linelist_raw.rds")
 When using a non-standardized dataset, the variable names and values must be aligned with the data dictionary. This is because later parts of the template expect certain variable names and values. **This process can take some time** and requires looking back-and-forth between your dataset, RStudio, and the MSF data dictionary. In this example, here are the steps taken:  
 
 ### Review the MSF data dictionary
-Uncomment and run this command, found in the read_nonDHIS_data chunk, to view the MSF data dictionary for the disease ("AJS" in this example).
+Uncomment and run this command, found in the `read_nonDHIS_data` chunk, to view the MSF data dictionary for the disease ("AJS" in this example).
 
 ```{r eval = FALSE}
 # Creates object linelist_dict using the msf_dict function from the sitrep package
@@ -83,23 +83,23 @@ linelist_dict <- msf_dict("AJS", compact = FALSE) %>%
   select(option_code, option_name, everything())
 ```
 
-The dataframe linelist_dict should appear in your Environment pane. You can view the data dictionary by running the command `View(linelist_dict)` (note capital V), or by clicking linelist_dict in the Environment pane.  
+The dataframe `linelist_dict` should appear in your Environment pane. You can view the data dictionary by running the command `View(linelist_dict)` (note capital V), or by clicking on `linelist_dict` in the Environment pane.  
 
 ![](/images/AJS_Data_Dictionary.png)
 
 ### Clean the variable names  
-These steps standardize how your variable names are written, such as changing spaces and dots to underscores ("_"). **Uncomment these lines of code in the read_nonDHIS_data chunk**.  
+These steps standardize how your variable names are written, such as changing spaces and dots to underscores ("_"). **Uncomment these lines of code in the `read_nonDHIS_data` chunk**.  
 
-**First, make a copy of the dataframe linelist_raw but with a new name: linelist_cleaned.** Throughout the template you will modify and improve this linelist_cleaned dataframe. However, you can always return to the linelist_raw version for reference.  
+**First, make a copy of the dataframe `linelist_raw` but with a new name: `linelist_cleaned`.** Throughout the template you will modify and improve this `linelist_cleaned` dataframe. However, you can always return to the `linelist_raw` version for reference.  
 
 ```{r}
 ## make a copy of your orginal dataset and name it linelist_cleaned
 linelist_cleaned <- linelist_raw
 ```
 
-**Second, use the clean_labels() function** from the epitrix package to fix any variable names with non-standard syntax. These code lines take the column names, clean them, and then store the cleaned names in the vector cleaned_colnames. The second code line over-writes the old column names of linelist_cleaned with the improved ones.  
+**Second, use the `clean_labels()` function** from the epitrix package to fix any variable names with non-standard syntax. These code lines take the column names, clean them, and then store the cleaned names in the vector `cleaned_colnames`. The second code line over-writes the old column names of `linelist_cleaned` with the improved ones.  
 
-*Note: if you have a variable named "#" it may be removed by the clean_labels() function. You can protect it by adding the argument `protect = "#"`.*
+*Note: if you have a variable named "#" it may be removed by the `clean_labels()` function. You can protect it by adding the argument `protect = "#"`.*
 
 ```{r}
 # Store cleaned column names
@@ -113,7 +113,7 @@ colnames(linelist_cleaned) <- cleaned_colnames
 
 Standardized variable names are required for this template to work smoothly, and the variable names in our Am Timan dataset do not align with the names this template expects. The template offers code that you can uncomment if you only have to change a few variable names (see below). **However, in this example we need to change many variable names. For this scenario, MSF developed a special function to help map our variables to the expected variable names.**  
 
-* **Paste the disease-specific rename helper into the script.** This command is found in the template near the end of the "read_nonDHIS_data"" chunk. For our example we run the command `msf_dict_rename_helper("AJS")` and a block of code text is copied to our clipboard. Return to the template script and *paste* from the clipboard into the template. For the AJS template, the code that is pasted will look like the code below. This code uses the function rename() to change variable names.  
+* **Paste the disease-specific rename helper into the script.** This command is found in the template near the end of the `read_nonDHIS_data` chunk. For our example we run the command `msf_dict_rename_helper("AJS")` and a block of code text is copied to our clipboard. Return to the template script and *paste* from the clipboard into the template. For the AJS template, the code that is pasted will look like the code below. This code uses the function `rename()` to change variable names.  
 
 *Note: Be sure to paste the code into an existing R code chunk, not into the white space of the RMarkdown script. 
 
