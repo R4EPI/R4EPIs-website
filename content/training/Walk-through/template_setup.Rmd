@@ -69,13 +69,13 @@ The "Introduction to this template" section is for your information only and thi
 
 
 ## Installation and loading packages
-**The text which explains the purpose of this code chunk may be deleted, but you must keep the code chunk!** The code will run without producing any output in your final report, but it is required to install (or load using library(), if already installed) the packages necessary to produce the report.  
+**The text which explains the purpose of this code chunk may be deleted, but you must keep the code chunk!** The code will run without producing any output in your final report, but it is required to install (or load using `library()`, if already installed) the packages necessary to produce the report.  
 
 This "setup" code chunk does the following:  
 
 * Set default settings for tables such as size, error handling, and display of missing values  
 
-* Create a vector of names of packages required for the template to run, each of which is installed if it is not already installed, and then is loaded using library() for use in the current R session.
+* Create a vector of names of packages required for the template to run, each of which is installed if it is not already installed, and then is loaded using `library()` for use in the current R session.
 
 * Set default text size in graphic plots  
 
@@ -120,7 +120,7 @@ Set the epidemiological week for the report. **This value is used in later code 
 
 By default in the templates epi weeks begin on Mondays (this can be changed at the bottom of the "setup" code chunk). See the documentation of the [package "aweek"](https://cran.r-project.org/web/packages/aweek/vignettes/introduction.html) for more information. 
 
-To determine which epi week of a date you can use the date2week() function. It will tell you the year, week, and day number of the provided date. Let's assume the date we want to use for this analysis is 20 April, 2017.
+To determine which epi week of a date you can use the `date2week()` function. It will tell you the year, week, and day number of the provided date. Let's assume the date we want to use for this analysis is 20 April, 2017.
 
 ```{r}
 set_week_start("Monday")     # Define the first day of the epi week
@@ -131,7 +131,7 @@ date2week("2017-04-20")      # Ask for the epi week of this date
 reporting_week <- "2017-W16"  # Set reporting_week for our template
 ```
 
-*Note: If you want to use the automatically-updated date from your computer, use Sys.Date() like this: `date2week(Sys.Date())`.*
+*Note: If you want to use the automatically-updated date from your computer, use `Sys.Date()` like this: `date2week(Sys.Date())`.*
 
 
 ```{r, include=FALSE, results='hide', message=FALSE, warning=FALSE}
