@@ -123,7 +123,8 @@ By default in the templates epi weeks begin on Mondays (this can be changed at t
 To determine which epi week of a date you can use the date2week() function. It will tell you the year, week, and day number of the provided date. Let's assume the date we want to use for this analysis is 20 April, 2017.
 
 ```{r}
-date2week("2017-04-20")      # Ask the epi week of this date
+set_week_start("Monday")     # Define the first day of the epi week
+date2week("2017-04-20")      # Ask for the epi week of this date
 ```
 
 ```{r}
