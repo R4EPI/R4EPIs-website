@@ -207,7 +207,7 @@ linelist_cleaned <- rename(linelist_cleaned,
 )
 ```
 
-Below are the variable assignments used in this example, to reference when building your template. You can copy the entire code chunk using the copy icon in the top-right corner.  
+Below is the code for the variable assignments used in this example. You can use or reference this when building your template. **You can copy the entire code chunk using the copy icon in the top-right corner.**  
 
 ```{r eval=FALSE, message=FALSE, warning=FALSE}
 ## Below are the column assignments used in this case study example

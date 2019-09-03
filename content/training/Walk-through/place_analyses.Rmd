@@ -80,7 +80,7 @@ obs_end <- readRDS("data/obs_end.rds")
 
 TODO: introduction to place analyses
 
-### Non-map place analyses
+### Tabular place analyses (non-maps)
 
 To get a basic **descriptive table of cases by region** (which in our case was originally the variable *quartier* from the raw linelist), we use tab_linelist() on the variable patient_origin, with columns by patient_facility_type (inpatient, outpatient, or missing). 
 
@@ -118,15 +118,12 @@ tab_linelist(filter(linelist_cleaned,
 
 **First**, like when we calculated attack rate by epiweek in the time_analysis section, the cases are counted by patient_origin. This list of counts is then **joined** to the imported population data for each region **joined by patient_origin (the name of the region/quartier)**. These data are stored in the object `cases`.  
 
-*Recall that this **join** requires **exact matches** between patient_origin values in `linelist_cleaned$patient_origin` and `population_data_region$patient_origin` to match a region's cases to its population (read more about joins TODO HERE). In the data cleaning steps we converted the values in linelist_cleaned to all capital letters to match those in population_data_region.   
-
-**TODO - Note: the attack_rate function currently does not show cases in the table if there is no population denominator. For example, the table below shows TARADONA quartier with no cases, when in reality it has 235. Also, for those regions with no cases or no population, the attack rate defaults to 10,000 - which is obviously not true.** 
-   
+*Recall that this **join** requires **exact matches** between patient_origin values in `linelist_cleaned$patient_origin` and `population_data_region$patient_origin` to match a region's cases to its population (read more about joins in the advanced R Basics page). In the data cleaning steps we converted the values in linelist_cleaned to all capital letters to match those in population_data_region.  
 The "ar" object saves the counts, population, and attack rate calculations along with modified column names.  
 
 Finally, the table is created with kable() and displayed.
 
-```{r attack_rate_by_region}
+```{r attack_rate_by_region, warning=FALSE, message=FALSE}
 ## - [ ] consider facet wrapping by an overarching unit if have many regions (e.g. by province)
 cases <- count(linelist_cleaned, patient_origin) %>%   # cases for each region
   left_join(population_data_region, by = "patient_origin")    # merge population data 
@@ -148,9 +145,14 @@ ar %>%
 
 You could then also plot this on a bar chart with confidence intervals.  
 
-**TODO: Note: Until the bug in attack_rate() is fixed, the bar chart will not appear correctly, as it shows all the regions that are missing attack rates as having ARs of 10,000.**
+*Note: There are many quartiers without population denominators that will make the graph difficult to read. Thus, we first filter `ar` to remove those using the opposite (!) of the is.na() function (see R Basics page on operators). Note that if this step is added, any quartiers with missing denominators will not appear in the graph.*  
 
-```{r bar_attack_rate_by_region}
+
+
+```{r bar_attack_rate_by_region, warning=FALSE, message=FALSE}
+# filter ar for non-zero quartiers
+ar <- filter(ar, !is.na(`AR (per 10,000)`))
+
 # plot with the region on the x axis sorted by increasing ar
 # ar value on the y axis 
 ggplot(ar, aes(x = reorder(Region, `AR (per 10,000)`),
@@ -171,9 +173,7 @@ You could also **table mortality rate by region**. A few things to note:
 * The first command uses group_by() to count cases by patient_origin. Then, filter() is applied based on the character search function grepl() from the package stringr, which looks for "Dead" within the variable exit_status - **note: we must change this to reflect our data and have grepl() look for "Died" in exit_status2.** (otherwise, the object "deaths" has 0 rows and mortality_rate() produces an error)  
 * The mortality_rate() step calculates mortality rates for the regions that had a death.  
 
-**TODO: Note: The table only shows the regions that had a death, but there is a bug and the deaths show as missing if there is no population denominator.**
-
-```{r mortality_rate_region}
+```{r mortality_rate_region, warning=FALSE, message=FALSE}
 deaths <- group_by(linelist_cleaned, patient_origin) %>%
   filter(grepl("Died", exit_status2)) %>% 
   summarise(deaths = n()) %>% # count deaths by region
@@ -234,7 +234,7 @@ st_crs(map)
 ```
 
 If there is no CRS specified for your shapefile, you can set the CRS to WGS84 with the following command, which uses the EPSG code of 4326.   
-```{r, eval=FALSE}
+```{r, eval=FALSE }
 ## set the CRS if not present using EPSG value
 ## this is the most commonly used 
 map <- st_set_crs(map, value = 4326) # Sets to WGS84
@@ -251,7 +251,7 @@ Below we explain each step within the this code chunk, plotting a map based on t
 
 3) In the last command, mutate() is used to create the categorical variable within 'ar', using `breakers` to define the breaks in the numeric variable in 'ar': AR (per 10,000). 
 
-```{r}
+```{r warning=FALSE, message=FALSE}
 ## create a categorical variable for plotting 
 max_ar    <- max(ar$`Upper 95%CI`, na.rm = TRUE) # define your highest AR
 breakers <- as.integer(c(0, # include zero as a standalone group
@@ -271,7 +271,7 @@ ar <- mutate(ar,
 
 The resulting object 'mapsub' is a product of this **left join**. A left join will include all values from the Left-hand Side (LHS) and only inlcude values from the Right-hand Side (RHS) if they match to LHS values. Now, the attack rates are joined to the region names and to their GIS geometries. You can verify this by Viewing the object mapsub (click on it in the Environment pane).
 
-```{r}
+```{r warning=FALSE, message=FALSE}
 ## join your ar or case counts based on matching shapefile names with regions in your ar table
 mapsub <- left_join(map, ar, by = c("Name" = "Region"))
 ```
@@ -295,7 +295,7 @@ display.brewer.all()
 
 **theme_void()** specifies a theme for the map that does not include coordinates or axes.  
  
-```{r}
+```{r warning=FALSE, message=FALSE}
 ## plotting with polygons ------------------------------------------------------
 
 ggplot() +
@@ -378,7 +378,7 @@ forcats::fct_drop(cases$epiweek)
 **Note: Only results for the first 5 epiweeks are shown.**  
 
 
-```{r}
+```{r warning=FALSE, message=FALSE}
 # go through each epiweek, filter and plot the data
 for (i in unique(cases$epiweek)) {
   this_ar <- filter(ar, epiweek == i)

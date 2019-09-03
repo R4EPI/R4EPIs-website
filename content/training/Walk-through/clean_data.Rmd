@@ -211,7 +211,7 @@ linelist_cleaned$age_group <- age_categories(linelist_cleaned$age_years,
                                              breakers = c(0, 3, 15, 30, 45))
 ```
 
-### Cleaning categorical variables  
+### Clean categorical variables  
 While the template directs us to next create a DIED variable based on exit_status containing the characters "Dead", we must first **clean our exit_status variable, which is currrently in French**. 
 
 **Use case_when() to assign new values for a new exit_status2 variable**, as in the code below. The code uses the function case_when() to re-define linelist_cleaned as itself, but mutated to include the new variable exit_status2. The values in exit_status2 are based on the values in exit_status, such that when exist_status == "Décédé", the value in exit_status2 is "Died", and so on. 
