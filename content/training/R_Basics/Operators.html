@@ -11,10 +11,10 @@ weight: 9
 <p><strong>Relational operators compare values</strong> and are often used when defining new variables and subsets of datasets. Here are the common relational operators in R:</p>
 <table>
 <colgroup>
-<col width="20%" />
-<col width="19%" />
-<col width="20%" />
-<col width="38%" />
+<col width="30%" />
+<col width="16%" />
+<col width="17%" />
+<col width="34%" />
 </colgroup>
 <thead>
 <tr class="header">
@@ -29,7 +29,7 @@ weight: 9
 <td>Equal to</td>
 <td><code>==</code></td>
 <td><code>&quot;A&quot; == &quot;a&quot;</code></td>
-<td><code>FALSE</code> (because R is case sensitive) <em>Note that == (double equals) is different from = (single equals), which acts like the assignment operator &lt;-</em></td>
+<td><code>FALSE</code> (because R is case sensitive) <em>Note that == (double equals) is different from = (single equals), which acts like the assignment operator <code>&lt;-</code></em></td>
 </tr>
 <tr class="even">
 <td>Not equal to</td>
@@ -94,13 +94,11 @@ weight: 9
 </tr>
 <tr class="odd">
 <td>Parentheses</td>
-<td>( ) Used to group criteria together and clarify order</td>
+<td><code>( )</code> Used to group criteria together and clarify order</td>
 </tr>
 </tbody>
 </table>
-<blockquote>
-<p>For example, the command below use the function case_when to create the new variable “case_def” such that:</p>
-</blockquote>
+<p>For example, below, we have a linelist with two variables we want to use to create our case definition, <code>hep_e_rdt</code>, a test result and <code>other_cases_in_hh</code>, which will tell us if there are other cases in the household. The command below uses the function <code>case_when()</code> to create the new variable “case_def” such that:</p>
 <pre class="r"><code>linelist_cleaned &lt;- linelist_cleaned %&gt;%
   mutate(case_def = case_when(
     is.na(hep_e_rdt) &amp; is.na(other_cases_in_hh)           ~ NA_character_,
@@ -110,13 +108,13 @@ weight: 9
   ))</code></pre>
 <table>
 <colgroup>
-<col width="53%" />
-<col width="46%" />
+<col width="51%" />
+<col width="48%" />
 </colgroup>
 <thead>
 <tr class="header">
 <th>Criteria in example above</th>
-<th>Resulting value in new variable “case_def”“</th>
+<th>Resulting value in new variable “case_def”</th>
 </tr>
 </thead>
 <tbody>
@@ -142,11 +140,11 @@ weight: 9
 </div>
 <div id="missing-values" class="section level2">
 <h2>Missing Values</h2>
-<p><strong>In R, missing values are represented by the special value NA</strong> (capital letters N and A - not in quotation marks). If you import data that records missing data in another way (e.g. 99, “Missing”, or .), you may want to re-code those values to NA.</p>
-<p><strong>To test whether a value is NA, use the special function is.na()</strong>, which returns TRUE or FALSE.</p>
-<pre class="r"><code>rdt_result &lt;- NA   # Assigns the object rdt_result with the value NA (missing)
+<p><strong>In R, missing values are represented by the special value <code>NA</code></strong> (capital letters N and A - not in quotation marks). If you import data that records missing data in another way (e.g. 99, “Missing”, or .), you may want to re-code those values to <code>NA</code>.</p>
+<p><strong>To test whether a value is <code>NA</code>, use the special function <code>is.na()</code></strong>, which returns TRUE or FALSE.</p>
+<pre class="r"><code>rdt_result &lt;- c(&quot;Positive&quot;, &quot;Suspected&quot;, &quot;Positive&quot;, NA)   # two positive cases, one suspected, and one unknown
 is.na(rdt_result)  # Tests whether the value of rdt_result is NA</code></pre>
-<pre><code>## [1] TRUE</code></pre>
+<pre><code>## [1] FALSE FALSE FALSE  TRUE</code></pre>
 </div>
 <div id="mathematical-operators" class="section level2">
 <h2>Mathematical operators</h2>
@@ -161,23 +159,23 @@ is.na(rdt_result)  # Tests whether the value of rdt_result is NA</code></pre>
 <tbody>
 <tr class="odd">
 <td>addition</td>
-<td>2+3</td>
+<td>2 + 3</td>
 </tr>
 <tr class="even">
 <td>subtraction</td>
-<td>2-3</td>
+<td>2 - 3</td>
 </tr>
 <tr class="odd">
 <td>multiplication</td>
-<td>2*3</td>
+<td>2 * 3</td>
 </tr>
 <tr class="even">
 <td>division</td>
-<td>30/5</td>
+<td>30 / 5</td>
 </tr>
 <tr class="odd">
 <td>exponent</td>
-<td>2^3 or 2**3</td>
+<td>2^3</td>
 </tr>
 <tr class="even">
 <td>order of operations</td>

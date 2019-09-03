@@ -7,13 +7,15 @@ weight: 13
 
 
 <div id="factors-and-the-forcats-package" class="section level3">
-<h3>Factors and the forcats() package</h3>
+<h3>Factors and the <em>forcats</em> package</h3>
 <div id="factors" class="section level4">
 <h4>Factors</h4>
 <p>Factors are a special variable class in which data are stored internally as integers, but each integer <em>level</em> has a corresponding character value <em>label</em> that is used when the data are displayed. This can be partularly helpful when running statistical models which expect numeric (e.g. 0/1) inputs.</p>
-<p><em>Factors are similar to labeled values of categorical variables in Stata.</em></p>
-<p>You can read more about factors <a href="https://www.stat.berkeley.edu/~s133/factors.html">here</a>.</p>
-<p>The package forcats provides useful tools for working with factor variables. You can read more about forcats <a href="https://www.rdocumentation.org/packages/forcats/versions/0.4.0">here</a>.</p>
+<p>{{% notice tip %}}</p>
+<p>Factors are similar to labeled values of categorical variables in Stata.*</p>
+<p>{{% /notice %}}</p>
+<p>You can <a href="https://www.stat.berkeley.edu/~s133/factors.html">read more about factors here</a>.</p>
+<p>The package forcats provides useful tools for working with factor variables. You can <a href="https://forcats.tidyverse.org">read more about forcats here</a>.</p>
 <blockquote>
 <p>For example, in the automatically generated AJS dataset, the variable <code>sex</code> is a factor. In the underlying dataset the levels are F, M, and U, but we can attach longer character labels that are displayed.</p>
 </blockquote>
@@ -23,19 +25,19 @@ linelist_cleaned &lt;- gen_data(&quot;AJS&quot;)
 # the variable is a factor. 
 class(linelist_cleaned$sex)</code></pre>
 <pre><code>## [1] &quot;factor&quot;</code></pre>
-<p><em>Note: To convert use as.factor() <code>linelist_cleaned$sex &lt;- as.factor(linelist_cleaned$sex)</code></em></p>
-<p><strong>To change the labels for a variable, use the function fct_recode() from the package forcats.</strong></p>
+<p><em>Note: To convert use <code>as.factor()</code> <code>linelist_cleaned$sex &lt;- as.factor(linelist_cleaned$sex)</code></em></p>
+<p><strong>To change the labels for a variable, use the function <code>fct_recode()</code> from the package forcats.</strong></p>
 <p>After providing the name of the factor give the conversion statements, separated by commas, in the format <strong>NEW = “OLD”</strong>. Note that everything on the right-hand side (RHS) must be a character. So, if you want to give a new label to missing values, use the special term <code>NA_character_</code>.</p>
-<p>First we use fct_count() from the package forcats to see the values in the factor:</p>
+<p>First we use <code>fct_count()</code> from the package forcats to see the values in the factor:</p>
 <pre class="r"><code># View the levels present in the variable
 fct_count(linelist_cleaned$sex)</code></pre>
 <pre><code>## # A tibble: 3 x 2
 ##   f         n
 ##   &lt;fct&gt; &lt;int&gt;
-## 1 M       101
-## 2 F       106
-## 3 U        93</code></pre>
-<p>Now we re-label the values using fct_recode(), also from the package forcats.</p>
+## 1 M        86
+## 2 F        99
+## 3 U       115</code></pre>
+<p>Now we re-label the values using <code>fct_recode()</code>, also from the package forcats.</p>
 <pre class="r"><code># Re-define the labels for the factor variable (pay attention to spelling!)
 linelist_cleaned$sex &lt;- fct_recode(linelist_cleaned$sex, 
                                    Male = &quot;M&quot;,
@@ -47,15 +49,15 @@ fct_count(linelist_cleaned$sex)</code></pre>
 <pre><code>## # A tibble: 3 x 2
 ##   f           n
 ##   &lt;fct&gt;   &lt;int&gt;
-## 1 Male      101
-## 2 Female    106
-## 3 Unknown    93</code></pre>
-<p><strong>To change the <em>order</em> of the levels, use fct_relevel()</strong>.</p>
-<p>This will impact the <em>order</em> of the levels as displayed in graphs and tables. Give the name of the factor followed by the new order (pay attention to spelling!).</p>
-<pre class="r"><code># Provide new order of levels
+## 1 Male       86
+## 2 Female     99
+## 3 Unknown   115</code></pre>
+<p><strong>To change the <em>arrangement</em> of the levels, use <code>fct_relevel()</code></strong>.</p>
+<p>This will impact the <em>arrangement</em> of the levels as displayed in graphs and tables. Give the name of the factor followed by the new arrangement (pay attention to spelling!).</p>
+<pre class="r"><code># Provide new arrangement of levels
 linelist_cleaned$sex &lt;- fct_relevel(linelist_cleaned$sex, &quot;Female&quot;, &quot;Male&quot;, &quot;Unknown&quot;)
 
-# Check order of levels
+# Check arrangement of levels
 levels(linelist_cleaned$sex)</code></pre>
 <pre><code>## [1] &quot;Female&quot;  &quot;Male&quot;    &quot;Unknown&quot;</code></pre>
 </div>
@@ -73,11 +75,11 @@ fct_count(linelist_cleaned$sex)</code></pre>
 <pre><code>## # A tibble: 3 x 2
 ##   f           n
 ##   &lt;fct&gt;   &lt;int&gt;
-## 1 Female    106
-## 2 Male      101
-## 3 Unknown    93</code></pre>
+## 1 Female     99
+## 2 Male       86
+## 3 Unknown   115</code></pre>
 <blockquote>
-<p>We can see that the value “U” now has a count of zero, but it is still present as a level of the factor variable and will appear in tables and graphs. To remove this level entirely we use fct_drop(), which drops unused levels from a factor.</p>
+<p>We can see that the value “U” now has a count of zero, but it is still present as a level of the factor variable and will appear in tables and graphs. To remove this level entirely we use <code>fct_drop()</code>, which drops unused levels from a factor.</p>
 </blockquote>
 <pre class="r"><code># Drop unused levels
 linelist_cleaned$sex &lt;- fct_drop(linelist_cleaned$sex)
@@ -87,67 +89,65 @@ fct_count(linelist_cleaned$sex)</code></pre>
 <pre><code>## # A tibble: 3 x 2
 ##   f           n
 ##   &lt;fct&gt;   &lt;int&gt;
-## 1 Female    106
-## 2 Male      101
-## 3 Unknown    93</code></pre>
+## 1 Female     99
+## 2 Male       86
+## 3 Unknown   115</code></pre>
 <p><em>Note: Use the argument <code>only =</code> to drop specific levels: <code>fct_drop(linelist_cleaned$sex, only = &quot;U&quot;)</code></em></p>
 </div>
 </div>
 <div id="the-in-operator" class="section level3">
-<h3>The %in% operator</h3>
-<p>The operator %in% looks to see if a value is present within a vector. A vector can be created with the function c(), and a variable in a data frame is also a vector.</p>
-<p>In the simple example below, R is asked if the number 4 is present in the vector “numbers”:</p>
-<pre class="r"><code># Vector is defined
-numbers &lt;- c(4, 10, 5, 365, 12, 0.5, 9)
+<h3>The <code>%in%</code> operator</h3>
+<p>The <code>%in%</code> operator looks to see if any elements of a vector are within another vector. <strong>You can use this to filter your data to a specific set of values.</strong> It’s like a parallel version of <code>==</code>. A vector can be created with the function <code>c()</code>, and a variable in a data frame is also a vector.</p>
+<p>Here, we show how <code>%in%</code> can be used to find which random sample of 10 letters are in the set of (a, b, c):</p>
+<pre class="r"><code># randomly sample 10 letters from the alphabet
+set.seed(99) 
+my_letters &lt;- sample(letters, 10) 
+my_letters</code></pre>
+<pre><code>##  [1] &quot;p&quot; &quot;a&quot; &quot;l&quot; &quot;v&quot; &quot;w&quot; &quot;u&quot; &quot;c&quot; &quot;j&quot; &quot;b&quot; &quot;f&quot;</code></pre>
+<pre class="r"><code># use %in% to ask &quot;which letters are within the set of (a, b, c)?&quot;
+abc &lt;- my_letters %in% c(&quot;a&quot;, &quot;b&quot;, &quot;c&quot;) 
 
-# Test if 5 is in the vector
-5 %in% numbers</code></pre>
-<pre><code>## [1] TRUE</code></pre>
-<p>In the templates, %in% can be used when creating the valued “DIED” (when a patient died). The variable DIED is logical (either TRUE or FALSE). It will be TRUE if the value in exit_status is either “DD” or “DOA” - those are the two character values present in the vector. You can add to or change the terms listed in the vector.</p>
-<pre class="r"><code>#DIED == TRUE if value in exit_status is &quot;DD&quot; or &quot;DOA&quot;
+# the result is a logical (TRUE/FALSE) vector
+abc</code></pre>
+<pre><code>##  [1] FALSE  TRUE FALSE FALSE FALSE FALSE  TRUE FALSE  TRUE FALSE</code></pre>
+<pre class="r"><code># this vector can be used to subset our original vector, returning everything that is TRUE.
+my_letters[abc]</code></pre>
+<pre><code>## [1] &quot;a&quot; &quot;c&quot; &quot;b&quot;</code></pre>
+<p>In the templates, <code>%in%</code> can be used when creating the valued “DIED” (when a patient died). The variable DIED is logical (either <code>TRUE</code> or <code>FALSE</code>). It will be <code>TRUE</code> if the value in exit_status is either “DD” or “DOA” - those are the two character values present in the vector. You can add to or change the terms listed in the vector.</p>
+<pre class="r"><code># DIED is set to TRUE if value in exit_status is &quot;DD&quot; or &quot;DOA&quot;
 linelist_cleaned$DIED &lt;- linelist_cleaned$exit_status %in% c(&quot;DD&quot;, &quot;DOA&quot;))</code></pre>
-<p>You can read more abouth %in% <a href="http://www.datasciencemadesimple.com/in-operator-in-r/">here</a></p>
+<p>You can <a href="http://www.datasciencemadesimple.com/in-operator-in-r/">read more about the <code>%in%</code> here</a></p>
 </div>
 <div id="joins" class="section level2">
 <h2>Joins</h2>
-<p>The package dplyr contains functions that are used in the templates for joining (“merging”) data frames. There are many ways to conduct a join, and it is important that you use the correct option - otherwise you risk unexpectedl losing data!</p>
+<p>The package dplyr contains functions that are used in the templates for joining (“merging”) data frames.
+There are many ways to conduct a join, and it is important that you use the correct option - otherwise you risk unexpectedly losing data!</p>
 <p>It is wise to verify any join by inspecting the joined data frames and the resulting data frame.</p>
-<p>There are more reference materials on dyplr join functions <a href="https://stat545.com/bit001_dplyr-cheatsheet.html">here</a> and <a href="https://rpubs.com/williamsurles/293454">here</a>, and the animations below can be acccessed <a href="https://github.com/gadenbuie/tidyexplain">here</a>.</p>
+<p>There are more reference materials on dplyr join functions <a href="https://stat545.com/bit001_dplyr-cheatsheet.html">in the cheat sheet from UBC’s STAT545 course (by Jenny Bryan)</a> and <a href="https://rpubs.com/williamsurles/293454">course notes from William Srules</a>.
+The animations below were originally from <a href="https://github.com/gadenbuie/tidyexplain" class="uri">https://github.com/gadenbuie/tidyexplain</a>.</p>
 <div id="inner-join" class="section level3">
 <h3>Inner join</h3>
-<p>An inner join of dataframes x and y (<code>inner_join(x, y)</code>) returns <strong>only</strong> the rows from x which have matching values in y, and includes all the columns from both x and y.</p>
-<p>The argument <code>by =</code> specifies the column name in both dataframes to compare for the join (it must be spelled the same in both dataframes).</p>
-<div class="figure">
-<img src="/images/inner-join.gif" />
-
-</div>
+<p>An inner join of data frames x and y (<code>inner_join(x, y)</code>) returns <strong>only</strong> the rows from x which have matching values in y, and includes all the columns from both x and y.</p>
+<p>The argument <code>by =</code> specifies the column name in both data frames to compare for the join (it must be spelled the same in both data frames).</p>
+<p><img src="/images/inner-join.gif" /></p>
 </div>
 <div id="left-join" class="section level3">
 <h3>Left join</h3>
-<p>A left join of dataframes x and y (<code>left_join(x, y)</code>) prioritizes only the “left” dataframe (x), thus returning all rows from x with all columns from x and y. If a row in x has multiple matches in y, all combinations are returned as separate rows.</p>
-<p>The argument <code>by =</code> specifies the column name in both dataframes to compare for the join (it must be spelled the same in both dataframes).</p>
-<p>For example, a left join occurs in the AJS template when calculating attack rate by region, where <code>cases</code> and <code>population_data</code> are joined by their variable “patient_origin”.</p>
+<p>A left join of data frames x and y (<code>left_join(x, y)</code>) prioritizes only the “left” data frame (x), thus returning all rows from x with all columns from x and y. If a row in x has multiple matches in y, all combinations are returned as separate rows.</p>
+<p>The argument <code>by =</code> specifies the column name in both data frames to compare for the join (it must be spelled the same in both data frames).</p>
+<p>For example, a left join occurs in the AJS template when calculating attack rate by region, where <code>cases</code> and <code>population_data</code> are joined by their variable <code>patient_origin</code>.</p>
 <pre class="r"><code>cases &lt;- count(linelist_cleaned, patient_origin) %&gt;%   # cases for each region
   left_join(population_data, by = &quot;patient_origin&quot;)    # merge population data </code></pre>
-<div class="figure">
-<img src="/images/left-join.gif" />
-
-</div>
+<p><img src="/images/left-join.gif" /></p>
 </div>
 <div id="full-join" class="section level3">
 <h3>Full join</h3>
-<p>A full join of dataframes x and y (<code>full_join(x, y)</code>) returns all rows from x and y. If there are any rows in x not in y (or visa-versa), the missing values are NA.</p>
-<div class="figure">
-<img src="/images/full-join.gif" />
-
-</div>
+<p>A full join of data frames x and y (<code>full_join(x, y)</code>) returns all rows from x and y. If there are any rows in x not in y (or visa-versa), the missing values are <code>NA</code>.</p>
+<p><img src="/images/full-join.gif" /></p>
 </div>
 <div id="anti-join" class="section level3">
 <h3>Anti join</h3>
-<p>An anti join of dataframes x and y (<code>anti_join(x, y)</code>) returns the rows from dataframe x that <em>do not</em> have matching values in dataframe y. Also, only columns from x are returned. This is sometimes used to filter data.</p>
-<div class="figure">
-<img src="/images/anti-join.gif" />
-
-</div>
+<p>This is often used to inspect which rows are unique to a data frame. An anti join of data frames x and y (<code>anti_join(x, y)</code>) returns the rows from data frame x that <em>do not</em> have matching values in data frame y. Only columns from x are returned.</p>
+<p><img src="/images/anti-join.gif" /></p>
 </div>
 </div>
