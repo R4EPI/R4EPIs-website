@@ -19,11 +19,12 @@ linelist_cleaned <- linelist_raw
 ## Working with Dates
 
 ### Converting date variables to the date class
-It is important to make R recognize when a variable contains dates. Dates are an object class and can be tricky to work with. The templates provides some code for converting variables to class date, but if your data are not standardized to a MSF data dictionary this process can require attention. **The templates often use the function `guess_dates()`, but this guide will also demonstrate converting a variable to class date using the function as.Date().** 
 
-#### The function guess_dates() 
+It is important to make R recognize when a variable contains dates. Dates are an object class and can be tricky to work with. The templates provides some code for converting variables to class date, but if your data are not standardized to a MSF data dictionary this process can require attention. **The templates often use the function `guess_dates()`, but this guide will also demonstrate converting a variable to class date using the function `as.Date()`.** 
 
-**The function guess_dates() attempts to read a "messy" date variable containing dates in many different formats and convert the dates to a standard format.** You can read more about guess_dates(), which is in the "linelist" package, [here](https://rdrr.io/github/reconhub/linelist/man/guess_dates.html).  
+#### The function `guess_dates()` 
+
+**The function `guess_dates()` attempts to read a "messy" date variable containing dates in many different formats and convert the dates to a standard format.** You can [read more about `guess_dates()`](https://www.repidemicsconsortium.org/linelist/reference/guess_dates.html), which is in the "linelist" package.
 
 >For example, guess_dates would see the following dates "03 Jan 2018", "07/03/1982", and "08/20/85" and convert them in the class Date to: 2018-01-03, 1982-03-07, and 1985-08-20.  
 
@@ -31,7 +32,7 @@ It is important to make R recognize when a variable contains dates. Dates are an
 guess_dates(c("03 Jan 2018", "07/03/1982", "08/20/85"))
 ```
 
-*Some optional arguments for guess_dates() that you might include are:*  
+*Some optional arguments for `guess_dates()` that you might include are:*  
 
 * error_tolerance - The proportion of entries which cannot be identified as dates to be tolerated (defaults to 0.1 or 10%)
 * last_date - the last valid date (defaults to current date)  
@@ -50,9 +51,9 @@ linelist_cleaned <- linelist_cleaned %>%
 
 
 
-#### The function as.Date()  
+#### The function `as.Date()`  
 
-If guess_dates() is not working for you, you can use the base function as.Date() to convert a variable to class Date. **as.Date() cannot guess dates, and therefore requires that all the date values be in the same format before converting.** Read more about using as.Date() [here](https://www.stat.berkeley.edu/~s133/dates.html).
+If `guess_dates()` is not working for you, you can use the base function `as.Date()` to convert a variable to class Date. **`as.Date()` cannot guess dates, and therefore requires that all the date values be in the same format before converting.** [Read more about using `as.Date()` here](https://www.stat.berkeley.edu/~s133/dates.html).
 
 It can be easiest to first convert the variable to character class, and then convert to date class:  
 
@@ -93,7 +94,8 @@ Once the values are in class Date, R will present them in it's standard format, 
 
 #### Excel Dates
 
-Excel stores dates as the number of days since December 30, 1899. If the dataset you imported from Excel has a date variable showing numbers like "41369"... use the as.Date() function to convert, but **instead of supplying a format as above, supply an origin date**. Note that the origin date must be given in the default date format for R ("YYYY-MM-DD").
+Excel stores dates as the number of days since December 30, 1899. If the dataset you imported from Excel has a date variable showing numbers like "41369"... use the `as.Date()` function to convert, but **instead of supplying a format as above, supply an origin date**. Note that the origin date must be given in the default date format for R ("YYYY-MM-DD").
+
 ```{r, eval=FALSE}
 # An example of providing an origin date when converting to class Date
 linelist_cleaned$date_of_onset <- as.Date(linelist_cleaned$date_of_onset, origin = "1899-12-30")
@@ -101,7 +103,7 @@ linelist_cleaned$date_of_onset <- as.Date(linelist_cleaned$date_of_onset, origin
 
 #### Changing the format of displayed dates 
 
-Once dates are the correct class, you often want them to display differently. For example, "Monday 05 Jan" instead of 2018-01-05. You can do this with the function format() in a similar was to as.Date(). Read more about it [here](https://www.statmethods.net/input/dates.html) 
+Once dates are the correct class, you often want them to display differently. For example, "Monday 05 Jan" instead of 2018-01-05. You can do this with the function `format()` in a similar was to `as.Date()`. Read more about it [here](https://www.statmethods.net/input/dates.html) 
 
 #### Calculating distance between dates
 

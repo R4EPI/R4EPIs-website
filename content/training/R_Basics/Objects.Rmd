@@ -20,7 +20,7 @@ Everything you store in R - datasets, variables, a list of village names, a tota
 
 An object exists when you have assigned it a value (see the assignment section below). When it is assigned a value, the object appears in the Environment (see the upper right pane of RStudio). It can then be operated upon, manipulated, changed, and re-defined.
 
-### Creating objects with the Assignment Operator <-  
+### Creating objects with the Assignment Operator (`<-`)
 
 **You create objects *by assigning them a value* with the <- operator.** You can think of the assignment operator `<-` as the words "is defined as". Assignment commands generally follow a standard order:  
   

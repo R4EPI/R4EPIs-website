@@ -116,7 +116,7 @@ The `%in%` operator looks to see if any elements of a vector are within another 
 Here, we show how `%in%` can be used to find which letters in the word "epidemiology" are vowels:
 
 ```{r}
-epi <- c("e", "p", "i", "d", "e", "m", "i", "o", "l", "g", "y")
+epi <- c("e", "p", "i", "d", "e", "m", "i", "o", "l", "o", "g", "y")
 epi
 
 # use %in% to ask "for each letter in epi, is it in the list of vowels (a, e, i, o, u)?"

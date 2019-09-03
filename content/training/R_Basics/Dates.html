@@ -10,16 +10,16 @@ weight: 10
 <h2>Working with Dates</h2>
 <div id="converting-date-variables-to-the-date-class" class="section level3">
 <h3>Converting date variables to the date class</h3>
-<p>It is important to make R recognize when a variable contains dates. Dates are an object class and can be tricky to work with. The templates provides some code for converting variables to class date, but if your data are not standardized to a MSF data dictionary this process can require attention. <strong>The templates often use the function <code>guess_dates()</code>, but this guide will also demonstrate converting a variable to class date using the function as.Date().</strong></p>
+<p>It is important to make R recognize when a variable contains dates. Dates are an object class and can be tricky to work with. The templates provides some code for converting variables to class date, but if your data are not standardized to a MSF data dictionary this process can require attention. <strong>The templates often use the function <code>guess_dates()</code>, but this guide will also demonstrate converting a variable to class date using the function <code>as.Date()</code>.</strong></p>
 <div id="the-function-guess_dates" class="section level4">
-<h4>The function guess_dates()</h4>
-<p><strong>The function guess_dates() attempts to read a “messy” date variable containing dates in many different formats and convert the dates to a standard format.</strong> You can read more about guess_dates(), which is in the “linelist” package, <a href="https://rdrr.io/github/reconhub/linelist/man/guess_dates.html">here</a>.</p>
+<h4>The function <code>guess_dates()</code></h4>
+<p><strong>The function <code>guess_dates()</code> attempts to read a “messy” date variable containing dates in many different formats and convert the dates to a standard format.</strong> You can <a href="https://www.repidemicsconsortium.org/linelist/reference/guess_dates.html">read more about <code>guess_dates()</code></a>, which is in the “linelist” package.</p>
 <blockquote>
 <p>For example, guess_dates would see the following dates “03 Jan 2018”, “07/03/1982”, and “08/20/85” and convert them in the class Date to: 2018-01-03, 1982-03-07, and 1985-08-20.</p>
 </blockquote>
 <pre class="r"><code>guess_dates(c(&quot;03 Jan 2018&quot;, &quot;07/03/1982&quot;, &quot;08/20/85&quot;))</code></pre>
 <pre><code>## [1] &quot;2018-01-03&quot; &quot;1982-03-07&quot; &quot;1985-08-20&quot;</code></pre>
-<p><em>Some optional arguments for guess_dates() that you might include are:</em></p>
+<p><em>Some optional arguments for <code>guess_dates()</code> that you might include are:</em></p>
 <ul>
 <li>error_tolerance - The proportion of entries which cannot be identified as dates to be tolerated (defaults to 0.1 or 10%)</li>
 <li>last_date - the last valid date (defaults to current date)<br />
@@ -35,8 +35,8 @@ linelist_cleaned &lt;- linelist_cleaned %&gt;%
            error_tolerance = 0.5, first_date = &quot;2016-01-01&quot;)</code></pre>
 </div>
 <div id="the-function-as.date" class="section level4">
-<h4>The function as.Date()</h4>
-<p>If guess_dates() is not working for you, you can use the base function as.Date() to convert a variable to class Date. <strong>as.Date() cannot guess dates, and therefore requires that all the date values be in the same format before converting.</strong> Read more about using as.Date() <a href="https://www.stat.berkeley.edu/~s133/dates.html">here</a>.</p>
+<h4>The function <code>as.Date()</code></h4>
+<p>If <code>guess_dates()</code> is not working for you, you can use the base function <code>as.Date()</code> to convert a variable to class Date. <strong><code>as.Date()</code> cannot guess dates, and therefore requires that all the date values be in the same format before converting.</strong> <a href="https://www.stat.berkeley.edu/~s133/dates.html">Read more about using <code>as.Date()</code> here</a>.</p>
 <p>It can be easiest to first convert the variable to character class, and then convert to date class:</p>
 <ol style="list-style-type: decimal">
 <li>Turn the variable into character values using the function <code>as.character()</code></li>
@@ -75,13 +75,13 @@ class(linelist_cleaned$date_of_onset)  </code></pre>
 </div>
 <div id="excel-dates" class="section level4">
 <h4>Excel Dates</h4>
-<p>Excel stores dates as the number of days since December 30, 1899. If the dataset you imported from Excel has a date variable showing numbers like “41369”… use the as.Date() function to convert, but <strong>instead of supplying a format as above, supply an origin date</strong>. Note that the origin date must be given in the default date format for R (“YYYY-MM-DD”).</p>
+<p>Excel stores dates as the number of days since December 30, 1899. If the dataset you imported from Excel has a date variable showing numbers like “41369”… use the <code>as.Date()</code> function to convert, but <strong>instead of supplying a format as above, supply an origin date</strong>. Note that the origin date must be given in the default date format for R (“YYYY-MM-DD”).</p>
 <pre class="r"><code># An example of providing an origin date when converting to class Date
 linelist_cleaned$date_of_onset &lt;- as.Date(linelist_cleaned$date_of_onset, origin = &quot;1899-12-30&quot;)</code></pre>
 </div>
 <div id="changing-the-format-of-displayed-dates" class="section level4">
 <h4>Changing the format of displayed dates</h4>
-<p>Once dates are the correct class, you often want them to display differently. For example, “Monday 05 Jan” instead of 2018-01-05. You can do this with the function format() in a similar was to as.Date(). Read more about it <a href="https://www.statmethods.net/input/dates.html">here</a></p>
+<p>Once dates are the correct class, you often want them to display differently. For example, “Monday 05 Jan” instead of 2018-01-05. You can do this with the function <code>format()</code> in a similar was to <code>as.Date()</code>. Read more about it <a href="https://www.statmethods.net/input/dates.html">here</a></p>
 </div>
 <div id="calculating-distance-between-dates" class="section level4">
 <h4>Calculating distance between dates</h4>

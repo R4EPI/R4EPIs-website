@@ -15,6 +15,7 @@ A few things to remember when writing commands in R, to avoid errors and warning
 
 
 ### Code assists  
+
 Any script (RMarkdown or otherwise) will give clues when you have made a mistake. For example, if you forgot to write a comma where it is needed, or to close a parentheses, RStudio will raise a flag on that line, on the right side of the script, to warn you.  
 
 ![](/images/Warnings_and_Errors.png)
