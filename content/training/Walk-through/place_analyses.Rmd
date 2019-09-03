@@ -192,7 +192,7 @@ mortality_rate(deaths$deaths, deaths$population, multiplier = 10000) %>%
 ```
 
 
-#### Maps 
+### Maps 
 
 Mapping in R can be intimidating at first because it is different than ArcGIS, QGIS, or other mapping software that primarily use a point-and-click interface. However, you will see that using commands to create maps can be much faster, more replicable, and transparent for whomever you share code with.  
 
@@ -265,7 +265,7 @@ ar <- mutate(ar,
              )
 ```
 
-**Join the object 'ar' to the map (shapefile)** 'map' is joined to 'ar' with a **left join** (see the R Basics page on Advanced Function to learn more about joins). Both of these objects contain tables (you can click them in the Environment pane to see this). In the command, they are linked by the "Name" variable in 'ar' and the "Region" variable in 'map'.  
+**Join the object 'ar' to the map (shapefile)** 'map' is joined to 'ar' with a **left join** (see the Advanced R Basics page to learn more about joins). Both of these objects contain tables (you can click them in the Environment pane to see this). In the command, they are linked by the "Name" variable in 'ar' and the "Region" variable in 'map'.  
 
 **Note: make sure your `left_join` code uses "Name" with a capital N, as that is how the variable is spelled in the object 'map'. In your data these variable names may be completely different and must be changed**  
 

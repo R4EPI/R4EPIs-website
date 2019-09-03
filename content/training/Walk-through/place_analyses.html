@@ -2367,8 +2367,9 @@ mortality_rate(deaths$deaths, deaths$population, multiplier = 10000) %&gt;%
 </tr>
 </tbody>
 </table>
-<div id="maps" class="section level4">
-<h4>Maps</h4>
+</div>
+<div id="maps" class="section level3">
+<h3>Maps</h3>
 <p>Mapping in R can be intimidating at first because it is different than ArcGIS, QGIS, or other mapping software that primarily use a point-and-click interface. However, you will see that using commands to create maps can be much faster, more replicable, and transparent for whomever you share code with.</p>
 <p>We do have shapefiles for the Am Timan exercise. You can download them from the case study overview page of this website.</p>
 <p><em>Shapefiles are a format for storing geometric location and attribute data for geographic features - for example <strong>either points (e.g. GPS points of cases or households surveyed), lines (e.g. road network), or polygons (e.g. district boundaries)</strong> </em></p>
@@ -2414,7 +2415,7 @@ ar &lt;- mutate(ar,
              categories = age_categories(`AR (per 10,000)`, 
                                          breakers = breakers)
              )</code></pre>
-<p><strong>Join the object ‘ar’ to the map (shapefile)</strong> ‘map’ is joined to ‘ar’ with a <strong>left join</strong> (see the R Basics page on Advanced Function to learn more about joins). Both of these objects contain tables (you can click them in the Environment pane to see this). In the command, they are linked by the “Name” variable in ‘ar’ and the “Region” variable in ‘map’.</p>
+<p><strong>Join the object ‘ar’ to the map (shapefile)</strong> ‘map’ is joined to ‘ar’ with a <strong>left join</strong> (see the Advanced R Basics page to learn more about joins). Both of these objects contain tables (you can click them in the Environment pane to see this). In the command, they are linked by the “Name” variable in ‘ar’ and the “Region” variable in ‘map’.</p>
 <p><strong>Note: make sure your <code>left_join</code> code uses “Name” with a capital N, as that is how the variable is spelled in the object ‘map’. In your data these variable names may be completely different and must be changed</strong></p>
 <p>The resulting object ‘mapsub’ is a product of this <strong>left join</strong>. A left join will include all values from the Left-hand Side (LHS) and only inlcude values from the Right-hand Side (RHS) if they match to LHS values. Now, the attack rates are joined to the region names and to their GIS geometries. You can verify this by Viewing the object mapsub (click on it in the Environment pane).</p>
 <pre class="r"><code>## join your ar or case counts based on matching shapefile names with regions in your ar table
@@ -2558,5 +2559,4 @@ for (i in unique(cases$epiweek)) {
   )
 }</code></pre>
 <p><img src="/training/Walk-through/place_analyses_files/figure-html/unnamed-chunk-8-1.png" width="720" /><img src="/training/Walk-through/place_analyses_files/figure-html/unnamed-chunk-8-2.png" width="720" /><img src="/training/Walk-through/place_analyses_files/figure-html/unnamed-chunk-8-3.png" width="720" /><img src="/training/Walk-through/place_analyses_files/figure-html/unnamed-chunk-8-4.png" width="720" /><img src="/training/Walk-through/place_analyses_files/figure-html/unnamed-chunk-8-5.png" width="720" /><img src="/training/Walk-through/place_analyses_files/figure-html/unnamed-chunk-8-6.png" width="720" /><img src="/training/Walk-through/place_analyses_files/figure-html/unnamed-chunk-8-7.png" width="720" /><img src="/training/Walk-through/place_analyses_files/figure-html/unnamed-chunk-8-8.png" width="720" /><img src="/training/Walk-through/place_analyses_files/figure-html/unnamed-chunk-8-9.png" width="720" /><img src="/training/Walk-through/place_analyses_files/figure-html/unnamed-chunk-8-10.png" width="720" /><img src="/training/Walk-through/place_analyses_files/figure-html/unnamed-chunk-8-11.png" width="720" /><img src="/training/Walk-through/place_analyses_files/figure-html/unnamed-chunk-8-12.png" width="720" /><img src="/training/Walk-through/place_analyses_files/figure-html/unnamed-chunk-8-13.png" width="720" /><img src="/training/Walk-through/place_analyses_files/figure-html/unnamed-chunk-8-14.png" width="720" /><img src="/training/Walk-through/place_analyses_files/figure-html/unnamed-chunk-8-15.png" width="720" /><img src="/training/Walk-through/place_analyses_files/figure-html/unnamed-chunk-8-16.png" width="720" /><img src="/training/Walk-through/place_analyses_files/figure-html/unnamed-chunk-8-17.png" width="720" /><img src="/training/Walk-through/place_analyses_files/figure-html/unnamed-chunk-8-18.png" width="720" /><img src="/training/Walk-through/place_analyses_files/figure-html/unnamed-chunk-8-19.png" width="720" /><img src="/training/Walk-through/place_analyses_files/figure-html/unnamed-chunk-8-20.png" width="720" /><img src="/training/Walk-through/place_analyses_files/figure-html/unnamed-chunk-8-21.png" width="720" /></p>
-</div>
 </div>
