@@ -26,9 +26,7 @@ linelist_cleaned <- gen_data("AJS")
 Factors are a special variable class in which data are stored internally as integers, but each integer *level* has a corresponding character value *label* that is used when the data are displayed. This can be partularly helpful when running statistical models which expect numeric (e.g. 0/1) inputs.  
 
 {{% notice tip %}}
-
-Factors are similar to labeled values of categorical variables in Stata.*  
-
+Factors are similar to labeled values of categorical variables in Stata.  
 {{% /notice %}}
 
 You can [read more about factors here](https://www.stat.berkeley.edu/~s133/factors.html).  
