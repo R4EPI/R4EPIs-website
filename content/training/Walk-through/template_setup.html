@@ -80,7 +80,8 @@ weight: 6
 <p>Set the epidemiological week for the report. <strong>This value is used in later code chunks, for example when producing epidemic curves.</strong> Note that you may want to specify the most recent <strong>complete</strong> epi week. Follow the format in the code below (within quotes give the 4-digit year, a hyphen (-), capital W, then the 2-digit epi week number).</p>
 <p>By default in the templates epi weeks begin on Mondays (this can be changed at the bottom of the “setup” code chunk). See the documentation of the <a href="https://cran.r-project.org/web/packages/aweek/vignettes/introduction.html">package “aweek”</a> for more information.</p>
 <p>To determine which epi week of a date you can use the date2week() function. It will tell you the year, week, and day number of the provided date. Let’s assume the date we want to use for this analysis is 20 April, 2017.</p>
-<pre class="r"><code>date2week(&quot;2017-04-20&quot;)      # Ask the epi week of this date</code></pre>
+<pre class="r"><code>set_week_start(&quot;Monday&quot;)     # Define the first day of the epi week
+date2week(&quot;2017-04-20&quot;)      # Ask for the epi week of this date</code></pre>
 <pre><code>## &lt;aweek start: Monday&gt;
 ## [1] &quot;2017-W16-4&quot;</code></pre>
 <pre class="r"><code>reporting_week &lt;- &quot;2017-W16&quot;  # Set reporting_week for our template</code></pre>
