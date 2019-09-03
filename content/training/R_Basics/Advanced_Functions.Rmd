@@ -115,29 +115,28 @@ fct_count(linelist_cleaned$sex)
 
 The `%in%` operator looks to see if any elements of a vector are within another vector. **You can use this to filter your data to a specific set of values.** It's like a parallel version of `==`. A vector can be created with the function `c()`, and a variable in a data frame is also a vector. 
 
-Here, we show how `%in%` can be used to find which random sample of 10 letters are in the set of (a, b, c):
+Here, we show how `%in%` can be used to find which letters in the word "epidemiology" are vowels:
 
 ```{r}
-# randomly sample 10 letters from the alphabet
-set.seed(99) 
-my_letters <- sample(letters, 10) 
-my_letters
+epi <- c("e", "p", "i", "d", "e", "m", "i", "o", "l", "g", "y")
+epi
 
-# use %in% to ask "which letters are within the set of (a, b, c)?"
-abc <- my_letters %in% c("a", "b", "c") 
+# use %in% to ask "for each letter in epi, is it in the list of vowels (a, e, i, o, u)?"
+are_vowels <- epi %in% c("a", "e", "i", "o", "u")
 
 # the result is a logical (TRUE/FALSE) vector
-abc
+are_vowels
 
-# this vector can be used to subset our original vector, returning everything that is TRUE.
-my_letters[abc]
+# this new vector can be used to subset our original vector
+# the following returns only the letters in epi that evaluated to TRUE in epi_vowels
+epi[are_vowels]
 ```
 
 In the templates, `%in%` can be used when creating the valued "DIED" (when a patient died). The variable DIED is logical (either `TRUE` or `FALSE`). It will be `TRUE` if the value in exit_status is either "DD" or "DOA" - those are the two character values present in the vector. You can add to or change the terms listed in the vector.
 
 ```{r eval=FALSE}
 # DIED is set to TRUE if value in exit_status is "DD" or "DOA"
-linelist_cleaned$DIED <- linelist_cleaned$exit_status %in% c("DD", "DOA"))
+linelist_cleaned$DIED <- linelist_cleaned$exit_status %in% c("DD", "DOA")
 ```
 
 You can [read more about the `%in%` here](http://www.datasciencemadesimple.com/in-operator-in-r/)
