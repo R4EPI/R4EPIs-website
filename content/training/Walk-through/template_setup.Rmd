@@ -30,8 +30,8 @@ required_packages <- c("knitr",       # create output docs
                        "epitools",    # 2x2 tables and other epi goodness
                        "epitrix",     # epi helpers and tricks
                        "sf",          # encode spatial vector data
-                       "ggspatial",
-                       "here")   # plot maps
+                       "ggspatial",   # plot maps
+                       "here")        # locate files
 
 for (pkg in required_packages) {
   # install packages if not already present
@@ -95,6 +95,7 @@ This "setup" code chunk does the following:
 * rio used to read in data  
 * epitrix used for data cleaning and variable standardisation  
 * ggplot2 used to visualise your data using different plotting methods  
+* here used to locate files
 
 #### More epidemiology-specific packages  
 
@@ -119,17 +120,18 @@ Set the epidemiological week for the report. **This value is used in later code 
 
 By default in the templates epi weeks begin on Mondays (this can be changed at the bottom of the "setup" code chunk). See the documentation of the [package "aweek"](https://cran.r-project.org/web/packages/aweek/vignettes/introduction.html) for more information. 
 
-To determine which epi week of a date you can use the date2week() function. Let's assume the date of this analysis is 20 April, 2017.
+To determine which epi week of a date you can use the date2week() function. It will tell you the year, week, and day number of the provided date. Let's assume the date we want to use for this analysis is 20 April, 2017.
 
 ```{r}
-date2week("2017-04-20")      #Sys.Date() uses the current date from your computer
+set_week_start("Monday")     # Define the first day of the epi week
+date2week("2017-04-20")      # Ask for the epi week of this date
 ```
 
 ```{r}
-reporting_week <- "2017-W16"  # Set the reporting week
+reporting_week <- "2017-W16"  # Set reporting_week for our template
 ```
 
-
+*Note: If you want to use the automatically-updated date from your computer, use Sys.Date() like this: `date2week(Sys.Date())`.*
 
 
 ```{r, include=FALSE, results='hide', message=FALSE, warning=FALSE}

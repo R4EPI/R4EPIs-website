@@ -24,7 +24,6 @@ linelist_cleaned$age_group <- age_categories(linelist_cleaned$age_years,
 ```
 
 
-## Functions  
 
 ### Simple Functions  
 

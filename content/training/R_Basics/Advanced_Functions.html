@@ -1,48 +1,96 @@
 ---
 date: "2019-08-22T15:33:00+02:00"
-title: Advanced Functions
-weight: 12
+title: Advanced and Miscellaneous
+weight: 13
 ---
 
 
 
-<div id="the-here-packge-and-here-function" class="section level2">
-<h2>The Here packge and here() function</h2>
-<p>The templates use the <strong>Here package to assist with locating local files</strong>. The Here package and its function here() work well with R projects.</p>
-<p><strong>How it works:</strong> When the package “Here” is loaded, it automatically considers the top-level folder of your R project as “here” - as a benchmark for all other files in the Project. In your script, if you want to import or reference a file saved in your R project’s folders, you use the function here() to tell R where the file is in relation to “here”.</p>
-<p>If you are unsure where “here” is set to, run this command:</p>
-<pre class="r"><code># This command tells you the folder path that &quot;here&quot; is set to 
-here()</code></pre>
-<p><strong>Below is an example</strong> of importing the file “linelist.xlsx”. The import() function from the rio package does the importing, but <strong>import() needs to be told where to look on your computer</strong> to find the file. Normally, it accepts a filepath in quotes, but it is easy to make mistakes. Instead, <strong>import() is wrapped around the function here()</strong>.</p>
-<p>If the file you want is in the folder designated as “here”, all you have to do is provide the name of the file in quotes (with the appropriate ending).</p>
-<pre class="r"><code>linelist_raw &lt;- rio::import(here(&quot;linelist.xlsx&quot;), which = &quot;Sheet1&quot;)</code></pre>
-<p><em>Note: After the closing parenthes of here() the import() function continues. There is a comma and import()’s optional argument <code>which =</code>, specifying which sheet of the Excel file to import.</em></p>
-<p><strong>If however, your file is within subfolders of the folder designated as “here”</strong> - let’s say it is in the subfolder “data” and then the sub-subfolder “linelists” - <strong>you write these folder names before the file name, in quotes, and separated by commas</strong>, as below:</p>
-<pre class="r"><code>linelist_raw &lt;- rio::import(here(&quot;data&quot;, &quot;linelists&quot;, &quot;linelist.xlsx&quot;), which = &quot;Sheet1&quot;)</code></pre>
-<p>You can read more about Here and here() at <a href="https://github.com/jennybc/here_here">this site</a> and <a href="https://here.r-lib.org/">this one</a></p>
-<p><em>Note: by using the Here package and here() function with R projects, it is not necessary to worry about your “working directory”, setwd(), or getwd() commands.</em></p>
-</div>
-<div id="joins" class="section level2">
-<h2>Joins</h2>
-<p>The animations below can be acccessed <a href="https://github.com/gadenbuie/tidyexplain">here</a>.</p>
-<div id="left-join" class="section level3">
-<h3>Left join</h3>
-<p>An example of a left join from the AJS outbreak template occurs in the TODO</p>
-<div class="figure">
-<img src="/images/left-join.gif" />
+<div id="factors-and-the-forcats-package" class="section level3">
+<h3>Factors and the forcats() package</h3>
+<div id="factors" class="section level4">
+<h4>Factors</h4>
+<p>Factors are a special variable class in which data are stored internally as integers, but each integer <em>level</em> has a corresponding character value <em>label</em> that is used when the data are displayed. This can be partularly helpful when running statistical models which expect numeric (e.g. 0/1) inputs.</p>
+<p><em>Factors are similar to labeled values of categorical variables in Stata.</em></p>
+<p>You can read more about factors <a href="https://www.stat.berkeley.edu/~s133/factors.html">here</a>.</p>
+<p>The package forcats provides useful tools for working with factor variables. You can read more about forcats <a href="https://www.rdocumentation.org/packages/forcats/versions/0.4.0">here</a>.</p>
+<blockquote>
+<p>For example, in the automatically generated AJS dataset, the variable <code>sex</code> is a factor. In the underlying dataset the levels are F, M, and U, but we can attach longer character labels that are displayed.</p>
+</blockquote>
+<pre class="r"><code># Use auto-generated dataset for this example
+linelist_cleaned &lt;- gen_data(&quot;AJS&quot;)
 
-</div>
-<div class="figure">
-<img src="/images/right-join.gif" />
+# the variable is a factor. 
+class(linelist_cleaned$sex)</code></pre>
+<pre><code>## [1] &quot;factor&quot;</code></pre>
+<p><em>Note: To convert use as.factor() <code>linelist_cleaned$sex &lt;- as.factor(linelist_cleaned$sex)</code></em></p>
+<p><strong>To change the labels for a variable, use the function fct_recode() from the package forcats.</strong></p>
+<p>After providing the name of the factor give the conversion statements, separated by commas, in the format <strong>NEW = “OLD”</strong>. Note that everything on the right-hand side (RHS) must be a character. So, if you want to give a new label to missing values, use the special term <code>NA_character_</code>.</p>
+<p>First we use fct_count() from the package forcats to see the values in the factor:</p>
+<pre class="r"><code># View the levels present in the variable
+fct_count(linelist_cleaned$sex)</code></pre>
+<pre><code>## # A tibble: 3 x 2
+##   f         n
+##   &lt;fct&gt; &lt;int&gt;
+## 1 M       101
+## 2 F       106
+## 3 U        93</code></pre>
+<p>Now we re-label the values using fct_recode(), also from the package forcats.</p>
+<pre class="r"><code># Re-define the labels for the factor variable (pay attention to spelling!)
+linelist_cleaned$sex &lt;- fct_recode(linelist_cleaned$sex, 
+                                   Male = &quot;M&quot;,
+                                   Female = &quot;F&quot;,
+                                   Unknown = &quot;U&quot;)
 
-</div>
-<div class="figure">
-<img src="/images/full-join.gif" />
+# View the levels present in the variable
+fct_count(linelist_cleaned$sex)</code></pre>
+<pre><code>## # A tibble: 3 x 2
+##   f           n
+##   &lt;fct&gt;   &lt;int&gt;
+## 1 Male      101
+## 2 Female    106
+## 3 Unknown    93</code></pre>
+<p><strong>To change the <em>order</em> of the levels, use fct_relevel()</strong>.</p>
+<p>This will impact the <em>order</em> of the levels as displayed in graphs and tables. Give the name of the factor followed by the new order (pay attention to spelling!).</p>
+<pre class="r"><code># Provide new order of levels
+linelist_cleaned$sex &lt;- fct_relevel(linelist_cleaned$sex, &quot;Female&quot;, &quot;Male&quot;, &quot;Unknown&quot;)
 
+# Check order of levels
+levels(linelist_cleaned$sex)</code></pre>
+<pre><code>## [1] &quot;Female&quot;  &quot;Male&quot;    &quot;Unknown&quot;</code></pre>
 </div>
-<div class="figure">
-<img src="/images/inner-join.gif" />
+<div id="dropping-factor-levels" class="section level4">
+<h4>Dropping factor levels</h4>
+<p>If a variable is already a factor, it can be difficult to remove levels that do not have any observations. These levels will continue to appear in graphs, tables, etc.</p>
+<blockquote>
+<p>For example, here we look at the values present in the variable sex. We want to convert those that are “U” to proper R missing values (<code>NA</code>).</p>
+</blockquote>
+<pre class="r"><code># Convert &quot;U&quot; values to missing
+linelist_cleaned$sex[linelist_cleaned$sex == &quot;U&quot;] &lt;- NA
 
+# see the values and counts in the factor variable sex
+fct_count(linelist_cleaned$sex)</code></pre>
+<pre><code>## # A tibble: 3 x 2
+##   f           n
+##   &lt;fct&gt;   &lt;int&gt;
+## 1 Female    106
+## 2 Male      101
+## 3 Unknown    93</code></pre>
+<blockquote>
+<p>We can see that the value “U” now has a count of zero, but it is still present as a level of the factor variable and will appear in tables and graphs. To remove this level entirely we use fct_drop(), which drops unused levels from a factor.</p>
+</blockquote>
+<pre class="r"><code># Drop unused levels
+linelist_cleaned$sex &lt;- fct_drop(linelist_cleaned$sex)
+
+# see the values and counts in the factor variable sex
+fct_count(linelist_cleaned$sex)</code></pre>
+<pre><code>## # A tibble: 3 x 2
+##   f           n
+##   &lt;fct&gt;   &lt;int&gt;
+## 1 Female    106
+## 2 Male      101
+## 3 Unknown    93</code></pre>
+<p><em>Note: Use the argument <code>only =</code> to drop specific levels: <code>fct_drop(linelist_cleaned$sex, only = &quot;U&quot;)</code></em></p>
 </div>
 </div>
 <div id="the-in-operator" class="section level3">
@@ -59,5 +107,47 @@ numbers &lt;- c(4, 10, 5, 365, 12, 0.5, 9)
 <pre class="r"><code>#DIED == TRUE if value in exit_status is &quot;DD&quot; or &quot;DOA&quot;
 linelist_cleaned$DIED &lt;- linelist_cleaned$exit_status %in% c(&quot;DD&quot;, &quot;DOA&quot;))</code></pre>
 <p>You can read more abouth %in% <a href="http://www.datasciencemadesimple.com/in-operator-in-r/">here</a></p>
+</div>
+<div id="joins" class="section level2">
+<h2>Joins</h2>
+<p>The package dplyr contains functions that are used in the templates for joining (“merging”) data frames. There are many ways to conduct a join, and it is important that you use the correct option - otherwise you risk unexpectedl losing data!</p>
+<p>It is wise to verify any join by inspecting the joined data frames and the resulting data frame.</p>
+<p>There are more reference materials on dyplr join functions <a href="https://stat545.com/bit001_dplyr-cheatsheet.html">here</a> and <a href="https://rpubs.com/williamsurles/293454">here</a>, and the animations below can be acccessed <a href="https://github.com/gadenbuie/tidyexplain">here</a>.</p>
+<div id="inner-join" class="section level3">
+<h3>Inner join</h3>
+<p>An inner join of dataframes x and y (<code>inner_join(x, y)</code>) returns <strong>only</strong> the rows from x which have matching values in y, and includes all the columns from both x and y.</p>
+<p>The argument <code>by =</code> specifies the column name in both dataframes to compare for the join (it must be spelled the same in both dataframes).</p>
+<div class="figure">
+<img src="/images/inner-join.gif" />
+
+</div>
+</div>
+<div id="left-join" class="section level3">
+<h3>Left join</h3>
+<p>A left join of dataframes x and y (<code>left_join(x, y)</code>) prioritizes only the “left” dataframe (x), thus returning all rows from x with all columns from x and y. If a row in x has multiple matches in y, all combinations are returned as separate rows.</p>
+<p>The argument <code>by =</code> specifies the column name in both dataframes to compare for the join (it must be spelled the same in both dataframes).</p>
+<p>For example, a left join occurs in the AJS template when calculating attack rate by region, where <code>cases</code> and <code>population_data</code> are joined by their variable “patient_origin”.</p>
+<pre class="r"><code>cases &lt;- count(linelist_cleaned, patient_origin) %&gt;%   # cases for each region
+  left_join(population_data, by = &quot;patient_origin&quot;)    # merge population data </code></pre>
+<div class="figure">
+<img src="/images/left-join.gif" />
+
+</div>
+</div>
+<div id="full-join" class="section level3">
+<h3>Full join</h3>
+<p>A full join of dataframes x and y (<code>full_join(x, y)</code>) returns all rows from x and y. If there are any rows in x not in y (or visa-versa), the missing values are NA.</p>
+<div class="figure">
+<img src="/images/full-join.gif" />
+
+</div>
+</div>
+<div id="anti-join" class="section level3">
+<h3>Anti join</h3>
+<p>An anti join of dataframes x and y (<code>anti_join(x, y)</code>) returns the rows from dataframe x that <em>do not</em> have matching values in dataframe y. Also, only columns from x are returned. This is sometimes used to filter data.</p>
+<div class="figure">
+<img src="/images/anti-join.gif" />
+
+</div>
 </div>
 </div>

@@ -6,7 +6,6 @@ weight: 13
 
 
 
-
 ```{r setup, include=FALSE, results='hide', message=FALSE, warning=FALSE}
 # hide all code chunks in the output, but show errors
 knitr::opts_chunk$set(echo = TRUE,       # hide all code chunks in output
@@ -74,6 +73,8 @@ obs_start <- readRDS("data/obs_start.rds")
 obs_end <- readRDS("data/obs_end.rds")
 
 ```
+
+
 
 
 TODO: Introduction to time analyses...  
@@ -232,7 +233,7 @@ ar %>%
          "Population" = population, 
          "AR (per 10,000)" = ar, 
          "95%CI" = ci) %>% 
-  knitr::kable(digits = 2, align = "r")
+  knitr::kable(digits = 1, align = "r")
 ```
  
 
@@ -249,7 +250,7 @@ attack_rate(cases$cumulative, population, multiplier = 10000) %>%
          "Population" = population, 
          "AR (per 10,000)" = ar, 
          "95%CI" = ci) %>% 
-  knitr::kable(digits = 2, align = "r")
+  knitr::kable(digits = 1, align = "r")
 ```
 
 This next code chunk applies a filter for only inpatient observations. It also uses a different function, case_fatality_rate_df(), to produce a table showing deaths, cases, CFR, and CFR confidence intervals.  
@@ -268,7 +269,7 @@ cfr %>%
          "Cases" = population, 
          "CFR (%)" = cfr, 
          "95%CI" = ci) %>% 
-  knitr::kable(digits = 2, align = "r")
+  knitr::kable(digits = 1, align = "r")
 ```
 
 #### Plotting AR, CFR, and Epidemic Curve together  
@@ -346,7 +347,7 @@ tab_linelist(linelist_cleaned, epiweek, strata = case_def,
   select(-variable) %>%
   rename_redundant("%" = proportion) %>%
   augment_redundant(" (n)" = " n$") %>%
-  kable(digits = 2)
+  kable(digits = 1)
 ```
 
 Finally, this produces the same table as above but uses exit_status2 as the strata/column variable to display exits per epiweek. Note that this is also filtered to only include inpatient observations.  
@@ -363,7 +364,7 @@ linelist_cleaned %>%
   rename("Week" = value) %>%
   rename_redundant("%" = proportion) %>%
   augment_redundant(" (n)" = " n$") %>%
-  kable(digits = 2)
+  kable(digits = 1)
 ```
 
 

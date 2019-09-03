@@ -53,17 +53,21 @@ ggplot2::theme_set(theme_classic(base_size = 18))
 aweek::set_week_start("Monday")
 ```
 
-## Import the dataset
 
-**In this template section you choose the appropriate code chunk to importing your dataset.** 
+**In this template section you choose the appropriate code chunk to import your dataset.**  
+
+For this exercise our dataset is a **non-standardized Excel file**, so we use the `read_nonDHIS_data` code chunk. **The linelist Excel file can be downloaded from the case study overview page.** 
 
 <img src="/images/AJS_Data_Import.png" alt="Data import options snip", width = "75%">
+ 
 
-For this exercise our dataset is a **non-standardized Excel file** from MSF's response an outbreak of AJS in Am Timan, Chad, so we use the `read_nonDHIS_data` code chunk. We will specifically use the line that uses the import() function of the rio package to import an Excel file that is not password protected. Note that errors can occur if you provide an incorrect file name or path. Tlink for dataset download is at the top of this webpage. 
+**Importing the dataset into R**  
 
-Either **delete or comment out (#)** all lines of code in the other data import chunks (read_fake_data, read_DHIS_excel_data, and read_DHIS_csv_data).  
+Use the import() function of the rio package to import an Excel file that is not password protected. The `which=` argument of import() specifies that the sheet "linelist" should be imported.  
 
-*The import() function is wrapped around the here() function. The here() function makes it easy for R to locate files on your computer. It is best to save the dataset within your R project, and to provide here() with any R project subfolder names. You can read more about the here() function in the data import page of the R Basics tutorial.*
+*The import() function is wrapped around the here() function. The here() function makes it easy for R to locate files on your computer. It is best to save the dataset within an R project, and to provide here() with any R project subfolder names.* **You can read more about import() and here() functions in the advanced R Basics page.**  
+
+Either delete or comment out (#) all lines of code in the other data import chunks (read_fake_data, read_DHIS_excel_data, and read_DHIS_csv_data). 
 
 
 ```{r eval=FALSE}

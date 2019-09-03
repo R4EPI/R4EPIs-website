@@ -4,9 +4,31 @@ title: Working within R projects
 weight: 5
 ---
 
-## Opening an R project
 
-## Working within an R project
+**It is strongly encouraged to organize your work within a self-contained R project**. An [R project](https://support.rstudio.com/hc/en-us/articles/200526207-Using-Projects) is a way to store all files related to one project in one place (R scripts, source files, location of the R working directory, RStudio workspace).  
 
-## Read more
 Read more about a project-oriented workflow [here](https://www.tidyverse.org/articles/2017/12/workflow-vs-script/)  
+
+
+## Opening a new R project  
+
+Select *File -> New Project* from the top RStudio menu.  
+
+Creating a new R project will create:  
+
+* A new project directory (folder)  
+* A R project file (.Rproj) that serves as a shortcut to open the project  
+* All files produced by R scripts saved to the project will also save into the project folder  
+* You can make sub-folders for data, scripts, etc.  
+
+Navigate and open files such as scripts using the Files tab of the lower-right RStudio pane.  
+
+TODO: GIF/VIDEO  
+
+## Sending an R project  
+
+One significant benefit of working within an R project is that all associated files (datasets, etc.) are located within the same folder. Thus, to send the project to someone else, **simply zip the folder and send**. All files referenced in the scripts are included and no file pathways in the script are unique to your computer.  
+
+
+
+

@@ -90,15 +90,15 @@ linelist_raw <- rio::import("AJS_AmTiman.xlsx", which = "linelist", na = ".")
 ```
 
 ### Drop ineligible observations  
-The next code item in the script drops observations with missing case_number or date_of_consultation_admission. Because the Am Timan dataset contains observations for patients seen in the community and at the hospital, these criteria may not be relevant. We can check and see that of the 1447 observations, there are 0 missing case_number or dateentry, but 616 observations missing date_of_admission. These 616 community-identified cases are still of interest for our report, so we will not drop them. 
+The next code item in the script drops observations with missing case_number or date_of_consultation_admission. Because the Am Timan dataset contains observations for patients seen in the community and at the hospital, these criteria may not be relevant. We can check and see that of the 1447 observations, there are 0 missing case_number or dateentry, but 616 observations missing date_of_consultation_admission. These 616 community-identified cases are still of interest for our report, so we will not drop them. 
 
 ```{r eval=FALSE}
-# Find the number of observations missing date_of_admission
-nrow(linelist_cleaned %>% filter(is.na(date_of_admission))) 
+# Find the number of observations missing date_of_consultation_admission
+nrow(linelist_cleaned %>% filter(is.na(date_of_consultation_admission))) 
 ```
 
 ### Convert and clean date variables
-In linelist_cleaned there are seven variables containing dates (dateentry, epiquestdate, date_of_admission, date_of_onset, date_lab_sample_taken, dthospitalisation, dtdeath).  
+In linelist_cleaned there are seven variables containing dates (dateentry, epiquestdate, date_of_consultation_admission, date_of_onset, date_lab_sample_taken, dthospitalisation, dtdeath).  
 
 Because the Am Timan dataset contains date variables not found in the data dictionary, we will ignore and comment out the first code of the Date variables chunk (these commands convert only the date variables known to the data dictionary).  
 
@@ -211,7 +211,7 @@ linelist_cleaned$age_group <- age_categories(linelist_cleaned$age_years,
                                              breakers = c(0, 3, 15, 30, 45))
 ```
 
-### Cleaning categorical variables  
+### Clean categorical variables  
 While the template directs us to next create a DIED variable based on exit_status containing the characters "Dead", we must first **clean our exit_status variable, which is currrently in French**. 
 
 **Use case_when() to assign new values for a new exit_status2 variable**, as in the code below. The code uses the function case_when() to re-define linelist_cleaned as itself, but mutated to include the new variable exit_status2. The values in exit_status2 are based on the values in exit_status, such that when exist_status == "Décédé", the value in exit_status2 is "Died", and so on. 
@@ -270,7 +270,11 @@ table(linelist_cleaned$patient_facility_type, useNA = "always")
 
 ### Recode values in lab test variables  
 
-For later steps, we will need many of our testing variables to the values "Positive" and "Negative" instead of "Pos" and "Neg". We can uncomment and use this helper code to make that change. Note: you may received warnings about unknown levels in some variables - this is generally okay but check the changes visually to be sure `View(linelist_cleaned)`.  
+For later steps, we will need many of our testing variables to the values "Positive" and "Negative" instead of "Pos" and "Neg". We can uncomment and use this helper code to make that change. Some notes about this step:  
+
+* You may receive warnings about unknown levels in some variables - this is generally okay but check the changes visually to be sure `View(linelist_cleaned)`.  
+* One variable (test_hepatitis_e_igm) has values 0 and 1 that we want to change to "Positive" and "Negative". The fct_record() function expects *character* RHS inputs (within quotes) - so put "0" and "1" in quotes, as below, and confirm the change.  
+* One variable (test_hepatitis_b) has a value recorded as "Weakly pos". For the purposes of this exercise we re-code this to "Positive".
 
 ```{r, warning=FALSE}
 ## sometimes, coding is inconsistent across variables -- for example, "Yes" / "No"
@@ -279,20 +283,26 @@ For later steps, we will need many of our testing variables to the values "Posit
 ## You may need to edit this code if options are different in your data.
 
 # # create list of variables
-change_test_vars <- c("hep_e_rdt", "hep_c_rdt", "hep_b_rdt", "test_hepatitis_a", "test_hepatitis_b", "test_hepatitis_c", "malaria_rdt_at_admission", "test_hepatitis_e_igm", "test_hepatitis_e_virus", "hevpcr", "other_arthropod_transmitted_virus")
+change_test_vars <- c("hep_e_rdt", "hep_c_rdt", "hep_b_rdt", "test_hepatitis_a", "test_hepatitis_b", "test_hepatitis_c", "malaria_rdt_at_admission", "test_hepatitis_e_genotype", "test_hepatitis_e_igm", "test_hepatitis_e_virus", "hevpcr", "other_arthropod_transmitted_virus")
 
 # standardize options
   linelist_cleaned <- linelist_cleaned %>%  
        mutate_at(vars(change_test_vars), forcats::fct_recode,   
        Positive = "Pos",
+       Positive = "pos",
        Positive = "yes",
        Positive = "Yes",
+       Positive = "Weakly pos",
+       Positive = "1",
        Negative = "Neg",
+       Negative = "neg",
        Negative = "no",
-       Negative = "No"
+       Negative = "No",
+       Negative = "0"
      )  
- 
 ``` 
+
+
 ### Other categorical variables  
 
 We can **comment/ignore the code to change the order of levels in categorical variables**, as the Am Timan dataset does not include a variable time_to_death and we do not need to change the order of any categorical variables.  
@@ -328,19 +338,16 @@ linelist_cleaned$patient_origin <- toupper(linelist_cleaned$patient_origin)
 
 ### Create lists of variables  
 
-These variables names are stored in vectors that are created using the function c(). These vectors of names will be referenced in later code chunks. This code creates two vectors - one for symptoms variables and one for laboratory testing variables.  
+These variables names are stored in vectors that are created using the function c(). These vectors of names will be referenced in later code chunks. This way if you want to run the same function over these variables you can simply use the named vector rather than typing out each variable individually.  
 
-**Some of these variables do not apply to our Am Timan data and must be removed from the list or commented out (such as convulsions and history of fever).** If non-existant variables are left in the list it will cause errors in later code chunks.
+The default template code creates two vectors - one for symptoms variables (SYMPTOMS) and one for laboratory testing variables (LABS). However, *we can see that there are two rather different type of lab variables*: those with Positive/Negative values, and those with IgG and IgM results. To make our table of lab results more clean, we split the lab variables into these two groups.
+
+**Some variables do not apply to our Am Timan data and must be removed from the list or commented out (such as convulsions and history of fever).** If non-existant variables are left in the list it will cause errors in later code chunks.
 
 ```{r}
 # vectors of variable names ----------------------------------------------------
-
-## You may want to group the names of several variables that have the same possible 
-## values in to a named vector. 
-## This way if you want to run the same function over these variables you can 
-## simply use the named vector rather than typing out each variable individually
-
 # create a grouping of all symptoms 
+
 SYMPTOMS <- c("generalized_itch", 
 #             "history_of_fever", 
               "fever",
@@ -355,7 +362,10 @@ SYMPTOMS <- c("generalized_itch",
 #              "convulsions",
               "other_symptoms"  
               )
+```
 
+
+```{r}
 # create a grouping of all lab tests 
 LABS <- c("hep_b_rdt", 
           "hep_c_rdt",
@@ -411,7 +421,11 @@ obs_end   <- week2date(sprintf("%s-7", reporting_week))
 
 ### Export if desired  
 
-And finally, if desired you can **export the cleaned dataset** for other purposes.
+And finally, if desired you can **export the cleaned dataset** for other purposes.  
+
+The command export() is also from the package "rio". First, the object that you want to export is named (linelist_cleaned).  
+
+Then, the function paste0() created the name for the new file by combining "AmTiman_linelist_cleaned_" with the current date and finally the extention. Don't be confused - it is equivalen of writing rio::export(linelist_cleaned, "AmTiman_linelist_cleaned_2019-08-24.xlsx"), but using paste0() and Sys.Date() means the current date will always be used.
 
 ```{r save_cleaned_data, eval = FALSE}
 ## OPTIONAL: save your cleaned dataset! 
