@@ -82,7 +82,11 @@ See the read_population_data chunk and modify the command to import the Excel sp
 
 Note that the variables names in the spreadsheet have already been edited to match the expected variable names ("patient_origin" and "population").  
 
-*The `import()` function is wrapped around the `here()` function. The `here()` function makes it easy for R to locate files on your computer. It is best to save the dataset within your R project, and to provide `here()` with any R project subfolder names. You can read more about the `here()` function in the data import page of the R Basics tutorial.* 
+{{% notice note %}}
+
+The `import()` function is wrapped around the `here()` function. The `here()` function makes it easy for R to locate files within a project. It is best to save the dataset within your R project, and to provide `here()` with any R project subfolder names. You can read more about the `here()` function in the data import page of the R Basics tutorial.
+
+{{% /notice %}}
 
 Delete or comment (#) all the code lines in the chunk that create fake data for `population_data_region`, `population_data_age`, and `population_data_age_months`.
 
