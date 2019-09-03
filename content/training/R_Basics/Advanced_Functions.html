@@ -32,9 +32,9 @@ fct_count(linelist_cleaned$sex)</code></pre>
 <pre><code>## # A tibble: 3 x 2
 ##   f         n
 ##   &lt;fct&gt; &lt;int&gt;
-## 1 M       100
-## 2 F       109
-## 3 U        91</code></pre>
+## 1 M       101
+## 2 F       106
+## 3 U        93</code></pre>
 <p>Now we re-label the values using fct_recode(), also from the package forcats.</p>
 <pre class="r"><code># Re-define the labels for the factor variable (pay attention to spelling!)
 linelist_cleaned$sex &lt;- fct_recode(linelist_cleaned$sex, 
@@ -47,9 +47,9 @@ fct_count(linelist_cleaned$sex)</code></pre>
 <pre><code>## # A tibble: 3 x 2
 ##   f           n
 ##   &lt;fct&gt;   &lt;int&gt;
-## 1 Male      100
-## 2 Female    109
-## 3 Unknown    91</code></pre>
+## 1 Male      101
+## 2 Female    106
+## 3 Unknown    93</code></pre>
 <p><strong>To change the <em>order</em> of the levels, use fct_relevel()</strong>.</p>
 <p>This will impact the <em>order</em> of the levels as displayed in graphs and tables. Give the name of the factor followed by the new order (pay attention to spelling!).</p>
 <pre class="r"><code># Provide new order of levels
@@ -73,9 +73,9 @@ fct_count(linelist_cleaned$sex)</code></pre>
 <pre><code>## # A tibble: 3 x 2
 ##   f           n
 ##   &lt;fct&gt;   &lt;int&gt;
-## 1 Female    109
-## 2 Male      100
-## 3 Unknown    91</code></pre>
+## 1 Female    106
+## 2 Male      101
+## 3 Unknown    93</code></pre>
 <blockquote>
 <p>We can see that the value “U” now has a count of zero, but it is still present as a level of the factor variable and will appear in tables and graphs. To remove this level entirely we use fct_drop(), which drops unused levels from a factor.</p>
 </blockquote>
@@ -87,9 +87,9 @@ fct_count(linelist_cleaned$sex)</code></pre>
 <pre><code>## # A tibble: 3 x 2
 ##   f           n
 ##   &lt;fct&gt;   &lt;int&gt;
-## 1 Female    109
-## 2 Male      100
-## 3 Unknown    91</code></pre>
+## 1 Female    106
+## 2 Male      101
+## 3 Unknown    93</code></pre>
 <p><em>Note: Use the argument <code>only =</code> to drop specific levels: <code>fct_drop(linelist_cleaned$sex, only = &quot;U&quot;)</code></em></p>
 </div>
 </div>
@@ -110,26 +110,43 @@ linelist_cleaned$DIED &lt;- linelist_cleaned$exit_status %in% c(&quot;DD&quot;, 
 </div>
 <div id="joins" class="section level2">
 <h2>Joins</h2>
-<p>The package dplyr contains functions that are used in the templates for joining (“merging”) data frames. There are many options for joins, and it is important that you use the correct one - otherwise you risk losing data unexpectedly.</p>
+<p>The package dplyr contains functions that are used in the templates for joining (“merging”) data frames. There are many ways to conduct a join, and it is important that you use the correct option - otherwise you risk unexpectedl losing data!</p>
 <p>It is wise to verify any join by inspecting the joined data frames and the resulting data frame.</p>
 <p>There are more reference materials on dyplr join functions <a href="https://stat545.com/bit001_dplyr-cheatsheet.html">here</a> and <a href="https://rpubs.com/williamsurles/293454">here</a>, and the animations below can be acccessed <a href="https://github.com/gadenbuie/tidyexplain">here</a>.</p>
+<div id="inner-join" class="section level3">
+<h3>Inner join</h3>
+<p>An inner join of dataframes x and y (<code>inner_join(x, y)</code>) returns <strong>only</strong> the rows from x which have matching values in y, and includes all the columns from both x and y.</p>
+<p>The argument <code>by =</code> specifies the column name in both dataframes to compare for the join (it must be spelled the same in both dataframes).</p>
+<div class="figure">
+<img src="/images/inner-join.gif" />
+
+</div>
+</div>
 <div id="left-join" class="section level3">
 <h3>Left join</h3>
-<p>An example of a left join from the AJS outbreak template occurs in the TODO</p>
+<p>A left join of dataframes x and y (<code>left_join(x, y)</code>) prioritizes only the “left” dataframe (x), thus returning all rows from x with all columns from x and y. If a row in x has multiple matches in y, all combinations are returned as separate rows.</p>
+<p>The argument <code>by =</code> specifies the column name in both dataframes to compare for the join (it must be spelled the same in both dataframes).</p>
+<p>For example, a left join occurs in the AJS template when calculating attack rate by region, where <code>cases</code> and <code>population_data</code> are joined by their variable “patient_origin”.</p>
+<pre class="r"><code>cases &lt;- count(linelist_cleaned, patient_origin) %&gt;%   # cases for each region
+  left_join(population_data, by = &quot;patient_origin&quot;)    # merge population data </code></pre>
 <div class="figure">
 <img src="/images/left-join.gif" />
 
 </div>
-<div class="figure">
-<img src="/images/right-join.gif" />
-
 </div>
+<div id="full-join" class="section level3">
+<h3>Full join</h3>
+<p>A full join of dataframes x and y (<code>full_join(x, y)</code>) returns all rows from x and y. If there are any rows in x not in y (or visa-versa), the missing values are NA.</p>
 <div class="figure">
 <img src="/images/full-join.gif" />
 
 </div>
+</div>
+<div id="anti-join" class="section level3">
+<h3>Anti join</h3>
+<p>An anti join of dataframes x and y (<code>anti_join(x, y)</code>) returns the rows from dataframe x that <em>do not</em> have matching values in dataframe y. Also, only columns from x are returned. This is sometimes used to filter data.</p>
 <div class="figure">
-<img src="/images/inner-join.gif" />
+<img src="/images/anti-join.gif" />
 
 </div>
 </div>
