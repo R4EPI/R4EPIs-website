@@ -12,7 +12,9 @@ Scripts are files that:
 
 * Help to reproduce and share your work with others  
 
-While it is possible to enter and run commands directly from the R Console, scripts will be the default way to work. If you are more familiar with Stata, a script is equivalent to a Do File.
+While it is possible to enter and run commands directly from the R Console, scripts will be the default way to work.  
+
+If you are more familiar with Stata, a script is equivalent to a Do File.
 
 
 **Remember to save your script as you work!** 
@@ -94,4 +96,6 @@ Any script (RMarkdown or otherwise) will give clues when you have made a mistake
 
 * You can use the arrow next to the word "Knit" to select the type of document you want to produce: Microsoft Word, PDF, or HTML (HTML opens the file in an offline web browser). Note that to knit to a PDF *directly*, additional packages may have to be installed.  
 
-* The default document type is specified in the header of the RMarkdown script, and for the templates it is Microsoft Word.
+* The default document type is specified in the header of the RMarkdown script, and for the templates it is Microsoft Word.  
+
+*Note: If you receive an error when knitting such as "openBinaryFile does not exist ... Error: pandoc document conversion failed with error 1", your R project file may be saved in a location with restricted permissions such as a network drive. The RMarkdown is likely not permitted to write the new Microsoft Word file to that location. Try saving your R project to a more local location on your computer.*
