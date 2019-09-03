@@ -65,7 +65,8 @@ The very top of the template consists of a header surrounded by `---` lines. Her
 
 The "Introduction to this template" section is for your information only and this text can be deleted before knitting the document.  
 
-<img src="/images/AJS_Intro.png" alt="AJS Header and Introduction snip", width = "75%">
+<img src="/images/AJS_Intro.png" alt="AJS Header and Introduction snip", width = "75%">  
+
 
 
 ## Installation and loading packages
@@ -81,7 +82,8 @@ This "setup" code chunk does the following:
 
 * Set epidemiological weeks to begin on Mondays  
 
-<img src="/images/Package_Installation.png" alt="Package installation chunk snip", width = "75%">
+<img src="/images/Package_Installation.png" alt="Package installation chunk snip", width = "75%">  
+
 
 
 ### About the packages used in this template  
