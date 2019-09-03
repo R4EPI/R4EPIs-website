@@ -8,26 +8,32 @@ weight: 9
 
 **Relational operators compare values** and are often used when defining new variables and subsets of datasets. Here are the common relational operators in R:  
 
-Function | Operator	| Example	| Example Result
--------------- | ------------- | -------------- | ---------------------------  
-Equal to |	`==` | `"A" == "a"`	| `FALSE` (because R is case sensitive) *Note that == (double equals) is different from = (single equals), which acts like the assignment operator <-*  
-Not equal to | `!=`	| `2 != 0` | `TRUE`  
-Greater than | `>` | `4 > 2` | `TRUE`  
-Less than | `<` | `4 < 2` | `FALSE`  
-Greater than or equal to | `>=` | `6 >= 4` | `TRUE`  
-Less than or equal to	| `<=` | `6 <= 4` | `FALSE`  
-Value is missing | `is.na()` | `is.na(7)` | `FALSE` (see section on missing values)
-Value is not missing | `!is.na()` | `!is.na(7)` | `TRUE`
+Function                |Operator     |Example       |Example Result
+------------------------|-------------|--------------|---------------------------
+Equal to                |`==`         |`"A" == "a"`  |`FALSE` (because R is case sensitive) *Note that == (double equals) is different from = (single equals), which acts like the assignment operator `<-`*
+Not equal to            |`!=`         |`2 != 0`      |`TRUE`
+Greater than            |`>`          |`4 > 2`       |`TRUE`
+Less than               |`<`          |`4 < 2`       |`FALSE`
+Greater than or equal to|`>=`         |`6 >= 4`      |`TRUE`
+Less than or equal to   |`<=`         |`6 <= 4`      |`FALSE`
+Value is missing        |`is.na()`    |`is.na(7)`    |`FALSE` (see section on missing values)
+Value is not missing    |`!is.na()`   |`!is.na(7)`   |`TRUE`
 
 **Logical operators, such as AND and OR, are often used to connect relational operators and create more complicated criteria**. Complex statements might require parentheses ( ) for grouping and order of application.  
 
-Function | Operator
--------- | ------------------------  
-AND | `&`  
-OR |  `|` (vertical bar)  
-Parentheses	| ( ) Used to group criteria together and clarify order  
+Function   |Operator
+-----------|------------------------
+AND        |`&`
+OR         |`|` (vertical bar)
+Parentheses|`( )` Used to group criteria together and clarify order
 
-> For example, the command below use the function case_when to create the new variable "case_def" such that:  
+
+For example, below, we have a linelist with two variables we want to use to create our case definition, `hep_e_rdt`, a test result and `other_cases_in_hh`, which will tell us if there are other cases in the househol. The command below uses the function `case_when()` to create the new variable "case_def" such that:
+
+1. Any `hep_e_rdt` or `other_cases_in_hh` that are both missing have a missing case definition
+2. Any "Positive" `hep_e_rdt` results have a "Confirmed" case definition
+3. Any non-positive `hep_e_rdt` results that also have other cases in the household have a "Probable" case definition
+4. All others are considered "Suspected"
 
 ```{r eval=FALSE}
 linelist_cleaned <- linelist_cleaned %>%
@@ -40,7 +46,6 @@ linelist_cleaned <- linelist_cleaned %>%
 
 ```
 
-
 Criteria in example above                        | Resulting value in new variable "case_def""
 ------------------------------------------|-------------------------------------
 If the value for variables hep_e_rdt and other_cases_in_hh are missing | NA (missing)  
@@ -52,11 +57,13 @@ If one of the above criteria are not met | "Suspected"
 *Note that R is case-sensitive, so "Positive" is different than "positive"...*  
 
 ## Missing Values
-**In R, missing values are represented by the special value NA** (capital letters N and A - not in quotation marks). If you import data that records missing data in another way (e.g. 99, "Missing", or .), you may want to re-code those values to NA.
+
+**In R, missing values are represented by the special value `NA`** (capital letters N and A - not in quotation marks). If you import data that records missing data in another way (e.g. 99, "Missing", or .), you may want to re-code those values to `NA`.
   
-**To test whether a value is NA, use the special function is.na()**, which returns TRUE or FALSE.
+**To test whether a value is `NA`, use the special function `is.na()`**, which returns TRUE or FALSE.
+
 ```{r}
-rdt_result <- NA   # Assigns the object rdt_result with the value NA (missing)
+rdt_result <- c("Positive", "Suspected", "Positive", NA)   # two positive cases, one suspected, and one unknown
 is.na(rdt_result)  # Tests whether the value of rdt_result is NA
 ```
 
@@ -65,11 +72,11 @@ is.na(rdt_result)  # Tests whether the value of rdt_result is NA
 
 Mathematical operators are often used to perform addition, division, to create new columns, etc. Below are common mathematical operators in R. Whether you put spaces around the operators is not important.  
 
-Objective	      | Example in R
---------------  | -------------
-addition	      | 2+3    
-subtraction	    | 2-3    
-multiplication	| 2*3
-division	      | 30/5
-exponent	      | 2^3 or 2**3   
-order of operations | ( )
+Objective          |Example in R
+-------------------|-------------
+addition           | 2 + 3
+subtraction        | 2 - 3
+multiplication     | 2 * 3
+division           | 30 / 5
+exponent           | 2^3
+order of operations| ( )
