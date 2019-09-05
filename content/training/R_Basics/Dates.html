@@ -13,18 +13,18 @@ weight: 10
 <p>It is important to make R recognize when a variable contains dates. Dates are an object class and can be tricky to work with. The templates provides some code for converting variables to class date, but if your data are not standardized to a MSF data dictionary this process can require attention. <strong>The templates often use the function <code>guess_dates()</code>, but this guide will also demonstrate converting a variable to class date using the function <code>as.Date()</code>.</strong></p>
 <div id="the-function-guess_dates" class="section level4">
 <h4>The function <code>guess_dates()</code></h4>
-<p><strong>The function <code>guess_dates()</code> attempts to read a “messy” date variable containing dates in many different formats and convert the dates to a standard format.</strong> You can <a href="https://www.repidemicsconsortium.org/linelist/reference/guess_dates.html">read more about <code>guess_dates()</code></a>, which is in the “linelist” package.</p>
+<p><strong>The function <code>guess_dates()</code> attempts to read a “messy” date variable containing dates in many different formats and convert the dates to a standard format.</strong> You can <a href="https://www.repidemicsconsortium.org/linelist/reference/guess_dates.html">read more about <code>guess_dates()</code></a>, which is in the <strong>linelist</strong> package.</p>
 <blockquote>
-<p>For example, guess_dates would see the following dates “03 Jan 2018”, “07/03/1982”, and “08/20/85” and convert them in the class Date to: 2018-01-03, 1982-03-07, and 1985-08-20.</p>
+<p><strong>For example:</strong> <code>guess_dates</code> would see the following dates “03 Jan 2018”, “07/03/1982”, and “08/20/85” and convert them in the class Date to: 2018-01-03, 1982-03-07, and 1985-08-20.</p>
 </blockquote>
 <pre class="r"><code>guess_dates(c(&quot;03 Jan 2018&quot;, &quot;07/03/1982&quot;, &quot;08/20/85&quot;))</code></pre>
 <pre><code>## [1] &quot;2018-01-03&quot; &quot;1982-03-07&quot; &quot;1985-08-20&quot;</code></pre>
 <p><em>Some optional arguments for <code>guess_dates()</code> that you might include are:</em></p>
 <ul>
-<li>error_tolerance - The proportion of entries which cannot be identified as dates to be tolerated (defaults to 0.1 or 10%)</li>
-<li>last_date - the last valid date (defaults to current date)<br />
+<li><code>error_tolerance</code> - The proportion of entries which cannot be identified as dates to be tolerated (defaults to 0.1 or 10%)</li>
+<li><code>last_date</code> - the last valid date (defaults to current date)<br />
 </li>
-<li>first_date - the first valid date. Defaults to fifty years before the last_date.</li>
+<li><code>first_date</code> - the first valid date. Defaults to fifty years before the last_date.</li>
 </ul>
 <pre class="r"><code># An example using guess_dates on the variable dtdeath
 linelist_cleaned$dtdeath &lt;- linelist::guess_dates(linelist_cleaned$dtdeath)
@@ -48,7 +48,7 @@ linelist_cleaned &lt;- linelist_cleaned %&gt;%
 </li>
 </ol>
 <ul>
-<li><p>Within the <code>as.Date()</code> function, you must use the format= argument to tell R which characters are which date components - which characters refer to the month, the day, and the year. If your values are already in one of R’s standard formats (YYYY-MM-DD or YYYY/MM/DD) the format= argument is not necessary.</p>
+<li><p>Within the <code>as.Date()</code> function, you must use the <code>format=</code> argument to tell R which characters are which date components - which characters refer to the month, the day, and the year. If your values are already in one of R’s standard formats (YYYY-MM-DD or YYYY/MM/DD) the <code>format=</code> argument is not necessary.</p>
 <ul>
 <li>The codes are:<br />
 %d = Day # (of the month e.g. 16, 17, 18…)<br />
@@ -63,8 +63,8 @@ linelist_cleaned &lt;- linelist_cleaned %&gt;%
 </ul>
 <p>For example, if your character dates are in the format DD/MM/YYYY, like “24/04/1968”, then your command to turn the values into dates will be as below. <strong>Putting the format in quotation marks is necessary.</strong></p>
 <pre class="r"><code>linelist_cleaned$date_of_onset &lt;- as.Date(linelist_cleaned$date_of_onset, format = &quot;%d/%m/%Y&quot;)</code></pre>
-<p><strong>Note: the format= argument is <em>not</em> telling R the format you want the dates to be, but rather how to identify the date parts as they are <em>before</em> you run the command.</strong></p>
-<p><em>Note: Be sure that in the format= argument you use the date-part separator (e.g. /, space, or -) that is present in your dates.</em></p>
+<p>{{% notice tip %}} <strong>The <code>format=</code> argument is <em>not</em> telling R the format you want the dates to be, but rather how to identify the date parts as they are <em>before</em> you run the command.</strong></p>
+<p>Also, be sure that in the <code>format=</code> argument you use the <em>date-part separator</em> (e.g. /, -, or space) that is present in your dates. {{% /notice %}}</p>
 <pre class="r"><code># Convert the variable to class Date by providing the format of the variable
 linelist_cleaned$date_of_onset &lt;- as.Date(linelist_cleaned$date_of_onset, format=&quot;%Y-%m-%d&quot;)
 
@@ -81,7 +81,7 @@ linelist_cleaned$date_of_onset &lt;- as.Date(linelist_cleaned$date_of_onset, ori
 </div>
 <div id="changing-the-format-of-displayed-dates" class="section level4">
 <h4>Changing the format of displayed dates</h4>
-<p>Once dates are the correct class, you often want them to display differently. For example, “Monday 05 Jan” instead of 2018-01-05. You can do this with the function <code>format()</code> in a similar was to <code>as.Date()</code>. Read more about it <a href="https://www.statmethods.net/input/dates.html">here</a></p>
+<p>Once dates are the correct class, you often want them to display differently. For example, “Monday 05 Jan” instead of 2018-01-05. You can do this with the function <code>format()</code> in a similar was to <code>as.Date()</code>. Read more about it <a href="https://www.statmethods.net/input/dates.html">in this tutorial</a></p>
 </div>
 <div id="calculating-distance-between-dates" class="section level4">
 <h4>Calculating distance between dates</h4>
@@ -96,6 +96,6 @@ linelist_cleaned$date_of_onset &lt;- as.Date(linelist_cleaned$date_of_onset, ori
 </div>
 <div id="epidemiological-weeks" class="section level3">
 <h3>Epidemiological weeks</h3>
-<p>The templates use the very flexible package “aweek”&quot; to set epidemiological weeks. You can read more about it <a href="https://www.repidemicsconsortium.org/aweek/">here</a></p>
+<p>The templates use the very flexible package <strong>aweek</strong> to set epidemiological weeks. You can read more about it <a href="https://www.repidemicsconsortium.org/aweek/">on the RECON website</a></p>
 </div>
 </div>

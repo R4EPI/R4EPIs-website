@@ -12,8 +12,8 @@ weight: 9
 <table>
 <colgroup>
 <col width="30%" />
-<col width="16%" />
 <col width="17%" />
+<col width="18%" />
 <col width="34%" />
 </colgroup>
 <thead>
@@ -98,7 +98,7 @@ weight: 9
 </tr>
 </tbody>
 </table>
-<p>For example, below, we have a linelist with two variables we want to use to create our case definition, <code>hep_e_rdt</code>, a test result and <code>other_cases_in_hh</code>, which will tell us if there are other cases in the household. The command below uses the function <code>case_when()</code> to create the new variable “case_def” such that:</p>
+<p>For example, below, we have a linelist with two variables we want to use to create our case definition, <code>hep_e_rdt</code>, a test result and <code>other_cases_in_hh</code>, which will tell us if there are other cases in the household. The command below uses the function <code>case_when()</code> to create the new variable <code>case_def</code> such that:</p>
 <pre class="r"><code>linelist_cleaned &lt;- linelist_cleaned %&gt;%
   mutate(case_def = case_when(
     is.na(hep_e_rdt) &amp; is.na(other_cases_in_hh)           ~ NA_character_,
@@ -106,7 +106,7 @@ weight: 9
     hep_e_rdt != &quot;Positive&quot; &amp; other_cases_in_hh == &quot;Yes&quot;  ~ &quot;Probable&quot;,
     TRUE                                                  ~ &quot;Suspected&quot;
   ))</code></pre>
-<table>
+<table style="width:100%;">
 <colgroup>
 <col width="51%" />
 <col width="48%" />
@@ -119,15 +119,15 @@ weight: 9
 </thead>
 <tbody>
 <tr class="odd">
-<td>If the value for variables hep_e_rdt and other_cases_in_hh are missing</td>
-<td>NA (missing)</td>
+<td>If the value for variables <code>hep_e_rdt</code> and <code>other_cases_in_hh</code> are missing</td>
+<td><code>NA</code> (missing)</td>
 </tr>
 <tr class="even">
-<td>If the value in hep_e_rdt is “Positive”</td>
+<td>If the value in <code>hep_e_rdt</code> is “Positive”</td>
 <td>“Confirmed”</td>
 </tr>
 <tr class="odd">
-<td>If the value in hep_e_rdt is NOT “Positive” AND the value in other_cases_in_hh is “Yes”</td>
+<td>If the value in <code>hep_e_rdt</code> is NOT “Positive” AND the value in <code>other_cases_in_hh</code> is “Yes”</td>
 <td>“Probable”</td>
 </tr>
 <tr class="even">
@@ -136,12 +136,12 @@ weight: 9
 </tr>
 </tbody>
 </table>
-<p><em>Note that R is case-sensitive, so “Positive” is different than “positive”…</em></p>
+<p>{{% notice tip %}} Note that R is case-sensitive, so “Positive” is different than “positive”… {{% /notice %}}</p>
 </div>
 <div id="missing-values" class="section level2">
 <h2>Missing Values</h2>
 <p><strong>In R, missing values are represented by the special value <code>NA</code></strong> (capital letters N and A - not in quotation marks). If you import data that records missing data in another way (e.g. 99, “Missing”, or .), you may want to re-code those values to <code>NA</code>.</p>
-<p><strong>To test whether a value is <code>NA</code>, use the special function <code>is.na()</code></strong>, which returns TRUE or FALSE.</p>
+<p><strong>To test whether a value is <code>NA</code>, use the special function <code>is.na()</code></strong>, which returns <code>TRUE</code> or <code>FALSE</code>.</p>
 <pre class="r"><code>rdt_result &lt;- c(&quot;Positive&quot;, &quot;Suspected&quot;, &quot;Positive&quot;, NA)   # two positive cases, one suspected, and one unknown
 is.na(rdt_result)  # Tests whether the value of rdt_result is NA</code></pre>
 <pre><code>## [1] FALSE FALSE FALSE  TRUE</code></pre>
