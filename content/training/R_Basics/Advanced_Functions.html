@@ -7,14 +7,14 @@ weight: 13
 
 
 <div id="factors-and-the-forcats-package" class="section level3">
-<h3>Factors and the <em>forcats</em> package</h3>
+<h3>Factors and the <strong>forcats</strong> package</h3>
 <div id="factors" class="section level4">
 <h4>Factors</h4>
 <p>Factors are a special variable class in which data are stored internally as integers, but each integer <em>level</em> has a corresponding character value <em>label</em> that is used when the data are displayed. This can be partularly helpful when running statistical models which expect numeric (e.g. 0/1) inputs.</p>
 <p>{{% notice tip %}} Factors are similar to labeled values of categorical variables in Stata.<br />
 {{% /notice %}}</p>
 <p>You can <a href="https://www.stat.berkeley.edu/~s133/factors.html">read more about factors here</a>.</p>
-<p>The package forcats provides useful tools for working with factor variables. You can <a href="https://forcats.tidyverse.org">read more about forcats here</a>.</p>
+<p>The package <strong>forcats</strong> provides useful tools for working with factor variables. You can <a href="https://forcats.tidyverse.org">read more about <strong>forcats</strong> here</a>.</p>
 <blockquote>
 <p>For example, in the automatically generated AJS dataset, the variable <code>sex</code> is a factor. In the underlying dataset the levels are F, M, and U, but we can attach longer character labels that are displayed.</p>
 </blockquote>
@@ -27,16 +27,16 @@ class(linelist_cleaned$sex)</code></pre>
 <p>{{% notice tip %}} To convert use <code>as.factor()</code> <code>linelist_cleaned$sex &lt;- as.factor(linelist_cleaned$sex)</code> {{% /notice %}}</p>
 <p><strong>To change the labels for a variable, use the function <code>fct_recode()</code> from the package forcats.</strong></p>
 <p>After providing the name of the factor give the conversion statements, separated by commas, in the format <strong>NEW = “OLD”</strong>. Note that everything on the right-hand side (RHS) must be a character. So, if you want to give a new label to missing values, use the special term <code>NA_character_</code>.</p>
-<p>First we use <code>fct_count()</code> from the package forcats to see the values in the factor:</p>
+<p>First we use <code>fct_count()</code> from the package <strong>forcats</strong> to see the values in the factor:</p>
 <pre class="r"><code># View the levels present in the variable
 fct_count(linelist_cleaned$sex)</code></pre>
 <pre><code>## # A tibble: 3 x 2
 ##   f         n
 ##   &lt;fct&gt; &lt;int&gt;
-## 1 M       106
-## 2 F        92
-## 3 U       102</code></pre>
-<p>Now we re-label the values using <code>fct_recode()</code>, also from the package forcats.</p>
+## 1 M       112
+## 2 F        94
+## 3 U        94</code></pre>
+<p>Now we re-label the values using <code>fct_recode()</code>, also from the package <strong>forcats</strong>.</p>
 <pre class="r"><code># Re-define the labels for the factor variable (pay attention to spelling!)
 linelist_cleaned$sex &lt;- fct_recode(linelist_cleaned$sex, 
                                    Male = &quot;M&quot;,
@@ -48,9 +48,9 @@ fct_count(linelist_cleaned$sex)</code></pre>
 <pre><code>## # A tibble: 3 x 2
 ##   f           n
 ##   &lt;fct&gt;   &lt;int&gt;
-## 1 Male      106
-## 2 Female     92
-## 3 Unknown   102</code></pre>
+## 1 Male      112
+## 2 Female     94
+## 3 Unknown    94</code></pre>
 <p><strong>To change the <em>arrangement</em> of the levels, use <code>fct_relevel()</code></strong>.</p>
 <p>This will impact the <em>arrangement</em> of the levels as displayed in graphs and tables. Give the name of the factor followed by the new arrangement (pay attention to spelling!).</p>
 <pre class="r"><code># Provide new arrangement of levels
@@ -74,10 +74,10 @@ fct_count(linelist_cleaned$sex)</code></pre>
 <pre><code>## # A tibble: 4 x 2
 ##   f           n
 ##   &lt;fct&gt;   &lt;int&gt;
-## 1 Female     92
-## 2 Male      106
+## 1 Female     94
+## 2 Male      112
 ## 3 Unknown     0
-## 4 &lt;NA&gt;      102</code></pre>
+## 4 &lt;NA&gt;       94</code></pre>
 <blockquote>
 <p>We can see that the value “Unknown” now has a count of zero, but it is still present as a level of the factor variable and will appear in tables and graphs. To remove this level entirely we use <code>fct_drop()</code>, which drops unused levels from a factor.</p>
 </blockquote>
@@ -89,9 +89,9 @@ fct_count(linelist_cleaned$sex)</code></pre>
 <pre><code>## # A tibble: 3 x 2
 ##   f          n
 ##   &lt;fct&gt;  &lt;int&gt;
-## 1 Female    92
-## 2 Male     106
-## 3 &lt;NA&gt;     102</code></pre>
+## 1 Female    94
+## 2 Male     112
+## 3 &lt;NA&gt;      94</code></pre>
 <p>{{% notice tip %}} Use the argument <code>only =</code> to drop specific levels: <code>fct_drop(linelist_cleaned$sex, only = &quot;Unknown&quot;)</code> {{% /notice %}}</p>
 </div>
 </div>
@@ -113,14 +113,14 @@ are_vowels</code></pre>
 # the following returns only the letters in epi that evaluated to TRUE in epi_vowels
 epi[are_vowels]</code></pre>
 <pre><code>## [1] &quot;e&quot; &quot;i&quot; &quot;e&quot; &quot;i&quot; &quot;o&quot; &quot;o&quot;</code></pre>
-<p>In the templates, <code>%in%</code> can be used when creating the valued “DIED” (when a patient died). The variable DIED is logical (either <code>TRUE</code> or <code>FALSE</code>). It will be <code>TRUE</code> if the value in exit_status is either “DD” or “DOA” - those are the two character values present in the vector. You can add to or change the terms listed in the vector.</p>
+<p>In the templates, <code>%in%</code> can be used when creating the variable <code>DIED</code> (when a patient died). The variable <code>DIED</code> is logical (either <code>TRUE</code> or <code>FALSE</code>). It will be <code>TRUE</code> if the value in <code>exit_status</code> is either “DD” or “DOA” - those are the two character values present in the vector. You can add to or change the terms listed in the vector.</p>
 <pre class="r"><code># DIED is set to TRUE if value in exit_status is &quot;DD&quot; or &quot;DOA&quot;
 linelist_cleaned$DIED &lt;- linelist_cleaned$exit_status %in% c(&quot;DD&quot;, &quot;DOA&quot;)</code></pre>
 <p>You can <a href="http://www.datasciencemadesimple.com/in-operator-in-r/">read more about the <code>%in%</code> here</a></p>
 </div>
 <div id="joins" class="section level2">
 <h2>Joins</h2>
-<p>The package dplyr contains functions that are used in the templates for joining (“merging”) data frames. There are many ways to conduct a join, and it is important that you use the correct option - otherwise you risk unexpectedly losing data!</p>
+<p>The package <strong>dplyr</strong> contains functions that are used in the templates for joining (“merging”) data frames. There are many ways to conduct a join, and it is important that you use the correct option - otherwise you risk unexpectedly losing data!</p>
 <p>It is wise to verify any join by inspecting the joined data frames and the resulting data frame.</p>
 <p>There are more reference materials on dplyr join functions <a href="https://stat545.com/bit001_dplyr-cheatsheet.html">in the cheat sheet from UBC’s STAT545 course (by Jenny Bryan)</a> and <a href="https://rpubs.com/williamsurles/293454">course notes from William Srules</a>. The animations below were originally from <a href="https://github.com/gadenbuie/tidyexplain" class="uri">https://github.com/gadenbuie/tidyexplain</a>.</p>
 <div id="inner-join" class="section level3">
@@ -159,5 +159,7 @@ linelist_cleaned$DIED &lt;- linelist_cleaned$exit_status %in% c(&quot;DD&quot;, 
 <img src="/images/anti-join.gif" />
 
 </div>
+<p>TODO: ggplot()</p>
+<p>TODO: for loops</p>
 </div>
 </div>

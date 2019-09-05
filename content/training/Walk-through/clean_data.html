@@ -69,13 +69,13 @@ linelist_cleaned &lt;- mutate(linelist_cleaned,
                                  date_of_onset &gt; as.Date(&quot;2017-10-31&quot;)  ~ as.Date(NA),
                                  TRUE                                   ~ date_of_onset
                                  ))</code></pre>
-<p>We also must <strong>use the provided code to create a variable called <code>epiweek</code></strong>. While there are already variables in our dataset that give the epidemiological weeks of various data points, it is safer to make a new variable AND later code chunks rely on the variable being named <code>epiweek</code>. See the <a href="https://cran.r-project.org/web/packages/aweek/vignettes/introduction.html">documentation of the package aweek</a> for more information.</p>
+<p>We also must <strong>use the provided code to create a variable called <code>epiweek</code></strong>. While there are already variables in our dataset that give the epidemiological weeks of various data points, it is safer to make a new variable AND later code chunks rely on the variable being named <code>epiweek</code>. See the <a href="https://cran.r-project.org/web/packages/aweek/vignettes/introduction.html">documentation of the package <strong>aweek</strong></a> for more information.</p>
 <pre class="r"><code># Create variable epiweek
 linelist_cleaned$epiweek &lt;- aweek::date2week(linelist_cleaned$date_of_onset, 
                                              floor_day = TRUE, 
                                              factor = TRUE)</code></pre>
 <p>{{% notice tip %}} A note on the epiweek variable and factors:<br />
-Notice that we converted dates to NA that were clearly errors <strong>before</strong> creating the <code>epiweek</code> variable. This is because the <code>epiweek</code> variable is created as a <strong>factor</strong>, and once a factor is created it is more difficult to remove factor levels. YOu can read more about factors and dropping unused factor levels in the Advanced R Basics page.* {{% /notice %}}</p>
+Notice that we converted dates to NA that were clearly errors <strong>before</strong> creating the <code>epiweek</code> variable. This is because the <code>epiweek</code> variable is created as a <strong>factor</strong>, and once a factor is created it is more difficult to remove factor levels. You can read more about factors and dropping unused factor levels in the Advanced R Basics page.* {{% /notice %}}</p>
 </div>
 <div id="clean-numeric-variables" class="section level3">
 <h3>Clean numeric variables</h3>
@@ -278,7 +278,7 @@ obs_end   &lt;- week2date(sprintf(&quot;%s-7&quot;, reporting_week))</code></pre
 <div id="export-if-desired" class="section level3">
 <h3>Export if desired</h3>
 <p>And finally, if desired you can <strong>export the cleaned dataset</strong> for other purposes.</p>
-<p>The command <code>export()</code> is also from the package “rio”.</p>
+<p>The command <code>export()</code> is also from the package <strong>rio</strong>.</p>
 <p>First, the object that you want to export is named (<code>linelist_cleaned</code>).</p>
 <p>Then, the function <code>paste0()</code> creates the name for the new file by combining “AmTiman_linelist_cleaned_” with the current date and finally the extention “.xlsx”. Don’t be confused - this is equivalen of writing <code>rio::export(linelist_cleaned, &quot;AmTiman_linelist_cleaned_2019-08-24.xlsx&quot;)</code>, but using <code>paste0()</code> and <code>Sys.Date()</code> means the current date will always be used automatically.</p>
 <pre class="r"><code>## OPTIONAL: save your cleaned dataset! 

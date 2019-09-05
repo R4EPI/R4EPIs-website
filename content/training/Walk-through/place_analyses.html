@@ -2244,7 +2244,7 @@ ggplot(ar, aes(x = reorder(Region, `AR (per 10,000)`),
 <p><img src="/training/Walk-through/place_analyses_files/figure-html/bar_attack_rate_by_region-1.png" width="720" /></p>
 <p>You could also <strong>table mortality rate by region</strong>. A few things to note:</p>
 <ul>
-<li>The first command uses <code>group_by()</code> to count cases by <code>patient_origin</code>. Then, <code>filter()</code> is applied based on the character search function <code>grepl()</code> from the package stringr, which looks for “Dead” within the variable <code>exit_status</code> - <strong>note: we must change this to reflect our data and have <code>grepl()</code> look for “Died” in <code>exit_status2</code></strong> (otherwise, the object <code>deaths</code> has 0 rows and <code>mortality_rate()</code> produces an error).<br />
+<li>The first command uses <code>group_by()</code> to count cases by <code>patient_origin</code>. Then, <code>filter()</code> is applied based on the character search function <code>grepl()</code> from the package <strong>stringr</strong>, which looks for “Dead” within the variable <code>exit_status</code> - <strong>note: we must change this to reflect our data and have <code>grepl()</code> look for “Died” in <code>exit_status2</code></strong> (otherwise, the object <code>deaths</code> has 0 rows and <code>mortality_rate()</code> produces an error).<br />
 </li>
 <li>The <code>mortality_rate()</code> step calculates mortality rates for the regions that had a death.</li>
 </ul>
@@ -2424,7 +2424,7 @@ mapsub &lt;- left_join(map, ar, by = c(&quot;Name&quot; = &quot;Region&quot;))</
 <p><strong><code>geom_sf()</code></strong> identifies <code>mapsub</code> as providing the data for the map, and filling the polygons by values in the variable <code>categories</code>.</p>
 <p><strong><code>coord_sf()</code></strong> set to <code>NA</code> prevents gridlines from being drawn on the map.</p>
 <p><strong><code>annotation_scale()</code></strong> adds a scalebar at the bottom of the map.</p>
-<p><strong><code>scale_fill_brewer()</code></strong> uses a color palatte from orange to red (“OrRd”), keeps all color levels even if there are no polygons at that level (<code>drop=FALSE</code>), and specifies a title for the legend. If you want a different color scale, use this code from the package RColorBrewer to see the possible options (hint: after running this code click “Zoom” in your Plot/Viewer pane to see more clearly). Then replace “OrRd” with your desired code. You can read more about colors <a href="http://www.sthda.com/english/wiki/print.php?id=85">here</a>.</p>
+<p><strong><code>scale_fill_brewer()</code></strong> uses a color palatte from orange to red (“OrRd”), keeps all color levels even if there are no polygons at that level (<code>drop=FALSE</code>), and specifies a title for the legend. If you want a different color scale, use this code from the package <strong>RColorBrewer</strong> to see the possible options (hint: after running this code click “Zoom” in your Plot/Viewer pane to see more clearly). Then replace “OrRd” with your desired code. You can read more about colors <a href="http://www.sthda.com/english/wiki/print.php?id=85">here</a>.</p>
 <pre class="r"><code>library(RColorBrewer)
 display.brewer.all()</code></pre>
 <p><img src="/training/Walk-through/place_analyses_files/figure-html/unnamed-chunk-5-1.png" width="720" /></p>

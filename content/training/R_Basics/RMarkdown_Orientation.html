@@ -101,6 +101,7 @@ linelist_raw &lt;- gen_data(&quot;AJS&quot;) # generates a fake dataset for use 
 <li><p>You can use the arrow next to the word “Knit” to select the type of document you want to produce: Microsoft Word, PDF, or HTML (HTML opens the file in an offline web browser). Note that to knit to a PDF <em>directly</em>, additional packages may have to be installed.</p></li>
 <li><p>The default document type is specified in the header of the RMarkdown script, and for the templates it is Microsoft Word.</p></li>
 </ul>
-<p>{{% notice tip %}} If you receive an error when knitting such as “openBinaryFile does not exist … Error: pandoc document conversion failed with error 1”, your R project file may be saved in a location with restricted permissions such as a network drive. The RMarkdown is likely not permitted to write the new Microsoft Word file to that location. Try saving your R project to a more local location on your computer. {{% /notice %}}</p>
+<p>{{% notice tip %}} If you receive an error when knitting such as “openBinaryFile does not exist … Error: pandoc document conversion failed with error 1”, your R project file may be saved in a location with restricted permissions such as a network drive. The RMarkdown is likely not permitted to write the new Microsoft Word file to that location. Try saving your R project to a more local location on your computer.</p>
+<p>If you are on an MSF computer, try writing saving the R project on the C drive where you have read/write rights - in general this is the c:temp folder. {{% /notice %}}</p>
 </div>
 </div>

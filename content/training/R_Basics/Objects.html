@@ -24,7 +24,7 @@ weight: 7
 
 reporting_week                 # prints the current value of reporting_week</code></pre>
 <pre><code>## [1] &quot;2018-W10&quot;</code></pre>
-<p>{{% notice tip %}} <strong>IMPORTANT: An object’s value can be over-written</strong> at any time by running an assignment command to re-define its value. Thus, the <strong>order of the commands run is very important</strong>. {{% /notice %}}</p>
+<p>{{% notice info %}} <strong>IMPORTANT: An object’s value can be over-written</strong> at any time by running an assignment command to re-define its value. Thus, the <strong>order of the commands run is very important</strong>. {{% /notice %}}</p>
 <pre class="r"><code>reporting_week &lt;- &quot;2018-W51&quot;   # assigns a NEW value to the object reporting_week
 
 reporting_week                 # prints the current value of reporting_week</code></pre>
@@ -44,7 +44,7 @@ linelist_cleaned &lt;- linelist_raw
 # linelist_cleaned is RE-defined as itself, but modified to include a new variable
 linelist_cleaned &lt;- mutate(linelist_cleaned, 
                            obs_days = as.numeric(date_of_exit - date_of_admission))</code></pre>
-<p>You can read more about importing and exporting datasets with the rio package <a href="https://rdrr.io/cran/rio/f/vignettes/rio.Rmd">here</a></p>
+<p>You can read more about importing and exporting datasets with the <strong>rio</strong> package <a href="https://rdrr.io/cran/rio/f/vignettes/rio.Rmd">in this vignette</a></p>
 <p>A quick note on naming of objects:</p>
 <ul>
 <li>Object names must not contain spaces, but you should use underscore (_) or a period (.) instead of a space.<br />
@@ -197,6 +197,6 @@ length(linelist_cleaned$age_years)  </code></pre>
 </tr>
 </tbody>
 </table>
-<p><a href="https://swcarpentry.github.io/r-novice-inflammation/13-supp-data-structures/">Here</a> is more material on classes and data structures in R.</p>
+<p>Here is <a href="https://swcarpentry.github.io/r-novice-inflammation/13-supp-data-structures/">more material on classes and data structures in R</a>.</p>
 </div>
 </div>

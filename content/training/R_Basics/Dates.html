@@ -13,7 +13,7 @@ weight: 10
 <p>It is important to make R recognize when a variable contains dates. Dates are an object class and can be tricky to work with. The templates provides some code for converting variables to class date, but if your data are not standardized to a MSF data dictionary this process can require attention. <strong>The templates often use the function <code>guess_dates()</code>, but this guide will also demonstrate converting a variable to class date using the function <code>as.Date()</code>.</strong></p>
 <div id="the-function-guess_dates" class="section level4">
 <h4>The function <code>guess_dates()</code></h4>
-<p><strong>The function <code>guess_dates()</code> attempts to read a “messy” date variable containing dates in many different formats and convert the dates to a standard format.</strong> You can <a href="https://www.repidemicsconsortium.org/linelist/reference/guess_dates.html">read more about <code>guess_dates()</code></a>, which is in the “linelist” package.</p>
+<p><strong>The function <code>guess_dates()</code> attempts to read a “messy” date variable containing dates in many different formats and convert the dates to a standard format.</strong> You can <a href="https://www.repidemicsconsortium.org/linelist/reference/guess_dates.html">read more about <code>guess_dates()</code></a>, which is in the <strong>linelist</strong> package.</p>
 <blockquote>
 <p><strong>For example:</strong> <code>guess_dates</code> would see the following dates “03 Jan 2018”, “07/03/1982”, and “08/20/85” and convert them in the class Date to: 2018-01-03, 1982-03-07, and 1985-08-20.</p>
 </blockquote>
@@ -96,6 +96,6 @@ linelist_cleaned$date_of_onset &lt;- as.Date(linelist_cleaned$date_of_onset, ori
 </div>
 <div id="epidemiological-weeks" class="section level3">
 <h3>Epidemiological weeks</h3>
-<p>The templates use the very flexible package “aweek”&quot; to set epidemiological weeks. You can read more about it <a href="https://www.repidemicsconsortium.org/aweek/">on the RECON website</a></p>
+<p>The templates use the very flexible package <strong>aweek</strong> to set epidemiological weeks. You can read more about it <a href="https://www.repidemicsconsortium.org/aweek/">on the RECON website</a></p>
 </div>
 </div>

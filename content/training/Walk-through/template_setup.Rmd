@@ -54,6 +54,24 @@ ggplot2::theme_set(theme_classic(base_size = 18))
 aweek::set_week_start("Monday")
 ```
 
+## Opening the template  
+
+### Opening a new R project  
+
+Please review the instructions in the R Basics page on Working within R projects. In brief:  
+
+Open RStudio. Select *New Project* from the main *File* menu of RStudio. Select "New Directory" and "New Project", and a location to save the new R project (this creates a new folder). Save all relevant data files into this new R project folder.  
+
+{{% notice tip %}}
+For the RMarkdown to produce the final report correctly, you must have read/write permissions for the location of the R project folder. On an MSF computer this is generally the c:/temp folder. 
+{{% /notice %}}  
+
+### Opening the AJS template  
+
+Once the R project is established, select *New File* from the main *File* menu of RStudio, and select "R Markdown". In the pop-up window, change the highlight on the left to "From Template" and then select "AJS outbreak report" from the menu on the right. The AJS template will open in your RStudio Viewer pane.  
+
+**Now, follow along with this walk-through and make edits to your AJS template, saving it regularly.**
+
 
 ## Overview of template 
 
