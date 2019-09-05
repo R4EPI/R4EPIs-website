@@ -37,7 +37,7 @@ reporting_week <- "2018-W10"   # creates the object reporting_week by assigning 
 reporting_week                 # prints the current value of reporting_week
 ```
 
-{{% notice tip %}}
+{{% notice info %}}
 **IMPORTANT: An object's value can be over-written** at any time by running an assignment command to re-define its value. Thus, the **order of the commands run is very important**.
 {{% /notice %}}
 
@@ -142,4 +142,4 @@ Function | Action
 `as.Date()` | Converts to Date class - Note: see section on dates for details  
 `as.factor()` | Converts to factor - Note: re-defining order of value levels requires extra arguments
 
-[This tutorial](https://swcarpentry.github.io/r-novice-inflammation/13-supp-data-structures/) has more material on classes and data structures in R.  
+Here is [more material on classes and data structures in R](https://swcarpentry.github.io/r-novice-inflammation/13-supp-data-structures/).  
