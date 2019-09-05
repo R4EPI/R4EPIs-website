@@ -6,10 +6,10 @@ weight: 14
 
 
 
-<p>TODO: introduction to place analyses</p>
+<p>The final section of the template produces tabular analysis outputs related to <em>place</em>. If you have shapefiles for your situation, you can also produce maps.</p>
 <div id="tabular-place-analyses-non-maps" class="section level3">
 <h3>Tabular place analyses (non-maps)</h3>
-<p>To get a basic <strong>descriptive table of cases by region</strong> (which in our case was originally the variable <em>quartier</em> from the raw linelist), we use tab_linelist() on the variable patient_origin, with columns by patient_facility_type (inpatient, outpatient, or missing).</p>
+<p>To get a basic <strong>descriptive table of cases by region</strong> (which in our case was originally the variable <em>quartier</em> from the raw linelist), we use <code>tab_linelist()</code> on the variable <code>patient_origin</code>, with columns by <code>patient_facility_type</code> (inpatient, outpatient, or missing).</p>
 <pre class="r"><code># Descriptive table of cases by region and facility type
 tab_linelist(linelist_cleaned, patient_origin, 
              strata = patient_facility_type,
@@ -967,7 +967,7 @@ tab_linelist(linelist_cleaned, patient_origin,
 </tr>
 </tbody>
 </table>
-<p>To get a <strong>descriptive table by patient outcome</strong> we set <code>strata = exit_status2</code>. We can also restrict the analysis to inpatients only by inserting the function filter() into the first argument of tab_linelist. tab_linelist() expects a data frame for it’s first argument, and it receives the filtered linelist_cleaned - this is an example of “nested”&quot; functions (one function inside another).</p>
+<p>To get a <strong>descriptive table by patient outcome</strong> we set <code>strata = exit_status2</code>. We can also restrict the analysis to inpatients only by inserting the function <code>filter()</code> into the first argument of <code>tab_linelist</code>. <code>tab_linelist()</code> expects a data frame for it’s first argument, and it receives the filtered <code>linelist_cleaned</code> - this is an example of “nested”&quot; functions (one function inside another).</p>
 <pre class="r"><code># get counts and props of region by outcome among inpatients
 # include column and row totals 
 tab_linelist(filter(linelist_cleaned,
@@ -1540,10 +1540,10 @@ tab_linelist(filter(linelist_cleaned,
 </tbody>
 </table>
 <p><strong>A table of attack rates by region may be useful</strong></p>
-<p><strong>First</strong>, like when we calculated attack rate by epiweek in the time_analysis section, the cases are counted by patient_origin. This list of counts is then <strong>joined</strong> to the imported population data for each region <strong>joined by patient_origin (the name of the region/quartier)</strong>. These data are stored in the object <code>cases</code>.</p>
-<p>*Recall that this <strong>join</strong> requires <strong>exact matches</strong> between patient_origin values in <code>linelist_cleaned$patient_origin</code> and <code>population_data_region$patient_origin</code> to match a region’s cases to its population (read more about joins in the advanced R Basics page). In the data cleaning steps we converted the values in linelist_cleaned to all capital letters to match those in population_data_region.<br />
-The “ar” object saves the counts, population, and attack rate calculations along with modified column names.</p>
-<p>Finally, the table is created with kable() and displayed.</p>
+<p><strong>First</strong>, like when we calculated attack rate by epiweek in the <code>time_analysis</code> section, the cases are counted by <code>patient_origin</code>. This list of counts is then <strong>joined</strong> to the imported population data for each region <strong>joined by <code>patient_origin</code> (the name of the region/quartier)</strong>. These data are stored in the object <code>cases</code>.</p>
+<p>*Recall that this <strong>join</strong> requires <strong>exact matches</strong> between <code>patient_origin</code> values in <code>linelist_cleaned$patient_origin</code> and <code>population_data_region$patient_origin</code> to match a region’s cases to its population (read more about joins in the advanced R Basics page). In the data cleaning steps we converted the values in <code>linelist_cleaned</code> to all capital letters to match those in <code>population_data_region</code>.<br />
+The <code>ar</code> object saves the counts, population, and attack rate calculations along with modified column names.</p>
+<p>Finally, the table is created with <code>kable()</code> and displayed.</p>
 <pre class="r"><code>## - [ ] consider facet wrapping by an overarching unit if have many regions (e.g. by province)
 cases &lt;- count(linelist_cleaned, patient_origin) %&gt;%   # cases for each region
   left_join(population_data_region, by = &quot;patient_origin&quot;)    # merge population data 
@@ -2226,7 +2226,7 @@ ar %&gt;%
 </tbody>
 </table>
 <p>You could then also plot this on a bar chart with confidence intervals.</p>
-<p><em>Note: There are many quartiers without population denominators that will make the graph difficult to read. Thus, we first filter <code>ar</code> to remove those using the opposite (!) of the is.na() function (see R Basics page on operators). Note that if this step is added, any quartiers with missing denominators will not appear in the graph.</em></p>
+<p>{{% notice tip %}} There are many quartiers without population denominators that will make the graph difficult to read. Thus, we first filter <code>ar</code> to remove those using the opposite (<code>!</code>) of the <code>is.na()</code> function (see Operators R Basics page). Note that if this step is added, any quartiers with missing denominators will not appear in the graph. {{% /notice %}}</p>
 <pre class="r"><code># filter ar for non-zero quartiers
 ar &lt;- filter(ar, !is.na(`AR (per 10,000)`))
 
@@ -2244,9 +2244,9 @@ ggplot(ar, aes(x = reorder(Region, `AR (per 10,000)`),
 <p><img src="/training/Walk-through/place_analyses_files/figure-html/bar_attack_rate_by_region-1.png" width="720" /></p>
 <p>You could also <strong>table mortality rate by region</strong>. A few things to note:</p>
 <ul>
-<li>The first command uses group_by() to count cases by patient_origin. Then, filter() is applied based on the character search function grepl() from the package stringr, which looks for “Dead” within the variable exit_status - <strong>note: we must change this to reflect our data and have grepl() look for “Died” in exit_status2.</strong> (otherwise, the object “deaths” has 0 rows and mortality_rate() produces an error)<br />
+<li>The first command uses <code>group_by()</code> to count cases by <code>patient_origin</code>. Then, <code>filter()</code> is applied based on the character search function <code>grepl()</code> from the package stringr, which looks for “Dead” within the variable <code>exit_status</code> - <strong>note: we must change this to reflect our data and have <code>grepl()</code> look for “Died” in <code>exit_status2</code></strong> (otherwise, the object <code>deaths</code> has 0 rows and <code>mortality_rate()</code> produces an error).<br />
 </li>
-<li>The mortality_rate() step calculates mortality rates for the regions that had a death.</li>
+<li>The <code>mortality_rate()</code> step calculates mortality rates for the regions that had a death.</li>
 </ul>
 <pre class="r"><code>deaths &lt;- group_by(linelist_cleaned, patient_origin) %&gt;%
   filter(grepl(&quot;Died&quot;, exit_status2)) %&gt;% 
@@ -2373,18 +2373,18 @@ mortality_rate(deaths$deaths, deaths$population, multiplier = 10000) %&gt;%
 <p>Mapping in R can be intimidating at first because it is different than ArcGIS, QGIS, or other mapping software that primarily use a point-and-click interface. However, you will see that using commands to create maps can be much faster, more replicable, and transparent for whomever you share code with.</p>
 <p>We do have shapefiles for the Am Timan exercise. You can download them from the case study overview page of this website.</p>
 <p><em>Shapefiles are a format for storing geometric location and attribute data for geographic features - for example <strong>either points (e.g. GPS points of cases or households surveyed), lines (e.g. road network), or polygons (e.g. district boundaries)</strong> </em></p>
-<p><em>Note: a shapefile is actually made of several files. Viewing the shapefile in your computer’s internal folders you will often see 4 or 5 files with the same name but different extensions (e.g. .shp, .prj, etc.). As long as these files are located in the same folder the shapefile will load correctly when you import with the .shp extension.</em></p>
+<p>{{% notice tip %}} A shapefile is actually made of several files. Viewing the shapefile in your computer’s internal folders you will often see 4 or 5 files with the same name but different extensions (e.g. .shp, .prj, etc.). As long as these files are located in the same folder the shapefile will load correctly when you import with the .shp extension. {{% /notice %}}</p>
 <p>Because we have shapefiles for this exercise, we <strong>must delete the command that generates the fake shapefile</strong> (<code>map &lt;- gen_polygon(regions = unique(linelist_cleaned$patient_origin))</code>).</p>
 <p>Note the checklist for using shapefiles:</p>
 <ul>
 <li>Your shapefile can be a polygon or points (and polygons do not have to be contiguous - they do not have to touch each other)<br />
 </li>
-<li>Ensure that the region names in the shapefile match <em>exactly</em> the region names in linelist_cleaned. (in most shapefiles there is an ID or NAME variable in the spreadsheet file)<br />
+<li>Ensure that the region names in the shapefile match <em>exactly</em> the region names in <code>linelist_cleaned</code>. (in most shapefiles there is an ID or NAME variable in the spreadsheet file)<br />
 </li>
 <li>Make sure the coordinate reference system (CRS) of the shapefile is WGS84 (this is the standard coordinate system used by most GPS systems, but it is good to ask whomever collected to data to be sure)</li>
 </ul>
-<p><em>Note that when giving the name of a shapefile to here(), list the file name with a .shp extension.</em></p>
-<p><em>The import() function is wrapped around the here() function. The here() function makes it easy for R to locate files on your computer. It is best to save the dataset within your R project, and to provide here() with any R project subfolder names. You can read more about the here() function in the data import page of the R Basics tutorial.</em></p>
+<p>{{% notice tip %}} When giving the name of a shapefile to here(), list the file name with a .shp extension. {{% /notice %}}</p>
+<p>The <code>import()</code> function is wrapped around the <code>here()</code> function. The <code>here()</code> function makes it easy for R to locate files on your computer. It is best to save the dataset within your R project, and to provide <code>here()</code> with any R project subfolder names. You can read more about the <code>here()</code> function in the data import R Basics page.</p>
 <pre class="r"><code>## reading in a shapefile 
 map &lt;- read_sf(here(&quot;quartiersshape.shp&quot;))</code></pre>
 <p>The next code will check the coordinate reference system (CRS) of the shapefile, as it was read-in. In our exercise, we see an EPSG code of 4326, which is the correct code for WGS84 (you can also see below the EPSG code that the datum is WGS84).</p>
@@ -2400,9 +2400,9 @@ map &lt;- st_set_crs(map, value = 4326) # Sets to WGS84</code></pre>
 <p>Below we explain each step within the this code chunk, plotting a map based on the attack rate table.</p>
 <p><strong>Create a <em>categorical</em> variable of the attack rate.</strong> These categories will appear in the map as the legend - and the regions will be colored by these groups.</p>
 <ol style="list-style-type: decimal">
-<li><p>The first command defines max_ar as the highest attack rate value in the object ar. This is referenced later.</p></li>
-<li><p>In the next command, <code>breakers</code> is defined as a sequence of integers. Zero is included by default because it should be a separate color on the final map. After zero, quartiles are determined up to the max_ar.</p></li>
-<li><p>In the last command, mutate() is used to create the categorical variable within ‘ar’, using <code>breakers</code> to define the breaks in the numeric variable in ‘ar’: AR (per 10,000).</p></li>
+<li><p>The first command defines <code>max_ar</code> as the highest attack rate value in the object <code>ar</code>. This is referenced later.</p></li>
+<li><p>In the next command, <code>breakers</code> is defined as a sequence of integers. Zero is included by default because it should be a separate color on the final map. After zero, quartiles are determined up to the <code>max_ar</code>.</p></li>
+<li><p>In the last command, <code>mutate()</code> is used to create the categorical variable within ‘ar’, using <code>breakers</code> to define the breaks in the numeric variable in <code>ar</code>, which is <code>AR (per 10,000)</code>.</p></li>
 </ol>
 <pre class="r"><code>## create a categorical variable for plotting 
 max_ar    &lt;- max(ar$`Upper 95%CI`, na.rm = TRUE) # define your highest AR
@@ -2415,21 +2415,21 @@ ar &lt;- mutate(ar,
              categories = age_categories(`AR (per 10,000)`, 
                                          breakers = breakers)
              )</code></pre>
-<p><strong>Join the object ‘ar’ to the map (shapefile)</strong> ‘map’ is joined to ‘ar’ with a <strong>left join</strong> (see the Advanced R Basics page to learn more about joins). Both of these objects contain tables (you can click them in the Environment pane to see this). In the command, they are linked by the “Name” variable in ‘ar’ and the “Region” variable in ‘map’.</p>
-<p><strong>Note: make sure your <code>left_join</code> code uses “Name” with a capital N, as that is how the variable is spelled in the object ‘map’. In your data these variable names may be completely different and must be changed</strong></p>
-<p>The resulting object ‘mapsub’ is a product of this <strong>left join</strong>. A left join will include all values from the Left-hand Side (LHS) and only inlcude values from the Right-hand Side (RHS) if they match to LHS values. Now, the attack rates are joined to the region names and to their GIS geometries. You can verify this by Viewing the object mapsub (click on it in the Environment pane).</p>
+<p><strong>Join the object <code>ar</code> to the map (shapefile)</strong>. <code>map</code> is joined to <code>ar</code> with a <strong>left join</strong> (see the Advanced R Basics page to learn more about joins). Both of these objects contain tables (you can click them in the Environment pane to see this). In the command, they are linked by the <code>Name</code> variable in <code>ar</code> and the <code>Region</code> variable in <code>map</code>.</p>
+<p>{{% notice tip %}} Make sure your <code>left_join</code> code uses “Name” with a capital N, as that is how the variable is spelled in the object ‘map’. In your other data these variable names may be completely different and must be changed {{% /notice %}}</p>
+<p>The resulting object <code>mapsub</code> is a product of this <strong>left join</strong>. A left join will include all values from the Left-hand Side (LHS) and only inlcude values from the Right-hand Side (RHS) if they match to LHS values. Now, the attack rates are joined to the region names and to their GIS geometries. You can verify this by Viewing the object <code>mapsub</code> (click on it in the Environment pane).</p>
 <pre class="r"><code>## join your ar or case counts based on matching shapefile names with regions in your ar table
 mapsub &lt;- left_join(map, ar, by = c(&quot;Name&quot; = &quot;Region&quot;))</code></pre>
-<p><strong>Now, ggplot() is used to create the map.</strong> Remember that ggplot() subcommands must be connected by plus symbols at the end of each line (+) (except the last line). Read more about ggplot2 and ggplot() in the R Basics pages.</p>
-<p><strong>geom_sf()</strong> identifies ‘mapsub’ as providing the data for the map, and filling the polygons by values in the variable ‘categories’.</p>
-<p><strong>coord_sf()</strong> set to NA prevents gridlines from being drawn on the map.</p>
-<p><strong>annotation_scale()</strong> adds a scalebar at the bottom of the map.</p>
-<p><strong>scale_fill_brewer()</strong> uses a color palatte from orange to red (“OrRd”), keeps all color levels even if there are no polygons at that level (<code>drop=FALSE</code>), and specifies a title for the legend. If you want a different color scale, use this code from the package RColorBrewer to see the possible options (hint: after running this code click “Zoom” in your Plot/Viewer pane to see more clearly). Then replace “OrRd” with your desired code. You can read more about colors <a href="http://www.sthda.com/english/wiki/print.php?id=85">here</a>.</p>
+<p><strong>Now, <code>ggplot()</code> is used to create the map.</strong> Remember that <code>ggplot()</code> subcommands must be connected by plus symbols at the end of each line (<code>+</code>) (except the last line). Read more about ggplot2 and <code>ggplot()</code> in the Advanced R Basics page.</p>
+<p><strong><code>geom_sf()</code></strong> identifies <code>mapsub</code> as providing the data for the map, and filling the polygons by values in the variable <code>categories</code>.</p>
+<p><strong><code>coord_sf()</code></strong> set to <code>NA</code> prevents gridlines from being drawn on the map.</p>
+<p><strong><code>annotation_scale()</code></strong> adds a scalebar at the bottom of the map.</p>
+<p><strong><code>scale_fill_brewer()</code></strong> uses a color palatte from orange to red (“OrRd”), keeps all color levels even if there are no polygons at that level (<code>drop=FALSE</code>), and specifies a title for the legend. If you want a different color scale, use this code from the package RColorBrewer to see the possible options (hint: after running this code click “Zoom” in your Plot/Viewer pane to see more clearly). Then replace “OrRd” with your desired code. You can read more about colors <a href="http://www.sthda.com/english/wiki/print.php?id=85">here</a>.</p>
 <pre class="r"><code>library(RColorBrewer)
 display.brewer.all()</code></pre>
 <p><img src="/training/Walk-through/place_analyses_files/figure-html/unnamed-chunk-5-1.png" width="720" /></p>
-<p><strong>geom_sf_text()</strong> specifies labels for the polygons, including which variable to use for labels (“Name”), and the text colour. <strong>Again, we need to modify this ggplot() reference to the variable “name” to now reference “Name” with a capital N. In your data the variable may be completely different.</strong></p>
-<p><strong>theme_void()</strong> specifies a theme for the map that does not include coordinates or axes.</p>
+<p><strong><code>geom_sf_text()</code></strong> specifies labels for the polygons, including which variable to use for labels (<code>Name</code>), and the text colour. <strong>Again, we need to modify this <code>ggplot()</code> reference to the variable “name” to now reference “Name” with a capital N. In your other data the variable may be completely different.</strong></p>
+<p><strong><code>theme_void()</code></strong> specifies a theme for the map that does not include coordinates or axes.</p>
 <pre class="r"><code>## plotting with polygons ------------------------------------------------------
 
 ggplot() +
@@ -2441,8 +2441,8 @@ ggplot() +
   theme_void() # remove coordinates and axes</code></pre>
 <p><img src="/training/Walk-through/place_analyses_files/figure-html/unnamed-chunk-6-1.png" width="720" /></p>
 <p><strong>You can use this alternative to make the labels not overlap.</strong></p>
-<p><strong>ggrepel()</strong> arranges point/polygon labels so they do not overlap and are easier to read. You can see more examples of ggrepel <a href="https://mran.microsoft.com/snapshot/2017-08-20/web/packages/ggrepel/vignettes/ggrepel.html">here</a></p>
-<p><em>Note: the geom_sf_text() line has been replaced by ggrepel.</em></p>
+<p><strong><code>ggrepel()</code></strong> arranges point/polygon labels so they do not overlap and are easier to read. You can see more examples of <code>ggrepel()</code> <a href="https://mran.microsoft.com/snapshot/2017-08-20/web/packages/ggrepel/vignettes/ggrepel.html">in this vignette</a></p>
+<p>{{% notice tip %}} The <code>geom_sf_text()</code> line has been replaced by ggrepel. {{% /notice %}}</p>
 <pre class="r"><code>## plotting with polygons ------------------------------------------------------
 
 ggplot() +
@@ -2459,15 +2459,15 @@ ggplot() +
   theme_void()  # remove coordinates and axes</code></pre>
 <p><img src="/training/Walk-through/place_analyses_files/figure-html/unnamed-chunk-7-1.png" width="720" /></p>
 <p>Lastly, <strong>there is an efficient way to create attack rate maps and bar plots of incidence for each epiweek</strong>. Use a <strong>“for loop”</strong> to run the same code for every epi week.</p>
-<p><strong>A for loop is used to iterate over (perform the same actions to) every value in a vector.</strong> In this case, we want to make the map and bar chart for each region. You can read more about for loops in the Advanced section of the R Basics pages, or <a href="https://www.datamentor.io/r-programming/for-loop/">here</a>.</p>
+<p><strong>A “for loop”&quot; is used to iterate over (perform the same actions to) every value in a vector.</strong> In this case, we want to make the map and bar chart for each region. You can read more about for loops in the Advanced R Basics pages, or <a href="https://www.datamentor.io/r-programming/for-loop/">this tutorial</a>.</p>
 <p>A few things to note about this chunk:</p>
 <ul>
 <li>The first half is very similar to the set-up of the previous map.<br />
 </li>
-<li>You must also modify the <code>left_join</code> command to list the correct variable names (e.g. Name instead of name)</li>
+<li>You must also modify the <code>left_join</code> command to list the correct variable names (e.g. <code>Name</code> instead of name)</li>
 <li>These maps are not labeled with region names.<br />
 </li>
-<li>The creation of the barplots depends on the object epicurve_theme, which was defined in the Time section of the template. If that section is not created, then this object will be missing and cause errors.</li>
+<li>The creation of the barplots depends on the object <code>epicurve_theme</code>, which was defined in the Time section of the template. If that section is not created, then this object will be missing and cause errors.</li>
 </ul>
 <pre class="r"><code>## Checklist for plotting in for-loop ------------------------------------------
 ## - [ ] decide if you would like to show counts, AR or categories of those

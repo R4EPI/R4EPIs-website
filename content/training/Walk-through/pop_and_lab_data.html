@@ -15,13 +15,14 @@ weight: 9
 </li>
 <li>Use the function <code>gen_population()</code> to derive the estimates from proportions</li>
 </ol>
-<p><img src="/images/AJS_Population_Counts.png" /></p>
+<div class="figure">
+<img src="/images/AJS_Population_Counts.png" />
+
+</div>
 <p><strong>For this case study, we import an Excel spreadsheet containing population data by quartier (available for download in case study overview page).</strong></p>
-<p>See the read_population_data chunk and modify the command to import the Excel spreadsheet. The command uses <code>import()</code> wrapped around <code>here()</code> to locate the file. The <code>which=</code> argument of <code>import()</code> specifies that the sheet “quartier” should be imported.</p>
+<p>See the <code>read_population_data</code> chunk and modify the command to import the Excel spreadsheet. The command uses <code>import()</code> wrapped around <code>here()</code> to locate the file. The <code>which=</code> argument of <code>import()</code> specifies that the sheet “quartier” should be imported.</p>
 <p>Note that the variables names in the spreadsheet have already been edited to match the expected variable names (“patient_origin” and “population”).</p>
-<p>{{% notice note %}}
-The <code>import()</code> function is wrapped around the <code>here()</code> function. The <code>here()</code> function makes it easy for R to locate files within a project. It is best to save the dataset within your R project, and to provide <code>here()</code> with any R project subfolder names. You can read more about the <code>here()</code> function in the data import page of the R Basics tutorial.
-{{% /notice %}}</p>
+<p>{{% notice tip %}} The <code>import()</code> function is wrapped around the <code>here()</code> function. The <code>here()</code> function makes it easy for R to locate files within a project. It is best to save the dataset within your R project, and to provide <code>here()</code> with any R project subfolder names. You can read more about the <code>here()</code> function in the data import page of the R Basics tutorial. {{% /notice %}}</p>
 <p>Delete or comment (#) all the code lines in the chunk that create fake data for <code>population_data_region</code>, <code>population_data_age</code>, and <code>population_data_age_months</code>.</p>
 <pre class="r"><code>population_data_region &lt;- rio::import(here(&quot;AJS_AmTiman_population_revised_for_template.xlsx&quot;), which=&quot;quartier&quot;)</code></pre>
 <p><strong>If you choose not to complete the population estimates section at all, delete the default <code>gen_population()</code> code, and expect that later sections on attack and mortality rates will not produce output.</strong></p>

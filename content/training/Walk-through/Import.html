@@ -11,7 +11,7 @@ weight: 7
 <p><img src="/images/AJS_Data_Import.png" alt="Data import options snip", width = "75%"></p>
 <p><strong>Importing the dataset into R</strong></p>
 <p>Use the <code>import()</code> function of the rio package to import an Excel file that is not password protected. The <code>which=</code> argument of <code>import()</code> specifies that the sheet “linelist” should be imported.</p>
-<p><em>The <code>import()</code> function is wrapped around the <code>here()</code> function. The <code>here()</code> function makes it easy for R to locate files on your computer. It is best to save the dataset within an R project, and to provide <code>here()</code> with any R project subfolder names.</em> <strong>You can read more about <code>import()</code> and <code>here()</code> functions in the importing data R Basics page.</strong></p>
+<p>The <code>import()</code> function is wrapped around the <code>here()</code> function. The <code>here()</code> function makes it easy for R to locate files on your computer. It is best to save the dataset within an R project, and to provide <code>here()</code> with any R project subfolder names. <strong>You can read more about <code>import()</code> and <code>here()</code> functions in the importing data R Basics page.</strong></p>
 <p>Either delete or comment out (#) all lines of code in the other data import chunks (<code>read_fake_data</code> and <code>read_DHIS_excel_data</code>).</p>
 <pre class="r"><code>## Read data ------------------------------------
 # Excel file

@@ -69,3 +69,48 @@ linelist_cleaned <- readRDS("data/linelist_aligned.rds")
 
 
 This code chunk can be used to explore your data, but remember to eventually comment these code lines if you do not want these outputs in your final report.
+
+
+
+```{r browse_data, warning=FALSE, message=FALSE}
+## view the first ten rows of data
+head(linelist_cleaned, n = 10)
+```
+
+
+```{r warning=FALSE, message=FALSE}
+## view your whole dataset interactivley (in an excel style format)
+## Remember that `View` needs to be written with a capital *V*
+View(linelist_cleaned)
+```
+
+
+```{r warning=FALSE, message=FALSE}
+## overview of variable types and contents
+str(linelist_cleaned)
+```
+
+
+```{r warning=FALSE, message=FALSE}
+## gives mean, median and max values of variables
+## gives counts for categorical variables
+## also gives number of NAs
+summary(linelist_cleaned)
+```
+
+
+```{r warning=FALSE, message=FALSE}
+## view unique values contained in variables 
+unique(linelist_cleaned$sex)
+```
+
+
+```{r warning=FALSE, message=FALSE}
+## another alternative is with the "summarytools package"
+## use the dfSummary function in combination with view
+## note that view is not capitalised with this package
+# install.packages("summarytools")
+# summarytools::view(summarytools::dfSummary(linelist_cleaned))
+```
+
+

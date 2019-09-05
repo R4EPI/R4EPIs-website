@@ -99,7 +99,7 @@ linelist_cleaned <- linelist_raw
 
 **Second, use the `clean_labels()` function** from the epitrix package to fix any variable names with non-standard syntax. These code lines take the column names, clean them, and then store the cleaned names in the vector `cleaned_colnames`. The second code line over-writes the old column names of `linelist_cleaned` with the improved ones.  
 
-{{% notice note %}}
+{{% notice tip %}}
 If you have a variable named "#" it may be removed by the `clean_labels()` function. You can protect it by adding the argument `protect = "#"`. 
 {{% /notice %}}
 
@@ -118,7 +118,11 @@ Standardized variable names are required for this template to work smoothly, and
 
 * **Paste the disease-specific rename helper into the script.** This command is found in the template near the end of the `read_nonDHIS_data` chunk. For our example we run the command `msf_dict_rename_helper("AJS")` and a block of code text is copied to our clipboard. Return to the template script and *paste* from the clipboard into the template. For the AJS template, the code that is pasted will look like the code below. This code uses the function `rename()` to change variable names.  
 
-*Note: Be sure to paste the code into an existing R code chunk, not into the white space of the RMarkdown script. 
+
+{{% notice tip %}}
+Be sure to paste the code into an existing R code chunk, not into the white space of the RMarkdown script.
+{{% /notice %}}
+
 
 <img src="/images/Variable_Helper_Paste.gif" alt="rename variables empty snip", width = "100%">
 
@@ -126,9 +130,11 @@ Standardized variable names are required for this template to work smoothly, and
 
 ![](/images/AJS_Variable_Names.gif)  
 
-**Tip: **If you see this error:  
+{{% notice tip %}}
+If you see this error:  
 `Error in is_symbol(expr) : argument "expr" is missing, with no default`  
-then you likely forgot to comment (#) the line for a variable you did not use.  
+then you likely forgot to comment (#) the line for a variable you did not use.
+{{% /notice %}}
 
 And now you can see the result:  
 
