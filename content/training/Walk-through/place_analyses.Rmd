@@ -174,7 +174,7 @@ ggplot(ar, aes(x = reorder(Region, `AR (per 10,000)`),
 
 You could also **table mortality rate by region**. A few things to note:  
 
-* The first command uses `group_by()` to count cases by `patient_origin`. Then, `filter()` is applied based on the character search function `grepl()` from the package stringr, which looks for "Dead" within the variable `exit_status` - **note: we must change this to reflect our data and have `grepl()` look for "Died" in `exit_status2`** (otherwise, the object `deaths` has 0 rows and `mortality_rate()` produces an error).  
+* The first command uses `group_by()` to count cases by `patient_origin`. Then, `filter()` is applied based on the character search function `grepl()` from the package **stringr**, which looks for "Dead" within the variable `exit_status` - **note: we must change this to reflect our data and have `grepl()` look for "Died" in `exit_status2`** (otherwise, the object `deaths` has 0 rows and `mortality_rate()` produces an error).  
 * The `mortality_rate()` step calculates mortality rates for the regions that had a death.  
 
 ```{r mortality_rate_region, warning=FALSE, message=FALSE}
@@ -297,7 +297,7 @@ mapsub <- left_join(map, ar, by = c("Name" = "Region"))
 
 **`annotation_scale()`** adds a scalebar at the bottom of the map.  
 
-**`scale_fill_brewer()`** uses a color palatte from orange to red ("OrRd"), keeps all color levels even if there are no polygons at that level (`drop=FALSE`), and specifies a title for the legend. If you want a different color scale, use this code from the package RColorBrewer to see the possible options (hint: after running this code click "Zoom" in your Plot/Viewer pane to see more clearly). Then replace "OrRd" with your desired code. You can read more about colors [here](http://www.sthda.com/english/wiki/print.php?id=85).  
+**`scale_fill_brewer()`** uses a color palatte from orange to red ("OrRd"), keeps all color levels even if there are no polygons at that level (`drop=FALSE`), and specifies a title for the legend. If you want a different color scale, use this code from the package **RColorBrewer** to see the possible options (hint: after running this code click "Zoom" in your Plot/Viewer pane to see more clearly). Then replace "OrRd" with your desired code. You can read more about colors [here](http://www.sthda.com/english/wiki/print.php?id=85).  
 
 ```{r}
 library(RColorBrewer)

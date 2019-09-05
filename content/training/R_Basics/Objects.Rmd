@@ -70,7 +70,7 @@ linelist_cleaned <- mutate(linelist_cleaned,
 
 ```
 
-You can read more about importing and exporting datasets with the rio package [here](https://rdrr.io/cran/rio/f/vignettes/rio.Rmd)
+You can read more about importing and exporting datasets with the **rio** package [in this vignette](https://rdrr.io/cran/rio/f/vignettes/rio.Rmd)
 
 A quick note on naming of objects:
 
@@ -142,4 +142,4 @@ Function | Action
 `as.Date()` | Converts to Date class - Note: see section on dates for details  
 `as.factor()` | Converts to factor - Note: re-defining order of value levels requires extra arguments
 
-[Here](https://swcarpentry.github.io/r-novice-inflammation/13-supp-data-structures/) is more material on classes and data structures in R.  
+[This tutorial](https://swcarpentry.github.io/r-novice-inflammation/13-supp-data-structures/) has more material on classes and data structures in R.  

@@ -109,7 +109,7 @@ linelist_raw <- rio::import("linelist.xlsx", which = "Sheet1")
 
 Within the template scripts you will see the pipe operator `%>%`. Simply explained, the pipe operator passes an intermediate output from one function to the next. You can think of it as saying "then". Many functions can be linked together with `%>%`.  
 
-Piping is not a base function. To use piping, the dplyr package must be installed and loaded. Near the top of every template script is a code chunk that installs and loads the necessary packages, including dplyr. You can [read more about piping in the documentation](https://magrittr.tidyverse.org/).
+Piping is not a base function. To use piping, the **dplyr** package must be installed and loaded. Near the top of every template script is a code chunk that installs and loads the necessary packages, including **dplyr**. You can [read more about piping in the documentation](https://magrittr.tidyverse.org/).
 
 > **For example:** The following code chunk from the AJD template data cleaning section can be read as "`linelist_cleaned` is defined as `linelist_cleaned`, filtered to remove the rows where the variables `case_number` and `date_of_admission` are missing"  
 

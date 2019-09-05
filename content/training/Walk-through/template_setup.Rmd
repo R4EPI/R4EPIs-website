@@ -90,28 +90,28 @@ This "setup" code chunk does the following:
 
 #### Generic packages  
 
-* knitr used to create the output document (pdf, doc, html)  
-* dplyr used to clean and shape the data  
-* forcats used to clean and shape the data  
-* stringr used to clean text/characters  
-* rio used to read in data  
-* epitrix used for data cleaning and variable standardisation  
-* ggplot2 used to visualise your data using different plotting methods  
-* here used to locate files
+* **knitr** used to create the output document (pdf, doc, html)  
+* **dplyr** used to clean and shape the data  
+* **forcats** used to clean and shape the data  
+* **stringr** used to clean text/characters  
+* **rio** used to read in data  
+* **epitrix** used for data cleaning and variable standardisation  
+* **ggplot2** used to visualise your data using different plotting methods  
+* **here** used to locate files
 
 #### More epidemiology-specific packages  
 
-* sitrep includes a variety of useful field epidemiology functions
-* linelist used for cleaning and standardising data  
-* incidence used for creating epicurves  
-* aweek used for creating epiweeks  
-* epitools used for creating 2by2 tables  
-* epitrix used for helpful epidemiological tasks  
+* **sitrep** includes a variety of useful field epidemiology functions
+* **linelist** used for cleaning and standardising data  
+* **incidence** used for creating epicurves  
+* **aweek** used for creating epiweeks  
+* **epitools** used for creating 2by2 tables  
+* **epitrix** used for helpful epidemiological tasks  
 
 #### Mapping packages  
 
-* ggspatial used for selecting basemap tiles  
-* sf used for manipulating spatial objects (e.g. polygons) easily
+* **ggspatial** used for selecting basemap tiles  
+* **sf** used for manipulating spatial objects (e.g. polygons) easily
 
 
 
@@ -120,7 +120,7 @@ This "setup" code chunk does the following:
 
 Set the epidemiological week for the report. **This value is used in later code chunks, for example when producing epidemic curves.** Note that you may want to specify the most recent **complete** epi week. Follow the format in the code below (within quotes give the 4-digit year, a hyphen (-), capital W, then the 2-digit epi week number).  
 
-By default in the templates epi weeks begin on Mondays (this can be changed at the bottom of the "setup" code chunk). See the documentation of the [package "aweek"](https://cran.r-project.org/web/packages/aweek/vignettes/introduction.html) for more information. 
+By default in the templates epi weeks begin on Mondays (this can be changed at the bottom of the "setup" code chunk). See the documentation of the [package **aweek**](https://cran.r-project.org/web/packages/aweek/vignettes/introduction.html) for more information. 
 
 To determine which epi week of a date you can use the `date2week()` function. It will tell you the year, week, and day number of the provided date. Let's assume the date we want to use for this analysis is 20 April, 2017.
 

@@ -24,7 +24,7 @@ It is important to make R recognize when a variable contains dates. Dates are an
 
 #### The function `guess_dates()` 
 
-**The function `guess_dates()` attempts to read a "messy" date variable containing dates in many different formats and convert the dates to a standard format.** You can [read more about `guess_dates()`](https://www.repidemicsconsortium.org/linelist/reference/guess_dates.html), which is in the "linelist" package.
+**The function `guess_dates()` attempts to read a "messy" date variable containing dates in many different formats and convert the dates to a standard format.** You can [read more about `guess_dates()`](https://www.repidemicsconsortium.org/linelist/reference/guess_dates.html), which is in the **linelist** package.
 
 >**For example:** `guess_dates` would see the following dates "03 Jan 2018", "07/03/1982", and "08/20/85" and convert them in the class Date to: 2018-01-03, 1982-03-07, and 1985-08-20.  
 
@@ -122,4 +122,4 @@ The difference between dates can be calculated by:
 
 ### Epidemiological weeks  
 
-The templates use the very flexible package "aweek"" to set epidemiological weeks. You can read more about it [on the RECON website](https://www.repidemicsconsortium.org/aweek/)
+The templates use the very flexible package **aweek** to set epidemiological weeks. You can read more about it [on the RECON website](https://www.repidemicsconsortium.org/aweek/)

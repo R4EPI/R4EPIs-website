@@ -19,7 +19,7 @@ linelist_cleaned <- gen_data("AJS")
 ```
 
 
-### Factors and the *forcats* package  
+### Factors and the **forcats** package  
 
 #### Factors
 
@@ -31,7 +31,7 @@ Factors are similar to labeled values of categorical variables in Stata.
 
 You can [read more about factors here](https://www.stat.berkeley.edu/~s133/factors.html).  
 
-The package forcats provides useful tools for working with factor variables. You can [read more about forcats here](https://forcats.tidyverse.org).  
+The package **forcats** provides useful tools for working with factor variables. You can [read more about **forcats** here](https://forcats.tidyverse.org).  
 
 > For example, in the automatically generated AJS dataset, the variable `sex` is a factor. In the underlying dataset the levels are F, M, and U, but we can attach longer character labels that are displayed.  
 
@@ -51,14 +51,14 @@ To convert use `as.factor()` `linelist_cleaned$sex <- as.factor(linelist_cleaned
 
 After providing the name of the factor give the conversion statements, separated by commas, in the format **NEW = "OLD"**. Note that everything on the right-hand side (RHS) must be a character. So, if you want to give a new label to missing values, use the special term `NA_character_`.  
 
-First we use `fct_count()` from the package forcats to see the values in the factor:
+First we use `fct_count()` from the package **forcats** to see the values in the factor:
 
 ```{r}
 # View the levels present in the variable
 fct_count(linelist_cleaned$sex)
 ```
 
-Now we re-label the values using `fct_recode()`, also from the package forcats.  
+Now we re-label the values using `fct_recode()`, also from the package **forcats**.  
 
 ```{r}
 # Re-define the labels for the factor variable (pay attention to spelling!)
@@ -136,7 +136,7 @@ are_vowels
 epi[are_vowels]
 ```
 
-In the templates, `%in%` can be used when creating the valued "DIED" (when a patient died). The variable DIED is logical (either `TRUE` or `FALSE`). It will be `TRUE` if the value in exit_status is either "DD" or "DOA" - those are the two character values present in the vector. You can add to or change the terms listed in the vector.
+In the templates, `%in%` can be used when creating the variable `DIED` (when a patient died). The variable `DIED` is logical (either `TRUE` or `FALSE`). It will be `TRUE` if the value in `exit_status` is either "DD" or "DOA" - those are the two character values present in the vector. You can add to or change the terms listed in the vector.
 
 ```{r eval=FALSE}
 # DIED is set to TRUE if value in exit_status is "DD" or "DOA"
@@ -148,7 +148,7 @@ You can [read more about the `%in%` here](http://www.datasciencemadesimple.com/i
 
 ## Joins  
 
-The package dplyr contains functions that are used in the templates for joining ("merging") data frames. 
+The package **dplyr** contains functions that are used in the templates for joining ("merging") data frames. 
 There are many ways to conduct a join, and it is important that you use the correct option - otherwise you risk unexpectedly losing data!
 
 It is wise to verify any join by inspecting the joined data frames and the resulting data frame. 

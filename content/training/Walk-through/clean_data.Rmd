@@ -167,7 +167,7 @@ linelist_cleaned <- mutate(linelist_cleaned,
                            
 ```
 
-We also must **use the provided code to create a variable called `epiweek`**. While there are already variables in our dataset that give the epidemiological weeks of various data points, it is safer to make a new variable AND later code chunks rely on the variable being named `epiweek`. See the [documentation of the package aweek](https://cran.r-project.org/web/packages/aweek/vignettes/introduction.html) for more information.
+We also must **use the provided code to create a variable called `epiweek`**. While there are already variables in our dataset that give the epidemiological weeks of various data points, it is safer to make a new variable AND later code chunks rely on the variable being named `epiweek`. See the [documentation of the package **aweek**](https://cran.r-project.org/web/packages/aweek/vignettes/introduction.html) for more information.
 
 ```{r}
 # Create variable epiweek
@@ -180,7 +180,7 @@ linelist_cleaned$epiweek <- aweek::date2week(linelist_cleaned$date_of_onset,
 
 {{% notice tip %}}
 A note on the epiweek variable and factors:  
-Notice that we converted dates to NA that were clearly errors **before** creating the `epiweek` variable. This is because the `epiweek` variable is created as a **factor**, and once a factor is created it is more difficult to remove factor levels. YOu can read more about factors and dropping unused factor levels in the Advanced R Basics page.* 
+Notice that we converted dates to NA that were clearly errors **before** creating the `epiweek` variable. This is because the `epiweek` variable is created as a **factor**, and once a factor is created it is more difficult to remove factor levels. You can read more about factors and dropping unused factor levels in the Advanced R Basics page.* 
 {{% /notice %}}
 
 
@@ -444,7 +444,7 @@ obs_end   <- week2date(sprintf("%s-7", reporting_week))
 
 And finally, if desired you can **export the cleaned dataset** for other purposes.  
 
-The command `export()` is also from the package "rio".  
+The command `export()` is also from the package **rio**.  
 
 First, the object that you want to export is named (`linelist_cleaned`).  
 
