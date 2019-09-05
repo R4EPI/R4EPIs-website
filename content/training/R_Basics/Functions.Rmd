@@ -46,8 +46,7 @@ Functions often ask for several inputs. **Each piece of information needed is ca
 ![](/images/Function_Bread_Example.png)  
 
 
-  
->**For example**, this `plot_age_pyramid()` command in the templates produces an age pyramid graphic based on defined age groups and a binary split variable, such as `sex`. The function is given three arguments within the parentheses, separated by commas. The values supplied to the arguments establish `linelist_cleaned` as the data frame to use, `age_group` as the variable to count, and `sex` as the binary variable to use for splitting the pyramid
+>**For example**, this `plot_age_pyramid()` command in the templates produces an age pyramid graphic based on defined age groups and a binary split variable, such as `sex`. The function is given three arguments within the parentheses, separated by commas. The values supplied to the arguments establish `linelist_cleaned` as the data frame to use, `age_group` as the variable to count, and `sex` as the binary variable to use for splitting the pyramid.
 
 ```{r include=FALSE, results='hide', message=FALSE, warning=FALSE}
 ## create an age group variable by specifying categorical breaks
@@ -75,7 +74,11 @@ plot_age_pyramid(linelist_cleaned, "age_group", "sex")
 * Show proportions instead of counts (set `proportional = TRUE` when the default is `FALSE`)  
 * Specify the two colors to use (`pal = ` is short for "palette" and is supplied with a vector of two color names. See the Objects page for how the function `c()` makes a vector)  
 
-*Note: For arguments specified with an equals symbol (e.g. `coltotals = ...`), their order among the arguments is not important (must still be within the parentheses and separated by commas).* 
+
+{{% notice tip %}}
+For arguments specified with an equals symbol (e.g. `coltotals = ...`), their order among the arguments is not important (must still be within the parentheses and separated by commas).
+{{% /notice %}}
+
 
 ```{r message=FALSE, warning=FALSE}
 plot_age_pyramid(linelist_cleaned, "age_group", "sex", proportional = TRUE, pal = c("orange", "purple"))
@@ -85,7 +88,9 @@ plot_age_pyramid(linelist_cleaned, "age_group", "sex", proportional = TRUE, pal 
 
 R comes with "base" functions, but the R community has created and verified many other specialized functions that are available to you. These *functions* are contained within **packages** that can be downloaded to your computer. Once downloaded, you access the functions within a package by calling the package with the `library()` command at the beginning of each R session.
 
-**Note: While you only have to install packages once, you must load them at the beginning of every R session using `library()`.** There is a code chunk at the beginning of each template that loads the necessary packages. 
+{{% notice tip %}}
+**While you only have to install packages once, you must load them at the beginning of every R session using `library()`.** There is a code chunk at the beginning of each template that loads the necessary packages. 
+{{% /notice %}}
 
 Think of R as your personal library: When you download a package your library gains a book of functions, but each time you want to use a function in that book, you must borrow that book from your library.  
 
@@ -106,7 +111,7 @@ Within the template scripts you will see the pipe operator `%>%`. Simply explain
 
 Piping is not a base function. To use piping, the dplyr package must be installed and loaded. Near the top of every template script is a code chunk that installs and loads the necessary packages, including dplyr. You can [read more about piping in the documentation](https://magrittr.tidyverse.org/).
 
-> **As an example:** The following code chunk from the AJD template data cleaning section can be read as "`linelist_cleaned` is defined as `linelist_cleaned`, filtered to remove the rows where the variables `case_number` and `date_of_admission` are missing"  
+> **For example:** The following code chunk from the AJD template data cleaning section can be read as "`linelist_cleaned` is defined as `linelist_cleaned`, filtered to remove the rows where the variables `case_number` and `date_of_admission` are missing"  
 
 ``` {r eval=FALSE}
 # only keep variables with a case ID and a date of consultation
@@ -114,7 +119,7 @@ linelist_cleaned <- linelist_cleaned %>%
   filter(!is.na(case_number) & !is.na(date_of_admission))
 ```
 
-{{% notice note %}}
+{{% notice tip %}}
 **Remember that even when using piping to link functions, if the assignment operator (`<-`) is present, the object to the left will still be over-written (re-defined) by the right side.** In the code above, linelist_cleaned will be replaced by the new `linelist_cleaned` which likely has fewer observations.  
 {{% /notice %}}
 

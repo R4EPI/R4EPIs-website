@@ -42,7 +42,10 @@ linelist_cleaned <- gen_data("AJS")
 # the variable is a factor. 
 class(linelist_cleaned$sex)
 ```
-*Note: To convert use `as.factor()` `linelist_cleaned$sex <- as.factor(linelist_cleaned$sex)`*  
+
+{{% notice tip %}}
+To convert use `as.factor()` `linelist_cleaned$sex <- as.factor(linelist_cleaned$sex)` 
+{{% /notice %}}
 
 **To change the labels for a variable, use the function `fct_recode()` from the package forcats.**  
 
@@ -86,7 +89,7 @@ levels(linelist_cleaned$sex)
 
 If a variable is already a factor, it can be difficult to remove levels that do not have any observations. These levels will continue to appear in graphs, tables, etc.  
 
-> For example, here we look at the values present in the variable sex. We want to convert those that are "U" to proper R missing values (`NA`).
+> **For example:** here we look at the values present in the variable sex. We want to convert those that are "Unknown" to proper R missing values (`NA`).
 
 ```{r}
 # Convert "Unknown" values to missing
@@ -106,7 +109,10 @@ linelist_cleaned$sex <- fct_drop(linelist_cleaned$sex)
 fct_count(linelist_cleaned$sex)
 ``` 
 
-*Note: Use the argument `only = ` to drop specific levels: `fct_drop(linelist_cleaned$sex, only = "U")`*
+
+{{% notice tip %}}
+Use the argument `only = ` to drop specific levels: `fct_drop(linelist_cleaned$sex, only = "Unknown")`
+{{% /notice %}}
 
 
 ### The `%in%` operator  
