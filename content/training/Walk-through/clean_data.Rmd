@@ -90,10 +90,14 @@ linelist_raw <- rio::import("AJS_AmTiman.xlsx", which = "linelist", na = ".")
 ```
 
 ### Drop ineligible observations  
-The next code item in the script drops observations with missing `case_number` or `date_of_consultation_admission`. Because the Am Timan dataset contains observations for patients seen in the community and at the hospital, these criteria may not be relevant. We can check and see that of the 1447 observations, there are 0 missing `case_number` or `dateentry`, but 616 observations missing `date_of_consultation_admission`. These 616 community-identified cases are still of interest for our report, so we will not drop them. 
+The next code item in the script drops observations with missing `case_number` or `date_of_consultation_admission`. Because the Am Timan dataset contains observations for patients seen in the community and at the hospital, these criteria may not be relevant. We can check, using the code below, and see that of the 1447 observations, there are 0 missing `case_number` or `dateentry`, but 616 observations missing `date_of_consultation_admission`. These 616 community-identified cases are still of interest for our report, so we will not drop them. 
 
-```{r eval=FALSE}
-# Find the number of observations missing date_of_consultation_admission
+```{r warning=FALSE, message=FALSE}
+# Find the number of observations missing case_number, dateentry, and date_of_consultation_admission
+nrow(linelist_cleaned %>% filter(is.na(case_number))) 
+
+nrow(linelist_cleaned %>% filter(is.na(dateentry))) 
+
 nrow(linelist_cleaned %>% filter(is.na(date_of_consultation_admission))) 
 ```
 
