@@ -23,9 +23,14 @@ linelist_raw &lt;- rio::import(&quot;AJS_AmTiman.xlsx&quot;, which = &quot;linel
 </div>
 <div id="drop-ineligible-observations" class="section level3">
 <h3>Drop ineligible observations</h3>
-<p>The next code item in the script drops observations with missing <code>case_number</code> or <code>date_of_consultation_admission</code>. Because the Am Timan dataset contains observations for patients seen in the community and at the hospital, these criteria may not be relevant. We can check and see that of the 1447 observations, there are 0 missing <code>case_number</code> or <code>dateentry</code>, but 616 observations missing <code>date_of_consultation_admission</code>. These 616 community-identified cases are still of interest for our report, so we will not drop them.</p>
-<pre class="r"><code># Find the number of observations missing date_of_consultation_admission
-nrow(linelist_cleaned %&gt;% filter(is.na(date_of_consultation_admission))) </code></pre>
+<p>The next code item in the script drops observations with missing <code>case_number</code> or <code>date_of_consultation_admission</code>. Because the Am Timan dataset contains observations for patients seen in the community and at the hospital, these criteria may not be relevant. We can check, using the code below, and see that of the 1447 observations, there are 0 missing <code>case_number</code> or <code>dateentry</code>, but 616 observations missing <code>date_of_consultation_admission</code>. These 616 community-identified cases are still of interest for our report, so we will not drop them.</p>
+<pre class="r"><code># Find the number of observations missing case_number, dateentry, and date_of_consultation_admission
+nrow(linelist_cleaned %&gt;% filter(is.na(case_number))) </code></pre>
+<pre><code>## [1] 0</code></pre>
+<pre class="r"><code>nrow(linelist_cleaned %&gt;% filter(is.na(dateentry))) </code></pre>
+<pre><code>## [1] 0</code></pre>
+<pre class="r"><code>nrow(linelist_cleaned %&gt;% filter(is.na(date_of_consultation_admission))) </code></pre>
+<pre><code>## [1] 616</code></pre>
 <p>{{% notice tip %}} Notice that the command above returns the number of rows missing <code>date_of_consultation_admission</code>, but does not overwrite <code>linelist_cleaned</code> with an assignment operator <code>&lt;-</code>. {{% /notice %}}</p>
 </div>
 <div id="convert-and-clean-date-variables" class="section level3">
