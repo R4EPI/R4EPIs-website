@@ -190,5 +190,9 @@ This is often used to inspect which rows are unique to a data frame. An anti joi
 ![](/images/anti-join.gif)
 
 
+## Making beautiful graphics with the **ggplot2** package and `ggplot()`  
 
 
+R has the capability to make beautiful, very tailored graphics using the package **ggplot2** and it's function `ggplot()`. Below is a brief overview of the use of `ggplot()`, and you can read in more depth in this tutorial TODO. Reviewing [this gallery of visualizations](http://www.ggplot2-exts.org/gallery/) and `ggplot()` extensions can also be helpful and inspirational.  
+
+ggplot
