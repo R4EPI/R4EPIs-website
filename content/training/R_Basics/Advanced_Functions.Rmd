@@ -190,11 +190,142 @@ This is often used to inspect which rows are unique to a data frame. An anti joi
 ![](/images/anti-join.gif)
 
 
-## Making beautiful graphics with the **ggplot2** package and `ggplot()`  
+## Graphics with the **ggplot2** package  
+
+R has the capability to make beautiful and versatile graphics using the package **ggplot2** and its function `ggplot()`. Below is a brief overview of the use of `ggplot()`. **There are too many aspects of `ggplot()` to cover here, so it is highly encouraged that you download and review [this ggplot cheatsheet](/public_data/ggplot2-cheatsheet.pdf). **  
+
+For further reading, see [this data visualization tutorial](https://r4ds.had.co.nz/data-visualisation.html) and [this gallery of visualizations and extensions](http://www.ggplot2-exts.org/gallery/) for inspiration.  
+
+### Core components  
+
+A `ggplot()` command is typically built using sub-commands linked by `+` symbols. The sub-commands are executed one-after-another to build the final plot. The core components are:  
+
+* **a data set** - can be a data frame, or a spatial shapefile  
+* **coordinate system** - the x and y axes can reflect the range of values within specified variables
+* **geoms** - geometric marks to visualize the data (e.g. points, lines, etc)  
+* **aesthetics** - linking attributes such as color and size of geoms to variables in the data set  
+
+TODO: IMAGE describing parts of a template ggplot command  
+
+{{% notice tip %}}
+A command beginning with `ggplot()` will print the visualization but not save it. Using the assignment operator `<-` in the first line will assign the visualization to an R object and save it for later use.
+{{% /notice %}}  
+
+### Geospatial mapping  
+
+In the Place section of the template, `ggplot()` is used to create geospatial maps of attack rates and other indicators. In these cases, the coordinate system reflects latitude/longitude, and `ggplot()` uses `geom_sf()` to accept and display points, polygons, or lines shapefiles.
 
 
-R has the capability to make beautiful, very tailored graphics using the package **ggplot2** and its function `ggplot()`. Below is a brief overview of the use of `ggplot()`. You can read in more depth in this tutorial TODO. Also, reviewing [this gallery of visualizations and extensions](http://www.ggplot2-exts.org/gallery/) can be helpful and inspirational.  
+### Aesthetic themes and labels  
 
-You can also download [this ggplot2() cheatsheet](/public_data/ggplot2-cheatsheet.pdf).  
+In the templates, detailed aesthetics parameters are managed by creating theme objects that can be referenced multiple times.  
+
+Below, the object `epicurve_theme` is assigned certain `ggplot()` aesthetic parameters such as x-axis text angle, absence of legend title, and grid-line color. This object is then referenced in `ggplot()` commands throughout the template.  
+
+```{r eval=FALSE}
+# this sets the theme in ggplot for epicurves
+epicurve_theme <- theme(
+  axis.text.x = element_text(angle = 45, hjust = 1, vjust = 1), 
+  legend.title = element_blank(),
+  panel.grid.major.x = element_line(color = "grey60", linetype = 3),
+  panel.grid.major.y = element_line(color = "grey60", linetype = 3)
+)
+```
+
+Likewise, this chunk establishes the settings for labels. The settings for x-axis and y-axis labels, title, and subtitle are stored in the `epicurve_labels` object, which is referenced in several epidemic curve `ggplot()` commands.  
+
+```{r eval=FALSE}
+# This sets the labels in ggplot for the epicurves
+epicurve_labels <- labs(x = "Calendar week", 
+                        y = "Cases (n)", 
+                        title = "Cases by week of onset",
+                        subtitle = sprintf("Source: MSF data from %s", reporting_week)
+                       ) 
+```
+
+ 
 
 
+## For loop  
+
+A **for loop** is used to repeat or iterate code over each value in a vector. The vector can be a sequence of values - including the values within a data frame variable. 
+
+In the outbreak templates, a **for loop** is used at the end of the **Place** analyses to create bar graphs and maps of regional attack rates *for each epidemiological week*.  
+
+The basic structure of a **for loop** is as follows:  
+
+* **Setup**, including :  
+     * The keyword `for` (note the lowercase)  
+     * Parentheses containing:  
+          * A placeholder term (e.g. "i", "value", or another short word)  
+          * The keyword `in`  
+          * The name of the vector to cycle through  
+     * Opening bracket `{`  
+
+* **Actions** and commands to be performed for each item in the vector  
+     * If the item is referenced in a command, use the placeholder term instead.  
+     
+* **Closing** - A closing bracket `}`
+      
+
+A basic example **for loop** is below. `number_list` is defined as a vector of four numbers. The **for loop** is set-up to examine each item ("i") in `number_list`. The only command in the **for loop** is to print the value of "i" plus 2. Finally, the brackets are closed. See that one output is printed for each item in `number_list`.
+
+```{r}
+number_list <- c(102, 53, 14, 88)
+
+for (i in number_list) {
+     print(i + 2)
+}
+```
+
+In the outbreak templates, the **for loop** is more complex than the simple example above, but follows the same basic structure.  
+
+The loop is set-up for each item "i" of all the unique values in the variable `epiweek` within the data frame `cases`. This vector is a list of the epidemiological weeks with no repeated values. If you want to see this vector of epidemiological weeks, highlight and run just `unique(cases$epiweek))`.  
+
+Numerous commands are located within the loop's brackets `{ }`, but the most important is the first: `this_ar <- filter(ar, epiweek == i)`. This command restricts the large data frame `ar` to only the epiweek currently under consideration by the **for loop**. *Thus, the data frame `this_ar` will be different for each iteration of the **for loop** *. All the following steps (producing a map and a barplot) are performed on this filtered dataset.  
+
+The final step produces a `cowplot()` visualization that includes the map and the barplot for the epiweek "i". After producing the cowplot, the loop advances "i" to the next epiweek item in the vector, and repeats all the commands in the brackets `{ }`.
+
+```{r eval=FALSE}
+# go through each epiweek, fiter and plot the data
+for (i in unique(cases$epiweek)) {
+  this_ar <- filter(ar, epiweek == i)
+  
+  # map 
+  mapsub <- left_join(map, this_ar, by = c("name" = "Region"))
+  
+  # choropleth 
+  map_plot <- ggplot() +
+    geom_sf(data = mapsub, aes(fill = categories), col = "grey50") + # shapefile as polygon
+    coord_sf(datum = NA) + # needed to avoid gridlines being drawn
+    annotation_scale() + # add a scalebar
+  scale_fill_brewer(drop = FALSE, 
+                    palette = "OrRd", 
+                    name = "AR (per 10,000)") +  # color the scale to be perceptually uniform (keep levels)
+    theme_void() # remove coordinates and axes
+  
+  # plot with the region on the x axis sorted by increasing ar
+  # ar value on the y axis 
+  barplot <- ggplot(this_ar, aes(x = reorder(Region, `AR (per 10,000)`),
+                                 y = `AR (per 10,000)`)) + 
+    geom_bar(stat = "identity", col = "black", fill = "red") + # plot as bars (identity = as is)
+    geom_errorbar(aes(ymin = `Lower 95%CI`, ymax = `Upper 95%CI`), width = 0.2) + # add CIs
+    scale_y_continuous(expand = c(0, 0), limits = c(0, max_ar)) +  # set origin for axes
+    # add labels to axes and below chart
+    labs(x = "Region", y = "AR (per 10,000)", 
+         captions = paste0("Source: MSF data from ", reporting_week)) + 
+    epicurve_theme
+  # combine the barplot and map plot into one
+  print(
+    cowplot::plot_grid(
+      barplot + labs(title = paste0("Epiweek: ", i)),
+      map_plot,
+      nrow = 1,
+      align = "h",
+      axis = "tb"
+    )
+  )
+}
+```
+
+Here you can read more about [for loops and iteration in R](https://r4ds.had.co.nz/iteration.html).
