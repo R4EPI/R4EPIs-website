@@ -198,27 +198,34 @@ For further reading, see [this data visualization tutorial](https://r4ds.had.co.
 
 ### Core components  
 
-A `ggplot()` command is typically built using sub-commands linked by `+` symbols. The sub-commands are executed one-after-another to build the final plot. The core components are:  
+A `ggplot()` command is typically built using sub-commands linked by `+` symbols. The sub-commands are executed one-after-another to build the final plot. The core components to provide are:  
 
-* **a data set** - can be a data frame, or a spatial shapefile  
-* **coordinate system** - the x and y axes can reflect the range of values within specified variables
-* **geoms** - geometric marks to visualize the data (e.g. points, lines, etc)  
+* **a data set** - can be a standard data frame, or a spatial shapefile  
+* **coordinate system** - the x and y axes reflect the range of values within specified variables
+* **geom** - the geometric marks to visualize the data (e.g. points, lines, polygons, etc)  
 * **aesthetics** - linking attributes such as color and size of geoms to variables in the data set  
 
-TODO: IMAGE describing parts of a template ggplot command  
+The first command `ggplot()` creates an empty coordinate system to which layers of visualization and nuance are added.  
+* Its first argument specifies the data set to use.  
+* Its `aes()` argument establishes the variables to be mapped to the x and y axes.  
 
+Secondly, the geom is specified, indicating whether the data should be displayed as points, lines, bars, a map, etc. Without a geom, the data will not be visualized and the coordinate plane will be empty.  
+
+Other optional sub-commands can address the scale, labels, aesthetic themes and colors, etc. Note there are other ways to structure a ggplot() command, but the way described above is used in the template. When making a graphic, it often helps to look at examples online and mimic the code that produced them.  
+
+![](/images/ggplot.png)
 {{% notice tip %}}
-A command beginning with `ggplot()` will print the visualization but not save it. Using the assignment operator `<-` in the first line will assign the visualization to an R object and save it for later use.
+A command beginning with `ggplot()` will print the visualization but not save it. Using the assignment operator `<-` in the first line will assign the visualization to an R object and save it for later use. Print it by running a command of just the object name.
 {{% /notice %}}  
 
 ### Geospatial mapping  
 
-In the Place section of the template, `ggplot()` is used to create geospatial maps of attack rates and other indicators. In these cases, the coordinate system reflects latitude/longitude, and `ggplot()` uses `geom_sf()` to accept and display points, polygons, or lines shapefiles.
+In the Place section of the template, `ggplot()` is used to create geospatial maps of attack rates and other indicators. In these cases, the coordinate system reflects latitude/longitude, and `ggplot()` uses `geom_sf()` to accept and display points, polygons, or lines shapefiles (geom_sf is shorthand for "spatial file").
 
 
 ### Aesthetic themes and labels  
 
-In the templates, detailed aesthetics parameters are managed by creating theme objects that can be referenced multiple times.  
+In the outbreak templates, detailed aesthetics parameters are managed by creating "theme" objects that can be referenced multiple in multiple `ggplot()` commands.  
 
 Below, the object `epicurve_theme` is assigned certain `ggplot()` aesthetic parameters such as x-axis text angle, absence of legend title, and grid-line color. This object is then referenced in `ggplot()` commands throughout the template.  
 
@@ -232,7 +239,7 @@ epicurve_theme <- theme(
 )
 ```
 
-Likewise, this chunk establishes the settings for labels. The settings for x-axis and y-axis labels, title, and subtitle are stored in the `epicurve_labels` object, which is referenced in several epidemic curve `ggplot()` commands.  
+Likewise, this chunk establishes the settings for the labels in epidemic curve graphics. The settings for x-axis and y-axis labels, title, and subtitle are stored in the `epicurve_labels` object, which is referenced in several epidemic curve `ggplot()` commands.  
 
 ```{r eval=FALSE}
 # This sets the labels in ggplot for the epicurves
@@ -248,7 +255,7 @@ epicurve_labels <- labs(x = "Calendar week",
 
 ## For loop  
 
-A **for loop** is used to repeat or iterate code over each value in a vector. The vector can be a sequence of values - including the values within a data frame variable. 
+A **for loop** is used to repeat or iterate code, making repetitive tasks more efficient. The "loop" repeats a series of commands, altering them slightly to account for different input values that are stored in a vector. This vector, or sequence of values, can be the values within a data frame variable. 
 
 In the outbreak templates, a **for loop** is used at the end of the **Place** analyses to create bar graphs and maps of regional attack rates *for each epidemiological week*.  
 
@@ -257,18 +264,18 @@ The basic structure of a **for loop** is as follows:
 * **Setup**, including :  
      * The keyword `for` (note the lowercase)  
      * Parentheses containing:  
-          * A placeholder term (e.g. "i", "value", or another short word)  
+          * A placeholder term (e.g. "i", "value", or another relevant short word)  
           * The keyword `in`  
-          * The name of the vector to cycle through  
+          * The name of the vector to loop through  
      * Opening bracket `{`  
 
 * **Actions** and commands to be performed for each item in the vector  
-     * If the item is referenced in a command, use the placeholder term instead.  
+     * If the item is referenced in any command, use the placeholder term instead.  
      
 * **Closing** - A closing bracket `}`
       
 
-A basic example **for loop** is below. `number_list` is defined as a vector of four numbers. The **for loop** is set-up to examine each item ("i") in `number_list`. The only command in the **for loop** is to print the value of "i" plus 2. Finally, the brackets are closed. See that one output is printed for each item in `number_list`.
+A basic example **for loop** is below. `number_list` is defined as a vector of four numbers. The **for loop** is set-up to examine each item ("i") in `number_list`. The only command in the **for loop** is to print the value of "i" plus 2. Finally, the brackets are closed. As the loop executes, it produces one output for each item in `number_list`.
 
 ```{r}
 number_list <- c(102, 53, 14, 88)
@@ -280,11 +287,11 @@ for (i in number_list) {
 
 In the outbreak templates, the **for loop** is more complex than the simple example above, but follows the same basic structure.  
 
-The loop is set-up for each item "i" of all the unique values in the variable `epiweek` within the data frame `cases`. This vector is a list of the epidemiological weeks with no repeated values. If you want to see this vector of epidemiological weeks, highlight and run just `unique(cases$epiweek))`.  
+The loop is set-up for each item "i" of all the unique values in the variable `epiweek` within the data frame `cases`. This vector is a list of the epidemiological weeks with no repeated values. If you want to see this vector of epidemiological weeks, highlight and run just `unique(cases$epiweek)`.  
 
-Numerous commands are located within the loop's brackets `{ }`, but the most important is the first: `this_ar <- filter(ar, epiweek == i)`. This command restricts the large data frame `ar` to only the epiweek currently under consideration by the **for loop**. *Thus, the data frame `this_ar` will be different for each iteration of the **for loop** *. All the following steps (producing a map and a barplot) are performed on this filtered dataset.  
+Numerous commands are located within the loop's brackets `{ }`, but the most important is the first: `this_ar <- filter(ar, epiweek == i)`. This command restricts the large data frame `ar` to only the epiweek currently under consideration by the **for loop**. *Thus, the data frame `this_ar` will be different for each iteration of the **for loop** *. All the subsequent steps (producing a map and a barplot) are performed on this filtered dataset.  
 
-The final step produces a `cowplot()` visualization that includes the map and the barplot for the epiweek "i". After producing the cowplot, the loop advances "i" to the next epiweek item in the vector, and repeats all the commands in the brackets `{ }`.
+The final step produces a `cowplot()` visualization that includes the map and the barplot for the current epiweek "i". After producing the cowplot, the loop advances "i" to the next epiweek item in the vector, repeats all the commands in the brackets `{ }`, and produces a new cowplot.
 
 ```{r eval=FALSE}
 # go through each epiweek, fiter and plot the data

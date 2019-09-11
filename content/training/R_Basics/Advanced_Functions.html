@@ -33,9 +33,9 @@ fct_count(linelist_cleaned$sex)</code></pre>
 <pre><code>## # A tibble: 3 x 2
 ##   f         n
 ##   &lt;fct&gt; &lt;int&gt;
-## 1 M       107
-## 2 F        97
-## 3 U        96</code></pre>
+## 1 M        92
+## 2 F       115
+## 3 U        93</code></pre>
 <p>Now we re-label the values using <code>fct_recode()</code>, also from the package forcats.</p>
 <pre class="r"><code># Re-define the labels for the factor variable (pay attention to spelling!)
 linelist_cleaned$sex &lt;- fct_recode(linelist_cleaned$sex, 
@@ -48,9 +48,9 @@ fct_count(linelist_cleaned$sex)</code></pre>
 <pre><code>## # A tibble: 3 x 2
 ##   f           n
 ##   &lt;fct&gt;   &lt;int&gt;
-## 1 Male      107
-## 2 Female     97
-## 3 Unknown    96</code></pre>
+## 1 Male       92
+## 2 Female    115
+## 3 Unknown    93</code></pre>
 <p><strong>To change the <em>arrangement</em> of the levels, use <code>fct_relevel()</code></strong>.</p>
 <p>This will impact the <em>arrangement</em> of the levels as displayed in graphs and tables. Give the name of the factor followed by the new arrangement (pay attention to spelling!).</p>
 <pre class="r"><code># Provide new arrangement of levels
@@ -74,10 +74,10 @@ fct_count(linelist_cleaned$sex)</code></pre>
 <pre><code>## # A tibble: 4 x 2
 ##   f           n
 ##   &lt;fct&gt;   &lt;int&gt;
-## 1 Female     97
-## 2 Male      107
+## 1 Female    115
+## 2 Male       92
 ## 3 Unknown     0
-## 4 &lt;NA&gt;       96</code></pre>
+## 4 &lt;NA&gt;       93</code></pre>
 <blockquote>
 <p>We can see that the value “Unknown” now has a count of zero, but it is still present as a level of the factor variable and will appear in tables and graphs. To remove this level entirely we use <code>fct_drop()</code>, which drops unused levels from a factor.</p>
 </blockquote>
@@ -89,9 +89,9 @@ fct_count(linelist_cleaned$sex)</code></pre>
 <pre><code>## # A tibble: 3 x 2
 ##   f          n
 ##   &lt;fct&gt;  &lt;int&gt;
-## 1 Female    97
-## 2 Male     107
-## 3 &lt;NA&gt;      96</code></pre>
+## 1 Female   115
+## 2 Male      92
+## 3 &lt;NA&gt;      93</code></pre>
 <p><em>Note: Use the argument <code>only =</code> to drop specific levels: <code>fct_drop(linelist_cleaned$sex, only = &quot;U&quot;)</code></em></p>
 </div>
 </div>
@@ -161,23 +161,27 @@ linelist_cleaned$DIED &lt;- linelist_cleaned$exit_status %in% c(&quot;DD&quot;, 
 </div>
 </div>
 </div>
-<div id="making-beautiful-graphics-with-the-ggplot2-package" class="section level2">
-<h2>Making beautiful graphics with the <strong>ggplot2</strong> package</h2>
-<p>R has the capability to make beautiful, versatile, and very tailored graphics using the package <strong>ggplot2</strong> and its function <code>ggplot()</code>. Below is a brief overview of the use of <code>ggplot()</code>. You can read in more depth in <a href="https://r4ds.had.co.nz/data-visualisation.html">this data visualization tutorial</a>. Also, reviewing <a href="http://www.ggplot2-exts.org/gallery/">this gallery of visualizations and extensions</a> can be helpful and inspirational.</p>
-<p><strong>There are too many aspects of <code>ggplot()</code> to cover in here. It is highly encouraged that you download and review <a href="/public_data/ggplot2-cheatsheet.pdf">this ggplot2() cheatsheet</a>. </strong></p>
+<div id="graphics-with-the-ggplot2-package" class="section level2">
+<h2>Graphics with the <strong>ggplot2</strong> package</h2>
+<p>R has the capability to make beautiful and versatile graphics using the package <strong>ggplot2</strong> and its function <code>ggplot()</code>. Below is a brief overview of the use of <code>ggplot()</code>. <strong>There are too many aspects of <code>ggplot()</code> to cover here, so it is highly encouraged that you download and review <a href="/public_data/ggplot2-cheatsheet.pdf">this ggplot cheatsheet</a>. </strong></p>
+<p>For further reading, see <a href="https://r4ds.had.co.nz/data-visualisation.html">this data visualization tutorial</a> and <a href="http://www.ggplot2-exts.org/gallery/">this gallery of visualizations and extensions</a> for inspiration.</p>
 <div id="core-components" class="section level3">
 <h3>Core components</h3>
 <p>A <code>ggplot()</code> command is typically built using sub-commands linked by <code>+</code> symbols. The sub-commands are executed one-after-another to build the final plot. The core components are:</p>
 <ul>
 <li><strong>a data set</strong> - can be a data frame, or a spatial shapefile<br />
 </li>
-<li><strong>coordinate system</strong> - the x and y axes can reflect the range of values within specified variables</li>
+<li><strong>coordinate system</strong> - the x and y axes reflect the range of values within specified variables</li>
 <li><strong>geoms</strong> - geometric marks to visualize the data (e.g. points, lines, etc)<br />
 </li>
 <li><strong>aesthetics</strong> - linking attributes such as color and size of geoms to variables in the data set</li>
 </ul>
-<p>TODO: IMAGE describing parts of a template ggplot command</p>
-<p>{{% notice tip %}} A command beginning with <code>ggplot()</code> will print the visualization but not save it. Using the assignment operator <code>&lt;-</code> in the first line will assign the visualization to an R object and save it for later use. {{% /notice %}}</p>
+<p>The first command <code>ggplot()</code> creates an empty coordinate system to which layers of visualization and nuance are added.<br />
+* Its first argument specifies the data set to use.<br />
+* Its <code>aes()</code> argument establishes the variables to be mapped to the x and y axes.</p>
+<p>Secondly, the geom is specified, indicating whether the data should be displayed as points, lines, bars, a map, etc. Without a geom, the data will not be visualized and the coordinate plane will be empty.</p>
+<p>Other optional lines can address the scale, labels, aesthetic themes and colors, etc. Note there are other ways to structure a ggplot() command, but the way described above is used in the template.</p>
+<p><img src="/images/ggplot.png" /> {{% notice tip %}} A command beginning with <code>ggplot()</code> will print the visualization but not save it. Using the assignment operator <code>&lt;-</code> in the first line will assign the visualization to an R object and save it for later use. {{% /notice %}}</p>
 </div>
 <div id="geospatial-mapping" class="section level3">
 <h3>Geospatial mapping</h3>
