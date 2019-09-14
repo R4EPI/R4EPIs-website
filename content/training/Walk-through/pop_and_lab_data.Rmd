@@ -113,7 +113,11 @@ saveRDS(population_data_region, "data/population_data.rds")
 
 ## Provide laboratory testing data  
 
-**TODO: [Paragraph about lab data here - how it is used]**  
+In this example, laboratory testing data is already included in the linelist dataset. Therefore, there is no need to import a separate laboratory testing dataset.  
+
+If you have a separate laboratory dataset, use the alterate code provided in the template to import and then join that dataset to the linelist dataset. You can join them based on an ID or case number variable that is present in both datasets. For more information about joins, see the Advanced and Miscellaneous R Basics page.  
+
+
 
 
 
