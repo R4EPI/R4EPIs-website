@@ -1,6 +1,7 @@
 ---
 date: "2019-08-21T09:36:04+02:00"
-title: Import
+title: Import linelist
+menuTitle: Import linelist
 weight: 7
 ---
 
@@ -54,11 +55,13 @@ aweek::set_week_start("Monday")
 ```
 
 
-**In this template section you choose the appropriate code chunk to import your dataset.**  
+**In this template section you choose the appropriate code chunk to import your linelist dataset.** The linelist Excel file can be downloaded from the case study overview page.  
 
-For this exercise our dataset is a **non-standardized Excel file**, so we use the `read_nonDHIS_data` code chunk. **The linelist Excel file can be downloaded from the case study overview page.** 
+For this exercise our linelist dataset is a **non-DHIS file**, so to import we use the `read_nonDHIS_data` code chunk.  
 
-<img src="/images/AJS_Data_Import.png" alt="Data import options snip", width = "75%">
+**Comment out (using #) or delete the `read_fake_data`, `read_DHIS_data`, and `prep_DHIS_data` chunks**, as they are not necessary and will cause errors.
+
+<img src="/images/AJS_Data_Import.png" alt="Data import options snip", width = "100%">
  
 
 **Importing the dataset into R**  
@@ -67,17 +70,16 @@ Use the `import()` function of the **rio** package to import an Excel file that 
 
 The `import()` function is wrapped around the `here()` function. The `here()` function makes it easy for R to locate files on your computer. It is best to save the dataset within an R project, and to provide `here()` with any R project subfolder names. **You can read more about `import()` and `here()` functions in the importing data R Basics page.**  
 
-Either delete or comment out (#) all lines of code in the other data import chunks (`read_fake_data` and `read_DHIS_excel_data`). 
 
 
 ```{r eval=FALSE}
 ## Read data ------------------------------------
 # Excel file
 # to read in a specific sheet use "which"
-linelist_raw <- rio::import(here("AJS_AmTiman.xlsx"), which = "linelist")
+linelist_raw <- rio::import(here::here("AJS_AmTiman.xlsx"), which = "linelist")
 ```
 
-There should now be a dataframe object named `linelist_raw` in your environment pane, consisting of 1447 observations and 122 variables.  
+A successfull import should result in a dataframe object named `linelist_raw` in your RStudio Environment pane, consisting of 1447 observations and 122 variables.  
 
 <img src="/images/linelist_raw_imported.png" alt="Environment snip with linelist_raw", width = "50%">
 
