@@ -17,13 +17,15 @@ Select *File -> New Project* from the top RStudio menu.
 Creating a new R project will create:  
 
 * A new project directory (folder)  
-* A R project file (.Rproj) that serves as a shortcut to open the project  
-* All files produced by R scripts saved to the project will also save into the project folder  
+* A R project file (.Rproj) in the project folder that serves as a shortcut to open the project via RStudio  
+
+Note:  
+
 * You can make sub-folders for data, scripts, etc.  
+* All files produced by R scripts saved to the project will also save into the project folder  
+  
+Navigate and open project files, such as scripts, using the Files tab of the lower-right RStudio pane.  
 
-Navigate and open files such as scripts using the Files tab of the lower-right RStudio pane.  
-
-TODO: GIF/VIDEO  
 
 ## Sending an R project  
 
