@@ -1,7 +1,7 @@
 ---
 date: "2019-08-21T09:22:02+02:00"
-title: Packages and initial setup
-menuTitle: Packages
+title: First steps
+menuTitle: Template setup
 weight: 6
 ---
 
@@ -54,9 +54,8 @@ ggplot2::theme_set(theme_classic(base_size = 18))
 aweek::set_week_start("Monday")
 ```
 
-## Opening the template  
 
-### Opening a new R project  
+## Opening a new R project  
 
 Please review the instructions in the R Basics page on Working within R projects. In brief:  
 
@@ -66,41 +65,43 @@ Open RStudio. Select *New Project* from the main *File* menu of RStudio. Select 
 For the RMarkdown to produce the final report correctly, you must have read/write permissions for the location of the R project folder. On an MSF computer this is generally the c:/temp folder. 
 {{% /notice %}}  
 
-### Opening the AJS template  
+## Opening an AJS template  
 
 Once the R project is established, select *New File* from the main *File* menu of RStudio, and select "R Markdown". In the pop-up window, change the highlight on the left to "From Template" and then select "AJS outbreak report" from the menu on the right. The AJS template will open in your RStudio Viewer pane.  
 
 **Now, follow along with this walk-through and make edits to your AJS template, saving it regularly.**
 
 
-## Overview of template 
+## Template overview  
 
 **TODO: Graphic/video showing a big-picture overview of template parts - wait until final arrangement of chunks in template**
 
 ## Header and introduction
 
-The very top of the template consists of a header surrounded by `---` lines. Here you may want to edit the title of your document. The other settings in the header define the default document type produced (Microsoft Word) when the RMarkdown is "knit".
+The very top of the template consists of a header surrounded by `---` lines. Here you may want to edit the title of your document. The other settings in the header define the default document type produced (Microsoft Word) when the RMarkdown is "knit".  
 
-The "Introduction to this template" section is for your information only and this text can be deleted before knitting the document.  
+<img src="/images/AJS_Intro.png" alt="AJS Header and Introduction snip", width = "100%">  
 
-<img src="/images/AJS_Intro.png" alt="AJS Header and Introduction snip", width = "75%">  
+The "Introduction to this template" section is for your information only and this text should be deleted before knitting the document.  
 
 
 
-## Installation and loading packages
-**The text which explains the purpose of this code chunk may be deleted, but you must keep the code chunk!** The code will run without producing any output in your final report, but it is required to install (or load using `library()`, if already installed) the packages necessary to produce the report.  
+## Installing and loading packages
+**You must keep this "setup" code chunk!** When the final report is knit, this chunk will run without producing any output, but it is required for the template to work correctly.  
 
 This "setup" code chunk does the following:  
 
 * Set default settings for tables such as size, error handling, and display of missing values  
 
-* Create a vector of names of packages required for the template to run, each of which is installed if it is not already installed, and then is loaded using `library()` for use in the current R session.
+* Create a vector of names of packages required for the template to run  
+
+* Execute a **for loop** to install each required package (if not already installed), and load each required package for use in the current R session (learn about **for loops** in the Advanced and Miscellaneous R Basics page)  
 
 * Set default text size in graphic plots  
 
-* Set epidemiological weeks to begin on Mondays  
+* Establish aesthetic settings for epidemic curve plots
 
-<img src="/images/Package_Installation.png" alt="Package installation chunk snip", width = "75%">  
+<img src="/images/Package_Installation.png" alt="Package installation chunk snip", width = "100%">  
 
 
 
@@ -134,27 +135,30 @@ This "setup" code chunk does the following:
 
 
 
-## Set current epi week  
+## Define current epi week  
 
-Set the epidemiological week for the report. **This value is used in later code chunks, for example when producing epidemic curves.** Note that you may want to specify the most recent **complete** epi week. Follow the format in the code below (within quotes give the 4-digit year, a hyphen (-), capital W, then the 2-digit epi week number).  
+This chunk continues the set-up of time-related parameters.  
 
-By default in the templates epi weeks begin on Mondays (this can be changed at the bottom of the "setup" code chunk). See the documentation of the [package **aweek**](https://cran.r-project.org/web/packages/aweek/vignettes/introduction.html) for more information. 
+**First, ensure epidemiological weeks are set to begin on Mondays** using the function `set_week_start()` from the package **aweek**. See the documentation of the [package **aweek**](https://cran.r-project.org/web/packages/aweek/vignettes/introduction.html) for more information. 
 
-To determine which epi week of a date you can use the `date2week()` function. It will tell you the year, week, and day number of the provided date. Let's assume the date we want to use for this analysis is 20 April, 2017.
+**Secondly, set the reporting week for the report**. This value is used in later code chunks, for example when producing epidemic curves. Note that you likely want to specify the most recent **complete** epi week. Follow the format in the code below (within quotes give the 4-digit year, a hyphen (-), capital W, then the 2-digit epi week number).  
+
+To determine which epi week of a date you can use the `date2week()` function. It will tell you the year, week, and day number of the provided date. **Let's assume the date of this analysis is 27 April, 2017, so the most recent complete epidemiological week is Week 16 of 2017**.  
+
 
 ```{r}
-set_week_start("Monday") # Define the first day of the epi week
-date2week("2017-04-20")  # Ask for the epi week of this date
+aweek::date2week("2017-04-27")  # Ask for the epi week of this date
 ```
 
 ```{r}
-reporting_week <- "2017-W16"  # Set reporting_week for our template
+reporting_week <- aweek::as.aweek("2017-W16") # Set reporting_week as last complete epi week
 ```
 
 {{% notice tip %}}
 If you want to use the automatically-updated date from your computer, use `Sys.Date()` like this: `date2week(Sys.Date())`
 {{% /notice %}}
 
+**Lastly, the labels that will be used in epidemic curve plots are defined**. These should not need any adjustment. You may notice that the subtitle label uses the special term "%s" as a placeholder - the reporting_week defined in the previous chunk will show in its place.  
 
 
 ```{r, include=FALSE, results='hide', message=FALSE, warning=FALSE}
