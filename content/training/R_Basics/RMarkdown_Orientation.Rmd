@@ -82,7 +82,9 @@ linelist_raw <- gen_data("AJS") # generates a fake dataset for use in this templ
 
 ![](/images/Commented_Lines.png)
 
-*Tip*: Multiple lines of code can be commented/uncommented by highlighting the lines and pressing the keys Ctrl, Shift, and C at the same time (Ctrl+Shift+C).  
+{{% notice tip %}}
+Multiple lines of code can be commented/uncommented by highlighting the lines and pressing the keys Ctrl, Shift, and C at the same time (Ctrl+Shift+C).
+{{% /notice %}}
 
 
 ### Code assists  
@@ -98,4 +100,9 @@ Any script (RMarkdown or otherwise) will give clues when you have made a mistake
 
 * The default document type is specified in the header of the RMarkdown script, and for the templates it is Microsoft Word.  
 
-*Note: If you receive an error when knitting such as "openBinaryFile does not exist ... Error: pandoc document conversion failed with error 1", your R project file may be saved in a location with restricted permissions such as a network drive. The RMarkdown is likely not permitted to write the new Microsoft Word file to that location. Try saving your R project to a more local location on your computer.*
+{{% notice tip %}}
+If you receive an error when knitting such as "openBinaryFile does not exist ... Error: pandoc document conversion failed with error 1", your R project file may be saved in a location with restricted permissions such as a network drive. The RMarkdown is likely not permitted to write the new Microsoft Word file to that location. Try saving your R project to a more local location on your computer.  
+
+If you are on an MSF computer, try writing saving the R project on the C drive where you have read/write rights - in general this is the c:temp folder.
+{{% /notice %}}
+

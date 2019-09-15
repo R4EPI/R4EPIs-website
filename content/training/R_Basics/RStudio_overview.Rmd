@@ -13,7 +13,10 @@ By default RStudio displays four rectangle panes.
 
 ![](/images/RStudio_overview.png)
 
-*If your RStudio displays only one left pane it is because you have no scripts open yet.*
+
+{{% notice tip %}}
+If your RStudio displays only one left pane it is because you have no scripts open yet.
+{{% /notice %}}
 
 
 

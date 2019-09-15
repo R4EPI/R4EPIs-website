@@ -24,9 +24,9 @@ It is important to make R recognize when a variable contains dates. Dates are an
 
 #### The function `guess_dates()` 
 
-**The function `guess_dates()` attempts to read a "messy" date variable containing dates in many different formats and convert the dates to a standard format.** You can [read more about `guess_dates()`](https://www.repidemicsconsortium.org/linelist/reference/guess_dates.html), which is in the "linelist" package.
+**The function `guess_dates()` attempts to read a "messy" date variable containing dates in many different formats and convert the dates to a standard format.** You can [read more about `guess_dates()`](https://www.repidemicsconsortium.org/linelist/reference/guess_dates.html), which is in the **linelist** package.
 
->For example, guess_dates would see the following dates "03 Jan 2018", "07/03/1982", and "08/20/85" and convert them in the class Date to: 2018-01-03, 1982-03-07, and 1985-08-20.  
+>**For example:** `guess_dates` would see the following dates "03 Jan 2018", "07/03/1982", and "08/20/85" and convert them in the class Date to: 2018-01-03, 1982-03-07, and 1985-08-20.  
 
 ```{r}
 guess_dates(c("03 Jan 2018", "07/03/1982", "08/20/85"))
@@ -34,9 +34,9 @@ guess_dates(c("03 Jan 2018", "07/03/1982", "08/20/85"))
 
 *Some optional arguments for `guess_dates()` that you might include are:*  
 
-* error_tolerance - The proportion of entries which cannot be identified as dates to be tolerated (defaults to 0.1 or 10%)
-* last_date - the last valid date (defaults to current date)  
-* first_date - the first valid date. Defaults to fifty years before the last_date.
+* `error_tolerance` - The proportion of entries which cannot be identified as dates to be tolerated (defaults to 0.1 or 10%)
+* `last_date` - the last valid date (defaults to current date)  
+* `first_date` - the first valid date. Defaults to fifty years before the last_date.
 
 
 ```{r eval=FALSE}
@@ -63,7 +63,7 @@ linelist_cleaned$date_of_onset <- as.character(linelist_cleaned$date_of_onset)
 ```
   2. Convert the variable from character values into date values, using the function `as.Date()`  
   (note the capital "D" in this function)  
-  + Within the `as.Date()` function, you must use the format= argument to tell R which characters are which date components - which characters refer to the month, the day, and the year. If your values are already in one of R's standard formats (YYYY-MM-DD or YYYY/MM/DD) the format= argument is not necessary.  
+  + Within the `as.Date()` function, you must use the `format=` argument to tell R which characters are which date components - which characters refer to the month, the day, and the year. If your values are already in one of R's standard formats (YYYY-MM-DD or YYYY/MM/DD) the `format=` argument is not necessary.  
     
     + The codes are:  
          %d = Day # (of the month e.g. 16, 17, 18...)  
@@ -79,9 +79,15 @@ For example, if your character dates are in the format DD/MM/YYYY, like "24/04/1
 ```{r eval=F}
 linelist_cleaned$date_of_onset <- as.Date(linelist_cleaned$date_of_onset, format = "%d/%m/%Y")
 ```
-**Note: the format= argument is *not* telling R the format you want the dates to be, but rather how to identify the date parts as they are *before* you run the command.**  
 
-*Note: Be sure that in the format= argument you use the date-part separator (e.g. /, space, or -) that is present in your dates.*
+{{% notice tip %}}
+**The `format=` argument is *not* telling R the format you want the dates to be, but rather how to identify the date parts as they are *before* you run the command.**
+
+Also, be sure that in the `format=` argument you use the *date-part separator* (e.g. /, -, or space) that is present in your dates.
+{{% /notice %}}
+
+
+
 
 ```{r}
 # Convert the variable to class Date by providing the format of the variable
@@ -103,7 +109,7 @@ linelist_cleaned$date_of_onset <- as.Date(linelist_cleaned$date_of_onset, origin
 
 #### Changing the format of displayed dates 
 
-Once dates are the correct class, you often want them to display differently. For example, "Monday 05 Jan" instead of 2018-01-05. You can do this with the function `format()` in a similar was to `as.Date()`. Read more about it [here](https://www.statmethods.net/input/dates.html) 
+Once dates are the correct class, you often want them to display differently. For example, "Monday 05 Jan" instead of 2018-01-05. You can do this with the function `format()` in a similar was to `as.Date()`. Read more about it [in this tutorial](https://www.statmethods.net/input/dates.html) 
 
 #### Calculating distance between dates
 
@@ -116,4 +122,4 @@ The difference between dates can be calculated by:
 
 ### Epidemiological weeks  
 
-The templates use the very flexible package "aweek"" to set epidemiological weeks. You can read more about it [here](https://www.repidemicsconsortium.org/aweek/)
+The templates use the very flexible package **aweek** to set epidemiological weeks. You can read more about it [on the RECON website](https://www.repidemicsconsortium.org/aweek/)

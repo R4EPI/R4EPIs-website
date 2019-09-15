@@ -1,0 +1,25 @@
+---
+date: "2019-09-05T17:58:42+02:00"
+title: Knitting the report
+weight: 15
+---
+
+
+
+<p>TODO: Graphic showing knitting</p>
+<p><strong>Producing the final RMarksdown report is called “knitting”</strong>. When you are editing the RMarkdown script, you will see a special option to “Knit”&quot; at the top of the script, near the save shortcut button. Clicking “Knit” will begin the process of creating the final document. The option to “Knit” does not appear for normal R scripts, only RMarkdown scripts.</p>
+<p>Note the following:</p>
+<ul>
+<li><p>You can use the arrow next to the word “Knit” to select the type of document you want to produce: Microsoft Word, PDF, or HTML (HTML opens the file in an offline web browser). Note that to knit to a PDF <em>directly</em>, additional packages may have to be installed.</p></li>
+<li><p>The default document type is specified in the header of the RMarkdown script, and for the templates it is Microsoft Word.</p></li>
+</ul>
+<p><strong>Knit the template you have edited and review the results.</strong> You may find that helper text you left in the template appears - go back and delete it from the script.</p>
+<p>{{% notice tip %}} If you receive an error when knitting such as “openBinaryFile does not exist … Error: pandoc document conversion failed with error 1”, your R project file may be saved in a location with restricted permissions such as a network drive. The RMarkdown is likely not permitted to write the new Microsoft Word file to that location. Try saving your R project to a more local location on your computer.</p>
+<p>If you are on an MSF computer, try writing saving the R project on the C drive where you have read/write rights - in general this is the c:temp folder. {{% /notice %}}</p>
+<div id="adding-additional-text-to-the-report" class="section level3">
+<h3>Adding additional text to the report</h3>
+<p>You can add text to the report by typing into the write space of the template script (non-R chunks). You may want to write a more substantial introductory or summary paragraph at the beginning of the document.</p>
+<p><strong>It is also possible to write in-line code</strong> - this is where in the script text you put a placeholder for a number or output that is calculated from your data. This way, the number adapts to your data and does updates automatically. Examples of this are found throughout the template.</p>
+<p>To write in-line code, write your sentence in the script’s white space like normal text, but in place of the number put a one-line R command within backticks (` `). Ensure the R command returns the desired number.</p>
+<p>TODO: Screenshot of template script with an example of in-line code</p>
+</div>

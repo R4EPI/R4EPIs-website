@@ -28,7 +28,7 @@ OR         |`|` (vertical bar)
 Parentheses|`( )` Used to group criteria together and clarify order
 
 
-For example, below, we have a linelist with two variables we want to use to create our case definition, `hep_e_rdt`, a test result and `other_cases_in_hh`, which will tell us if there are other cases in the household. The command below uses the function `case_when()` to create the new variable "case_def" such that:
+For example, below, we have a linelist with two variables we want to use to create our case definition, `hep_e_rdt`, a test result and `other_cases_in_hh`, which will tell us if there are other cases in the household. The command below uses the function `case_when()` to create the new variable `case_def` such that:
 
 ```{r eval=FALSE}
 linelist_cleaned <- linelist_cleaned %>%
@@ -43,19 +43,22 @@ linelist_cleaned <- linelist_cleaned %>%
 
 Criteria in example above               | Resulting value in new variable "case_def"
 ----------------------------------------|-------------------------------------
-If the value for variables hep_e_rdt and other_cases_in_hh are missing | NA (missing)  
-If the value in hep_e_rdt is "Positive" | "Confirmed"  
-If the value in hep_e_rdt is NOT "Positive" AND the value in other_cases_in_hh is "Yes" | "Probable"  
+If the value for variables `hep_e_rdt` and `other_cases_in_hh` are missing | `NA` (missing)  
+If the value in `hep_e_rdt` is "Positive" | "Confirmed"  
+If the value in `hep_e_rdt` is NOT "Positive" AND the value in `other_cases_in_hh` is "Yes" | "Probable"  
 If one of the above criteria are not met | "Suspected"  
 
 
-*Note that R is case-sensitive, so "Positive" is different than "positive"...*  
+{{% notice tip %}}
+Note that R is case-sensitive, so "Positive" is different than "positive"...
+{{% /notice %}}
+ 
 
 ## Missing Values
 
 **In R, missing values are represented by the special value `NA`** (capital letters N and A - not in quotation marks). If you import data that records missing data in another way (e.g. 99, "Missing", or .), you may want to re-code those values to `NA`.
   
-**To test whether a value is `NA`, use the special function `is.na()`**, which returns TRUE or FALSE.
+**To test whether a value is `NA`, use the special function `is.na()`**, which returns `TRUE` or `FALSE`.
 
 ```{r}
 rdt_result <- c("Positive", "Suspected", "Positive", NA)   # two positive cases, one suspected, and one unknown

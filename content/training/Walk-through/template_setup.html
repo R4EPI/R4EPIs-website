@@ -7,15 +7,29 @@ weight: 6
 
 
 
+<div id="opening-the-template" class="section level2">
+<h2>Opening the template</h2>
+<div id="opening-a-new-r-project" class="section level3">
+<h3>Opening a new R project</h3>
+<p>Please review the instructions in the R Basics page on Working within R projects. In brief:</p>
+<p>Open RStudio. Select <em>New Project</em> from the main <em>File</em> menu of RStudio. Select “New Directory” and “New Project”, and a location to save the new R project (this creates a new folder). Save all relevant data files into this new R project folder.</p>
+<p>{{% notice tip %}} For the RMarkdown to produce the final report correctly, you must have read/write permissions for the location of the R project folder. On an MSF computer this is generally the c:/temp folder. {{% /notice %}}</p>
+</div>
+<div id="opening-the-ajs-template" class="section level3">
+<h3>Opening the AJS template</h3>
+<p>Once the R project is established, select <em>New File</em> from the main <em>File</em> menu of RStudio, and select “R Markdown”. In the pop-up window, change the highlight on the left to “From Template” and then select “AJS outbreak report” from the menu on the right. The AJS template will open in your RStudio Viewer pane.</p>
+<p><strong>Now, follow along with this walk-through and make edits to your AJS template, saving it regularly.</strong></p>
+</div>
+</div>
 <div id="overview-of-template" class="section level2">
 <h2>Overview of template</h2>
-<p><strong>TODO: Graphic or VIDEO? showing big-picture overview of template parts - waiting until final arrangement of chunks in template</strong></p>
+<p><strong>TODO: Graphic/video showing a big-picture overview of template parts - wait until final arrangement of chunks in template</strong></p>
 </div>
 <div id="header-and-introduction" class="section level2">
 <h2>Header and introduction</h2>
 <p>The very top of the template consists of a header surrounded by <code>---</code> lines. Here you may want to edit the title of your document. The other settings in the header define the default document type produced (Microsoft Word) when the RMarkdown is “knit”.</p>
 <p>The “Introduction to this template” section is for your information only and this text can be deleted before knitting the document.</p>
-<p>&lt;img src=“/images/AJS_Intro.png” alt=“AJS Header and Introduction snip”, width = “75%”&gt;</p>
+<p><img src="/images/AJS_Intro.png" alt="AJS Header and Introduction snip", width = "75%"></p>
 </div>
 <div id="installation-and-loading-packages" class="section level2">
 <h2>Installation and loading packages</h2>
@@ -27,50 +41,50 @@ weight: 6
 <li><p>Set default text size in graphic plots</p></li>
 <li><p>Set epidemiological weeks to begin on Mondays</p></li>
 </ul>
-<p>&lt;img src=“/images/Package_Installation.png” alt=“Package installation chunk snip”, width = “75%”&gt;</p>
+<p><img src="/images/Package_Installation.png" alt="Package installation chunk snip", width = "75%"></p>
 <div id="about-the-packages-used-in-this-template" class="section level3">
 <h3>About the packages used in this template</h3>
 <div id="generic-packages" class="section level4">
 <h4>Generic packages</h4>
 <ul>
-<li>knitr used to create the output document (pdf, doc, html)<br />
+<li><strong>knitr</strong> used to create the output document (pdf, doc, html)<br />
 </li>
-<li>dplyr used to clean and shape the data<br />
+<li><strong>dplyr</strong> used to clean and shape the data<br />
 </li>
-<li>forcats used to clean and shape the data<br />
+<li><strong>forcats</strong> used to clean and shape the data<br />
 </li>
-<li>stringr used to clean text/characters<br />
+<li><strong>stringr</strong> used to clean text/characters<br />
 </li>
-<li>rio used to read in data<br />
+<li><strong>rio</strong> used to read in data<br />
 </li>
-<li>epitrix used for data cleaning and variable standardisation<br />
+<li><strong>epitrix</strong> used for data cleaning and variable standardisation<br />
 </li>
-<li>ggplot2 used to visualise your data using different plotting methods<br />
+<li><strong>ggplot2</strong> used to visualise your data using different plotting methods<br />
 </li>
-<li>here used to locate files</li>
+<li><strong>here</strong> used to locate files</li>
 </ul>
 </div>
 <div id="more-epidemiology-specific-packages" class="section level4">
 <h4>More epidemiology-specific packages</h4>
 <ul>
-<li>sitrep includes a variety of useful field epidemiology functions</li>
-<li>linelist used for cleaning and standardising data<br />
+<li><strong>sitrep</strong> includes a variety of useful field epidemiology functions</li>
+<li><strong>linelist</strong> used for cleaning and standardising data<br />
 </li>
-<li>incidence used for creating epicurves<br />
+<li><strong>incidence</strong> used for creating epicurves<br />
 </li>
-<li>aweek used for creating epiweeks<br />
+<li><strong>aweek</strong> used for creating epiweeks<br />
 </li>
-<li>epitools used for creating 2by2 tables<br />
+<li><strong>epitools</strong> used for creating 2by2 tables<br />
 </li>
-<li>epitrix used for helpful epidemiological tasks</li>
+<li><strong>epitrix</strong> used for helpful epidemiological tasks</li>
 </ul>
 </div>
 <div id="mapping-packages" class="section level4">
 <h4>Mapping packages</h4>
 <ul>
-<li>ggspatial used for selecting basemap tiles<br />
+<li><strong>ggspatial</strong> used for selecting basemap tiles<br />
 </li>
-<li>sf used for manipulating spatial objects (e.g. polygons) easily</li>
+<li><strong>sf</strong> used for manipulating spatial objects (e.g. polygons) easily</li>
 </ul>
 </div>
 </div>
@@ -78,12 +92,12 @@ weight: 6
 <div id="set-current-epi-week" class="section level2">
 <h2>Set current epi week</h2>
 <p>Set the epidemiological week for the report. <strong>This value is used in later code chunks, for example when producing epidemic curves.</strong> Note that you may want to specify the most recent <strong>complete</strong> epi week. Follow the format in the code below (within quotes give the 4-digit year, a hyphen (-), capital W, then the 2-digit epi week number).</p>
-<p>By default in the templates epi weeks begin on Mondays (this can be changed at the bottom of the “setup” code chunk). See the documentation of the <a href="https://cran.r-project.org/web/packages/aweek/vignettes/introduction.html">package “aweek”</a> for more information.</p>
+<p>By default in the templates epi weeks begin on Mondays (this can be changed at the bottom of the “setup” code chunk). See the documentation of the <a href="https://cran.r-project.org/web/packages/aweek/vignettes/introduction.html">package <strong>aweek</strong></a> for more information.</p>
 <p>To determine which epi week of a date you can use the <code>date2week()</code> function. It will tell you the year, week, and day number of the provided date. Let’s assume the date we want to use for this analysis is 20 April, 2017.</p>
 <pre class="r"><code>set_week_start(&quot;Monday&quot;) # Define the first day of the epi week
 date2week(&quot;2017-04-20&quot;)  # Ask for the epi week of this date</code></pre>
 <pre><code>## &lt;aweek start: Monday&gt;
 ## [1] &quot;2017-W16-4&quot;</code></pre>
 <pre class="r"><code>reporting_week &lt;- &quot;2017-W16&quot;  # Set reporting_week for our template</code></pre>
-<p><em>Note: If you want to use the automatically-updated date from your computer, use <code>Sys.Date()</code> like this: <code>date2week(Sys.Date())</code>.</em></p>
+<p>{{% notice tip %}} If you want to use the automatically-updated date from your computer, use <code>Sys.Date()</code> like this: <code>date2week(Sys.Date())</code> {{% /notice %}}</p>
 </div>
