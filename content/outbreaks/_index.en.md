@@ -26,11 +26,11 @@ You can access these by selecting them from the RStudio RMarkdown template menu:
 > 1. in RStudio, click on File > New File > R Markdown
 > 2. select "From Template" and then select the outbreak report template you want to use
 
-# Getting started with outbreak templates in R
+## Getting started with outbreak templates in R
 
 This section (TODO: INSERT LINK TO THE WALK THROUGH ON OUTBREAK DATA ANALYSIS) offers you a step by step guide on how to use the outbreak templates to fit your data and run the analysis.
 
-# Concepts of outbreak linelist data analysis
+## Concepts of outbreak linelist data analysis
 
 The main analysis of outbreak data will always focus on describing your data in terms of :
 
@@ -66,7 +66,7 @@ Here you will create different types of maps to illustrate the geographical spre
 
 **Source**: [MSF calls for increased response to cholera outbreak](https://www.msf.ie/article/yemen-msf-calls-increased-response-cholera-outbreak)
 
-# Outbreak templates, the basics
+## Outbreak templates, the basics
 
 In the Outbreak Template Walkthrough (INSERT LINK), there is a step by step description of how to use the templates for data analysis using outbreak linelists.
 
@@ -79,7 +79,7 @@ We have designed the templates to run through a similar series of data managemen
 5. Analysis of **temporal characteristics**: creating graphs that display different indicators in time
 6. Analysis of **spatial/geographical characteristics**: creating maps
 
-# Other uses of the templates
+## Other uses of the templates
 
 As the coding included in the outbreak templates is structured in terms of time, place and person, they can also be used to help guide you through any other analysis for epidemiological data from either:
 
@@ -94,7 +94,7 @@ There is also coding to be able to guide you on conducting simple statistical co
 > **TODO: Below here is all the stuff that was written before that we need to make sure is included in the outbreak template walkthrough**
 
 
-# Available Templates
+## Available Templates
 
 There are four available outbreak templates:
 
