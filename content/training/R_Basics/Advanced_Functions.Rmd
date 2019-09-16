@@ -235,7 +235,7 @@ In these cases, the coordinate system reflects latitude/longitude, and `geom_sf(
 
 In the outbreak templates, detailed aesthetics parameters are managed by creating "theme" objects that can be referenced multiple in multiple `ggplot()` commands.  
 
-Below, the object `epicurve_theme` is assigned certain `ggplot()` aesthetic parameters such as x-axis text angle, absence of legend title, and grid-line color. This object is then referenced in `ggplot()` commands throughout the template.  
+Below, the object `epicurve_theme` is assigned certain superficial plot parameters that are not associated with the data such as x-axis text angle, absence of legend title, and grid-line color. This object is then referenced in `ggplot()` commands throughout the template.  
 
 ```{r eval=FALSE}
 # this sets the theme in ggplot for epicurves
