@@ -299,7 +299,7 @@ The loop is set-up for each item "i" of all the unique values in the variable `e
 
 Numerous commands are located within the loop's brackets `{ }`, but the most important is the first: `this_ar <- filter(ar, epiweek == i)`. This command restricts the large data frame `ar` to only the epiweek currently under consideration by the **for loop**. *Thus, the data frame `this_ar` will be different for each iteration of the **for loop** *. All the subsequent steps (producing a map and a barplot) are performed on this filtered dataset.  
 
-The final step produces a `cowplot()` visualization that includes the map and the barplot for the current epiweek "i". After producing the cowplot, the loop advances "i" to the next epiweek item in the vector, repeats all the commands in the brackets `{ }`, and produces a new cowplot.
+The final step creates a combined plot of the map and barplot for the current epiweek "i" using the `plot_grid()` function from the **cowplot** package. This plot is aligned horizontally based on the top and bottom of each plot. After producing the combined plot, the loop advances "i" to the next epiweek item in the vector, repeats all the commands in the brackets `{ }`, and produces a new combined plot.
 
 ```{r eval=FALSE}
 # go through each epiweek, fiter and plot the data
