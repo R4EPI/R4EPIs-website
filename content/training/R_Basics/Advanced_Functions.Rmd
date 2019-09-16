@@ -288,7 +288,7 @@ A basic example **for loop** is below. `number_list` is defined as a vector of f
 number_list <- c(102, 53, 14, 88)
 
 for (i in number_list) {
-     print(i + 2)
+  print(i + 2)
 }
 ```
 
