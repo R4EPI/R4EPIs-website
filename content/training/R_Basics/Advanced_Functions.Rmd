@@ -218,7 +218,7 @@ The first command `ggplot()` creates an empty coordinate system to which layers 
 
 Secondly, the geom is specified, indicating whether the data should be displayed as points, lines, bars, a map, etc. Without a geom, the data will not be visualized and the coordinate plane will be empty.  
 
-Other optional sub-commands can address the scale, labels, aesthetic themes and colors, etc. Note there are other ways to structure a ggplot() command, but the way described above is used in the template. When making a graphic, it often helps to look at examples online and mimic the code that produced them.  
+Other optional sub-commands can address the scales (e.g `scale_fill_brewer()` chooses a scale for the `fill` aesthetic based on the [Color Brewer 2 color scales](http://colorbrewer2.org/)), labels (e.g. `labs(title = "Attack Rate by Region")` to define a specific title for the plot), themes (e.g. `theme(text = element_text(size = 18))` makes all the text in the plot be a minimum size of 18 points), etc. 
 
 ![](/images/ggplot.png)
 {{% notice tip %}}
