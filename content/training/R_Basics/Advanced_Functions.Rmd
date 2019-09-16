@@ -227,7 +227,8 @@ A command beginning with `ggplot()` will print the visualization but not save it
 
 ### Geospatial mapping  
 
-In the Place section of the template, `ggplot()` is used to create geospatial maps of attack rates and other indicators. In these cases, the coordinate system reflects latitude/longitude, and `ggplot()` uses `geom_sf()` to accept and display points, polygons, or lines shapefiles (geom_sf is shorthand for "spatial file").
+In the "Place" section of the template, `ggplot()` is used to create geospatial maps of attack rates and other indicators. 
+In these cases, the coordinate system reflects latitude/longitude, and `geom_sf()` displays the spatial tiles of the regions contained in the map.
 
 
 ### Aesthetic themes and labels  
