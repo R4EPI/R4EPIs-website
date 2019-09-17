@@ -33,10 +33,12 @@ fct_count(linelist_cleaned$sex)</code></pre>
 <pre><code>## # A tibble: 3 x 2
 ##   f         n
 ##   &lt;fct&gt; &lt;int&gt;
-## 1 M       112
-## 2 F        94
-## 3 U        94</code></pre>
-<p>Now we re-label the values using <code>fct_recode()</code>, also from the package <strong>forcats</strong>.</p>
+
+## 1 M        92
+## 2 F       115
+## 3 U        93</code></pre>
+<p>Now we re-label the values using <code>fct_recode()</code>, also from the package forcats.</p>
+
 <pre class="r"><code># Re-define the labels for the factor variable (pay attention to spelling!)
 linelist_cleaned$sex &lt;- fct_recode(linelist_cleaned$sex, 
                                    Male = &quot;M&quot;,
@@ -48,9 +50,11 @@ fct_count(linelist_cleaned$sex)</code></pre>
 <pre><code>## # A tibble: 3 x 2
 ##   f           n
 ##   &lt;fct&gt;   &lt;int&gt;
-## 1 Male      112
-## 2 Female     94
-## 3 Unknown    94</code></pre>
+
+## 1 Male       92
+## 2 Female    115
+## 3 Unknown    93</code></pre>
+
 <p><strong>To change the <em>arrangement</em> of the levels, use <code>fct_relevel()</code></strong>.</p>
 <p>This will impact the <em>arrangement</em> of the levels as displayed in graphs and tables. Give the name of the factor followed by the new arrangement (pay attention to spelling!).</p>
 <pre class="r"><code># Provide new arrangement of levels
@@ -74,10 +78,12 @@ fct_count(linelist_cleaned$sex)</code></pre>
 <pre><code>## # A tibble: 4 x 2
 ##   f           n
 ##   &lt;fct&gt;   &lt;int&gt;
-## 1 Female     94
-## 2 Male      112
+
+## 1 Female    115
+## 2 Male       92
 ## 3 Unknown     0
-## 4 &lt;NA&gt;       94</code></pre>
+## 4 &lt;NA&gt;       93</code></pre>
+
 <blockquote>
 <p>We can see that the value “Unknown” now has a count of zero, but it is still present as a level of the factor variable and will appear in tables and graphs. To remove this level entirely we use <code>fct_drop()</code>, which drops unused levels from a factor.</p>
 </blockquote>
@@ -89,10 +95,12 @@ fct_count(linelist_cleaned$sex)</code></pre>
 <pre><code>## # A tibble: 3 x 2
 ##   f          n
 ##   &lt;fct&gt;  &lt;int&gt;
-## 1 Female    94
-## 2 Male     112
-## 3 &lt;NA&gt;      94</code></pre>
-<p>{{% notice tip %}} Use the argument <code>only =</code> to drop specific levels: <code>fct_drop(linelist_cleaned$sex, only = &quot;Unknown&quot;)</code> {{% /notice %}}</p>
+
+## 1 Female   115
+## 2 Male      92
+## 3 &lt;NA&gt;      93</code></pre>
+<p><em>Note: Use the argument <code>only =</code> to drop specific levels: <code>fct_drop(linelist_cleaned$sex, only = &quot;U&quot;)</code></em></p>
+
 </div>
 </div>
 <div id="the-in-operator" class="section level3">
@@ -120,7 +128,9 @@ linelist_cleaned$DIED &lt;- linelist_cleaned$exit_status %in% c(&quot;DD&quot;, 
 </div>
 <div id="joins" class="section level2">
 <h2>Joins</h2>
-<p>The package <strong>dplyr</strong> contains functions that are used in the templates for joining (“merging”) data frames. There are many ways to conduct a join, and it is important that you use the correct option - otherwise you risk unexpectedly losing data!</p>
+
+<p>The package dplyr contains functions that are used in the templates for joining (“merging”) data frames. There are many ways to conduct a join, and it is important that you use the correct option - otherwise you risk unexpectedly losing data!</p>
+
 <p>It is wise to verify any join by inspecting the joined data frames and the resulting data frame.</p>
 <p>There are more reference materials on dplyr join functions <a href="https://stat545.com/bit001_dplyr-cheatsheet.html">in the cheat sheet from UBC’s STAT545 course (by Jenny Bryan)</a> and <a href="https://rpubs.com/williamsurles/293454">course notes from William Srules</a>. The animations below were originally from <a href="https://github.com/gadenbuie/tidyexplain" class="uri">https://github.com/gadenbuie/tidyexplain</a>.</p>
 <div id="inner-join" class="section level3">
@@ -158,8 +168,135 @@ linelist_cleaned$DIED &lt;- linelist_cleaned$exit_status %in% c(&quot;DD&quot;, 
 <div class="figure">
 <img src="/images/anti-join.gif" />
 
+
 </div>
-<p>TODO: ggplot()</p>
-<p>TODO: for loops</p>
 </div>
+</div>
+<div id="graphics-with-the-ggplot2-package" class="section level2">
+<h2>Graphics with the <strong>ggplot2</strong> package</h2>
+<p>R has the capability to make beautiful and versatile graphics using the package <strong>ggplot2</strong> and its function <code>ggplot()</code>. Below is a brief overview of the use of <code>ggplot()</code>. <strong>There are too many aspects of <code>ggplot()</code> to cover here, so it is highly encouraged that you download and review <a href="/public_data/ggplot2-cheatsheet.pdf">this ggplot cheatsheet</a>. </strong></p>
+<p>For further reading, see <a href="https://r4ds.had.co.nz/data-visualisation.html">this data visualization tutorial</a> and <a href="http://www.ggplot2-exts.org/gallery/">this gallery of visualizations and extensions</a> for inspiration.</p>
+<div id="core-components" class="section level3">
+<h3>Core components</h3>
+<p>A <code>ggplot()</code> command is typically built using sub-commands linked by <code>+</code> symbols. The sub-commands are executed one-after-another to build the final plot. The core components are:</p>
+<ul>
+<li><strong>a data set</strong> - can be a data frame, or a spatial shapefile<br />
+</li>
+<li><strong>coordinate system</strong> - the x and y axes reflect the range of values within specified variables</li>
+<li><strong>geoms</strong> - geometric marks to visualize the data (e.g. points, lines, etc)<br />
+</li>
+<li><strong>aesthetics</strong> - linking attributes such as color and size of geoms to variables in the data set</li>
+</ul>
+<p>The first command <code>ggplot()</code> creates an empty coordinate system to which layers of visualization and nuance are added.<br />
+* Its first argument specifies the data set to use.<br />
+* Its <code>aes()</code> argument establishes the variables to be mapped to the x and y axes.</p>
+<p>Secondly, the geom is specified, indicating whether the data should be displayed as points, lines, bars, a map, etc. Without a geom, the data will not be visualized and the coordinate plane will be empty.</p>
+<p>Other optional lines can address the scale, labels, aesthetic themes and colors, etc. Note there are other ways to structure a ggplot() command, but the way described above is used in the template.</p>
+<p><img src="/images/ggplot.png" /> {{% notice tip %}} A command beginning with <code>ggplot()</code> will print the visualization but not save it. Using the assignment operator <code>&lt;-</code> in the first line will assign the visualization to an R object and save it for later use. {{% /notice %}}</p>
+</div>
+<div id="geospatial-mapping" class="section level3">
+<h3>Geospatial mapping</h3>
+<p>In the Place section of the template, <code>ggplot()</code> is used to create geospatial maps of attack rates and other indicators. In these cases, the coordinate system reflects latitude/longitude, and <code>ggplot()</code> uses <code>geom_sf()</code> to accept and display points, polygons, or lines shapefiles.</p>
+</div>
+<div id="aesthetic-themes-and-labels" class="section level3">
+<h3>Aesthetic themes and labels</h3>
+<p>In the templates, detailed aesthetics parameters are managed by creating theme objects that can be referenced multiple times.</p>
+<p>Below, the object <code>epicurve_theme</code> is assigned certain <code>ggplot()</code> aesthetic parameters such as x-axis text angle, absence of legend title, and grid-line color. This object is then referenced in <code>ggplot()</code> commands throughout the template.</p>
+<pre class="r"><code># this sets the theme in ggplot for epicurves
+epicurve_theme &lt;- theme(
+  axis.text.x = element_text(angle = 45, hjust = 1, vjust = 1), 
+  legend.title = element_blank(),
+  panel.grid.major.x = element_line(color = &quot;grey60&quot;, linetype = 3),
+  panel.grid.major.y = element_line(color = &quot;grey60&quot;, linetype = 3)
+)</code></pre>
+<p>Likewise, this chunk establishes the settings for labels. The settings for x-axis and y-axis labels, title, and subtitle are stored in the <code>epicurve_labels</code> object, which is referenced in several epidemic curve <code>ggplot()</code> commands.</p>
+<pre class="r"><code># This sets the labels in ggplot for the epicurves
+epicurve_labels &lt;- labs(x = &quot;Calendar week&quot;, 
+                        y = &quot;Cases (n)&quot;, 
+                        title = &quot;Cases by week of onset&quot;,
+                        subtitle = sprintf(&quot;Source: MSF data from %s&quot;, reporting_week)
+                       ) </code></pre>
+</div>
+</div>
+<div id="for-loop" class="section level2">
+<h2>For loop</h2>
+<p>A <strong>for loop</strong> is used to repeat or iterate code over each value in a vector. The vector can be a sequence of values - including the values within a data frame variable.</p>
+<p>In the outbreak templates, a <strong>for loop</strong> is used at the end of the <strong>Place</strong> analyses to create bar graphs and maps of regional attack rates <em>for each epidemiological week</em>.</p>
+<p>The basic structure of a <strong>for loop</strong> is as follows:</p>
+<ul>
+<li><strong>Setup</strong>, including :
+<ul>
+<li>The keyword <code>for</code> (note the lowercase)<br />
+</li>
+<li>Parentheses containing:
+<ul>
+<li>A placeholder term (e.g. “i”, “value”, or another short word)<br />
+</li>
+<li>The keyword <code>in</code><br />
+</li>
+<li>The name of the vector to cycle through<br />
+</li>
+</ul></li>
+<li>Opening bracket <code>{</code></li>
+</ul></li>
+<li><strong>Actions</strong> and commands to be performed for each item in the vector
+<ul>
+<li>If the item is referenced in a command, use the placeholder term instead.</li>
+</ul></li>
+<li><strong>Closing</strong> - A closing bracket <code>}</code></li>
+</ul>
+<p>A basic example <strong>for loop</strong> is below. <code>number_list</code> is defined as a vector of four numbers. The <strong>for loop</strong> is set-up to examine each item (“i”) in <code>number_list</code>. The only command in the <strong>for loop</strong> is to print the value of “i” plus 2. Finally, the brackets are closed. See that one output is printed for each item in <code>number_list</code>.</p>
+<pre class="r"><code>number_list &lt;- c(102, 53, 14, 88)
+
+for (i in number_list) {
+     print(i + 2)
+}</code></pre>
+<pre><code>## [1] 104
+## [1] 55
+## [1] 16
+## [1] 90</code></pre>
+<p>In the outbreak templates, the <strong>for loop</strong> is more complex than the simple example above, but follows the same basic structure.</p>
+<p>The loop is set-up for each item “i” of all the unique values in the variable <code>epiweek</code> within the data frame <code>cases</code>. This vector is a list of the epidemiological weeks with no repeated values. If you want to see this vector of epidemiological weeks, highlight and run just <code>unique(cases$epiweek))</code>.</p>
+<p>Numerous commands are located within the loop’s brackets <code>{ }</code>, but the most important is the first: <code>this_ar &lt;- filter(ar, epiweek == i)</code>. This command restricts the large data frame <code>ar</code> to only the epiweek currently under consideration by the <strong>for loop</strong>. <em>Thus, the data frame <code>this_ar</code> will be different for each iteration of the <strong>for loop</strong> </em>. All the following steps (producing a map and a barplot) are performed on this filtered dataset.</p>
+<p>The final step produces a <code>cowplot()</code> visualization that includes the map and the barplot for the epiweek “i”. After producing the cowplot, the loop advances “i” to the next epiweek item in the vector, and repeats all the commands in the brackets <code>{ }</code>.</p>
+<pre class="r"><code># go through each epiweek, fiter and plot the data
+for (i in unique(cases$epiweek)) {
+  this_ar &lt;- filter(ar, epiweek == i)
+  
+  # map 
+  mapsub &lt;- left_join(map, this_ar, by = c(&quot;name&quot; = &quot;Region&quot;))
+  
+  # choropleth 
+  map_plot &lt;- ggplot() +
+    geom_sf(data = mapsub, aes(fill = categories), col = &quot;grey50&quot;) + # shapefile as polygon
+    coord_sf(datum = NA) + # needed to avoid gridlines being drawn
+    annotation_scale() + # add a scalebar
+  scale_fill_brewer(drop = FALSE, 
+                    palette = &quot;OrRd&quot;, 
+                    name = &quot;AR (per 10,000)&quot;) +  # color the scale to be perceptually uniform (keep levels)
+    theme_void() # remove coordinates and axes
+  
+  # plot with the region on the x axis sorted by increasing ar
+  # ar value on the y axis 
+  barplot &lt;- ggplot(this_ar, aes(x = reorder(Region, `AR (per 10,000)`),
+                                 y = `AR (per 10,000)`)) + 
+    geom_bar(stat = &quot;identity&quot;, col = &quot;black&quot;, fill = &quot;red&quot;) + # plot as bars (identity = as is)
+    geom_errorbar(aes(ymin = `Lower 95%CI`, ymax = `Upper 95%CI`), width = 0.2) + # add CIs
+    scale_y_continuous(expand = c(0, 0), limits = c(0, max_ar)) +  # set origin for axes
+    # add labels to axes and below chart
+    labs(x = &quot;Region&quot;, y = &quot;AR (per 10,000)&quot;, 
+         captions = paste0(&quot;Source: MSF data from &quot;, reporting_week)) + 
+    epicurve_theme
+  # combine the barplot and map plot into one
+  print(
+    cowplot::plot_grid(
+      barplot + labs(title = paste0(&quot;Epiweek: &quot;, i)),
+      map_plot,
+      nrow = 1,
+      align = &quot;h&quot;,
+      axis = &quot;tb&quot;
+    )
+  )
+}</code></pre>
+<p>Here you can read more about <a href="https://r4ds.had.co.nz/iteration.html">for loops and iteration in R</a>.</p>
 </div>
