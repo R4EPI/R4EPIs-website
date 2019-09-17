@@ -19,11 +19,11 @@ All survey templates are available in the [sitrep] package.
 
 You can access these by selecting them from the RStudio RMarkdown template menu.
 
-# Getting started with Survey templates in R?
+## Getting started with Survey templates in R?
 
 This section (TODO: INSERT LINK TO THE WALK THROUGH ON SURVEY DATA ANALYSIS) offers you a step by step guide on how to use the survey templates to fit your data and run the analysis.
 
-# Basic concepts of survey data analysis
+## Basic concepts of survey data analysis
 
 This website will not cover the detailed aspects of designing, implementing and analysing a survey in MSF contexts. There are many other training and briefing materials that address this aspect.
 
