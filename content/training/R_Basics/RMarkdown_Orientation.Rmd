@@ -34,12 +34,23 @@ You can learn more about RMarkdowns [here](https://rmarkdown.rstudio.com/lesson-
 
 #### Code chunks
 
-While the RMarkdown may at first look like a wall of code, notice how "chunks" of code are differentiated by their background color:  
+While the RMarkdown may at first look like a wall of code, notice how "chunks" of code are differentiated by their color:  
 
 * **In chunks with WHITE background, code text will appear as text in the document.** These lines can have *italics*, **bold**, or other formating, and can display parameters derived from your data (such as epi week of outbreak peak, as in the example above).  
 
-* **In chunks with GRAY background, RMarkdown is running R commands.** The commands perform data processing and cleaning steps, or could produce visual outputs in the document.    
+* **In chunks with GRAY background, RMarkdown is running R commands.** The commands perform data processing and cleaning steps, or could produce visual outputs in the document.  
 
+* **Text that appears GREEN in the RMarkdown will not appear in the final report**. These sections, placed between special characters such as arrows (< >), serve as instructions for you.  
+
+
+```{r eval=FALSE}
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+This comment will not show up when you knit the document.
+A comment with a title with slashes indicates a name of a code chunk.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+     
+```
 
 #### Navigating the RMarkdown  
 
@@ -63,9 +74,9 @@ Progress bars and previews of chunk output/error messages help with revisions an
 
 Every script should include helpful text that organizes commands and explains their rationale to collaborators. The **# (hash or comment) symbol** ensures that any text *after the # and on the same line* will not be executed by R as it runs the script. Such "commented" text will appear a different color than the code.  
 
-In the templates, you will see **#** serving two purposes:  
+In the templates, you will see **#** serving three purposes:  
 
-* **# Explanatory text or section headers.** This commented text can be placed after code, or in the line above.
+* **# Explanatory text or section headers with an R chunk.** This commented text can be placed after code, or in the line above.
 ```{r eval = FALSE}
 # An example of commented text  
 linelist_raw <- gen_data("AJS") # generates a fake dataset for use in this template
@@ -79,13 +90,16 @@ linelist_raw <- gen_data("AJS") # generates a fake dataset for use in this templ
 # CSV file
 # linelist_raw <- rio::import("linelist.csv")
 ```
+* **### As section titles.** In the plain text sections of the RMarkdown script (not R code chunks), hash/comment symbols produce titles and section headers.  
 
 ![](/images/Commented_Lines.png)
 
+
 {{% notice tip %}}
-Multiple lines of code can be commented/uncommented by highlighting the lines and pressing the keys Ctrl, Shift, and C at the same time (Ctrl+Shift+C).
+Multiple lines of R code can be commented/uncommented by highlighting the lines and pressing the keys Ctrl, Shift, and C at the same time (Ctrl+Shift+C).
 {{% /notice %}}
 
+* 
 
 ### Code assists  
 Any script (RMarkdown or otherwise) will give clues when you have made a mistake. For example, if you forgot to write a comma where it is needed, or to close a parentheses, RStudio will raise a flag on that line, on the right side of the script, to warn you.  

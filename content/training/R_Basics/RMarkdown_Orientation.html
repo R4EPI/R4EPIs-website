@@ -31,11 +31,16 @@ weight: 6
 <h3>Understand a RMarkdown</h3>
 <div id="code-chunks" class="section level4">
 <h4>Code chunks</h4>
-<p>While the RMarkdown may at first look like a wall of code, notice how “chunks” of code are differentiated by their background color:</p>
+<p>While the RMarkdown may at first look like a wall of code, notice how “chunks” of code are differentiated by their color:</p>
 <ul>
 <li><p><strong>In chunks with WHITE background, code text will appear as text in the document.</strong> These lines can have <em>italics</em>, <strong>bold</strong>, or other formating, and can display parameters derived from your data (such as epi week of outbreak peak, as in the example above).</p></li>
 <li><p><strong>In chunks with GRAY background, RMarkdown is running R commands.</strong> The commands perform data processing and cleaning steps, or could produce visual outputs in the document.</p></li>
+<li><p><strong>Text that appears GREEN in the RMarkdown will not appear in the final report</strong>. These sections, placed between special characters such as arrows (&lt; &gt;), serve as instructions for you.</p></li>
 </ul>
+<pre class="r"><code>&lt;!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+This comment will not show up when you knit the document.
+A comment with a title with slashes indicates a name of a code chunk.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ --&gt;</code></pre>
 </div>
 <div id="navigating-the-rmarkdown" class="section level4">
 <h4>Navigating the RMarkdown</h4>
@@ -64,9 +69,9 @@ weight: 6
 <div id="commented-code" class="section level4">
 <h4>Commented code</h4>
 <p>Every script should include helpful text that organizes commands and explains their rationale to collaborators. The <strong># (hash or comment) symbol</strong> ensures that any text <em>after the # and on the same line</em> will not be executed by R as it runs the script. Such “commented” text will appear a different color than the code.</p>
-<p>In the templates, you will see <strong>#</strong> serving two purposes:</p>
+<p>In the templates, you will see <strong>#</strong> serving three purposes:</p>
 <ul>
-<li><strong># Explanatory text or section headers.</strong> This commented text can be placed after code, or in the line above.</li>
+<li><strong># Explanatory text or section headers with an R chunk.</strong> This commented text can be placed after code, or in the line above.</li>
 </ul>
 <pre class="r"><code># An example of commented text  
 linelist_raw &lt;- gen_data(&quot;AJS&quot;) # generates a fake dataset for use in this template</code></pre>
@@ -79,11 +84,17 @@ linelist_raw &lt;- gen_data(&quot;AJS&quot;) # generates a fake dataset for use 
 ## Read data ------------------------------------------------------
 # CSV file
 # linelist_raw &lt;- rio::import(&quot;linelist.csv&quot;)</code></pre>
+<ul>
+<li><strong>### As section titles.</strong> In the plain text sections of the RMarkdown script (not R code chunks), hash/comment symbols produce titles and section headers.</li>
+</ul>
 <div class="figure">
 <img src="/images/Commented_Lines.png" />
 
 </div>
-<p>{{% notice tip %}} Multiple lines of code can be commented/uncommented by highlighting the lines and pressing the keys Ctrl, Shift, and C at the same time (Ctrl+Shift+C). {{% /notice %}}</p>
+<p>{{% notice tip %}} Multiple lines of R code can be commented/uncommented by highlighting the lines and pressing the keys Ctrl, Shift, and C at the same time (Ctrl+Shift+C). {{% /notice %}}</p>
+<ul>
+<li></li>
+</ul>
 </div>
 </div>
 <div id="code-assists" class="section level3">
