@@ -160,9 +160,20 @@ If you want to use the automatically-updated date from your computer, use `Sys.D
 
 **Lastly, the labels that will be used in epidemic curve plots are defined**. These should not need any adjustment. You may notice that the subtitle label uses the special term "%s" as a placeholder - the reporting_week defined in the previous chunk will show in its place.  
 
+```{r}
+## sets the labels in ggplot for the epicurves
+epicurve_labels <- labs(x = "Calendar week", 
+                        y = "Cases (n)", 
+                        title = "Cases by week of onset",
+                        subtitle = sprintf("Source: MSF data from %s", 
+                                           reporting_week)
+                       ) 
+```
+
 
 ```{r, include=FALSE, results='hide', message=FALSE, warning=FALSE}
 # Save linelist_raw as "linelist_raw" for use in the next page (dataset alignment).
 saveRDS(reporting_week, "data/reporting_week.rds")
+saveRDS(epicurve_labels, "data/epicurve_labels.rds")
 ```
 

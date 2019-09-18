@@ -9,7 +9,7 @@ weight: 13
 <p>The next section of the template produces analyses and outputs related to time, such as epidemic curves.</p>
 <div id="basic-epidemic-curve" class="section level3">
 <h3>Basic epidemic curve</h3>
-<p>The first code chunk (<code>create_incidence</code>) is about setting-up the data for the epidemic curves. <em>There will not be output from this first code chunk.</em></p>
+<p>The first half of this code chunk (<code>epicurve</code>) is about setting-up the data for the epidemic curves.</p>
 <p><strong>First</strong>, the function <code>incidence()</code> <strong>counts the number of cases</strong> for each week, by <code>date_of_onset</code>. It stores this information in the object <code>inc_week_7</code>. Read more about <code>incidence()</code> in the Help pane.</p>
 <p><strong>Second</strong>, the <strong>theme elements</strong> are set that <code>ggplot()</code> will use when plotting the epidemic curves (you can read more about <code>ggplot()</code> and theme elements in the Advanced R Basics page). This includes the angle and placement of x-axis label text, having no title in the legend, and setting colors and type for x and y gridlines.</p>
 <p><strong>Third</strong>, the <strong>text labels</strong> for the x and y axes, title, and subtitle (subtitle automatically using the <code>reporting_week</code> defined at the top of the template). These are stored in the object <code>epicurve_labels</code>.</p>
@@ -32,10 +32,10 @@ epicurve_labels &lt;- labs(x = &quot;Calendar week&quot;,
                         title = &quot;Cases by week of onset&quot;,
                         subtitle = sprintf(&quot;Source: MSF data from %s&quot;, reporting_week)
                        ) </code></pre>
-<p><strong>In this next chunk (<code>epicurve</code>), the plot of the epidemic curve is finalized and displayed.</strong></p>
+<p><strong>In this next part of the chunk, the plot of the epidemic curve is finalized and displayed.</strong></p>
 <p>{{% notice tip %}} The <code>plot()</code> function used here is from the package <strong>incidence</strong>, not the base R <code>plot()</code> function. This one uses <code>ggplot()</code> and so has different syntax and structure. As with <code>ggplot()</code>, layers of the graphic are added sequentially using the <code>+</code> symbol at the end of each sub-command. {{% /notice %}}</p>
 <p>In the example below, the weekly count data from <code>inc_week_7</code> are plotted first, then miscellaneous settings are specified: the y-axis origin is set, the labels, and finally the theme parameters. All of these elements are stored in the object <code>basic_curve</code>, which is finally run to display the plot.</p>
-<p>{{% notice tip %}} It is necessary to use the “full name” of variables for this to work correctly - this means <code>date_of_onset</code> should be listed in <code>incidence()</code> as <code>linelist_cleaned$date_of_onset</code>. Otherwise you may get an error such as “object ‘date_of_onset’ not found”. {{% /notice %}}</p>
+<p>{{% notice tip %}} For some functions, it is necessary to use the “full name” of variables - for example when using <code>incidence()</code>, <code>date_of_onset</code> should be listed as <code>linelist_cleaned$date_of_onset</code>. Otherwise you may get an error such as “object ‘date_of_onset’ not found”. {{% /notice %}}</p>
 <pre class="r"><code># plot your epicurve as a ggplot (incidence::plot is different to base::plot)
 basic_curve &lt;- plot(inc_week_7, show_cases = TRUE, border = &quot;black&quot;, n_breaks = nrow(inc_week_7)) + 
   scale_y_continuous(expand = c(0, 0)) +  # set origin for axes
@@ -65,7 +65,7 @@ plot(inc_week_14, show_cases = TRUE, border = &quot;black&quot;, n_breaks = nrow
   epicurve_theme</code></pre>
 <p><img src="/training/Walk-through/time_analyses_files/figure-html/biweekly_epicurve-1.png" width="720" /></p>
 <p>To <strong>stratify the epidemic curve</strong> by a categorical variable (such as gender), the <code>groups =</code> argument is added to the <code>incidence()</code> function. Additionally, the <code>show_cases =</code> argument of <code>plot()</code> can be set to <code>FALSE</code> to improve aesthetics.</p>
-<p>{{% notice tip %}} Remember that if listing a variable, the plot() function expects its “full name”, such as <code>linelist_cleaned$sex</code>**. Otherwise you may get an error such as “object ‘sex’ not found”. {{% /notice %}}</p>
+<p>{{% notice tip %}} Remember that if listing a variable, the incidence() function expects its “full name”, such as <code>linelist_cleaned$sex</code>**. Otherwise you may get an error such as “object ‘sex’ not found”. {{% /notice %}}</p>
 <pre class="r"><code># get counts by gender
 inc_week_7_gender &lt;- incidence(linelist_cleaned$date_of_onset, 
                                interval = &quot;2 Monday weeks&quot;, 
@@ -275,10 +275,10 @@ ar %&gt;%
 </tr>
 <tr class="odd">
 <td align="right">2016-W43</td>
-<td align="right">5</td>
+<td align="right">4</td>
 <td align="right">62336</td>
-<td align="right">0.8</td>
-<td align="right">(0.34–1.88)</td>
+<td align="right">0.6</td>
+<td align="right">(0.25–1.65)</td>
 </tr>
 <tr class="even">
 <td align="right">2016-W44</td>
@@ -296,17 +296,17 @@ ar %&gt;%
 </tr>
 <tr class="even">
 <td align="right">2016-W46</td>
+<td align="right">10</td>
+<td align="right">62336</td>
+<td align="right">1.6</td>
+<td align="right">(0.87–2.95)</td>
+</tr>
+<tr class="odd">
+<td align="right">2016-W47</td>
 <td align="right">12</td>
 <td align="right">62336</td>
 <td align="right">1.9</td>
 <td align="right">(1.10–3.36)</td>
-</tr>
-<tr class="odd">
-<td align="right">2016-W47</td>
-<td align="right">13</td>
-<td align="right">62336</td>
-<td align="right">2.1</td>
-<td align="right">(1.22–3.57)</td>
 </tr>
 <tr class="even">
 <td align="right">2016-W48</td>
@@ -331,10 +331,10 @@ ar %&gt;%
 </tr>
 <tr class="odd">
 <td align="right">2016-W51</td>
-<td align="right">22</td>
+<td align="right">21</td>
 <td align="right">62336</td>
-<td align="right">3.5</td>
-<td align="right">(2.33–5.34)</td>
+<td align="right">3.4</td>
+<td align="right">(2.20–5.15)</td>
 </tr>
 <tr class="even">
 <td align="right">2016-W52</td>
@@ -352,10 +352,10 @@ ar %&gt;%
 </tr>
 <tr class="even">
 <td align="right">2017-W02</td>
-<td align="right">22</td>
+<td align="right">21</td>
 <td align="right">62336</td>
-<td align="right">3.5</td>
-<td align="right">(2.33–5.34)</td>
+<td align="right">3.4</td>
+<td align="right">(2.20–5.15)</td>
 </tr>
 <tr class="odd">
 <td align="right">2017-W03</td>
@@ -387,17 +387,17 @@ ar %&gt;%
 </tr>
 <tr class="odd">
 <td align="right">2017-W07</td>
-<td align="right">20</td>
+<td align="right">19</td>
 <td align="right">62336</td>
-<td align="right">3.2</td>
-<td align="right">(2.08–4.96)</td>
+<td align="right">3.0</td>
+<td align="right">(1.95–4.76)</td>
 </tr>
 <tr class="even">
 <td align="right">2017-W08</td>
-<td align="right">41</td>
+<td align="right">40</td>
 <td align="right">62336</td>
-<td align="right">6.6</td>
-<td align="right">(4.85–8.92)</td>
+<td align="right">6.4</td>
+<td align="right">(4.71–8.74)</td>
 </tr>
 <tr class="odd">
 <td align="right">2017-W09</td>
@@ -408,10 +408,10 @@ ar %&gt;%
 </tr>
 <tr class="even">
 <td align="right">2017-W10</td>
-<td align="right">40</td>
+<td align="right">39</td>
 <td align="right">62336</td>
-<td align="right">6.4</td>
-<td align="right">(4.71–8.74)</td>
+<td align="right">6.3</td>
+<td align="right">(4.58–8.55)</td>
 </tr>
 <tr class="odd">
 <td align="right">2017-W11</td>
@@ -450,10 +450,10 @@ ar %&gt;%
 </tr>
 <tr class="even">
 <td align="right">2017-W16</td>
-<td align="right">7</td>
+<td align="right">5</td>
 <td align="right">62336</td>
-<td align="right">1.1</td>
-<td align="right">(0.54–2.32)</td>
+<td align="right">0.8</td>
+<td align="right">(0.34–1.88)</td>
 </tr>
 <tr class="odd">
 <td align="right">-</td>
@@ -628,192 +628,192 @@ attack_rate(cases$cumulative, population, multiplier = 10000) %&gt;%
 </tr>
 <tr class="odd">
 <td align="right">2016-W43</td>
-<td align="right">78</td>
+<td align="right">77</td>
 <td align="right">62336</td>
-<td align="right">12.5</td>
-<td align="right">(10.03–15.61)</td>
+<td align="right">12.4</td>
+<td align="right">(9.89–15.43)</td>
 </tr>
 <tr class="even">
 <td align="right">2016-W44</td>
-<td align="right">81</td>
+<td align="right">80</td>
 <td align="right">62336</td>
-<td align="right">13.0</td>
-<td align="right">(10.46–16.15)</td>
+<td align="right">12.8</td>
+<td align="right">(10.31–15.97)</td>
 </tr>
 <tr class="odd">
 <td align="right">2016-W45</td>
-<td align="right">86</td>
+<td align="right">85</td>
 <td align="right">62336</td>
-<td align="right">13.8</td>
-<td align="right">(11.17–17.03)</td>
+<td align="right">13.6</td>
+<td align="right">(11.03–16.86)</td>
 </tr>
 <tr class="even">
 <td align="right">2016-W46</td>
-<td align="right">98</td>
+<td align="right">95</td>
 <td align="right">62336</td>
-<td align="right">15.7</td>
-<td align="right">(12.90–19.15)</td>
+<td align="right">15.2</td>
+<td align="right">(12.47–18.62)</td>
 </tr>
 <tr class="odd">
 <td align="right">2016-W47</td>
-<td align="right">111</td>
+<td align="right">107</td>
 <td align="right">62336</td>
-<td align="right">17.8</td>
-<td align="right">(14.79–21.44)</td>
+<td align="right">17.2</td>
+<td align="right">(14.21–20.74)</td>
 </tr>
 <tr class="even">
 <td align="right">2016-W48</td>
-<td align="right">134</td>
+<td align="right">130</td>
 <td align="right">62336</td>
-<td align="right">21.5</td>
-<td align="right">(18.15–25.45)</td>
+<td align="right">20.9</td>
+<td align="right">(17.57–24.76)</td>
 </tr>
 <tr class="odd">
 <td align="right">2016-W49</td>
-<td align="right">153</td>
+<td align="right">149</td>
 <td align="right">62336</td>
-<td align="right">24.5</td>
-<td align="right">(20.95–28.75)</td>
+<td align="right">23.9</td>
+<td align="right">(20.36–28.05)</td>
 </tr>
 <tr class="even">
 <td align="right">2016-W50</td>
-<td align="right">188</td>
+<td align="right">184</td>
 <td align="right">62336</td>
-<td align="right">30.2</td>
-<td align="right">(26.15–34.78)</td>
+<td align="right">29.5</td>
+<td align="right">(25.55–34.09)</td>
 </tr>
 <tr class="odd">
 <td align="right">2016-W51</td>
-<td align="right">210</td>
+<td align="right">205</td>
 <td align="right">62336</td>
-<td align="right">33.7</td>
-<td align="right">(29.44–38.55)</td>
+<td align="right">32.9</td>
+<td align="right">(28.69–37.70)</td>
 </tr>
 <tr class="even">
 <td align="right">2016-W52</td>
-<td align="right">241</td>
+<td align="right">236</td>
 <td align="right">62336</td>
-<td align="right">38.7</td>
-<td align="right">(34.09–43.85)</td>
+<td align="right">37.9</td>
+<td align="right">(33.33–43.00)</td>
 </tr>
 <tr class="odd">
 <td align="right">2017-W01</td>
-<td align="right">257</td>
+<td align="right">252</td>
 <td align="right">62336</td>
-<td align="right">41.2</td>
-<td align="right">(36.49–46.57)</td>
+<td align="right">40.4</td>
+<td align="right">(35.74–45.72)</td>
 </tr>
 <tr class="even">
 <td align="right">2017-W02</td>
-<td align="right">279</td>
+<td align="right">273</td>
 <td align="right">62336</td>
-<td align="right">44.8</td>
-<td align="right">(39.81–50.31)</td>
+<td align="right">43.8</td>
+<td align="right">(38.91–49.29)</td>
 </tr>
 <tr class="odd">
 <td align="right">2017-W03</td>
-<td align="right">293</td>
+<td align="right">287</td>
 <td align="right">62336</td>
-<td align="right">47.0</td>
-<td align="right">(41.93–52.69)</td>
+<td align="right">46.0</td>
+<td align="right">(41.02–51.67)</td>
 </tr>
 <tr class="even">
 <td align="right">2017-W04</td>
-<td align="right">313</td>
+<td align="right">307</td>
 <td align="right">62336</td>
-<td align="right">50.2</td>
-<td align="right">(44.96–56.07)</td>
+<td align="right">49.2</td>
+<td align="right">(44.05–55.06)</td>
 </tr>
 <tr class="odd">
 <td align="right">2017-W05</td>
-<td align="right">329</td>
+<td align="right">323</td>
 <td align="right">62336</td>
-<td align="right">52.8</td>
-<td align="right">(47.39–58.78)</td>
+<td align="right">51.8</td>
+<td align="right">(46.48–57.77)</td>
 </tr>
 <tr class="even">
 <td align="right">2017-W06</td>
-<td align="right">447</td>
+<td align="right">441</td>
 <td align="right">62336</td>
-<td align="right">71.7</td>
-<td align="right">(65.38–78.64)</td>
+<td align="right">70.7</td>
+<td align="right">(64.46–77.64)</td>
 </tr>
 <tr class="odd">
 <td align="right">2017-W07</td>
-<td align="right">467</td>
+<td align="right">460</td>
 <td align="right">62336</td>
-<td align="right">74.9</td>
-<td align="right">(68.44–82.00)</td>
+<td align="right">73.8</td>
+<td align="right">(67.37–80.82)</td>
 </tr>
 <tr class="even">
 <td align="right">2017-W08</td>
-<td align="right">508</td>
+<td align="right">500</td>
 <td align="right">62336</td>
-<td align="right">81.5</td>
-<td align="right">(74.73–88.86)</td>
+<td align="right">80.2</td>
+<td align="right">(73.50–87.52)</td>
 </tr>
 <tr class="odd">
 <td align="right">2017-W09</td>
-<td align="right">523</td>
+<td align="right">515</td>
 <td align="right">62336</td>
-<td align="right">83.9</td>
-<td align="right">(77.04–91.37)</td>
+<td align="right">82.6</td>
+<td align="right">(75.81–90.03)</td>
 </tr>
 <tr class="even">
 <td align="right">2017-W10</td>
-<td align="right">563</td>
+<td align="right">554</td>
 <td align="right">62336</td>
-<td align="right">90.3</td>
-<td align="right">(83.19–98.05)</td>
+<td align="right">88.9</td>
+<td align="right">(81.80–96.55)</td>
 </tr>
 <tr class="odd">
 <td align="right">2017-W11</td>
-<td align="right">571</td>
+<td align="right">562</td>
 <td align="right">62336</td>
-<td align="right">91.6</td>
-<td align="right">(84.42–99.39)</td>
+<td align="right">90.2</td>
+<td align="right">(83.03–97.89)</td>
 </tr>
 <tr class="even">
 <td align="right">2017-W12</td>
-<td align="right">585</td>
+<td align="right">576</td>
 <td align="right">62336</td>
-<td align="right">93.8</td>
-<td align="right">(86.57–101.72)</td>
+<td align="right">92.4</td>
+<td align="right">(85.19–100.22)</td>
 </tr>
 <tr class="odd">
 <td align="right">2017-W13</td>
-<td align="right">593</td>
+<td align="right">584</td>
 <td align="right">62336</td>
-<td align="right">95.1</td>
-<td align="right">(87.81–103.06)</td>
+<td align="right">93.7</td>
+<td align="right">(86.42–101.56)</td>
 </tr>
 <tr class="even">
 <td align="right">2017-W14</td>
-<td align="right">604</td>
+<td align="right">595</td>
 <td align="right">62336</td>
-<td align="right">96.9</td>
-<td align="right">(89.50–104.89)</td>
+<td align="right">95.5</td>
+<td align="right">(88.11–103.39)</td>
 </tr>
 <tr class="odd">
 <td align="right">2017-W15</td>
-<td align="right">607</td>
+<td align="right">598</td>
 <td align="right">62336</td>
-<td align="right">97.4</td>
-<td align="right">(89.96–105.39)</td>
+<td align="right">95.9</td>
+<td align="right">(88.58–103.89)</td>
 </tr>
 <tr class="even">
 <td align="right">2017-W16</td>
-<td align="right">614</td>
+<td align="right">603</td>
 <td align="right">62336</td>
-<td align="right">98.5</td>
-<td align="right">(91.04–106.56)</td>
+<td align="right">96.7</td>
+<td align="right">(89.35–104.73)</td>
 </tr>
 <tr class="odd">
 <td align="right">-</td>
-<td align="right">1447</td>
+<td align="right">1436</td>
 <td align="right">62336</td>
-<td align="right">232.1</td>
-<td align="right">(220.60–244.25)</td>
+<td align="right">230.4</td>
+<td align="right">(218.88–242.44)</td>
 </tr>
 </tbody>
 </table>
@@ -844,18 +844,102 @@ cfr %&gt;%
 </thead>
 <tbody>
 <tr class="odd">
+<td align="right">2016-W23</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">-</td>
+<td align="right">(NaN–NaN)</td>
+</tr>
+<tr class="even">
+<td align="right">2016-W24</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">-</td>
+<td align="right">(NaN–NaN)</td>
+</tr>
+<tr class="odd">
+<td align="right">2016-W25</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">-</td>
+<td align="right">(NaN–NaN)</td>
+</tr>
+<tr class="even">
+<td align="right">2016-W26</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">-</td>
+<td align="right">(NaN–NaN)</td>
+</tr>
+<tr class="odd">
+<td align="right">2016-W27</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">-</td>
+<td align="right">(NaN–NaN)</td>
+</tr>
+<tr class="even">
+<td align="right">2016-W28</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">-</td>
+<td align="right">(NaN–NaN)</td>
+</tr>
+<tr class="odd">
+<td align="right">2016-W29</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">-</td>
+<td align="right">(NaN–NaN)</td>
+</tr>
+<tr class="even">
 <td align="right">2016-W30</td>
 <td align="right">0</td>
 <td align="right">1</td>
 <td align="right">0</td>
 <td align="right">(0.00–79.35)</td>
 </tr>
+<tr class="odd">
+<td align="right">2016-W31</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">-</td>
+<td align="right">(NaN–NaN)</td>
+</tr>
 <tr class="even">
+<td align="right">2016-W32</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">-</td>
+<td align="right">(NaN–NaN)</td>
+</tr>
+<tr class="odd">
 <td align="right">2016-W33</td>
 <td align="right">0</td>
 <td align="right">1</td>
 <td align="right">0</td>
 <td align="right">(0.00–79.35)</td>
+</tr>
+<tr class="even">
+<td align="right">2016-W34</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">-</td>
+<td align="right">(NaN–NaN)</td>
+</tr>
+<tr class="odd">
+<td align="right">2016-W35</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">-</td>
+<td align="right">(NaN–NaN)</td>
+</tr>
+<tr class="even">
+<td align="right">2016-W36</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">-</td>
+<td align="right">(NaN–NaN)</td>
 </tr>
 <tr class="odd">
 <td align="right">2016-W37</td>
@@ -923,9 +1007,9 @@ cfr %&gt;%
 <tr class="even">
 <td align="right">2016-W46</td>
 <td align="right">0</td>
-<td align="right">4</td>
+<td align="right">3</td>
 <td align="right">0</td>
-<td align="right">(0.00–48.99)</td>
+<td align="right">(0.00–56.15)</td>
 </tr>
 <tr class="odd">
 <td align="right">2016-W47</td>
@@ -942,112 +1026,147 @@ cfr %&gt;%
 <td align="right">(0.00–79.35)</td>
 </tr>
 <tr class="odd">
+<td align="right">2016-W49</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">-</td>
+<td align="right">(NaN–NaN)</td>
+</tr>
+<tr class="even">
 <td align="right">2016-W50</td>
 <td align="right">0</td>
 <td align="right">1</td>
 <td align="right">0</td>
 <td align="right">(0.00–79.35)</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="right">2016-W51</td>
 <td align="right">0</td>
 <td align="right">1</td>
 <td align="right">0</td>
 <td align="right">(0.00–79.35)</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="right">2016-W52</td>
 <td align="right">0</td>
 <td align="right">2</td>
 <td align="right">0</td>
 <td align="right">(0.00–65.76)</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="right">2017-W01</td>
 <td align="right">0</td>
 <td align="right">2</td>
 <td align="right">0</td>
 <td align="right">(0.00–65.76)</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="right">2017-W02</td>
 <td align="right">0</td>
 <td align="right">1</td>
 <td align="right">0</td>
 <td align="right">(0.00–79.35)</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="right">2017-W03</td>
 <td align="right">0</td>
 <td align="right">2</td>
 <td align="right">0</td>
 <td align="right">(0.00–65.76)</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="right">2017-W04</td>
 <td align="right">0</td>
 <td align="right">4</td>
 <td align="right">0</td>
 <td align="right">(0.00–48.99)</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="right">2017-W05</td>
 <td align="right">0</td>
 <td align="right">1</td>
 <td align="right">0</td>
 <td align="right">(0.00–79.35)</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="right">2017-W06</td>
 <td align="right">0</td>
 <td align="right">5</td>
 <td align="right">0</td>
 <td align="right">(0.00–43.45)</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="right">2017-W07</td>
 <td align="right">0</td>
 <td align="right">1</td>
 <td align="right">0</td>
 <td align="right">(0.00–79.35)</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="right">2017-W08</td>
 <td align="right">0</td>
 <td align="right">1</td>
 <td align="right">0</td>
 <td align="right">(0.00–79.35)</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="right">2017-W09</td>
 <td align="right">0</td>
 <td align="right">1</td>
 <td align="right">0</td>
 <td align="right">(0.00–79.35)</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="right">2017-W10</td>
 <td align="right">0</td>
 <td align="right">1</td>
 <td align="right">0</td>
 <td align="right">(0.00–79.35)</td>
 </tr>
+<tr class="odd">
+<td align="right">2017-W11</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">-</td>
+<td align="right">(NaN–NaN)</td>
+</tr>
 <tr class="even">
+<td align="right">2017-W12</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">-</td>
+<td align="right">(NaN–NaN)</td>
+</tr>
+<tr class="odd">
 <td align="right">2017-W13</td>
 <td align="right">0</td>
 <td align="right">2</td>
 <td align="right">0</td>
 <td align="right">(0.00–65.76)</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="right">2017-W14</td>
 <td align="right">0</td>
 <td align="right">1</td>
 <td align="right">0</td>
 <td align="right">(0.00–79.35)</td>
 </tr>
-<tr class="even">
+<tr class="odd">
+<td align="right">2017-W15</td>
+<td align="right">0</td>
+<td align="right">0</td>
 <td align="right">-</td>
+<td align="right">(NaN–NaN)</td>
+</tr>
+<tr class="even">
+<td align="right">2017-W16</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">-</td>
+<td align="right">(NaN–NaN)</td>
+</tr>
+<tr class="odd">
+<td align="right">(Missing)</td>
 <td align="right">0</td>
 <td align="right">27</td>
 <td align="right">0</td>
@@ -1059,7 +1178,7 @@ cfr %&gt;%
 <div id="plotting-ar-cfr-and-epidemic-curve-together" class="section level4">
 <h4>Plotting AR, CFR, and Epidemic Curve together</h4>
 <p>These code chunks produce plots of the AR (in the population), CFR (among inpatients only), and the AF and CFR as line graphs together with the Epidemic Curve.</p>
-<p><strong>The first chunk prepares a plot of attack rate by epiweek, but does not yet print it.</strong> You can print it alone by running a command of its name <code>ar_plot</code>.</p>
+<p><strong>The first chunk, <code>ar_line_graph</code>, prepares a plot of attack rate by epiweek, but does not yet print it.</strong> You can print it alone by running a command of its name <code>ar_plot</code>.</p>
 <p>{{% notice tip %}} This <code>ar_plot</code> depends on you having already run the <code>attack_rate_per_week</code> chunk. If you have not, you may see “Error: epiweek not found” {{% /notice %}}</p>
 <pre class="r"><code>ar_plot &lt;- ggplot(ar, aes(x = week2date(epiweek) + (7 * 0.5), group = 1)) +
   geom_ribbon(aes(ymin = lower, ymax = upper), 
@@ -1072,7 +1191,7 @@ cfr %&gt;%
   labs(x = &quot;Calendar week&quot;, y = &quot;AR [95% CI]&quot;, subtitle = &quot;Attack Rate (per 10,000)&quot;) + 
   # change visuals of dates and remove legend title
   epicurve_theme</code></pre>
-<p><strong>The second code chunk prepares a plot of CFR by epiweek, but does not yet print it.</strong> You can print it alone by running a command with its name <code>cfr_plot</code>.</p>
+<p><strong>The second code chunk, <code>cfr_line_graph</code> prepares a plot of CFR by epiweek, but also does not yet print it.</strong> You can print it alone by running a command with its name <code>cfr_plot</code>.</p>
 <p>{{% notice tip %}} This cfr_plot depends on you having already run the cfr_per_week chunk. If you have not, you may see “Error: epiweek not found”. {{% /notice %}}</p>
 <pre class="r"><code>cfr_plot &lt;- ggplot(cfr, aes(x = week2date(epiweek) + (7 * 0.5), group = 1)) +
   geom_ribbon(aes(ymin = lower, ymax = upper), 
@@ -1086,7 +1205,7 @@ cfr %&gt;%
        subtitle = &quot;Case Fatality Ratio [95% CI] Among Inpatients&quot;) + 
   # change visuals of dates and remove legend title
   epicurve_theme </code></pre>
-<p><strong>Adding the AR and CFR plots with an Epidemic Curve</strong> and plotting them all together is now possible with the function <code>cowplot()</code>, which nicely combines different plots.</p>
+<p><strong>Adding the AR and CFR plots with an Epidemic Curve (chunk <code>epicurve_ar_cfr</code>)</strong> and plotting them all together is now possible with the function <code>cowplot()</code>, which nicely combines different plots. You can read more about <code>cowplot()</code> in the Advanced and Miscellaneous R Basics page.</p>
 <pre class="r"><code># Define no specified axis text or title over the combined plot
 nofx &lt;- theme(axis.text.x = element_blank(),
               axis.title.x = element_blank())
@@ -1100,7 +1219,7 @@ cowplot::plot_grid(
   axis = &quot;lr&quot;, # only by their left and right margins
   ncol = 1     # allow only one column
 )</code></pre>
-<p><img src="/training/Walk-through/time_analyses_files/figure-html/epicurve_ar_cfr-1.png" width="720" /></p>
+<pre><code>## Error in stop_if_not_aweek_string(x): aweek strings must match the pattern &#39;YYYY-Www-d&#39;. The first incorrect string was: &#39;(Missing)&#39;</code></pre>
 </div>
 <div id="admission-and-exits-by-epiweek" class="section level4">
 <h4>Admission and exits by epiweek</h4>
@@ -1217,7 +1336,7 @@ tab_linelist(linelist_cleaned, epiweek, strata = case_def,
 <tr class="even">
 <td align="left">2016-W37</td>
 <td align="right">9</td>
-<td align="right">12.9</td>
+<td align="right">13.0</td>
 <td align="right">0</td>
 <td align="right">0</td>
 <td align="right">8</td>
@@ -1229,7 +1348,7 @@ tab_linelist(linelist_cleaned, epiweek, strata = case_def,
 <tr class="odd">
 <td align="left">2016-W38</td>
 <td align="right">5</td>
-<td align="right">7.1</td>
+<td align="right">7.2</td>
 <td align="right">0</td>
 <td align="right">0</td>
 <td align="right">5</td>
@@ -1253,7 +1372,7 @@ tab_linelist(linelist_cleaned, epiweek, strata = case_def,
 <tr class="odd">
 <td align="left">2016-W40</td>
 <td align="right">4</td>
-<td align="right">5.7</td>
+<td align="right">5.8</td>
 <td align="right">0</td>
 <td align="right">0</td>
 <td align="right">3</td>
@@ -1292,11 +1411,11 @@ tab_linelist(linelist_cleaned, epiweek, strata = case_def,
 <td align="right">1.4</td>
 <td align="right">0</td>
 <td align="right">0</td>
-<td align="right">3</td>
-<td align="right">0.6</td>
+<td align="right">2</td>
+<td align="right">0.4</td>
 <td align="right">1</td>
 <td align="right">3.6</td>
-<td align="right">5</td>
+<td align="right">4</td>
 </tr>
 <tr class="odd">
 <td align="left">2016-W44</td>
@@ -1324,15 +1443,15 @@ tab_linelist(linelist_cleaned, epiweek, strata = case_def,
 </tr>
 <tr class="odd">
 <td align="left">2016-W46</td>
-<td align="right">2</td>
-<td align="right">2.9</td>
+<td align="right">1</td>
+<td align="right">1.4</td>
 <td align="right">0</td>
 <td align="right">0</td>
-<td align="right">8</td>
-<td align="right">1.6</td>
+<td align="right">7</td>
+<td align="right">1.4</td>
 <td align="right">2</td>
 <td align="right">7.1</td>
-<td align="right">12</td>
+<td align="right">10</td>
 </tr>
 <tr class="even">
 <td align="left">2016-W47</td>
@@ -1340,11 +1459,11 @@ tab_linelist(linelist_cleaned, epiweek, strata = case_def,
 <td align="right">0.0</td>
 <td align="right">0</td>
 <td align="right">0</td>
-<td align="right">10</td>
-<td align="right">2.0</td>
+<td align="right">9</td>
+<td align="right">1.8</td>
 <td align="right">3</td>
 <td align="right">10.7</td>
-<td align="right">13</td>
+<td align="right">12</td>
 </tr>
 <tr class="odd">
 <td align="left">2016-W48</td>
@@ -1353,7 +1472,7 @@ tab_linelist(linelist_cleaned, epiweek, strata = case_def,
 <td align="right">0</td>
 <td align="right">0</td>
 <td align="right">20</td>
-<td align="right">3.9</td>
+<td align="right">4.0</td>
 <td align="right">1</td>
 <td align="right">3.6</td>
 <td align="right">23</td>
@@ -1365,7 +1484,7 @@ tab_linelist(linelist_cleaned, epiweek, strata = case_def,
 <td align="right">1</td>
 <td align="right">25</td>
 <td align="right">18</td>
-<td align="right">3.5</td>
+<td align="right">3.6</td>
 <td align="right">0</td>
 <td align="right">0.0</td>
 <td align="right">19</td>
@@ -1377,7 +1496,7 @@ tab_linelist(linelist_cleaned, epiweek, strata = case_def,
 <td align="right">0</td>
 <td align="right">0</td>
 <td align="right">30</td>
-<td align="right">5.9</td>
+<td align="right">6.0</td>
 <td align="right">3</td>
 <td align="right">10.7</td>
 <td align="right">35</td>
@@ -1388,20 +1507,20 @@ tab_linelist(linelist_cleaned, epiweek, strata = case_def,
 <td align="right">4.3</td>
 <td align="right">0</td>
 <td align="right">0</td>
-<td align="right">19</td>
-<td align="right">3.7</td>
+<td align="right">18</td>
+<td align="right">3.6</td>
 <td align="right">0</td>
 <td align="right">0.0</td>
-<td align="right">22</td>
+<td align="right">21</td>
 </tr>
 <tr class="odd">
 <td align="left">2016-W52</td>
 <td align="right">4</td>
-<td align="right">5.7</td>
+<td align="right">5.8</td>
 <td align="right">0</td>
 <td align="right">0</td>
 <td align="right">26</td>
-<td align="right">5.1</td>
+<td align="right">5.2</td>
 <td align="right">1</td>
 <td align="right">3.6</td>
 <td align="right">31</td>
@@ -1413,7 +1532,7 @@ tab_linelist(linelist_cleaned, epiweek, strata = case_def,
 <td align="right">0</td>
 <td align="right">0</td>
 <td align="right">13</td>
-<td align="right">2.5</td>
+<td align="right">2.6</td>
 <td align="right">0</td>
 <td align="right">0.0</td>
 <td align="right">16</td>
@@ -1424,11 +1543,11 @@ tab_linelist(linelist_cleaned, epiweek, strata = case_def,
 <td align="right">1.4</td>
 <td align="right">0</td>
 <td align="right">0</td>
-<td align="right">21</td>
-<td align="right">4.1</td>
+<td align="right">20</td>
+<td align="right">4.0</td>
 <td align="right">0</td>
 <td align="right">0.0</td>
-<td align="right">22</td>
+<td align="right">21</td>
 </tr>
 <tr class="even">
 <td align="left">2017-W03</td>
@@ -1437,7 +1556,7 @@ tab_linelist(linelist_cleaned, epiweek, strata = case_def,
 <td align="right">1</td>
 <td align="right">25</td>
 <td align="right">12</td>
-<td align="right">2.3</td>
+<td align="right">2.4</td>
 <td align="right">0</td>
 <td align="right">0.0</td>
 <td align="right">14</td>
@@ -1449,7 +1568,7 @@ tab_linelist(linelist_cleaned, epiweek, strata = case_def,
 <td align="right">1</td>
 <td align="right">25</td>
 <td align="right">16</td>
-<td align="right">3.1</td>
+<td align="right">3.2</td>
 <td align="right">0</td>
 <td align="right">0.0</td>
 <td align="right">20</td>
@@ -1461,7 +1580,7 @@ tab_linelist(linelist_cleaned, epiweek, strata = case_def,
 <td align="right">0</td>
 <td align="right">0</td>
 <td align="right">13</td>
-<td align="right">2.5</td>
+<td align="right">2.6</td>
 <td align="right">0</td>
 <td align="right">0.0</td>
 <td align="right">16</td>
@@ -1469,11 +1588,11 @@ tab_linelist(linelist_cleaned, epiweek, strata = case_def,
 <tr class="odd">
 <td align="left">2017-W06</td>
 <td align="right">9</td>
-<td align="right">12.9</td>
+<td align="right">13.0</td>
 <td align="right">0</td>
 <td align="right">0</td>
 <td align="right">109</td>
-<td align="right">21.3</td>
+<td align="right">21.7</td>
 <td align="right">0</td>
 <td align="right">0.0</td>
 <td align="right">118</td>
@@ -1484,11 +1603,11 @@ tab_linelist(linelist_cleaned, epiweek, strata = case_def,
 <td align="right">1.4</td>
 <td align="right">0</td>
 <td align="right">0</td>
-<td align="right">19</td>
-<td align="right">3.7</td>
+<td align="right">18</td>
+<td align="right">3.6</td>
 <td align="right">0</td>
 <td align="right">0.0</td>
-<td align="right">20</td>
+<td align="right">19</td>
 </tr>
 <tr class="odd">
 <td align="left">2017-W08</td>
@@ -1496,11 +1615,11 @@ tab_linelist(linelist_cleaned, epiweek, strata = case_def,
 <td align="right">4.3</td>
 <td align="right">0</td>
 <td align="right">0</td>
-<td align="right">38</td>
+<td align="right">37</td>
 <td align="right">7.4</td>
 <td align="right">0</td>
 <td align="right">0.0</td>
-<td align="right">41</td>
+<td align="right">40</td>
 </tr>
 <tr class="even">
 <td align="left">2017-W09</td>
@@ -1509,7 +1628,7 @@ tab_linelist(linelist_cleaned, epiweek, strata = case_def,
 <td align="right">0</td>
 <td align="right">0</td>
 <td align="right">15</td>
-<td align="right">2.9</td>
+<td align="right">3.0</td>
 <td align="right">0</td>
 <td align="right">0.0</td>
 <td align="right">15</td>
@@ -1520,11 +1639,11 @@ tab_linelist(linelist_cleaned, epiweek, strata = case_def,
 <td align="right">1.4</td>
 <td align="right">0</td>
 <td align="right">0</td>
-<td align="right">39</td>
+<td align="right">38</td>
 <td align="right">7.6</td>
 <td align="right">0</td>
 <td align="right">0.0</td>
-<td align="right">40</td>
+<td align="right">39</td>
 </tr>
 <tr class="even">
 <td align="left">2017-W11</td>
@@ -1545,7 +1664,7 @@ tab_linelist(linelist_cleaned, epiweek, strata = case_def,
 <td align="right">0</td>
 <td align="right">0</td>
 <td align="right">13</td>
-<td align="right">2.5</td>
+<td align="right">2.6</td>
 <td align="right">0</td>
 <td align="right">0.0</td>
 <td align="right">14</td>
@@ -1569,7 +1688,7 @@ tab_linelist(linelist_cleaned, epiweek, strata = case_def,
 <td align="right">0</td>
 <td align="right">0</td>
 <td align="right">11</td>
-<td align="right">2.1</td>
+<td align="right">2.2</td>
 <td align="right">0</td>
 <td align="right">0.0</td>
 <td align="right">11</td>
@@ -1592,23 +1711,23 @@ tab_linelist(linelist_cleaned, epiweek, strata = case_def,
 <td align="right">0.0</td>
 <td align="right">0</td>
 <td align="right">0</td>
-<td align="right">7</td>
-<td align="right">1.4</td>
+<td align="right">5</td>
+<td align="right">1.0</td>
 <td align="right">0</td>
 <td align="right">0.0</td>
-<td align="right">7</td>
+<td align="right">5</td>
 </tr>
 <tr class="even">
 <td align="left">Total</td>
-<td align="right">70</td>
+<td align="right">69</td>
 <td align="right">100.0</td>
 <td align="right">4</td>
 <td align="right">100</td>
-<td align="right">512</td>
+<td align="right">502</td>
 <td align="right">100.0</td>
 <td align="right">28</td>
 <td align="right">100.0</td>
-<td align="right">614</td>
+<td align="right">603</td>
 </tr>
 </tbody>
 </table>
@@ -1628,7 +1747,7 @@ linelist_cleaned %&gt;%
 <thead>
 <tr class="header">
 <th align="left">Week</th>
-<th align="right">Died (n)</th>
+<th align="right">Dead (n)</th>
 <th align="right">%</th>
 <th align="right">Discharged (n)</th>
 <th align="right">%</th>
@@ -1649,7 +1768,7 @@ linelist_cleaned %&gt;%
 <td align="right">0</td>
 <td align="right">0</td>
 <td align="right">1</td>
-<td align="right">7.1</td>
+<td align="right">7.7</td>
 <td align="right">1</td>
 </tr>
 <tr class="even">
@@ -1673,7 +1792,7 @@ linelist_cleaned %&gt;%
 <td align="right">0</td>
 <td align="right">0</td>
 <td align="right">2</td>
-<td align="right">14.3</td>
+<td align="right">15.4</td>
 <td align="right">4</td>
 </tr>
 <tr class="even">
@@ -1733,7 +1852,7 @@ linelist_cleaned %&gt;%
 <td align="right">0</td>
 <td align="right">0</td>
 <td align="right">2</td>
-<td align="right">14.3</td>
+<td align="right">15.4</td>
 <td align="right">5</td>
 </tr>
 <tr class="odd">
@@ -1745,7 +1864,7 @@ linelist_cleaned %&gt;%
 <td align="right">0</td>
 <td align="right">0</td>
 <td align="right">1</td>
-<td align="right">7.1</td>
+<td align="right">7.7</td>
 <td align="right">1</td>
 </tr>
 <tr class="even">
@@ -1757,7 +1876,7 @@ linelist_cleaned %&gt;%
 <td align="right">0</td>
 <td align="right">0</td>
 <td align="right">1</td>
-<td align="right">7.1</td>
+<td align="right">7.7</td>
 <td align="right">1</td>
 </tr>
 <tr class="odd">
@@ -1769,7 +1888,7 @@ linelist_cleaned %&gt;%
 <td align="right">0</td>
 <td align="right">0</td>
 <td align="right">1</td>
-<td align="right">7.1</td>
+<td align="right">7.7</td>
 <td align="right">3</td>
 </tr>
 <tr class="even">
@@ -1780,9 +1899,9 @@ linelist_cleaned %&gt;%
 <td align="right">8.6</td>
 <td align="right">0</td>
 <td align="right">0</td>
-<td align="right">1</td>
-<td align="right">7.1</td>
-<td align="right">4</td>
+<td align="right">0</td>
+<td align="right">0.0</td>
+<td align="right">3</td>
 </tr>
 <tr class="odd">
 <td align="left">2016-W47</td>
@@ -1793,7 +1912,7 @@ linelist_cleaned %&gt;%
 <td align="right">0</td>
 <td align="right">0</td>
 <td align="right">1</td>
-<td align="right">7.1</td>
+<td align="right">7.7</td>
 <td align="right">1</td>
 </tr>
 <tr class="even">
@@ -1805,7 +1924,7 @@ linelist_cleaned %&gt;%
 <td align="right">0</td>
 <td align="right">0</td>
 <td align="right">1</td>
-<td align="right">7.1</td>
+<td align="right">7.7</td>
 <td align="right">1</td>
 </tr>
 <tr class="odd">
@@ -1829,7 +1948,7 @@ linelist_cleaned %&gt;%
 <td align="right">0</td>
 <td align="right">0</td>
 <td align="right">1</td>
-<td align="right">7.1</td>
+<td align="right">7.7</td>
 <td align="right">1</td>
 </tr>
 <tr class="odd">
@@ -1841,7 +1960,7 @@ linelist_cleaned %&gt;%
 <td align="right">0</td>
 <td align="right">0</td>
 <td align="right">1</td>
-<td align="right">7.1</td>
+<td align="right">7.7</td>
 <td align="right">2</td>
 </tr>
 <tr class="even">
@@ -1901,7 +2020,7 @@ linelist_cleaned %&gt;%
 <td align="right">0</td>
 <td align="right">0</td>
 <td align="right">1</td>
-<td align="right">7.1</td>
+<td align="right">7.7</td>
 <td align="right">1</td>
 </tr>
 <tr class="odd">
@@ -1996,9 +2115,9 @@ linelist_cleaned %&gt;%
 <td align="right">100.0</td>
 <td align="right">2</td>
 <td align="right">100</td>
-<td align="right">14</td>
+<td align="right">13</td>
 <td align="right">100.0</td>
-<td align="right">59</td>
+<td align="right">58</td>
 </tr>
 </tbody>
 </table>

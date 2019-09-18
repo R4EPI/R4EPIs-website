@@ -99,4 +99,11 @@ weight: 6
 <pre class="r"><code>reporting_week &lt;- aweek::as.aweek(&quot;2017-W16&quot;) # Set reporting_week as last complete epi week</code></pre>
 <p>{{% notice tip %}} If you want to use the automatically-updated date from your computer, use <code>Sys.Date()</code> like this: <code>date2week(Sys.Date())</code> {{% /notice %}}</p>
 <p><strong>Lastly, the labels that will be used in epidemic curve plots are defined</strong>. These should not need any adjustment. You may notice that the subtitle label uses the special term “%s” as a placeholder - the reporting_week defined in the previous chunk will show in its place.</p>
+<pre class="r"><code>## sets the labels in ggplot for the epicurves
+epicurve_labels &lt;- labs(x = &quot;Calendar week&quot;, 
+                        y = &quot;Cases (n)&quot;, 
+                        title = &quot;Cases by week of onset&quot;,
+                        subtitle = sprintf(&quot;Source: MSF data from %s&quot;, 
+                                           reporting_week)
+                       ) </code></pre>
 </div>

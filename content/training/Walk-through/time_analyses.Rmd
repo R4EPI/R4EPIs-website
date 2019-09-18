@@ -82,7 +82,7 @@ The next section of the template produces analyses and outputs related to time, 
 
 ### Basic epidemic curve  
 
-The first code chunk (`create_incidence`) is about setting-up the data for the epidemic curves. *There will not be output from this first code chunk.*  
+The first half of this code chunk (`epicurve`) is about setting-up the data for the epidemic curves.  
 
 **First**, the function `incidence()` **counts the number of cases** for each week, by `date_of_onset`. It stores this information in the object `inc_week_7`. Read more about `incidence()` in the Help pane. 
 
@@ -117,7 +117,7 @@ epicurve_labels <- labs(x = "Calendar week",
                        ) 
 ```
 
-**In this next chunk (`epicurve`), the plot of the epidemic curve is finalized and displayed.**  
+**In this next part of the chunk, the plot of the epidemic curve is finalized and displayed.**  
 
 
 {{% notice tip %}}
@@ -129,7 +129,7 @@ In the example below, the weekly count data from `inc_week_7` are plotted first,
 
 
 {{% notice tip %}}
-It is necessary to use the "full name" of variables for this to work correctly - this means `date_of_onset` should be listed in `incidence()` as `linelist_cleaned$date_of_onset`. Otherwise you may get an error such as "object 'date_of_onset' not found".
+For some functions, it is necessary to use the "full name" of variables - for example when using `incidence()`, `date_of_onset` should be listed as `linelist_cleaned$date_of_onset`. Otherwise you may get an error such as "object 'date_of_onset' not found".
 {{% /notice %}}
 
 
@@ -182,7 +182,7 @@ plot(inc_week_14, show_cases = TRUE, border = "black", n_breaks = nrow(inc_week_
 To **stratify the epidemic curve** by a categorical variable (such as gender), the `groups = ` argument is added to the `incidence()` function. Additionally, the `show_cases = ` argument of `plot()` can be set to `FALSE` to improve aesthetics.  
 
 {{% notice tip %}}
-Remember that if listing a variable, the plot() function expects its "full name", such as `linelist_cleaned$sex`**. Otherwise you may get an error such as "object 'sex' not found". 
+Remember that if listing a variable, the incidence() function expects its "full name", such as `linelist_cleaned$sex`**. Otherwise you may get an error such as "object 'sex' not found". 
 {{% /notice %}}
 
 
@@ -298,7 +298,7 @@ cfr %>%
 
 These code chunks produce plots of the AR (in the population), CFR (among inpatients only), and the AF and CFR as line graphs together with the Epidemic Curve.  
 
-**The first chunk prepares a plot of attack rate by epiweek, but does not yet print it.** You can print it alone by running a command of its name `ar_plot`.
+**The first chunk, `ar_line_graph`, prepares a plot of attack rate by epiweek, but does not yet print it.** You can print it alone by running a command of its name `ar_plot`.
 
 
 {{% notice tip %}}
@@ -320,7 +320,7 @@ ar_plot <- ggplot(ar, aes(x = week2date(epiweek) + (7 * 0.5), group = 1)) +
   epicurve_theme
 ```
 
-**The second code chunk prepares a plot of CFR by epiweek, but does not yet print it.** You can print it alone by running a command with its name `cfr_plot`.  
+**The second code chunk, `cfr_line_graph` prepares a plot of CFR by epiweek, but also does not yet print it.** You can print it alone by running a command with its name `cfr_plot`.  
 
 
 {{% notice tip %}}
@@ -345,7 +345,8 @@ cfr_plot <- ggplot(cfr, aes(x = week2date(epiweek) + (7 * 0.5), group = 1)) +
 ```
 
 
-**Adding the AR and CFR plots with an Epidemic Curve** and plotting them all together is now possible with the function `cowplot()`, which nicely combines different plots. 
+**Adding the AR and CFR plots with an Epidemic Curve (chunk `epicurve_ar_cfr`)** and plotting them all together is now possible with the function `cowplot()`, which nicely combines different plots. You can read more about `cowplot()` in the Advanced and Miscellaneous R Basics page.  
+
 
 ```{r epicurve_ar_cfr, message = FALSE, fig.height = 10, warning=FALSE}
 # Define no specified axis text or title over the combined plot
