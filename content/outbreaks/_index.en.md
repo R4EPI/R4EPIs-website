@@ -1,5 +1,6 @@
 ---
-title: "Outbreak Templates"
+pre: <i class='fas fa-fw fa-project-diagram'></i>&nbsp;
+title: "About Outbreak Templates"
 categories: ["R"]
 tags: ["wiki"]
 weight: 10
