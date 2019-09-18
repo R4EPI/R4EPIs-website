@@ -1,6 +1,8 @@
 ---
-
+pre: <i class='fas fa-fw fa-chalkboard-teacher'></i>&nbsp;
 title: Training Materials
+categories: ["R"]
+weight: 20
 ---
 
 

@@ -1,5 +1,6 @@
 ---
-title: "Survey templates"
+pre: <i class='fas fa-fw fa-clipboard-list'></i>&nbsp;
+title: "About Survey Templates"
 categories: ["R"]
 tags: ["wiki"]
 weight: 15

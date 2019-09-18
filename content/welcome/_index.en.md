@@ -1,60 +1,132 @@
 ---
-chapter: true
+pre: <i class='fas fa-fw fa-info-circle'></i>&nbsp;
+title: "Getting Started"
 categories: ["R"]
 tags: ["wiki"]
-weight: 5
-# pre: <b>1. </b>
-title: Introduction
+weight: 1
 ---
 
-![MSF268858_Medium](images/MSF268858_Medium.jpg?width=50pc)
+This section describes how to get up and running!
 
-![Recon_logo](images/recon_logo.png?width=30pc) ![R4epis logo](images/R4epis_clr_rgb.png?width=30pc) ![MSF LOGO](images/MSF LOGO.jpg)
+## NECESSARY COMPONENTS
 
-# R4epis - what is it?
+### R
 
-R4epis is a project for the development of the package **sitrep** in R software. The idea of the package is give you standardised data cleaning, analysis and
-reporting tools to cover common types of outbreaks and population based surveys
-that would be conducted in an MSF emergency response setting. The templates
-cover outbreak investigations (acute jaundice syndrome, cholera, measles,
-meningitis) and three of the MSF ERB pre-approved surveys: mortality, nutrition
-and vaccination.
+The templates need at least R version 3.3. We recommend [getting R directly from CRAN](https://cran.r-project.org), but [the MRAN version of R](https://mran.microsoft.com/) will work as well.
 
-All of the templates are contained within the package as RStudio templates that
-can easily be used from within RStudio. The user then changes the
-version of the template and modifies it to his/her needs.
+> **Caveat for MRAN**: MRAN is a version of R that has modifications that are outside the scope of this project, however, it should be noted that it also locks the version of all packages to a specific date, so care is needed to specify repositories when installing R packages.
 
-![MarkdownsfromR](images/SnipMarkdown.png?width=70pc)
+If you are unsure whether you have MRAN or CRAN R installed then see the [FAQ](<https://github.com/R4EPI/sitrep/wiki/4)-FAQ#i-am-unsure-if-i-have-the-mran-or-cran-version-of-r-installed>) 
 
-The templates address all aspects of:
+### RStudio Desktop
 
-* data cleaning of outbreak linelists and survey data (household and individual
-  level)
-* analysis of data to report in terms of time/place/person (more for linelist
-  analysis)
-* analysis of survey data (including accounting for survey design)
+[RStudio](https://www.rstudio.com) is an Integrated Development Environment for R that comes bundled with pandoc for publishing automated reports. Please have [version 1.1.463 or greater installed](https://www.rstudio.com/products/rstudio/download/#download).
 
-![Datavisualisationoutput](images/SnipDatavisualisation.png?width=70pc)
 
-All coding is open source and freely available and can be used by anyone.
+### Configuring RStudio
 
-For suggestions on what to add or change, please linke to our Github location.
-**TODO** add link to Github location or linke with contribution?
+It's important to start R every time with a clean working session. To do this, you must ensure that RStudio is set up correctly. Go to <kbd> Options > Global Options </kbd> and do the following:
 
-# Who funded R4epis?
+1. **de-select** "Restore .RData into workspace at startup". This ensures R never loads any previous workspaces
+2. **Select "Never"** from the dropdown menu for "Save workspace to .RData on exit". This ensures that R will never attempt to save your workspace when you close it.
 
-R4epis was funded through the [Sapling Nursery](https://www.msf.org.uk/sapling-nursery-grow-your-ideas), an MSF internal innovation fund for new projects that aim to improve the medical care MSF provides. 
+Your Global Options window should look like this:
 
-# Who contributed to R4epis
+<img src="https://imgur.com/LXsbqPT.png" width = "50%" align="middle" alt="RStudio global options window showing a setting optimal for reproducibility">
 
-R4epis has been a collaboration between the R for Epidemics Consortium ([RECON](https://www.repidemicsconsortium.org/)) and MSF. 
+When writing RMarkdown and code, it's common to wrap your text at 80 characters. You can add a reference line for this in RStudio:
 
-The project has merged the skills and experience of people in [coding in R software](https://blogs.msf.org/bloggers/r4epis-team/r4epis-hackathon), [field epidemiology](https://blogs.msf.org/bloggers/larissa/innovation-introducing-r4epis), spatial epidemiology, health information systems and public health.
 
-**TODO** Add link to list of contributors
+<img src="https://imgur.com/FWJ7lER.png" width = "50%" align="middle" alt="Margin line setting in RStudio global options">
 
-# How does the website work
+### Setting the default R repository
 
-**TODO** insert structure and links of the website
+If you are using Microsoft's version of R (MRAN), the packages are all locked to one specific date (as of this writing, it's 2018-08-07). 
+If you are unsure whether you have MRAN or CRAN R installed then see the [FAQ](<https://github.com/R4EPI/sitrep/wiki/4)-FAQ#i-am-unsure-if-i-have-the-mran-or-cran-version-of-r-installed>). 
 
+To install packages that were either created or updated after this date, you should use the RStudio cloud repository. The following code will update a file called `.Rprofile` that lives in your home directory (on Windows, this directory is usually "C:\Users\\\<username>").
+
+To create this file and set your default repository, open R and type:
+
+```r
+## install.packages("usethis", repos = "https://cran.rstudio.com/")
+library("usethis")
+edit_r_profile()
+```
+
+An editor window will open up and instructions will be printed to your R console. Paste the following code in the editor, save it, and restart your R session:
+
+```r
+local({
+  r <- getOption("repos")
+  r["CRAN"] <- "https://cran.rstudio.com/"
+  options(repos = r)
+})
+```
+
+This sets the default repository to be https://cran.rstudio.com so that you will always have the latest version of R packages available.
+
+
+### Updating your R version 
+
+Please make sure you have the latest version of R installed. 
+To do this you can use the *installr* package. 
+See [this page](https://www.r-statistics.com/tag/installr/) for details. 
+
+For MSF Field Epidemiologists, you do not have full admin rights to be able to do this on your field laptops. Please liaise with someone in your headquarters to ask what the best way is to do this.
+
+``` r
+install.packages("installr") # install package
+installr::updateR() # updating R.
+## If you wish it to go faster, run: installr::updateR(TRUE)
+```
+
+### Installing the package 
+
+To install from GitHub you will first need to install the *remotes* package. 
+Once installed you can use the *install_github* function to install *sitrep* 
+from the appropriate repo. 
+
+``` r
+## install.packages("remotes", repos = "https://cran.rstudio.com")
+```
+
+The necessary R packages for these templates are described in the DESCRIPTION file. To obtain these packages, run the following from within R:
+
+```r
+remotes::install_github("R4EPI/sitrep", repos = "https://cran.rstudio.com", update = "never")
+```
+
+To explain a bit: this will install the sitrep package and also install any dependent packages that are not currently installed on your machine. It will not, however, update any of your current packages. If you want it to update packages, then you should change the argument above to `update = "ask"`.
+
+If you are getting errors, check the FAQ section of this wiki. 
+
+### Opening up templates 
+
+Once the packages have been installed you can use the R-markdown templates
+provided to create automated reports. 
+
+<img src="https://imgur.com/0n4wigA.gif" align="middle" alt="Example of how to open and save the cholera template">
+
+To access the templates:
+
+* Go into Rstudio
+* Under the 'File' button (top left of your screen), click on the "+" 
+* Then click on "R markdown...", 
+* and select "From template"; 
+you should be able to see all the options of templates that are available. For example "Outbreak Report". 
+
+If you are not seeing these, then please take a look at this [GitHub post](https://github.com/R4EPI/sitrep/issues/35). 
+
+### Folder structure 
+
+You will need to save your rmarkdown document (the template) in the 
+same folder as your dataset in order for it to work! 
+
+
+## NICE-TO-HAVE COMPONENTS
+
+#### Tools for building packages
+
+Most packages will have windows binaries available for installation. For those that don't, [the RTools suite](https://cran.r-project.org/bin/windows/Rtools/) is a straightforward, easy-to-install (with administrator priviledges) toolset that gives the user the ability to compile and install R packages directly from source on windows machines. 
 

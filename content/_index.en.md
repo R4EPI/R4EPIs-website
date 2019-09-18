@@ -2,40 +2,68 @@
 title: R4EPIs
 ---
 
+![Waiting area for men in the shadow of a tree and an MSF car.](images/MSF268858_Medium.jpg?width=50pc)
 
-# R4EPIs
+**Source:** Susanne Doettling/MSF, 2019. The waiting area for men in the shadow of a tree and an MSF car. 75-year-old Hassan (right), one of the community leaders in Ton-Habalan is waiting for his turn.
 
-Welcome to the R4EPIs project homepage. Here you will find tutorials and 
-documentation for our project. 
+![R4EPIs project](images/R4epis_clr_rgb.png?width=40pc)
 
-{{% notice info %}}
+<div class="container">
+  <div class="imgContainer" style="width: 25%;">
+  <center>
+    <img src="images/recon_logo.png" alt="R Epidemics Consortium">
+  </center>
+  </div>
+  <div class="imgContainer" style="width: 25%;">
+  <center>
+    <img src="images/MSF LOGO.jpg" alt="MSF">
+  </center>
+  </div>
+</div>
 
-<b> THIS IS STILL A WORK IN PROGRESS. </b> Please check back soon as we will
-be adding more content in the coming weeks.
 
-{{% /notice %}}
+## R4epis - what is it?
 
-## What we do
+R4epis is a project for the development of the package **sitrep** in R software. The idea of the package is give you standardised data cleaning, analysis and
+reporting tools to cover common types of outbreaks and population based surveys
+that would be conducted in an MSF emergency response setting. The templates
+cover outbreak investigations (acute jaundice syndrome, cholera, measles,
+meningitis) and three of the MSF ERB pre-approved surveys: mortality, nutrition
+and vaccination.
 
-This project aims to help MSF field epidemiologists use the R statistical 
-language to create standardized and automated situation reports that will reduce
-the amount of time spent wrangling data so that they can spend more time 
-understanding the contex of an outbreak situation. 
+All of the templates are contained within the package as RStudio templates that
+can easily be used from within RStudio. The user then changes the
+version of the template and modifies it to his/her needs.
 
-You can read about our collaboration in [our introductory
-article](https://blogs.msf.org/bloggers/larissa/innovation-introducing-r4epis)
-and our [recent
-hackathon](https://blogs.msf.org/bloggers/r4epis-team/r4epis-hackathon).
+![Markdowns from R](images/SnipMarkdown.PNG?width=70pc)
 
-## Templates
+The templates address all aspects of:
 
-We have created a set of templates for use outbreak scenarios.
-To install the templates and code, you can use the `pak` R package:
+* data cleaning of outbreak linelists and survey data (household and individual level)
+* analysis of data to report in terms of time/place/person (more for linelist analysis)
+* analysis of survey data (including accounting for survey design)
 
-```r
-# install.packages("pak")
-pak::pkg_install("R4EPI/sitrep")
-```
+![Data visualisation output](images/SnipDatavisualisation.PNG?width=70pc)
 
+All coding is open source and freely available and can be used by anyone.
+
+For suggestions on what to add or change, please linke to our Github location.
+**TODO** add link to Github location or linke with contribution?
+
+## Who funded R4epis?
+
+R4epis was funded through the [Sapling Nursery](https://www.msf.org.uk/sapling-nursery-grow-your-ideas), an MSF internal innovation fund for new projects that aim to improve the medical care MSF provides. 
+
+## Who contributed to R4epis
+
+R4epis has been a collaboration between the R for Epidemics Consortium ([RECON](https://www.repidemicsconsortium.org/)) and MSF. 
+
+The project has merged the skills and experience of people in [coding in R software](https://blogs.msf.org/bloggers/r4epis-team/r4epis-hackathon), [field epidemiology](https://blogs.msf.org/bloggers/larissa/innovation-introducing-r4epis), spatial epidemiology, health information systems and public health.
+
+**TODO** Add link to list of contributors
+
+## How does the website work
+
+**TODO** insert structure and links of the website
 
 
