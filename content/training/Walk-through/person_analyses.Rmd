@@ -77,7 +77,7 @@ obs_end <- readRDS("data/obs_end.rds")
 
 
 
-After cleaning the data, there are three sections of the template that produce tabular, graphic, and cartigraphic (map) analysis outputs.  
+After cleaning the data, there are three sections of the template that produce tabular, graphic, and cartographic (map) analysis outputs.  
 
 This first section produces descriptive analyses about the patients demographics and attack rates.  
 
@@ -166,14 +166,14 @@ filter(linelist_cleaned, age_years <= 2) %>%
 
 ### Inpatient statistics  
 
-The text following the age pyramids uses **in-line code** to describe the distribution of outpatient and inpatient observations, and descriptive statistics of the length of stay for inpatients. **The Am Timan dataset does not have length of stay**, so it is best to delete those sentences for the final report.  
+The text following the age pyramids uses **in-line code** to describe the distribution of outpatient and inpatient observations, and descriptive statistics of the length of stay for inpatients. **The Am Timan dataset does not have length of stay, so it is best to delete those related sentences related to `obs_days` for the final report**.  
 
-### Symptom and lab descriptives  
+### Symptom and lab descriptive tables  
 
 This next code also uses the `tab_linelist()` function to **create descriptive tables of all the variables that were included in the `SYMPTOMS` variable list**.  
 
 * In the `tab_linelist()` function, `SYMPTOMS` (the value supplied to the second argument) is an object we defined in data cleaning that is a list of variables to tabulate. If this code produces an error about an "Unknown column", ensure that the variables in the object `SYMPTOMS` are *all* present in your dataset (and spelled correctly). 
-* Also in `tab_linelist()`, the argument `keep =` must represent the character value to be counted for the the table. As these Am Timan variables are still in French, we change `keep = "Yes"` to `keep = "Oui"`.  
+* Also in `tab_linelist()`, the argument `keep =` must represent the character value to be counted for the the table. As these Am Timan variables are still in French, **we change `keep = "Yes"` to `keep = "Oui"`**.  
 * The `mutate()` function is aesthetically changing variable names with underscores to spaces.   
 
 ```{r describe_by_symptoms, warning=FALSE, message=FALSE}
@@ -213,9 +213,9 @@ tab_linelist(linelist_cleaned, LABS,
 
 ## Case Fatality Ratio (CFR)
 
-The opening text with in-line code must be edited to match our Am Timan data. The second in-line code references the variable `exit_status` and the value "Dead" - **we know that it must now reference the variable `exit_status2` and the value "Died"**. Also, we do not have Dead on Arrival recorded in our dataset. Likewise, **the section on time-to-death does not apply to our dataset and can be deleted.**  
+The opening text of this chunk with in-line code must be edited to match our Am Timan data. The second in-line code references the variable `exit_status` - **this must now reference the variable `exit_status2`**. Also, we do not have Dead on Arrival recorded in our dataset, so **that part of the sentence should be deleted**.  
 
-TODO: PNG image of in-line code edited to be correct  
+Likewise, **the code section on time-to-death does not apply to our dataset and should be deleted.**  
 
 Overall CFR is produced with the code below. Note the following:  
 
@@ -298,7 +298,7 @@ To use the attack rate section, we need to modify the first code slightly. An ob
 Running the correct command and printing the value of population, we see that the sum population across regions is estimated to be 62336.  
 
 ```{r}
-# Corrected command for Am Timan exercise
+# CORRECTED command for Am Timan exercise
 population <- sum(population_data_region$population)
 
 population
@@ -321,9 +321,9 @@ ar %>%
   knitr::kable(digits = 1, align = "r")
 ```
 
-We are unable to calculate the attack rate by age group, because we do not have population counts for each age group.
+We are unable to calculate the attack rate by age group, because we do not have population counts for each age group. **Comment out (#) this code.**  
 
-Mortality attributable to AJS is also not appropriate for this example.
+Mortality attributable to AJS is also not appropriate for this example. **Comment out (#) the 4 related code chunks.**
 
 
 ```{r, include=FALSE, results='hide', message=FALSE, warning=FALSE}
