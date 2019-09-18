@@ -42,9 +42,13 @@ Here are the most common challenges and ways to manage them.
 
 How to interpret and avoid mistakes, especially with syntax
 
-### Advanced functions
+### Importing data
 
-Tips on using some of the more advanced functions in the template
+How to import data with the functions used in the templates
+
+### Advanced and miscellaneous
+
+Tips on using some of the more advanced functions in the templates
 
 
 

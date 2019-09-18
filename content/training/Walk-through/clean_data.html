@@ -23,7 +23,8 @@ linelist_raw &lt;- rio::import(&quot;AJS_AmTiman.xlsx&quot;, which = &quot;linel
 </div>
 <div id="drop-ineligible-observations" class="section level3">
 <h3>Drop ineligible observations</h3>
-<p>The next code item in the script drops observations with missing <code>case_number</code> or <code>date_of_consultation_admission</code>. Because the Am Timan dataset contains observations for patients seen in the community and at the hospital, these criteria may not be relevant. We can check, using the code below, and see that of the 1447 observations, there are 0 missing <code>case_number</code> or <code>dateentry</code>, but 616 observations missing <code>date_of_consultation_admission</code>. These 616 community-identified cases are still of interest for our report, so we will not drop them.</p>
+<p>The next code item in the script drops observations with missing <code>case_number</code> or <code>date_of_consultation_admission</code>. Because the Am Timan dataset contains observations for patients seen in the community and at the hospital, these criteria may not be relevant.</p>
+<p>We can check, using the code below, and see that of the 1447 observations, there are 0 missing <code>case_number</code> or <code>dateentry</code>, but 616 observations missing <code>date_of_consultation_admission</code>. These 616 community-identified cases are still of interest for our report, so we will not drop them.</p>
 <pre class="r"><code># Find the number of observations missing case_number, dateentry, and date_of_consultation_admission
 nrow(linelist_cleaned %&gt;% filter(is.na(case_number))) </code></pre>
 <pre><code>## [1] 0</code></pre>
@@ -32,6 +33,9 @@ nrow(linelist_cleaned %&gt;% filter(is.na(case_number))) </code></pre>
 <pre class="r"><code>nrow(linelist_cleaned %&gt;% filter(is.na(date_of_consultation_admission))) </code></pre>
 <pre><code>## [1] 616</code></pre>
 <p>{{% notice tip %}} Notice that the command above returns the number of rows missing <code>date_of_consultation_admission</code>, but does not overwrite <code>linelist_cleaned</code> with an assignment operator <code>&lt;-</code>. {{% /notice %}}</p>
+<p><strong>After viewing the above results, we must comment out (#) the two lines that <code>filter()</code> the linelist_cleaned dataset - we do <em>not</em> want those 616 observations removed.</strong></p>
+<pre class="r"><code>#linelist_cleaned &lt;- linelist_cleaned %&gt;% 
+#  filter(!is.na(case_number) &amp; !is.na(date_of_consultation_admission)) </code></pre>
 </div>
 <div id="convert-and-clean-date-variables" class="section level3">
 <h3>Convert and clean date variables</h3>
