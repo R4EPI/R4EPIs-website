@@ -6,7 +6,21 @@ title: R4EPIs
 
 **Source:** Susanne Doettling/MSF, 2019. The waiting area for men in the shadow of a tree and an MSF car. 75-year-old Hassan (right), one of the community leaders in Ton-Habalan is waiting for his turn.
 
-![Recon_logo](images/recon_logo.png?width=30pc) ![R4epis logo](images/R4epis_clr_rgb.png?width=30pc) ![MSF LOGO](images/MSF LOGO.jpg)
+![R4EPIs project](images/R4epis_clr_rgb.png?width=40pc)
+
+<div class="container">
+  <div class="imgContainer" style="width: 25%;">
+  <center>
+    <img src="images/recon_logo.png" alt="R Epidemics Consortium">
+  </center>
+  </div>
+  <div class="imgContainer" style="width: 25%;">
+  <center>
+    <img src="images/MSF LOGO.jpg" alt="MSF">
+  </center>
+  </div>
+</div>
+
 
 ## R4epis - what is it?
 
