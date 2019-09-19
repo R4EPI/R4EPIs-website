@@ -182,7 +182,7 @@ plot(inc_week_14, show_cases = TRUE, border = "black", n_breaks = nrow(inc_week_
 To **stratify the epidemic curve** by a categorical variable (such as gender), the `groups = ` argument is added to the `incidence()` function. Additionally, the `show_cases = ` argument of `plot()` can be set to `FALSE` to improve aesthetics.  
 
 {{% notice tip %}}
-Remember that if listing a variable, the incidence() function expects its "full name", such as `linelist_cleaned$sex`**. Otherwise you may get an error such as "object 'sex' not found". 
+Remember that if listing a variable, the `incidence()` function expects its "full name", such as `linelist_cleaned$sex`**. Otherwise you may get an error such as "object 'sex' not found". 
 {{% /notice %}}
 
 
