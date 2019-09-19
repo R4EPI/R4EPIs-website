@@ -29,6 +29,10 @@ date list here: https://github.com/R4EPI/sitrep/graphs/contributors
 {{% ghcontributors "https://api.github.com/repos/R4EPI/sitrep/contributors?per_page=100" %}}
 -->
 
+## Project Lead 
+Special thanks to Annick Lenglet as project lead for providing theoretical background and 
+perhaps too much review for both templates and training. 
+
 ## Project Team
 
 The R4EPIs project is a collaboration between the [R Epidemics Consortium
@@ -37,7 +41,7 @@ Doctors Without Borders (MSF)](https://msf.org) with Annick Lenglet and Amrish
 Baidjoe securing Sapling Nursery Funding from MSF.
 
 The R4EPIs project kicked off in October 2018 at the MSF London office with the
-following collaborators (in alphabetical order, **bold** indicates project lead): 
+following collaborators (in alphabetical order): 
 
 Amrish Baidjoe (1, 2),
 Elburg van Boetzelaar (3),
@@ -49,7 +53,7 @@ Thibaut Jombart (1, 6),
 Zhian Kamvar (1, 2),
 Patrick Keating (1, 6),
 Anna Kuehne (4),
-**Annick Lenglet** (7),
+Annick Lenglet (7),
 Pete Masters (4),
 Dirk Schumacher (1),
 Rosamund Southgate (4),
