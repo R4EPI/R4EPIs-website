@@ -40,7 +40,7 @@ While the RMarkdown may at first look like a wall of code, notice how "chunks" o
 
 * **In chunks with GRAY background, RMarkdown is running R commands.** The commands perform data processing and cleaning steps, or could produce visual outputs in the document.  
 
-* **Text that appears GREEN in the RMarkdown will not appear in the final report**. These sections, placed between special characters such as arrows (< >), serve as instructions for you.  
+* **Text that appears GREEN in the RMarkdown will not appear in the final report**. These sections, placed between special arrows (known as html comment tags, `<!-- -->`), serve as instructions for you.  
 
 
 ```
