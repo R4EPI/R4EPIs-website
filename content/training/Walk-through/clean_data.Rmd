@@ -389,7 +389,7 @@ linelist_cleaned$patient_origin <- toupper(linelist_cleaned$patient_origin)
 
 These variables names are stored in vectors that are created using the function `c()`. These vectors of names will be referenced in later code chunks. This way if you want to run the same function over these variables you can simply use the named vector rather than typing out each variable individually.  
 
-The default template code creates two vectors - one for symptoms variables (`SYMPTOMS`) and one for laboratory testing variables (`LABS`). **Some variables do not apply to our Am Timan data and must be removed from the list or commented out (such as `convulsions` and `history of fever`).** If non-existant variables are left in the list it will cause errors in later code chunks.
+The default template code creates two vectors - one for symptom variables (`SYMPTOMS`) and one for laboratory testing variables (`LABS`). 
 
 ```{r}
 # vectors of variable names ----------------------------------------------------
