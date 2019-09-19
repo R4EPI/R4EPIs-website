@@ -3,11 +3,31 @@ disableToc: true
 title: Credits
 ---
 
+## Website Contributors
+
+The material on this website was created by:
+
+ - Neale Batra ([@nsbatra](https://github.com/nsbatra))
+ - Annick Lenglet ([@epiamsterdam](https://github.com/epiamsterdam))
+ - Zhian N. Kamvar ([@zkamvar](https://github.com/zkamvar))
+
+
 ## Template Contributors
 
-Thanks to the contributors of the R4EPIs *sitrep* package <i class="fas fa-heart"></i>
+Thanks to the contributors of the R4EPIs *sitrep* package. You can see an up-to
+date list here: https://github.com/R4EPI/sitrep/graphs/contributors
 
+ - Alex Spina ([@aspina7](https://github.com/aspina7))
+ - Zhian N. Kamvar ([@zkamvar](https://github.com/zkamvar))
+ - Kate Doyle ([@kdoyle514](https://github.com/kdoyle514))
+ - Lukas Richter ([@lukric](https://github.com/lukric))
+ - Dirk Schumacher ([@dirkschumacher](https://github.com/dirkschumacher))
+ - Neale Batra ([@nsbatra](https://github.com/nsbatra))
+ - Chris Jarvis ([@jarvisc1](https://github.com/jarvisc1))
+
+<!--
 {{% ghcontributors "https://api.github.com/repos/R4EPI/sitrep/contributors?per_page=100" %}}
+-->
 
 ## Project Team
 
