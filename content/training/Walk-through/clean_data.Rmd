@@ -113,7 +113,7 @@ Notice that the command above returns the number of rows missing `date_of_consul
 ```{r}
 
 # linelist_cleaned <- linelist_cleaned %>% 
-#  filter(!is.na(case_number) & !is.na(date_of_consultation_admission)) 
+#   filter(!is.na(case_number) & !is.na(date_of_consultation_admission)) 
 
 ```
 
