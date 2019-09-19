@@ -379,7 +379,7 @@ linelist_cleaned$sex <- fct_recode(linelist_cleaned$sex,
 
 The variable `patient_origin` (originally the variable *quartier* in the raw dataset) is referenced in the place analyses chunks, for example when calculating attack rates by region. In those steps, the variable `patient_origin` in `linelist_cleaned` is *joined to* the variable `patient_origin` of the data frame `population_data_region` (which was imported in the population and lab data steps).  
 
-However, the place names in `population_data_region` are ALL CAPITAL LETTERS. This is not true in `linelist_cleaned` - so the join will not register any matches. The easiest way to solve this problem is to **redefine the `linelist_cleaned` variable into all capital letters as well**, using the base R function `toupper()`:  
+However, the place names in `population_data_region` are ALL CAPITAL LETTERS. This is not true in `linelist_cleaned` - so the join will not register any matches. The easiest way to solve this problem is to **redefine the `linelist_cleaned` variable into all capital letters as well**, using the base R function `toupper()`, which means "to upper case":  
 
 ```{r}
 linelist_cleaned$patient_origin <- toupper(linelist_cleaned$patient_origin)
