@@ -14,7 +14,7 @@ The material on this website was created by:
 
 ## Template Contributors
 
-Thanks to the contributors of the R4EPIs *sitrep* package. You can see an up-to
+Code contributors on the R4EPIs *sitrep* package. You can see an up-to
 date list here: https://github.com/R4EPI/sitrep/graphs/contributors
 
  - Alex Spina ([@aspina7](https://github.com/aspina7))
@@ -30,8 +30,7 @@ date list here: https://github.com/R4EPI/sitrep/graphs/contributors
 -->
 
 ## Project Lead 
-Special thanks to Annick Lenglet as project lead for providing theoretical background and 
-perhaps too much review for both templates and training. 
+Annick Lenglet
 
 ## Project Team
 
