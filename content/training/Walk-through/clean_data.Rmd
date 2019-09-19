@@ -385,7 +385,7 @@ However, the place names in `population_data_region` are ALL CAPITAL LETTERS. Th
 linelist_cleaned$patient_origin <- toupper(linelist_cleaned$patient_origin)
 ```
 
-### Create list variables  
+### Gather common variables for later analysis
 
 These variables names are stored in vectors that are created using the function `c()`. These vectors of names will be referenced in later code chunks. This way if you want to run the same function over these variables you can simply use the named vector rather than typing out each variable individually.  
 
