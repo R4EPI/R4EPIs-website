@@ -43,7 +43,7 @@ While the RMarkdown may at first look like a wall of code, notice how "chunks" o
 * **Text that appears GREEN in the RMarkdown will not appear in the final report**. These sections, placed between special characters such as arrows (< >), serve as instructions for you.  
 
 
-```{r eval=FALSE}
+```
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 This comment will not show up when you knit the document.
