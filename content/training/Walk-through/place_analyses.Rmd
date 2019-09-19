@@ -268,7 +268,7 @@ Below we explain each step within the this code chunk, plotting a map based on t
 ## create a categorical variable for plotting 
 max_ar    <- max(ar_region$`Upper 95%CI`, na.rm = TRUE) # define your highest AR
 breakers <- as.integer(c(0, # include zero as a standalone group
-             seq(1, max_ar, by = max_ar/4) # 1 to maximum with four divisions
+             find_breaks(max_ar, breaks = 4, by = 100) # four breaks rounded to the nearest 100
              ))
 ## add a categorical variable using the age_categories function 
 ## nb in this case we arent using ages - but it functions the same way!
