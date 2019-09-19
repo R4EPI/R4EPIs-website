@@ -75,7 +75,7 @@ linelist_raw <- readRDS("data/linelist_raw.rds")
 When using a non-standardized dataset, the variable names and values must be aligned with the data dictionary. This is because later parts of the template expect certain variable names and values. **This process can take some time** and requires looking back-and-forth between your dataset, RStudio, and the MSF data dictionary. In this example, here are the steps taken:  
 
 ### Review the MSF data dictionary
-Uncomment and run this command, found in the `read_nonDHIS_data` chunk, to view the MSF data dictionary for the disease ("AJS" in this example).
+Uncomment and run this command, found in the `prep_nonDHIS_data` chunk, to view the MSF data dictionary for the disease ("AJS" in this example).
 
 ```{r eval = FALSE}
 # Creates object linelist_dict using the msf_dict function from the sitrep package
@@ -88,7 +88,7 @@ The dataframe `linelist_dict` should appear in your Environment pane. You can vi
 ![](/images/AJS_Data_Dictionary.png)
 
 ### Clean the variable names  
-These steps standardize how your variable names are written, such as changing spaces and dots to underscores ("_"). **Uncomment these lines of code in the `read_nonDHIS_data` chunk**.  
+These steps standardize how your variable names are written, such as changing spaces and dots to underscores ("_"). **Uncomment these lines of code in the `prep_nonDHIS_data` chunk**.  
 
 **First, make a copy of the dataframe `linelist_raw` but with a new name: `linelist_cleaned`.** Throughout the template you will modify and improve this `linelist_cleaned` dataframe. However, you can always return to the `linelist_raw` version for reference.  
 
@@ -112,21 +112,21 @@ cleaned_colnames <- epitrix::clean_labels(colnames(linelist_raw))
 colnames(linelist_cleaned) <- cleaned_colnames
 ```
 
-### Re-name variables to align with data dictionary  
+### Match variables to align with data dictionary  
 
 Standardized variable names are required for this template to work smoothly, and the variable names in our Am Timan dataset do not align with the names this template expects. The template offers code that you can uncomment if you only have to change a few variable names (see below). **However, in this example we need to change many variable names. For this scenario, MSF developed a special function to help map our variables to the expected variable names.**  
 
-* **Paste the disease-specific rename helper into the script.** This command is found in the template near the end of the `read_nonDHIS_data` chunk. For our example we run the command `msf_dict_rename_helper("AJS")` and a block of code text is copied to our clipboard. Return to the template script and *paste* from the clipboard into the template. For the AJS template, the code that is pasted will look like the code below. This code uses the function `rename()` to change variable names.  
+* **Paste the disease-specific rename helper into the script.** This command is found in the template near the end of the `prep_nonDHIS_data` chunk. For our example we run the command `msf_dict_rename_helper("AJS")` and a block of code text is copied to our clipboard. Return to the template script and *paste* from the clipboard into the template. For the AJS template, the code that is pasted will look like the code below. This code uses the function `rename()` to change variable names.  
 
 
 {{% notice tip %}}
-Be sure to paste the code into an existing R code chunk, not into the white space of the RMarkdown script.
+Be sure to paste the AJS rename helper code into an existing R code chunk (e.g. `prep_nonDHIS_data`), not into the white space of the RMarkdown script.
 {{% /notice %}}
 
 
-<img src="/images/Variable_Helper_Paste.gif" alt="rename variables empty snip", width = "100%">
+<img src="/images/Variable_Helper_Paste_Revised.gif" alt="rename variables empty snip", width = "100%">
 
-* **Complete the mapping of variable names.** To the right of the equals sign, and before the comma, type the *exact* names of the variables from your dataset that correspond to the expected MSF data dictionary variables on the left. *If there is a data dictionary variable that is not present in your dataset, be sure to comment (#) out that line, as shown in the GIF below.*
+* **Complete the mapping of variable names.** To the right of the equals sign, and before the comma, type the *exact* names of the variables from your dataset that correspond to the expected MSF data dictionary variables on the left. *If there is a data dictionary variable that is not present in your dataset, be sure to comment (#) out that line.*
 
 ![](/images/AJS_Variable_Names.gif)  
 
@@ -216,7 +216,7 @@ linelist_cleaned <- rename(linelist_cleaned,
 )
 ```
 
-Below is the code for the variable assignments used in this example. You can use or reference this when building your template. **You can copy the entire code chunk using the copy icon in the top-right corner.**  
+Below is the code for the variable assignments used in this example. You can use or reference this when building your template for this case study. **You can copy this entire code chunk using the copy icon that appears in the top-right corner.**  
 
 ```{r eval=FALSE, message=FALSE, warning=FALSE}
 ## Below are the column assignments used in this case study example

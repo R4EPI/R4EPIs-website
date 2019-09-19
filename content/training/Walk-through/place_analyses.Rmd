@@ -85,7 +85,7 @@ The final section of the template produces tabular analysis outputs related to *
 To get a basic **descriptive table of cases by region** (which in our case was originally the variable *quartier* from the raw linelist), we use `tab_linelist()` on the variable `patient_origin`, with columns by `patient_facility_type` (inpatient, outpatient, or missing). 
 
 
-```{r describe_by_region_facility}
+```{r describe_by_region_facility, warning=FALSE, message=FALSE}
 # Descriptive table of cases by region and facility type
 tab_linelist(linelist_cleaned, patient_origin, 
              strata = patient_facility_type,
@@ -99,7 +99,7 @@ tab_linelist(linelist_cleaned, patient_origin,
 
 To get a **descriptive table by patient outcome** we set `strata = exit_status2`. We can also restrict the analysis to inpatients only by inserting the function `filter()` into the first argument of `tab_linelist`. `tab_linelist()` expects a data frame for it's first argument, and it receives the filtered `linelist_cleaned` - this is an example of "nested"" functions (one function inside another).
 
-```{r describe_by_region_outcome}
+```{r describe_by_region_outcome, warning=FALSE, message=FALSE}
 # get counts and props of region by outcome among inpatients
 # include column and row totals 
 tab_linelist(filter(linelist_cleaned,
@@ -124,11 +124,13 @@ The `ar` object saves the counts, population, and attack rate calculations along
 Finally, the table is created with `kable()` and displayed.
 
 ```{r attack_rate_by_region, warning=FALSE, message=FALSE}
-## - [ ] consider facet wrapping by an overarching unit if have many regions (e.g. by province)
-cases <- count(linelist_cleaned, patient_origin) %>%   # cases for each region
-  left_join(population_data_region, by = "patient_origin")    # merge population data 
-# attack rate for region
-ar <- attack_rate(cases$n, cases$population, multiplier = 10000) %>% 
+# count cases by region
+cases <- count(linelist_cleaned, patient_origin) %>%
+  # add in population data
+  left_join(population_data_region, by = "patient_origin") 
+  
+# calculate attack rate for region
+ar_region <- attack_rate(cases$n, cases$population, multiplier = 10000) %>% 
   # add the region column to table
   bind_cols(select(cases, patient_origin), .) %>% 
   rename("Region" = patient_origin, 
@@ -137,17 +139,19 @@ ar <- attack_rate(cases$n, cases$population, multiplier = 10000) %>%
          "AR (per 10,000)" = ar, 
          "Lower 95%CI" = lower,
          "Upper 95%CI" = upper) 
-ar %>% 
+ar_region %>% 
   merge_ci_df(e = 4) %>% # merge lower and upper CI in to one column 
   rename("95%CI" = ci) %>%  # rename single 95%CI column
   kable(digits = 1, align = "r", format.args = list(big.mark = ",")) # set thousands separator
+
+
 ```
 
 You could then also plot this on a bar chart with confidence intervals.  
 
 
 {{% notice tip %}}
-There are many quartiers without population denominators that will make the graph difficult to read. Thus, we first filter `ar` to remove those using the opposite (`!`) of the `is.na()` function (see Operators R Basics page). Note that if this step is added, any quartiers with missing denominators will not appear in the graph.
+There are many quartiers without population denominators that will make the graph difficult to read. Thus, we first filter `ar_region` to remove these using the opposite (`!`) of the `is.na()` function (see Operators R Basics page). Now any quartiers with missing denominators will not appear in the graph.  
 {{% /notice %}}
 
 
@@ -155,11 +159,11 @@ There are many quartiers without population denominators that will make the grap
 
 ```{r bar_attack_rate_by_region, warning=FALSE, message=FALSE}
 # filter ar for non-zero quartiers
-ar <- filter(ar, !is.na(`AR (per 10,000)`))
+ar_region <- filter(ar_region, !is.na(`AR (per 10,000)`))
 
 # plot with the region on the x axis sorted by increasing ar
 # ar value on the y axis 
-ggplot(ar, aes(x = reorder(Region, `AR (per 10,000)`),
+ggplot(ar_region, aes(x = reorder(Region, `AR (per 10,000)`),
                y = `AR (per 10,000)`)) + 
   geom_bar(stat = "identity", col = "black", fill = "red") + # plot as bars (identity = as is)
   geom_errorbar(aes(ymin = `Lower 95%CI`, ymax = `Upper 95%CI`), width = 0.2) + # add CIs
@@ -174,12 +178,12 @@ ggplot(ar, aes(x = reorder(Region, `AR (per 10,000)`),
 
 You could also **table mortality rate by region**. A few things to note:  
 
-* The first command uses `group_by()` to count cases by `patient_origin`. Then, `filter()` is applied based on the character search function `grepl()` from the package **stringr**, which looks for "Dead" within the variable `exit_status` - **note: we must change this to reflect our data and have `grepl()` look for "Died" in `exit_status2`** (otherwise, the object `deaths` has 0 rows and `mortality_rate()` produces an error).  
+* The first command uses `group_by()` to count cases by `patient_origin`. Then, `filter()` is applied based on the character search function `str_detect()` from the package **stringr**, which looks for "Dead" within the variable `exit_status` - **note: we must change this to reflect our data and have `str_detect()` look in `exit_status2`** (otherwise, the object `deaths` has 0 rows and `mortality_rate()` produces an error).  
 * The `mortality_rate()` step calculates mortality rates for the regions that had a death.  
 
 ```{r mortality_rate_region, warning=FALSE, message=FALSE}
 deaths <- group_by(linelist_cleaned, patient_origin) %>%
-  filter(grepl("Died", exit_status2)) %>% 
+  filter(str_detect(exit_status2, "Dead")) %>% 
   summarise(deaths = n()) %>% # count deaths by region
   left_join(population_data_region, by = "patient_origin") # merge population data 
 
@@ -259,23 +263,23 @@ Below we explain each step within the this code chunk, plotting a map based on t
 
 2) In the next command, `breakers` is defined as a sequence of integers. Zero is included by default because it should be a separate color on the final map. After zero, quartiles are determined up to the `max_ar`.  
 
-3) In the last command, `mutate()` is used to create the categorical variable within 'ar', using `breakers` to define the breaks in the numeric variable in `ar`, which is `AR (per 10,000)`. 
+3) In the last command, `mutate()` is used to make `ar_map` (a copy `ar_region`), and add the `categories` variable. This variable is created using `breakers` to define the breaks in the numeric variable `AR (per 10,000)`. 
 
 ```{r warning=FALSE, message=FALSE}
 ## create a categorical variable for plotting 
-max_ar    <- max(ar$`Upper 95%CI`, na.rm = TRUE) # define your highest AR
+max_ar    <- max(ar_region$`Upper 95%CI`, na.rm = TRUE) # define your highest AR
 breakers <- as.integer(c(0, # include zero as a standalone group
-             seq(1, max_ar, by = max_ar/4) # 1 to maximum with four divisions
+             find_breaks(max_ar, breaks = 4, by = 100) # four breaks rounded to the nearest 100
              ))
 ## add a categorical variable using the age_categories function 
 ## nb in this case we arent using ages - but it functions the same way!
-ar <- mutate(ar, 
+ar_map <- mutate(ar_region, 
              categories = age_categories(`AR (per 10,000)`, 
                                          breakers = breakers)
              )
 ```
 
-**Join the object `ar` to the map (shapefile)**. `map` is joined to `ar` with a **left join** (see the Advanced R Basics page to learn more about joins). Both of these objects contain tables (you can click them in the Environment pane to see this). In the command, they are linked by the `Name` variable in `ar` and the `Region` variable in `map`.  
+**Join the object `map` (shapefile) to `ar_map` (a data frame)**. The spatial object `map` is joined to the data frame `ar_map` with a **left join** (see the Advanced R Basics page to learn more about joins). Both of these objects contain tables (you can click them in the Environment pane to see this). In the command, they are linked by the `Name` variable in `ar` and the `Region` variable in `map`.  
 
 
 {{% notice tip %}}
@@ -286,7 +290,7 @@ The resulting object `mapsub` is a product of this **left join**. A left join wi
 
 ```{r warning=FALSE, message=FALSE}
 ## join your ar or case counts based on matching shapefile names with regions in your ar table
-mapsub <- left_join(map, ar, by = c("Name" = "Region"))
+mapsub <- left_join(map, ar_map, by = c("Name" = "Region"))
 ```
 
 **Now, `ggplot()` is used to create the map.** Remember that `ggplot()` subcommands must be connected by plus symbols at the end of each line (`+`) (except the last line). Read more about ggplot2 and `ggplot()` in the Advanced R Basics page.  
@@ -350,7 +354,7 @@ ggplot() +
 
 Lastly, **there is an efficient way to create attack rate maps and bar plots of incidence for each epiweek**. Use a **"for loop"** to run the same code for every epi week.  
 
-**A "for loop"" is used to iterate over (perform the same actions to) every value in a vector.** In this case, we want to make the map and bar chart for each region. You can read more about for loops in the Advanced R Basics pages, or [this tutorial](https://www.datamentor.io/r-programming/for-loop/).  
+**A "for loop"" is used to iterate over (perform the same actions to) every value in a vector.** In this case, we want to make the map and bar chart for each region. You can read more about for loops in the Advanced and Miscellaneous R Basics page, or [this tutorial](https://www.datamentor.io/r-programming/for-loop/).  
 
 A few things to note about this chunk:  
 

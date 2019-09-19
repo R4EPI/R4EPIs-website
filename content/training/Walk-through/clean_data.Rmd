@@ -90,7 +90,10 @@ linelist_raw <- rio::import("AJS_AmTiman.xlsx", which = "linelist", na = ".")
 ```
 
 ### Drop ineligible observations  
-The next code item in the script drops observations with missing `case_number` or `date_of_consultation_admission`. Because the Am Timan dataset contains observations for patients seen in the community and at the hospital, these criteria may not be relevant. We can check, using the code below, and see that of the 1447 observations, there are 0 missing `case_number` or `dateentry`, but 616 observations missing `date_of_consultation_admission`. These 616 community-identified cases are still of interest for our report, so we will not drop them. 
+The next code chunk in the script, `remove_unused_data`, drops observations with missing `case_number` or `date_of_consultation_admission`. Because the Am Timan dataset contains observations for patients seen in the community and at the hospital, these criteria may not be relevant.  
+
+We can check, using the code below, and see that of the 1447 observations, there are 0 missing `case_number` or `dateentry`, but 616 observations missing `date_of_consultation_admission`. These 616 community-identified cases are still of interest for our report, so we will not drop them.  
+
 
 ```{r warning=FALSE, message=FALSE}
 # Find the number of observations missing case_number, dateentry, and date_of_consultation_admission
@@ -101,32 +104,37 @@ nrow(linelist_cleaned %>% filter(is.na(dateentry)))
 nrow(linelist_cleaned %>% filter(is.na(date_of_consultation_admission))) 
 ```
 
-
 {{% notice tip %}}
 Notice that the command above returns the number of rows missing `date_of_consultation_admission`, but does not overwrite `linelist_cleaned` with an assignment operator `<-`. 
 {{% /notice %}}
 
+**After viewing the above results, we must comment out (#) the two lines that `filter()` the linelist_cleaned dataset - we do *not* want to remove those 616 observations.**
 
-### Convert and clean date variables
+```{r}
+
+# linelist_cleaned <- linelist_cleaned %>% 
+#   filter(!is.na(case_number) & !is.na(date_of_consultation_admission)) 
+
+```
+
+
+
+
+### Standardise dates  
+
 In linelist_cleaned there are seven variables containing dates (`dateentry`, `epiquestdate`, `date_of_consultation_admission`, `date_of_onset`, `date_lab_sample_taken`, `dthospitalisation`, `dtdeath`).  
 
-Because the Am Timan dataset contains date variables not found in the data dictionary, we will ignore and comment out the first code of the Date variables chunk (these commands convert only the date variables known to the data dictionary).  
+Because the Am Timan dataset contains date variables not found in the data dictionary, we will **comment out the first code lines related to DHIS data** (those commands convert only date variables known to the data dictionary).  
 
-Instead, we uncomment and **use the commands applicable to when a dataset does not align with the data dictionary**. You may see messages warning that a few dates are not in the correct timeframe - this is ok and these dates will be addressed in the next step.
+Instead, we uncomment and **use the commands applicable to non-DHIS2 data**. You may see messages warning that a few dates are not in the correct timeframe - this is ok and these dates will be addressed in the next step.
 
 ```{r results='hide', message=FALSE, warning=FALSE}
-# Use this is your dataset aligns with the data dictionary
-# Creates list of date variables from the data dictionary
-#DATEVARS <- filter(linelist_dict, data_element_valuetype == "DATE") %>% 
-#  select(data_element_shortname) # select date vars
-# change to the date variables found in your dataset to class date 
-#linelist_cleaned <- linelist_cleaned %>%
-#  mutate_at(DATEVARS$data_element_shortname, as.Date)
-
-# Use this if your dataset does not align with the data dictionary
-  linelist_cleaned <- linelist_cleaned %>%
-    mutate_at(vars(matches("date|Date")), linelist::guess_dates,
-            error_tolerance = 0.5)
+## Non-DHIS2 data --------------------------------------------------------------
+## Use this section if you did not have DHIS2 data. 
+# use the guess_dates() function to make a first pass at date variables.
+ linelist_cleaned <- linelist_cleaned %>%
+   mutate_at(vars(matches("date|Date")), linelist::guess_dates,
+           error_tolerance = 0.5)
 ```
 
 The code above converted successfully many of our date variables (remember you can check class like `class(linelist$date_of_onset`). However, did not detect the variables named with "dt", such as `dtdeath` and `dthospitalization`. We must **convert those variables manually**:  
@@ -155,7 +163,7 @@ As you modify this chunk for your own situation, remember to include commas at t
 
 
 {{% notice tip %}}
-All the right-hand side (RHS) values must be the same class (either character, numeric, etc.). So, if your other RHS values are character and you want one RHS value to be missing, you cannot just write `NA` on the RHS. Instead you must use the special character version of `NA` : `NA_character_`.
+All the right-hand side (RHS) values must be the *same class* (either character, numeric, etc.). So, *if your other RHS values are character* and you want one RHS value to be missing, you cannot just write `NA` on the RHS. Instead you must use the special character version of `NA` : `NA_character_`.
 {{% /notice %}}
 
   
@@ -184,27 +192,31 @@ linelist_cleaned$epiweek <- aweek::date2week(linelist_cleaned$date_of_onset,
 
 {{% notice tip %}}
 A note on the epiweek variable and factors:  
-Notice that we converted dates to NA that were clearly errors **before** creating the `epiweek` variable. This is because the `epiweek` variable is created as a **factor**, and once a factor is created it is more difficult to remove factor levels. You can read more about factors and dropping unused factor levels in the Advanced R Basics page.* 
+Notice that we converted dates to NA that were clearly errors **before** creating the `epiweek` variable. This is because the `epiweek` variable is created as a **factor**, and once a factor is created it is more difficult to remove factor levels. You can read more about factors and dropping unused factor levels in the Advanced and Miscellaneous R Basics page.* 
 {{% /notice %}}
 
 
 
 ### Clean numeric variables  
 
-We can **comment out/ignore the code that makes a new numeric variable `obs_days`**, because we do not have a `date_of_exit` in our dataset.  
+**To create the variable `age_group` we must first clean the variable `age_years`**. If we look at the range of values in `age_years`, we see something strange:  
 
-**However, we do need to clean the variable `age_years`**. If we look at the range of values, we get something strange:  
 ```{r}
 # See the range of age_years values, removing (excluding) NA
 range(linelist_cleaned$age_years, na.rm = TRUE)
 ```
-We know there are ages older than 9 years. We check `class(linelist_cleaned$age_years)` and see that R is reading this variable as class *character*, not numeric! So we must convert it by adding the following command to the script:
+
+We know there are ages older than 9 years. So we check `class(linelist_cleaned$age_years)` and see that R is reading this variable as class *character*, not numeric! We must convert it by **adding the following command** to the script:  
+
 ```{r}
 # Convert variable age_years to numeric class
 linelist_cleaned$age_years <- as.numeric(linelist_cleaned$age_years)
 ```
 
-**Now we must further clean the age-related variables.** In the chunk "Age group variables", we do not need and can comment out the code to add under 2 years to the `age_years` variable. However, we do have some decimal years. To align with the data dictionary we uncomment and **use the code to create a *new* variable `age_months` from the decimal years**.  
+In the chunk `create_age_group`, the first section of code ("add under 2 years to the age_years variable") assumes that we already have a variable `age_months`, which we do not. **Comment out (#) this code.**  
+
+**Now we must create the variable `age_months`.** Just below, there is another section marked "OPTIONAL: create an age_months variable from decimal years variable". **Uncomment this code.** This will create a variable `age_months` from `age_years` *if* `age_years` is less than 5.  
+
 
 ```{r}
 # For patients under 5 years, the new variable age_months is based on age_years * 12 
@@ -214,7 +226,7 @@ linelist_cleaned <- mutate(linelist_cleaned,
                               )) 
 ```
 
-We can then use the code to create an age group variable based on `age_months`.  
+We can now use the next section of code to create an `age_group` variable for children under 5 years based on `age_months`.  
 
 ```{r}
 ## create age group variable for under 5 years based on months
@@ -223,7 +235,7 @@ linelist_cleaned$age_group_mon <- age_categories(linelist_cleaned$age_months,
                                                  ceiling = TRUE)
 ```
 
-...and use the similar code for groups of `age_years`. A note on grouping using `age_categories()`: for example with breakers 0, 3, 15, 30, and 45, a 30-year old patient will be included in an age_group named "30-44".
+...and use the similar code below for groups of `age_years`. A note on grouping using `age_categories()`: for example with breakers 0, 3, 15, 30, and 45, a 30-year old patient will be included in an age_group named "30-44".
 
 ```{r}
 ## create an age group variable by specifying categorical breaks
@@ -231,7 +243,12 @@ linelist_cleaned$age_group <- age_categories(linelist_cleaned$age_years,
                                              breakers = c(0, 3, 15, 30, 45))
 ```
 
+
+
 ### Clean categorical variables  
+
+In the next chunk (`create_vars`) we can **comment out/ignore the code that makes a new numeric variable `obs_days`**, because we do not have a `date_of_exit` in our dataset. 
+
 While the template directs us to next create a `DIED` variable based on `exit_status` containing the characters "Dead", we must first **clean our `exit_status` variable, which is currrently in French**. 
 
 **Use `case_when()` to assign new values for a new exit_status2 variable**, as in the code below. The code uses the function `case_when()` to re-define `linelist_cleaned` as itself, but mutated to create the new variable `exit_status2`. The values in `exit_status2` are based on the values in `exit_status`, such that when `exist_status == "Décédé"`, the value in `exit_status2` is "Died", and so on. 
@@ -249,7 +266,7 @@ table(linelist_cleaned$exit_status, useNA = "always")
 # Create exit_status2 from values in exit_status
 linelist_cleaned <- linelist_cleaned %>% 
   mutate(exit_status2 = case_when(
-    exit_status == "Décédé"          ~ "Died",
+    exit_status == "Décédé"          ~ "Dead",
     exit_status == "-"               ~ NA_character_,
     exit_status == "Echappé"         ~ "Left",
     exit_status == "Déchargé/Guéri"  ~ "Discharged"
@@ -260,19 +277,20 @@ table(linelist_cleaned$exit_status2, useNA = "always")
 ```
 
 
-Now we can **make the `DIED` variable**, which is referenced in later code chunks. This command creates `DIED` as a logical (`TRUE` or `FALSE`) variable, depending on whether each observation meets the criteria to the right of the assignment operator `<-`. For a similar example, read about the `%in%` operator on the Advanced R Basics page.  
+**Now we can make the `DIED` variable**, which is referenced in later code chunks. This command creates `DIED` as a logical (`TRUE` or `FALSE`) variable, depending on whether each observation meets the criteria to the right of the assignment operator `<-`. For a similar example, read about the `%in%` operator on the Advanced R Basics page.  
+
 
 ```{r}
 ## Note we are directing R to look within the NEW exit_status2 variable
-linelist_cleaned$DIED <- linelist_cleaned$exit_status2 == "Died"
+linelist_cleaned$DIED <- str_detect(linelist_cleaned$exit_status2, "Dead")
 ```
 
 
 ### **Re-code values in `patient_facility_type`**  
 
-When we assigned our variables to match the data dictionary, we used the variable `hospitalisation` as the variable `patient_facility_type`. **However, the values in that variable do not match those expected by the template.** In the data dictionary, `patient_facility_type` should have values of "Inpatient" or "Outpatient." Currently, the values are "Oui" and "Non". In later code chunks, analyses are restricted to observations where `patient_facility_type == "Inpatient"`, thus, we should align the values to match the data dictionary.  
+When we assigned our variables to match the data dictionary, we used the variable `hospitalisation` as the variable `patient_facility_type`. **However, the values in that variable do not match those expected by the template.** In the data dictionary, `patient_facility_type` should have values of "Inpatient" or "Outpatient." Currently, the values are "Oui" and "Non". In later code chunks, analyses are restricted to observations where `patient_facility_type == "Inpatient"`, thus, we must align the values to match the data dictionary.  
 
-**To clean these values we uncomment and modify code from the `standardise_clean_data` chunk, found under the heading "recode a character variable".** 
+**To clean these values we uncomment and modify code also from the `create_vars` chunk, found under the heading "recode character variables".** 
 
 ```{r}
 # View all the values in patient_facility_type
@@ -324,12 +342,7 @@ change_test_vars <- c("hep_e_rdt", "hep_c_rdt", "hep_b_rdt", "test_hepatitis_a",
      )  
 ``` 
 
-
-### Other categorical variables  
-
-We can **comment/ignore the code to change the order of levels in categorical variables**, as the Am Timan dataset does not include a variable `time_to_death` and we do not need to change the order of any categorical variables.  
-
-**However, we do need to create a case definition variable.** In this use of `case_when()`, the last line left-hand side (LHS) is TRUE, which serves as a catch-all for any other possible values that have not yet met the criteria of the earlier `case_when()` lines.  
+**Lastly for the chunk `create_vars` we must create a case definition variable.** In this use of `case_when()`, the last line left-hand side (LHS) is TRUE, which serves as a catch-all for any other possible values that have not yet met the criteria of the earlier `case_when()` lines.  
 
 Note how this code checks the variable `hep_e_rdt` for "Positive". The earlier cleaning steps converting `hep_e_rdt` values from "Pos" to "Positive" were necessary for this case definition to properly apply.  
 
@@ -348,23 +361,35 @@ linelist_cleaned <- linelist_cleaned %>%
   ))
 ```
 
+
+### Factor variables  
+
+Factor variables require specialized functions to manipulate (see Factor sections of the Advanced and Miscellaneous R Basics page). The one factor variable we should clean now is `sex`, with the following code:  
+
+```{r}
+linelist_cleaned$sex <- fct_recode(linelist_cleaned$sex, 
+                                   NULL = "Unknown/unspecified")
+```                                   
+                                   
+                                   
+**We can comment out (#) the rest of the `factor_vars` chunk**, such as the code to change the order of levels in categorical variables. The Am Timan dataset does not include a variable `time_to_death` and we do not need to change the order of any categorical variables.  
+
+
 ### Cleaning patient origin  
 
-The variable `patient_origin` was originally the variable *quartier* in the raw dataset. **patient_origin is referenced in the place analyses chunks**, for example when calculating attack rates by region. In these steps, the variable `patient_origin` in `linelist_cleaned` is *joined to* the `patient_origin` variable of the data frame `population_data_region`, which was imported in the population and lab data steps.  
+The variable `patient_origin` (originally the variable *quartier* in the raw dataset) is referenced in the place analyses chunks, for example when calculating attack rates by region. In those steps, the variable `patient_origin` in `linelist_cleaned` is *joined to* the variable `patient_origin` of the data frame `population_data_region` (which was imported in the population and lab data steps).  
 
-**However, the place names in `population_data_region` are ALL CAPITAL LETTERS and this is not true in `linelist_cleaned` - the join will not register any matches.** The easiest way to solve this problem is to redefine the linelist_cleaned variable into all capital letters as well, using the base R function `toupper()`:  
+However, the place names in `population_data_region` are ALL CAPITAL LETTERS. This is not true in `linelist_cleaned` - so the join will not register any matches. The easiest way to solve this problem is to **redefine the `linelist_cleaned` variable into all capital letters as well**, using the base R function `toupper()`, which means "to upper case":  
 
 ```{r}
 linelist_cleaned$patient_origin <- toupper(linelist_cleaned$patient_origin)
 ```
 
-### Create lists of variables  
+### Gather common variables for later analysis
 
 These variables names are stored in vectors that are created using the function `c()`. These vectors of names will be referenced in later code chunks. This way if you want to run the same function over these variables you can simply use the named vector rather than typing out each variable individually.  
 
-The default template code creates two vectors - one for symptoms variables (`SYMPTOMS`) and one for laboratory testing variables (`LABS`). However, *we can see that there are two rather different type of lab variables*: those with Positive/Negative values, and those with IgG and IgM results. To make our table of lab results more clean, we split the lab variables into these two groups.
-
-**Some variables do not apply to our Am Timan data and must be removed from the list or commented out (such as `convulsions` and `history of fever`).** If non-existant variables are left in the list it will cause errors in later code chunks.
+The default template code creates two vectors - one for symptom variables (`SYMPTOMS`) and one for laboratory testing variables (`LABS`). 
 
 ```{r}
 # vectors of variable names ----------------------------------------------------
@@ -414,34 +439,30 @@ LABS <- c("hep_b_rdt",
 
 ```
 
-### Dropping observations  
+### Final setup for report  
 
-The next code assists with **dropping observations and variables**. We can remove any observations with date of onset after the `reporting_week` (`reporting_week` is an object defined at the beginning of the script).  
+The next code chunk, `report_setup`, defines important date-related parameters used to produce the report, and filters to remove any observations with date of onset after the `reporting_week` (`reporting_week` is an object defined at the beginning of the script).  
+
+The default code in the template also removes observations with missing (NA) `date_of_onset`. **We can add ` | is.na(date_of_onset)` into the filter to keep these.**
 
 
-{{% notice tip %}}
-The default code in the template also removes observations with missing (NA) `date_of_onset`. We can add ` | is.na(date_of_onset)` into the filter to keep these.
-{{% /notice %}}
+```{r echo=FALSE}
+# return the last day of the reporting week
+obs_end   <- week2date(str_glue(reporting_week, "-7"))
 
-```{r}
-# Drop cases after reporting week
-linelist_cleaned <- linelist_cleaned %>% 
-  filter(date_of_onset <= week2date(sprintf("%s-7", reporting_week)) | is.na(date_of_onset))
-```
-
-Then, it is important to **define these date-related objects** that are referenced in later code chunks.  
-
-```{r}
 # define the first week of outbreak (date of first case)
-first_week <- levels(linelist_cleaned$epiweek)[1]
+first_week <- as.aweek(min(as.character(linelist_cleaned$epiweek)))
 
 # outbreak start 
 # return the first day in the week of first case 
-obs_start <- week2date(sprintf("%s-1", first_week))
+obs_start <- as.Date(first_week)
+```
 
-# return last day of reporting week 
-obs_end   <- week2date(sprintf("%s-7", reporting_week))
 
+```{r}
+# filter out cases after end of reporting week
+linelist_cleaned <- linelist_cleaned %>% 
+  filter(date_of_consultation_admission <= obs_end | is.na(date_of_onset))
 ```
 
 ### Export if desired  

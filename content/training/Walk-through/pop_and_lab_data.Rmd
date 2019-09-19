@@ -1,6 +1,6 @@
 ---
 date: "2019-08-21T10:27:23+02:00"
-title: Population and lab data
+title: Import population and lab data
 weight: 9
 ---
 
@@ -67,26 +67,28 @@ reporting_week <- "2017-W16"  # Set the reporting week
 
 ## Provide population counts  
 
-The population estimates for regions and age groups are collected in order to calculate attack and mortality rates. **The template allows several ways to provide population estimates, but importantly, the data must be stored under specific variable names.** In your real-use case, the specific age groupings and region names in your data may differ from the examples, but the variable names must follow the expected standard.  
+The population estimates for regions and age groups are collected in order to calculate incidence, attack rates, and mortality rates. **The template allows several ways to provide population estimates, but importantly, the data must be stored under specific variable names.** In your real-use case, the specific age groupings and region names in your data may differ from the examples, but the variable names must follow the expected standard.  
 
 You can do one of the following:  
 
 A) Import a spreadsheet file with the estimates in the correct format  
 B) Use the function `gen_population()` to derive the estimates from proportions based on globally accepted standards  
+C) Use the function `gen_population()` to directly enter counts  
+
 
 ![](/images/AJS_Population_Counts.png)  
 
 **For this case study, we import an Excel spreadsheet containing population data by quartier (available for download in case study overview page).**  
 
-See the `read_population_data` chunk and modify the command to import the Excel spreadsheet. The command uses `import()` wrapped around `here()` to locate the file. The `which=` argument of `import()` specifies that the sheet "quartier" should be imported.  
+See the `read_population_data` chunk and modify the first command to import the Excel spreadsheet. We will assign the imported Excel sheet to the object name `population_data_region` (note the change from `population_data`), because the data we are importing is for regions (quartiers).
+
+The command uses `import()` wrapped around `here()` to locate the file. The `which=` argument of `import()` specifies that the sheet "quartier" should be imported.  
 
 Note that the variables names in the spreadsheet have already been edited to match the expected variable names ("patient_origin" and "population").  
 
 {{% notice tip %}}
 The `import()` function is wrapped around the `here()` function. The `here()` function makes it easy for R to locate files within a project. It is best to save the dataset within your R project, and to provide `here()` with any R project subfolder names. You can read more about the `here()` function in the data import page of the R Basics tutorial.
 {{% /notice %}}
-
-Delete or comment (#) all the code lines in the chunk that create fake data for `population_data_region`, `population_data_age`, and `population_data_age_months`.
 
 
 ```{r include=FALSE, results='hide', message=FALSE, warning=FALSE}
@@ -97,9 +99,9 @@ population_data_region <- rio::import(here("content", "training", "Walk-through"
 population_data_region <- rio::import(here("AJS_AmTiman_population_revised_for_template.xlsx"), which="quartier")
 ```
 
+Before moving on, delete or comment (#) all the code lines in the chunk that create fake data or proportions for `population_data_region`, `population_data_age`, and `population_data_age_months`.  
 
-**If you choose not to complete the population estimates section at all, delete the default `gen_population()` code, and expect that later sections on attack and mortality rates will not produce output.**
-
+**If you choose not to complete the population estimates section at all, delete or comment (#) all default `gen_population()` code, and expect that later sections on attack and mortality rates will not produce output.**
 
 
 
