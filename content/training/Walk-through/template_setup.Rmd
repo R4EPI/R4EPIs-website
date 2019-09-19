@@ -141,7 +141,7 @@ This chunk continues the set-up of time-related parameters.
 
 **First, ensure epidemiological weeks are set to begin on Mondays** using the function `set_week_start()` from the package **aweek**. See the documentation of the [package **aweek**](https://cran.r-project.org/web/packages/aweek/vignettes/introduction.html) for more information. 
 
-**Secondly, set the reporting week for the report**. This value is used in later code chunks, for example when producing epidemic curves. Note that you likely want to specify the most recent **complete** epi week. Follow the format in the code below (within quotes give the 4-digit year, a hyphen (-), capital W, then the 2-digit epi week number).  
+**Second, set the reporting week for the report**. This value is used in later code chunks, for example when producing epidemic curves. Note that you likely want to specify the most recent **complete** epi week. Follow the format in the code below (within quotes give the 4-digit year, a hyphen (-), capital W, then the 2-digit epi week number).  
 
 To determine which epi week of a date you can use the `date2week()` function. It will tell you the year, week, and day number of the provided date. **Let's assume the date of this analysis is 27 April, 2017, so the most recent complete epidemiological week is Week 16 of 2017**.  
 
