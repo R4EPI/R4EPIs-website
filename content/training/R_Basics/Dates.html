@@ -63,8 +63,10 @@ linelist_cleaned &lt;- linelist_cleaned %&gt;%
 </ul>
 <p>For example, if your character dates are in the format DD/MM/YYYY, like “24/04/1968”, then your command to turn the values into dates will be as below. <strong>Putting the format in quotation marks is necessary.</strong></p>
 <pre class="r"><code>linelist_cleaned$date_of_onset &lt;- as.Date(linelist_cleaned$date_of_onset, format = &quot;%d/%m/%Y&quot;)</code></pre>
-<p>{{% notice tip %}} <strong>The <code>format=</code> argument is <em>not</em> telling R the format you want the dates to be, but rather how to identify the date parts as they are <em>before</em> you run the command.</strong></p>
-<p>Also, be sure that in the <code>format=</code> argument you use the <em>date-part separator</em> (e.g. /, -, or space) that is present in your dates. {{% /notice %}}</p>
+<p>{{% notice tip %}}
+<strong>The <code>format=</code> argument is <em>not</em> telling R the format you want the dates to be, but rather how to identify the date parts as they are <em>before</em> you run the command.</strong></p>
+<p>Also, be sure that in the <code>format=</code> argument you use the <em>date-part separator</em> (e.g. /, -, or space) that is present in your dates.
+{{% /notice %}}</p>
 <pre class="r"><code># Convert the variable to class Date by providing the format of the variable
 linelist_cleaned$date_of_onset &lt;- as.Date(linelist_cleaned$date_of_onset, format=&quot;%Y-%m-%d&quot;)
 

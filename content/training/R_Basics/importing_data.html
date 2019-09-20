@@ -27,10 +27,14 @@ here()</code></pre>
 <h3>Importing using <code>import()</code> and <code>here()</code> together</h3>
 <p><strong>Below is an example</strong> of importing the file “linelist.xlsx”. If the file you want is in the folder designated as “here”, all you have to do is provide the name of the file in quotes (with the appropriate ending).</p>
 <pre class="r"><code>linelist_raw &lt;- rio::import(here(&quot;linelist.xlsx&quot;), which = &quot;Sheet1&quot;)</code></pre>
-<p>{{% notice tip %}} After the closing parenthes of <code>here()</code> the <code>import()</code> function continues. There is a comma and <code>import()</code>’s optional argument <code>which =</code>, specifying which sheet of the Excel file to import. {{% /notice %}}</p>
+<p>{{% notice tip %}}
+After the closing parenthes of <code>here()</code> the <code>import()</code> function continues. There is a comma and <code>import()</code>’s optional argument <code>which =</code>, specifying which sheet of the Excel file to import.
+{{% /notice %}}</p>
 <p><strong>If however, your file is within subfolders of the folder designated as “here”</strong> - let’s say it is in the subfolder “data” and then the sub-subfolder “linelists” - <strong>you write these folder names before the file name, in quotes, and separated by commas</strong>, as below:</p>
 <pre class="r"><code>linelist_raw &lt;- rio::import(here(&quot;data&quot;, &quot;linelists&quot;, &quot;linelist.xlsx&quot;), which = &quot;Sheet1&quot;)</code></pre>
 <p>You can read more about Here and <code>here()</code> in <a href="https://github.com/jennybc/here_here">this overview</a> and <a href="https://here.r-lib.org/">this documentation</a></p>
-<p>{{% notice tip %}} By using the <strong>Here</strong> package and <code>here()</code> function with R projects, it is not necessary to worry about your “working directory”, <code>setwd()</code>, or <code>getwd()</code> commands. {{% /notice %}}</p>
+<p>{{% notice tip %}}
+By using the <strong>Here</strong> package and <code>here()</code> function with R projects, it is not necessary to worry about your “working directory”, <code>setwd()</code>, or <code>getwd()</code> commands.
+{{% /notice %}}</p>
 </div>
 </div>

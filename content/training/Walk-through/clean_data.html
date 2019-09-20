@@ -32,10 +32,12 @@ nrow(linelist_cleaned %&gt;% filter(is.na(case_number))) </code></pre>
 <pre><code>## [1] 0</code></pre>
 <pre class="r"><code>nrow(linelist_cleaned %&gt;% filter(is.na(date_of_consultation_admission))) </code></pre>
 <pre><code>## [1] 616</code></pre>
-<p>{{% notice tip %}} Notice that the command above returns the number of rows missing <code>date_of_consultation_admission</code>, but does not overwrite <code>linelist_cleaned</code> with an assignment operator <code>&lt;-</code>. {{% /notice %}}</p>
+<p>{{% notice tip %}}
+Notice that the command above returns the number of rows missing <code>date_of_consultation_admission</code>, but does not overwrite <code>linelist_cleaned</code> with an assignment operator <code>&lt;-</code>.
+{{% /notice %}}</p>
 <p><strong>After viewing the above results, we must comment out (#) the two lines that <code>filter()</code> the linelist_cleaned dataset - we do <em>not</em> want to remove those 616 observations.</strong></p>
-<pre class="r"><code>#linelist_cleaned &lt;- linelist_cleaned %&gt;% 
-#  filter(!is.na(case_number) &amp; !is.na(date_of_consultation_admission)) </code></pre>
+<pre class="r"><code># linelist_cleaned &lt;- linelist_cleaned %&gt;% 
+#   filter(!is.na(case_number) &amp; !is.na(date_of_consultation_admission)) </code></pre>
 </div>
 <div id="standardise-dates" class="section level3">
 <h3>Standardise dates</h3>
@@ -64,7 +66,9 @@ range(linelist_cleaned$date_of_onset, na.rm = TRUE)</code></pre>
 <pre><code>## [1] &quot;2014-11-01&quot; &quot;2017-12-27&quot;</code></pre>
 <p>We convert dates outside the expected range (April 2016 to October 2017) to missing using <code>case_when()</code>. Note that when making the assignment on the right-hand side (RHS), wrap NA in <code>as.Date()</code>.</p>
 <p>As you modify this chunk for your own situation, remember to include commas at the end of each <code>case_when()</code> line (except the last one), and that <strong>each left-hand side (LHS) of the <code>~</code> must be a logical statement</strong>, not just a value. Best is to write <code>case_when()</code> lines from most specific at top to most general at bottom. You can read more about <code>case_when()</code> <a href="https://dplyr.tidyverse.org/reference/case_when.html">on this tidyverse site</a>.</p>
-<p>{{% notice tip %}} All the right-hand side (RHS) values must be the <em>same class</em> (either character, numeric, etc.). So, <em>if your other RHS values are character</em> and you want one RHS value to be missing, you cannot just write <code>NA</code> on the RHS. Instead you must use the special character version of <code>NA</code> : <code>NA_character_</code>. {{% /notice %}}</p>
+<p>{{% notice tip %}}
+All the right-hand side (RHS) values must be the <em>same class</em> (either character, numeric, etc.). So, <em>if your other RHS values are character</em> and you want one RHS value to be missing, you cannot just write <code>NA</code> on the RHS. Instead you must use the special character version of <code>NA</code> : <code>NA_character_</code>.
+{{% /notice %}}</p>
 <pre class="r"><code># Convert dates before April 2016 or after October 2017 to missing (NA)
 linelist_cleaned &lt;- mutate(linelist_cleaned,
                            date_of_onset = case_when(
@@ -77,8 +81,10 @@ linelist_cleaned &lt;- mutate(linelist_cleaned,
 linelist_cleaned$epiweek &lt;- aweek::date2week(linelist_cleaned$date_of_onset, 
                                              floor_day = TRUE, 
                                              factor = TRUE)</code></pre>
-<p>{{% notice tip %}} A note on the epiweek variable and factors:<br />
-Notice that we converted dates to NA that were clearly errors <strong>before</strong> creating the <code>epiweek</code> variable. This is because the <code>epiweek</code> variable is created as a <strong>factor</strong>, and once a factor is created it is more difficult to remove factor levels. You can read more about factors and dropping unused factor levels in the Advanced and Miscellaneous R Basics page.* {{% /notice %}}</p>
+<p>{{% notice tip %}}
+A note on the epiweek variable and factors:<br />
+Notice that we converted dates to NA that were clearly errors <strong>before</strong> creating the <code>epiweek</code> variable. This is because the <code>epiweek</code> variable is created as a <strong>factor</strong>, and once a factor is created it is more difficult to remove factor levels. You can read more about factors and dropping unused factor levels in the Advanced and Miscellaneous R Basics page.*
+{{% /notice %}}</p>
 </div>
 <div id="clean-numeric-variables" class="section level3">
 <h3>Clean numeric variables</h3>
@@ -112,7 +118,8 @@ linelist_cleaned$age_group &lt;- age_categories(linelist_cleaned$age_years,
 <p>While the template directs us to next create a <code>DIED</code> variable based on <code>exit_status</code> containing the characters “Dead”, we must first <strong>clean our <code>exit_status</code> variable, which is currrently in French</strong>.</p>
 <p><strong>Use <code>case_when()</code> to assign new values for a new exit_status2 variable</strong>, as in the code below. The code uses the function <code>case_when()</code> to re-define <code>linelist_cleaned</code> as itself, but mutated to create the new variable <code>exit_status2</code>. The values in <code>exit_status2</code> are based on the values in <code>exit_status</code>, such that when <code>exist_status == &quot;Décédé&quot;</code>, the value in <code>exit_status2</code> is “Died”, and so on.</p>
 <p>As you modify this chunk for your own situation, remember to include commas at the end of each <code>case_when()</code> line (except the last one), and that <strong>each left-hand side (LHS) of the <code>~</code> must be a logical statement</strong>, not just a value. Best is to write <code>case_when()</code> lines from most specific at top to most general at bottom. You can read more about <code>case_when()</code> <a href="https://dplyr.tidyverse.org/reference/case_when.html">at this tidyverse site</a>.</p>
-<p>{{% notice tip %}} All the right-hand side (RHS) values must be the same class (either character, numeric, etc.). So, if your other RHS values are character and you want one RHS value to be missing, you cannot just write <code>NA</code> on the RHS. Instead you must use the special character version of <code>NA</code> : <code>NA_character_</code>.{{% /notice %}}</p>
+<p>{{% notice tip %}}
+All the right-hand side (RHS) values must be the same class (either character, numeric, etc.). So, if your other RHS values are character and you want one RHS value to be missing, you cannot just write <code>NA</code> on the RHS. Instead you must use the special character version of <code>NA</code> : <code>NA_character_</code>.{{% /notice %}}</p>
 <pre class="r"><code># Tabulate to see all possible values of exit_status
 table(linelist_cleaned$exit_status, useNA = &quot;always&quot;)</code></pre>
 <pre><code>## 
@@ -215,13 +222,13 @@ linelist_cleaned &lt;- linelist_cleaned %&gt;%
 <div id="cleaning-patient-origin" class="section level3">
 <h3>Cleaning patient origin</h3>
 <p>The variable <code>patient_origin</code> (originally the variable <em>quartier</em> in the raw dataset) is referenced in the place analyses chunks, for example when calculating attack rates by region. In those steps, the variable <code>patient_origin</code> in <code>linelist_cleaned</code> is <em>joined to</em> the variable <code>patient_origin</code> of the data frame <code>population_data_region</code> (which was imported in the population and lab data steps).</p>
-<p>However, the place names in <code>population_data_region</code> are ALL CAPITAL LETTERS. This is not true in <code>linelist_cleaned</code> - so the join will not register any matches. The easiest way to solve this problem is to <strong>redefine the <code>linelist_cleaned</code> variable into all capital letters as well</strong>, using the base R function <code>toupper()</code>:</p>
+<p>However, the place names in <code>population_data_region</code> are ALL CAPITAL LETTERS. This is not true in <code>linelist_cleaned</code> - so the join will not register any matches. The easiest way to solve this problem is to <strong>redefine the <code>linelist_cleaned</code> variable into all capital letters as well</strong>, using the base R function <code>toupper()</code>, which means “to upper case”:</p>
 <pre class="r"><code>linelist_cleaned$patient_origin &lt;- toupper(linelist_cleaned$patient_origin)</code></pre>
 </div>
-<div id="create-list-variables" class="section level3">
-<h3>Create list variables</h3>
+<div id="gather-common-variables-for-later-analysis" class="section level3">
+<h3>Gather common variables for later analysis</h3>
 <p>These variables names are stored in vectors that are created using the function <code>c()</code>. These vectors of names will be referenced in later code chunks. This way if you want to run the same function over these variables you can simply use the named vector rather than typing out each variable individually.</p>
-<p>The default template code creates two vectors - one for symptoms variables (<code>SYMPTOMS</code>) and one for laboratory testing variables (<code>LABS</code>). <strong>Some variables do not apply to our Am Timan data and must be removed from the list or commented out (such as <code>convulsions</code> and <code>history of fever</code>).</strong> If non-existant variables are left in the list it will cause errors in later code chunks.</p>
+<p>The default template code creates two vectors - one for symptom variables (<code>SYMPTOMS</code>) and one for laboratory testing variables (<code>LABS</code>).</p>
 <pre class="r"><code># vectors of variable names ----------------------------------------------------
 # create a grouping of all symptoms 
 

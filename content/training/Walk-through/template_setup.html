@@ -11,7 +11,9 @@ weight: 6
 <h2>Opening a new R project</h2>
 <p>Please review the instructions in the R Basics page on Working within R projects. In brief:</p>
 <p>Open RStudio. Select <em>New Project</em> from the main <em>File</em> menu of RStudio. Select “New Directory” and “New Project”, and a location to save the new R project (this creates a new folder). Save all relevant data files into this new R project folder.</p>
-<p>{{% notice tip %}} For the RMarkdown to produce the final report correctly, you must have read/write permissions for the location of the R project folder. On an MSF computer this is generally the c:/temp folder. {{% /notice %}}</p>
+<p>{{% notice tip %}}
+For the RMarkdown to produce the final report correctly, you must have read/write permissions for the location of the R project folder. On an MSF computer this is generally the c:/temp folder.
+{{% /notice %}}</p>
 </div>
 <div id="opening-an-ajs-template" class="section level2">
 <h2>Opening an AJS template</h2>
@@ -25,7 +27,10 @@ weight: 6
 <div id="header-and-introduction" class="section level2">
 <h2>Header and introduction</h2>
 <p>The very top of the template consists of a header surrounded by <code>---</code> lines. Here you may want to edit the title of your document. The other settings in the header define the default document type produced (Microsoft Word) when the RMarkdown is “knit”.</p>
-<p><img src="/images/AJS_Intro.png" alt="AJS Header and Introduction snip", width = "100%"></p>
+<div class="figure">
+<img src="/images/AJS_Intro.PNG" alt="AJS Header and Introduction snippet" />
+<p class="caption">AJS Header and Introduction snippet</p>
+</div>
 <p>The “Introduction to this template” section is for your information only and this text should be deleted before knitting the document.</p>
 </div>
 <div id="installing-and-loading-packages" class="section level2">
@@ -39,7 +44,10 @@ weight: 6
 <li><p>Set default text size in graphic plots</p></li>
 <li><p>Establish aesthetic settings for epidemic curve plots</p></li>
 </ul>
-<p><img src="/images/Package_Installation.png" alt="Package installation chunk snip", width = "100%"></p>
+<div class="figure">
+<img src="/images/Package_Installation.PNG" alt="Package Installation Chunk" />
+<p class="caption">Package Installation Chunk</p>
+</div>
 <div id="about-the-packages-used-in-this-template" class="section level3">
 <h3>About the packages used in this template</h3>
 <div id="generic-packages" class="section level4">
@@ -91,13 +99,15 @@ weight: 6
 <h2>Define current epi week</h2>
 <p>This chunk continues the set-up of time-related parameters.</p>
 <p><strong>First, ensure epidemiological weeks are set to begin on Mondays</strong> using the function <code>set_week_start()</code> from the package <strong>aweek</strong>. See the documentation of the <a href="https://cran.r-project.org/web/packages/aweek/vignettes/introduction.html">package <strong>aweek</strong></a> for more information.</p>
-<p><strong>Secondly, set the reporting week for the report</strong>. This value is used in later code chunks, for example when producing epidemic curves. Note that you likely want to specify the most recent <strong>complete</strong> epi week. Follow the format in the code below (within quotes give the 4-digit year, a hyphen (-), capital W, then the 2-digit epi week number).</p>
+<p><strong>Second, set the reporting week for the report</strong>. This value is used in later code chunks, for example when producing epidemic curves. Note that you likely want to specify the most recent <strong>complete</strong> epi week. Follow the format in the code below (within quotes give the 4-digit year, a hyphen (-), capital W, then the 2-digit epi week number).</p>
 <p>To determine which epi week of a date you can use the <code>date2week()</code> function. It will tell you the year, week, and day number of the provided date. <strong>Let’s assume the date of this analysis is 27 April, 2017, so the most recent complete epidemiological week is Week 16 of 2017</strong>.</p>
 <pre class="r"><code>aweek::date2week(&quot;2017-04-27&quot;)  # Ask for the epi week of this date</code></pre>
 <pre><code>## &lt;aweek start: Monday&gt;
 ## [1] &quot;2017-W17-4&quot;</code></pre>
 <pre class="r"><code>reporting_week &lt;- aweek::as.aweek(&quot;2017-W16&quot;) # Set reporting_week as last complete epi week</code></pre>
-<p>{{% notice tip %}} If you want to use the automatically-updated date from your computer, use <code>Sys.Date()</code> like this: <code>date2week(Sys.Date())</code> {{% /notice %}}</p>
+<p>{{% notice tip %}}
+If you want to use the automatically-updated date from your computer, use <code>Sys.Date()</code> like this: <code>date2week(Sys.Date())</code>
+{{% /notice %}}</p>
 <p><strong>Lastly, the labels that will be used in epidemic curve plots are defined</strong>. These should not need any adjustment. You may notice that the subtitle label uses the special term “%s” as a placeholder - the reporting_week defined in the previous chunk will show in its place.</p>
 <pre class="r"><code>## sets the labels in ggplot for the epicurves
 epicurve_labels &lt;- labs(x = &quot;Calendar week&quot;, 
