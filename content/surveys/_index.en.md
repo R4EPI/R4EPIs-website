@@ -24,6 +24,7 @@ The survey report templates are special R scripts called "R-Markdowns", and are 
 RMarkdown scripts execute data cleaning and analytical R commands AND are themselves the outline of an automatically-produced report.
 
 **For assistance using the survey templates** 
+
 Read more about RMarkdown scripts and how to modify the templates in the [Training Materials](https://r4epis.netlify.com/training/) pages of this website. 
 
 The [case study walk-though](https://r4epis.netlify.com/training/walk-through/) offers you a step-by-step guide on how to use the templates to fit your data and run the analysis. 

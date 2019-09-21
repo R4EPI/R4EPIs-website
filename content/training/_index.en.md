@@ -9,24 +9,17 @@ weight: 20
 Welcome to the training homepage of the R4EPIs project. The purpose of these pages are to assist you in the use
 and modification of the outbreak and survey templates. 
 
-## R basics
-
-These pages provide an introduction to RStudio and R, with a focus on the functions and structures found in the templates.
-
-
 ## Case study walk-through
 
-These pages demonstrate application of the Acute Jaundice Syndrome (AJS) outbreak template to
-produce an epidemiological situation report for an outbreak that occurred in Am Timan, Chad. 
+These pages demonstrate use of the Acute Jaundice Syndrome (AJS) outbreak template to
+produce an epidemiological situation report for an outbreak that occurred in Am Timan, Chad.
 
-The dataset used is not standardised to DHIS or any data dictionary, and therefore allows demonstration of many techniques
-to modify the template. Read more about the case study walk-through in its introduction page.
+The datasets used and the final template script can be downloaded from the Case Study Overview page. 
+
+The datasets used are *not* standardised to DHIS or any data dictionary. This allows demonstration of many techniques
+to modify the template.
 
 
-{{% notice info %}}
+## R basics
 
-<b> THIS IS STILL A WORK IN PROGRESS. </b> Please check back soon as we will
-be adding more content in the coming weeks.
-
-{{% /notice %}}
-
+These pages provide an introduction to R and RStudio, with a focus on the functions and code structures found in the templates.
