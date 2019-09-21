@@ -6,21 +6,26 @@ tags: ["wiki"]
 weight: 1
 ---
 
-This section describes how to get up and running!
+This page describes important first steps for getting started with R, RStudio, and the templates!
+
+A step-by-step walk-through of an outbreak template case study is available in the Training Materials pages of this website.
 
 ## NECESSARY COMPONENTS
 
 ### R
 
-The templates need at least R version 3.3. We recommend [getting R directly from CRAN](https://cran.r-project.org), but [the MRAN version of R](https://mran.microsoft.com/) will work as well.
+R is a free software for statistical computing and graphics. The templates need at least R version 3.3. We recommend [downloading R directly from CRAN](https://cran.r-project.org), a central repository of R code, packages, and documentation. If desired, [the MRAN version of R](https://mran.microsoft.com/) will work as well.
 
-> **Caveat for MRAN**: MRAN is a version of R that has modifications that are outside the scope of this project, however, it should be noted that it also locks the version of all packages to a specific date, so care is needed to specify repositories when installing R packages.
+> **Caveat if using MRAN**: MRAN is a version of R that has modifications that are outside the scope of this project, however, it should be noted that it also locks the version of all packages to a specific date, so care is needed to specify repositories when installing R packages. If you are unsure whether you have MRAN or CRAN R installed then see this [FAQ](<https://github.com/R4EPI/sitrep/wiki/4). 
 
-If you are unsure whether you have MRAN or CRAN R installed then see the [FAQ](<https://github.com/R4EPI/sitrep/wiki/4)-FAQ#i-am-unsure-if-i-have-the-mran-or-cran-version-of-r-installed>) 
 
 ### RStudio Desktop
 
-[RStudio](https://www.rstudio.com) is an Integrated Development Environment for R that comes bundled with pandoc for publishing automated reports. Please have [version 1.1.463 or greater installed](https://www.rstudio.com/products/rstudio/download/#download).
+[RStudio](https://www.rstudio.com) is an interface (Integrated Development Environment) for easier use of R, and enables production of automated reports. For RStudio to function you must also have R installed on the computer.
+
+Please have RStudio [version 1.1.463 or greater installed](https://www.rstudio.com/products/rstudio/download/#download).
+
+There is an overview of RStudio, including comparisons to Stata, in the Training Materials pages. 
 
 
 ### Configuring RStudio
@@ -39,10 +44,10 @@ When writing RMarkdown and code, it's common to wrap your text at 80 characters.
 
 <img src="https://imgur.com/FWJ7lER.png" width = "50%" align="middle" alt="Margin line setting in RStudio global options">
 
-### Setting the default R repository
+### Setting the default R repository if using MRAN
 
 If you are using Microsoft's version of R (MRAN), the packages are all locked to one specific date (as of this writing, it's 2018-08-07). 
-If you are unsure whether you have MRAN or CRAN R installed then see the [FAQ](<https://github.com/R4EPI/sitrep/wiki/4)-FAQ#i-am-unsure-if-i-have-the-mran-or-cran-version-of-r-installed>). 
+If you are unsure whether you have MRAN or CRAN R installed then see the [FAQ](<https://github.com/R4EPI/sitrep/wiki/4). 
 
 To install packages that were either created or updated after this date, you should use the RStudio cloud repository. The following code will update a file called `.Rprofile` that lives in your home directory (on Windows, this directory is usually "C:\Users\\\<username>").
 
@@ -81,30 +86,31 @@ installr::updateR() # updating R.
 ## If you wish it to go faster, run: installr::updateR(TRUE)
 ```
 
-### Installing the package 
+### Installing the **sitrep** package 
 
-To install from GitHub you will first need to install the *remotes* package. 
-Once installed you can use the *install_github* function to install *sitrep* 
-from the appropriate repo. 
+The **sitrep** package, developed by MSF and partners, is stored on the website GitHub. Therefore, the procedure to install is different than for most packages you will work with. 
+
+To install **sitrep** from GitHub you must first install the **remotes** package. 
 
 ``` r
-## install.packages("remotes", repos = "https://cran.rstudio.com")
+install.packages("remotes", repos = "https://cran.rstudio.com")
 ```
 
-The necessary R packages for these templates are described in the DESCRIPTION file. To obtain these packages, run the following from within R:
+Once **remotes** is installed, use its *install_github* function to install **sitrep** from the appropriate repository on GitHub. 
+This command below will install the **sitrep** package and also install any packages necessary for use of the templates that are not currently installed on your machine.
+
+*It will not, however, update any packages already installed. If you want it to update packages, then you should change the last argument to `update = "ask"`.*
 
 ```r
 remotes::install_github("R4EPI/sitrep", repos = "https://cran.rstudio.com", update = "never")
 ```
-
-To explain a bit: this will install the sitrep package and also install any dependent packages that are not currently installed on your machine. It will not, however, update any of your current packages. If you want it to update packages, then you should change the argument above to `update = "ask"`.
-
-If you are getting errors, check the FAQ section of this wiki. 
+ 
+If you are getting errors, check the [FAQ section](<https://github.com/R4EPI/sitrep/wiki/4) of the **sitrep** wiki. 
 
 ### Opening up templates 
 
-Once the packages have been installed you can use the R-markdown templates
-provided to create automated reports. 
+The outbreak and survey report templates are special scripts called "R-Markdowns", and are included with **sitrep** package installation. You can open and modify them to create customized automated reports. 
+Read more about RMarkdown scripts and how to modify the templates in Training Materials pages of this website. 
 
 <img src="https://imgur.com/0n4wigA.gif" align="middle" alt="Example of how to open and save the cholera template">
 
@@ -120,8 +126,8 @@ If you are not seeing these, then please take a look at this [GitHub post](https
 
 ### Folder structure 
 
-You will need to save your rmarkdown document (the template) in the 
-same folder as your dataset in order for it to work! 
+It is *strongly* advised that you save your RMarkdown template and any related data within the same folder - specifically with a *R Project*.
+Read more about working within R Projects in the R Basics section of the Training Materials pages.
 
 
 ## NICE-TO-HAVE COMPONENTS
