@@ -33,8 +33,7 @@ tab_linelist(linelist_cleaned,
   rename_redundant(&quot;%&quot; = proportion) %&gt;%
   augment_redundant(&quot; cases (n)&quot; = &quot; n$&quot;) %&gt;%
   kable(digits = 1)</code></pre>
-<pre><code>## Warning in descriptive(x, counter = !!i, grouper = !!stra, proptotal =
-## prop_total, : Removing 8 missing values</code></pre>
+<pre><code>## Warning: Removing 8 missing values</code></pre>
 <table>
 <thead>
 <tr class="header">
@@ -134,8 +133,7 @@ tab_linelist(linelist_cleaned,
 #  rename_redundant(&quot;%&quot; = proportion) %&gt;%
   augment_redundant(&quot; cases (n)&quot; = &quot; n$&quot;) %&gt;%
   kable(digits = 1)</code></pre>
-<pre><code>## Warning in descriptive(x, counter = !!i, grouper = !!stra, proptotal =
-## prop_total, : Removing 8 missing values</code></pre>
+<pre><code>## Warning: Removing 8 missing values</code></pre>
 <table>
 <thead>
 <tr class="header">
@@ -321,7 +319,9 @@ tab_linelist(linelist_cleaned, SYMPTOMS, keep = &quot;Oui&quot;) %&gt;%
 <ul>
 <li>In the initial <code>tab_linelist()</code> command, <code>transpose = &quot;value&quot;</code> is set because the values in the lab data are important in-and-of themselves (e.g. IgM+/IgG-, etc.) - i.e. the values should become column headers.</li>
 </ul>
-<p>{{% notice tip %}} This table may be large and unwieldy at first, until you clean your data. The step in data cleaning where we converted 0, 1, “yes”, “pos”, “neg”, etc. to standardized “Positive” and “Negative” was crucial towards making this table readable. Once kitted into a word document, you will likely need to adjust the font size, column widths, etc. {{% /notice %}}</p>
+<p>{{% notice tip %}}
+This table may be large and unwieldy at first, until you clean your data. The step in data cleaning where we converted 0, 1, “yes”, “pos”, “neg”, etc. to standardized “Positive” and “Negative” was crucial towards making this table readable. Once kitted into a word document, you will likely need to adjust the font size, column widths, etc.
+{{% /notice %}}</p>
 <pre class="r"><code># get counts and proportions for all variables named in LABS
 tab_linelist(linelist_cleaned, LABS, 
              transpose = &quot;value&quot;) %&gt;% 
@@ -342,6 +342,12 @@ tab_linelist(linelist_cleaned, LABS,
 <th align="right">%</th>
 <th align="right">IgG-/IgM- (n)</th>
 <th align="right">%</th>
+<th align="right">IgG-/IgM+ (n)</th>
+<th align="right">%</th>
+<th align="right">IgG+/IgM- (n)</th>
+<th align="right">%</th>
+<th align="right">IgG+/IgM+ (n)</th>
+<th align="right">%</th>
 <th align="right">IgG±/IgM- (n)</th>
 <th align="right">%</th>
 </tr>
@@ -357,6 +363,12 @@ tab_linelist(linelist_cleaned, LABS,
 <td align="right">-</td>
 <td align="right">-</td>
 <td align="right">-</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">-</td>
 </tr>
 <tr class="even">
 <td align="left">Hep c rdt</td>
@@ -364,6 +376,12 @@ tab_linelist(linelist_cleaned, LABS,
 <td align="right">99.2</td>
 <td align="right">2</td>
 <td align="right">0.8</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">-</td>
 <td align="right">-</td>
 <td align="right">-</td>
 <td align="right">-</td>
@@ -379,11 +397,23 @@ tab_linelist(linelist_cleaned, LABS,
 <td align="right">-</td>
 <td align="right">-</td>
 <td align="right">-</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">-</td>
 </tr>
 <tr class="even">
 <td align="left">Test hepatitis a</td>
 <td align="right">23</td>
 <td align="right">100.0</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">-</td>
 <td align="right">-</td>
 <td align="right">-</td>
 <td align="right">-</td>
@@ -401,11 +431,23 @@ tab_linelist(linelist_cleaned, LABS,
 <td align="right">-</td>
 <td align="right">-</td>
 <td align="right">-</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">-</td>
 </tr>
 <tr class="even">
 <td align="left">Test hepatitis c</td>
 <td align="right">23</td>
 <td align="right">100.0</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">-</td>
 <td align="right">-</td>
 <td align="right">-</td>
 <td align="right">-</td>
@@ -423,6 +465,12 @@ tab_linelist(linelist_cleaned, LABS,
 <td align="right">-</td>
 <td align="right">-</td>
 <td align="right">-</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">-</td>
 </tr>
 <tr class="even">
 <td align="left">Test hepatitis e genotype</td>
@@ -430,6 +478,12 @@ tab_linelist(linelist_cleaned, LABS,
 <td align="right">-</td>
 <td align="right">2</td>
 <td align="right">100.0</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">-</td>
 <td align="right">-</td>
 <td align="right">-</td>
 <td align="right">-</td>
@@ -443,6 +497,12 @@ tab_linelist(linelist_cleaned, LABS,
 <td align="right">1.6</td>
 <td align="right">9</td>
 <td align="right">14.5</td>
+<td align="right">14</td>
+<td align="right">22.6</td>
+<td align="right">5</td>
+<td align="right">8.1</td>
+<td align="right">26</td>
+<td align="right">41.9</td>
 <td align="right">-</td>
 <td align="right">-</td>
 </tr>
@@ -456,6 +516,12 @@ tab_linelist(linelist_cleaned, LABS,
 <td align="right">-</td>
 <td align="right">-</td>
 <td align="right">-</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">-</td>
 </tr>
 <tr class="odd">
 <td align="left">Dengue</td>
@@ -465,6 +531,12 @@ tab_linelist(linelist_cleaned, LABS,
 <td align="right">-</td>
 <td align="right">12</td>
 <td align="right">50.0</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">11</td>
+<td align="right">45.8</td>
+<td align="right">-</td>
+<td align="right">-</td>
 <td align="right">1</td>
 <td align="right">4.2</td>
 </tr>
@@ -478,6 +550,12 @@ tab_linelist(linelist_cleaned, LABS,
 <td align="right">79.2</td>
 <td align="right">-</td>
 <td align="right">-</td>
+<td align="right">5</td>
+<td align="right">20.8</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">-</td>
 </tr>
 <tr class="odd">
 <td align="left">Chikungunya onyongnyong</td>
@@ -489,11 +567,23 @@ tab_linelist(linelist_cleaned, LABS,
 <td align="right">87.5</td>
 <td align="right">-</td>
 <td align="right">-</td>
+<td align="right">3</td>
+<td align="right">12.5</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">-</td>
 </tr>
 <tr class="even">
 <td align="left">Other arthropod transmitted virus</td>
 <td align="right">24</td>
 <td align="right">100.0</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">-</td>
 <td align="right">-</td>
 <td align="right">-</td>
 <td align="right">-</td>

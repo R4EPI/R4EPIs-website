@@ -222,22 +222,21 @@ Note the checklist for using shapefiles:
 * Make sure the coordinate reference system (CRS) of the shapefile is WGS84 (this is the standard coordinate system used by most GPS systems, but it is good to ask whomever collected to data to be sure)  
  
 {{% notice tip %}}
-When giving the name of a shapefile to here(), list the file name with a .shp extension.
+When giving the name of a shapefile to `here()`, list the file name with a .shp extension.
 {{% /notice %}}
 
 The `import()` function is wrapped around the `here()` function. The `here()` function makes it easy for R to locate files on your computer. It is best to save the dataset within your R project, and to provide `here()` with any R project subfolder names. You can read more about the `here()` function in the data import R Basics page. 
    
 
-
 ```{r read_shapefiles_import, include=FALSE, results='hide', message=FALSE, warning=FALSE }
 ## reading in a shapefile 
-map <- read_sf(here("content", "training", "Walk-through", "mapfolder", "quartiersshape.shp"))
+map <- read_sf(here("content", "training", "Walk-through", "mapfolder", "Quartiersshape.shp"))
 ```
 
 
 ```{r read_shapefiles_display, eval=FALSE}
 ## reading in a shapefile 
-map <- read_sf(here("quartiersshape.shp"))
+map <- read_sf(here("Quartiersshape.shp"))
 ```
 
 The next code will check the coordinate reference system (CRS) of the shapefile, as it was read-in. In our exercise, we see an EPSG code of 4326, which is the correct code for WGS84 (you can also see below the EPSG code that the datum is WGS84).

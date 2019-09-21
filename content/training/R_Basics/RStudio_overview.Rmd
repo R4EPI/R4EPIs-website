@@ -11,7 +11,7 @@ For RStudio to function you must also have R installed on the computer (see the 
 
 By default RStudio displays four rectangle panes. 
 
-![](/images/RStudio_overview.png)
+![](/images/RStudio_overview.PNG)
 
 
 {{% notice tip %}}

@@ -103,9 +103,8 @@ The response consisted of four components:
 
 For the duration of the outbreak we detected 1193 suspected cases, 100 confirmed cases and discarded 150 cases with AJS who were not positive for HEV infection.  
 
-[Link to publication](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0188240)  
+[Link to Spina and Lenglet *et al.* 2017](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0188240)  
 
-<img src="/images/AJS_Article.png" alt="AJS Article snip", width = "40%">
-
+![Spina and Lenglet et al. 2017](/images/AJS_Article.PNG?pc=40)
 
 

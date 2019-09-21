@@ -124,7 +124,7 @@ Be sure to paste the AJS rename helper code into an existing R code chunk (e.g. 
 {{% /notice %}}
 
 
-<img src="/images/Variable_Helper_Paste_Revised.gif" alt="rename variables empty snip", width = "100%">
+![](/images/Variable_Helper_Paste_Revised.gif)
 
 * **Complete the mapping of variable names.** To the right of the equals sign, and before the comma, type the *exact* names of the variables from your dataset that correspond to the expected MSF data dictionary variables on the left. *If there is a data dictionary variable that is not present in your dataset, be sure to comment (#) out that line.*
 
@@ -138,7 +138,7 @@ then you likely forgot to comment (#) the line for a variable you did not use.
 
 And now you can see the result:  
 
-<img src="/images/AJS_Rename_Variables_Proof.png" alt="rename variables proof", width = "100%">
+![](/images/AJS_Rename_Variables_Proof.png)
 
 
 ```{r include=FALSE, results='hide', message=FALSE, warning=FALSE}

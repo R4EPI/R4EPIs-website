@@ -80,13 +80,14 @@ Once the R project is established, select *New File* from the main *File* menu o
 
 The very top of the template consists of a header surrounded by `---` lines. Here you may want to edit the title of your document. The other settings in the header define the default document type produced (Microsoft Word) when the RMarkdown is "knit".  
 
-<img src="/images/AJS_Intro.png" alt="AJS Header and Introduction snip", width = "100%">  
+![AJS Header and Introduction snippet](/images/AJS_Intro.PNG)
 
 The "Introduction to this template" section is for your information only and this text should be deleted before knitting the document.  
 
 
 
 ## Installing and loading packages
+
 **You must keep this "setup" code chunk!** When the final report is knit, this chunk will run without producing any output, but it is required for the template to work correctly.  
 
 This "setup" code chunk does the following:  
@@ -101,7 +102,7 @@ This "setup" code chunk does the following:
 
 * Establish aesthetic settings for epidemic curve plots
 
-<img src="/images/Package_Installation.png" alt="Package installation chunk snip", width = "100%">  
+![Package Installation Chunk](/images/Package_Installation.PNG)
 
 
 

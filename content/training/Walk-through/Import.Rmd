@@ -61,8 +61,7 @@ For this exercise our linelist dataset is a **non-DHIS file**, so to import we u
 
 **Comment out (using #) or delete the `read_fake_data`, `read_DHIS_data`, and `prep_DHIS_data` chunks**, as they are not necessary and will cause errors.
 
-<img src="/images/AJS_Data_Import.png" alt="Data import options snip", width = "100%">
- 
+![Data import options](/images/AJS_Data_Import.png) 
 
 **Importing the dataset into R**  
 
@@ -81,8 +80,7 @@ linelist_raw <- rio::import(here::here("AJS_AmTiman.xlsx"), which = "linelist")
 
 A successfull import should result in a dataframe object named `linelist_raw` in your RStudio Environment pane, consisting of 1447 observations and 122 variables.  
 
-<img src="/images/linelist_raw_imported.png" alt="Environment snip with linelist_raw", width = "50%">
-
+![Environment pane showing `linelist_raw`](/images/linelist_raw_imported.PNG?width=50pc)
 
 
 ```{r include=FALSE, results='hide', message=FALSE, warning=FALSE}
