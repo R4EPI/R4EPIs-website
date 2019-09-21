@@ -2,13 +2,15 @@
 title: R4EPIs
 ---
 
-![Waiting area for men in the shadow of a tree and an MSF car.](images/MSF268858_Medium.jpg?width=50pc)
-
-**Source:** Susanne Doettling/MSF, 2019. The waiting area for men in the shadow of a tree and an MSF car. 75-year-old Hassan (right), one of the community leaders in Ton-Habalan is waiting for his turn.
 
 ![R4EPIs project](images/R4epis_clr_rgb.png?width=30pc)
 
 ![RECON and MSF partnership](images/RECON-MSF_logo_joined.png)
+
+![Waiting area for men in the shadow of a tree and an MSF car.](images/MSF268858_Medium.jpg?width=30pc)
+
+*The waiting area for men in the shadow of a tree and an MSF car. 75-year-old Hassan (right), 
+one of the community leaders in Ton-Habalan is waiting for his turn.* ***Source: Susanne Doettling/MSF, 2019.***
 
 ## R4epis - what is it?
 
@@ -37,10 +39,10 @@ or contact one of [our contributors](https://r4epis.netlify.com/credits/).
 
 
 *Below: The "sitrep" package developed by R4Epis includes templates of automated situation reports* 
-![Markdowns from R](images/SnipMarkdown.PNG?width=70pc)
+![Markdowns from R](images/SnipMarkdown.PNG?width=30pc)
 
 *Below: Report contents, including graphics and maps, can be modified with new data cleaning and analysis functions* 
-![Data visualisation output](images/SnipDatavisualisation.PNG?width=70pc)
+![Data visualisation output](images/SnipDatavisualisation.PNG?width=30pc)
 
 
 ## What is on this website?
@@ -69,10 +71,17 @@ R4epis was funded through the [Sapling Nursery](https://www.msf.org.uk/sapling-n
 
 R4epis has been a collaboration between the R for Epidemics Consortium ([RECON](https://www.repidemicsconsortium.org/)) and MSF. 
 
-The project has merged the skills and experience of people in [coding in R software](https://blogs.msf.org/bloggers/r4epis-team/r4epis-hackathon), [field epidemiology](https://blogs.msf.org/bloggers/larissa/innovation-introducing-r4epis), spatial epidemiology, 
-health information systems and public health.
+The project has merged the skills and experience of people in 
+[coding in R software](https://blogs.msf.org/bloggers/r4epis-team/r4epis-hackathon), 
+[field epidemiology](https://blogs.msf.org/bloggers/larissa/innovation-introducing-r4epis), 
+spatial epidemiology, 
+health information systems 
+and public health.
 
-See [this page](https://r4epis.netlify.com/credits/) for a list of project contibutors
+See [this page](https://r4epis.netlify.com/credits/) for a list of project contibutors. 
+
+See these MSF innovation blog posts describing [the origin](https://blogs.msf.org/bloggers/larissa/innovation-introducing-r4epis) 
+and some of the [development efforts](https://blogs.msf.org/bloggers/r4epis-team/r4epis-hackathon).
 
 
 

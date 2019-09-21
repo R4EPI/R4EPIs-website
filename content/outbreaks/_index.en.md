@@ -9,8 +9,8 @@ weight: 10
 
 *Above: MSF is working with the Ministry of Public Health throughout the year to monitor areas at risks of disease outbreaks. 
 Week after week Louis, the MSF epidemiologist, monitors the health zones that have reported cases and the levels of epidemic alert. 
-He is also in charge of coordinating the post-vaccination coverage survey to ensure that the vaccination coverage rate is sufficient. 
-SOURCE: Elise Mertens/MSF*
+He is also in charge of coordinating the post-vaccination coverage survey to ensure that the vaccination coverage rate is sufficient.* 
+***Source: Elise Mertens/MSF***
 
 **The outbreak templates have been developed to cover four of the most common outbreak scenarios MSF teams face in our project locations. 
 They include:**
@@ -49,7 +49,7 @@ In the walk-through, you will learn lessons for modifying the templates to fit y
 * and select "From template"; 
 you should be able to see all the options of templates that are available. For example "Outbreak Report". 
 
-<img src="https://imgur.com/0n4wigA.gif" align="middle" alt="Example of how to open and save the cholera template">
+![example of opening and saving cholera template](images/opening_template.gif?width=30pc)
 
 ## Overview of template parts
 

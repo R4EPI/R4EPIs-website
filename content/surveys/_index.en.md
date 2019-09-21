@@ -8,27 +8,51 @@ weight: 15
 
 ![MSF Epidemiologist carrying out survey](images/msfepisurvey.jpg?width=30pc)
 
-**Source**: Charlotte Morris/MSF; Suzanne Moja, 36, from Madrid, Spain is an epidemologist and supervises the team of MSF researchers in Bokoro, Chad. 
+*Above: Suzanne Moja, 36, from Madrid, Spain is an epidemologist and supervises the team of MSF researchers in Bokoro, Chad.* ***Source: Charlotte Morris/MSF.*** 
 
-The survey templates have been developed to match the data that would be collected using [MSF Ethical Review Board pre-approved surveys](https://fieldresearch.msf.org/handle/10144/618942) on: 
+**The survey templates have been developed to match the data that would be collected using 
+[MSF Ethical Review Board pre-approved surveys](https://fieldresearch.msf.org/handle/10144/618942) on:** 
 
 * ***Retrospective mortality and access to care***,  
 * ***Vaccination coverage*** and   
 * ***Malnutrition***.   
 
-All survey templates are available in the [sitrep] package.  
 
-You can access these by selecting them from the RStudio RMarkdown template menu.
+## Getting started
 
-## Getting started with Survey templates in R?
+The survey report templates are special R scripts called "R-Markdowns", and are included with **sitrep** package installation. 
+RMarkdown scripts execute data cleaning and analytical R commands AND are themselves the outline of an automatically-produced report.
 
-This section (TODO: INSERT LINK TO THE WALK THROUGH ON SURVEY DATA ANALYSIS) offers you a step by step guide on how to use the survey templates to fit your data and run the analysis.
+**For assistance using the survey templates** 
+Read more about RMarkdown scripts and how to modify the templates in the [Training Materials](https://r4epis.netlify.com/training/) pages of this website. 
 
+The [case study walk-though](https://r4epis.netlify.com/training/walk-through/) offers you a step-by-step guide on how to use the templates to fit your data and run the analysis. 
+Althrough the walk-through uses an outbreak template, the structure and techniques used to modify the templates are similar. 
+At the start of the walk-through you can download the case study's data files and final template to follow along. 
+In the walk-through, you will learn lessons for modifying the templates to fit your needs.
+
+**To access the survey templates:**
+
+* Open Rstudio
+* Under the 'File' button (top left of your screen), click on the "+" 
+* Then click on "R markdown...", 
+* and select "From template"; 
+you should be able to see all the options of templates that are available. For example "Mortality Survey". 
+
+![example of opening and saving cholera template](images/opening_template.gif)
 ## Basic concepts of survey data analysis
 
-This website will not cover the detailed aspects of designing, implementing and analysing a survey in MSF contexts. There are many other training and briefing materials that address this aspect.
+**Further resources** 
 
-We will cover a few crucial concepts which are required for the understanding and use of the templates for your survey analysis.
+This website will not cover the detailed aspects of designing, implementing and analysing a survey in MSF contexts. 
+There are many other training and briefing materials that address this aspect. We will cover a few crucial concepts 
+which are required for the understanding and use of the templates for your survey analysis.
+
+For further survey methodology resources please see: 
+
+* [MSF Field Research site](https://fieldresearch.msf.org/)
+* [SMART Methodology](https://smartmethodology.org/about-smart/?doing_wp_cron=1569090491.1568140983581542968750) (Standardized Monitoring and Assessment of Relief and Transitions)
+* This site on [the use of epidemiological tools in conflict-affected populations](http://conflict.lshtm.ac.uk/page_02.htm) from the London School of Hygiene and Tropical Medicine (LSHTM). 
 
 ## Sampling strategy
 There are different ways to sample populations for surveys. The most commonly used in MSF settings are:
@@ -51,7 +75,9 @@ When calculating a sample size for your survey you take the below parameters int
 * **Precision required around your estimate of prevalence**
 
 ### Estimate of prevalence
-You will need to use an estimate of the prevalence/coverage of the your main outcome of interest in your to-be-surveyed population (prevalence of malnutrition, measles vaccination coverage etc.). You will use published or grey literature to determine a logical estimate of this parameter.
+You will need to use an estimate of the prevalence/coverage of the your main outcome of interest in your to-be-surveyed population
+ (prevalence of malnutrition, measles vaccination coverage, etc.). You will use published or grey literature to determine a logical 
+estimate of this parameter.
 
 {{% notice note %}}
 The largest sample size you will need will be that which is calculated using an estimate of prevalence of 50%. The closer to 0% or 100% prevalence you set your estimate, the smaller your sample size will be. Therefore, if you have no idea what your estimate of prevalence is, try and use 50% and the largest possible sample size.
@@ -86,8 +112,7 @@ The templates assume that data will have been collected using mobile data collec
 
 We recommend that you try and establish generic data dictionaries for mobile data collection (through template questionnaires) or through template databases. This will improve the consistency of the naming of your variables and will facilitate the frequent and systematic use of the Survey Templates.
 
-## Survey analysis, the basics
-In the Survey Template Walkthrough (TODO: INSERT LINK), there is a step by step description of how to use the templates for data analysis.
+## Overview of survey template parts
 
 We have designed the templates to run through a similar series of analytical questions in the same order:
 
@@ -102,5 +127,5 @@ We have designed the templates to run through a similar series of analytical que
 
 {{% notice info %}}
 The sampling stratgey **MUST** be considered by the epidemiologist using the templates in order to ensure an appropriate weighting is applied to the analysis.
-{% /notice %}}
+{{% /notice %}}
 

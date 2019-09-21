@@ -14,18 +14,18 @@ A step-by-step walk-through of an outbreak template case study is available in t
 
 ### R
 
-R is a free software for statistical computing and graphics. The templates need at least R version 3.3. We recommend [downloading R directly from CRAN](https://cran.r-project.org), a central repository of R code, packages, and documentation. If desired, [the MRAN version of R](https://mran.microsoft.com/) will work as well.
+**R is a free software for statistical computing and graphics.** The templates need at least R version 3.3. We recommend [downloading R directly from CRAN](https://cran.r-project.org), a central repository of R code, packages, and documentation. If desired, [the MRAN version of R](https://mran.microsoft.com/) will work as well.
 
 > **Caveat if using MRAN**: MRAN is a version of R that has modifications that are outside the scope of this project, however, it should be noted that it also locks the version of all packages to a specific date, so care is needed to specify repositories when installing R packages. If you are unsure whether you have MRAN or CRAN R installed then see this [FAQ](<https://github.com/R4EPI/sitrep/wiki/4). 
 
 
 ### RStudio Desktop
 
-[RStudio](https://www.rstudio.com) is an interface (Integrated Development Environment) for easier use of R, and enables production of automated reports. For RStudio to function you must also have R installed on the computer.
+**[RStudio](https://www.rstudio.com) is an interface (Integrated Development Environment) for easier use of R**, and enables production of automated reports. For RStudio to function you must also have R installed on the computer.
 
 Please have RStudio [version 1.1.463 or greater installed](https://www.rstudio.com/products/rstudio/download/#download).
 
-There is an overview of RStudio, including comparisons to Stata, in the Training Materials pages. 
+There is an overview of RStudio, including comparisons to Stata, in the [Training Materials](https://r4epis.netlify.com/training/) pages. 
 
 
 ### Configuring RStudio
@@ -37,12 +37,11 @@ It's important to start R every time with a clean working session. To do this, y
 
 Your Global Options window should look like this:
 
-<img src="https://imgur.com/LXsbqPT.png" width = "50%" align="middle" alt="RStudio global options window showing a setting optimal for reproducibility">
+![RStudio global options window showing a setting optimal for reproducibility](images/RStudio_global_options.jfif?width=30pc)
 
 When writing RMarkdown and code, it's common to wrap your text at 80 characters. You can add a reference line for this in RStudio:
 
-
-<img src="https://imgur.com/FWJ7lER.png" width = "50%" align="middle" alt="Margin line setting in RStudio global options">
+![Margin line setting in RStudio global options](images/show_margins.png)
 
 ### Setting the default R repository if using MRAN
 
@@ -74,7 +73,7 @@ This sets the default repository to be https://cran.rstudio.com so that you will
 
 ### Updating your R version 
 
-Please make sure you have the latest version of R installed. 
+**Please make sure you have the latest version of R installed.** 
 To do this you can use the *installr* package. 
 See [this page](https://www.r-statistics.com/tag/installr/) for details. 
 
@@ -107,12 +106,12 @@ remotes::install_github("R4EPI/sitrep", repos = "https://cran.rstudio.com", upda
  
 If you are getting errors, check the [FAQ section](<https://github.com/R4EPI/sitrep/wiki/4) of the **sitrep** wiki. 
 
-### Opening up templates 
+### Opening the templates
 
-The outbreak and survey report templates are special scripts called "R-Markdowns", and are included with **sitrep** package installation. You can open and modify them to create customized automated reports. 
+**The outbreak and survey report templates are special scripts called "R-Markdowns"**, and are included with **sitrep** package installation. You can open and modify them to create customized automated reports. 
 Read more about RMarkdown scripts and how to modify the templates in Training Materials pages of this website. 
 
-<img src="https://imgur.com/0n4wigA.gif" align="middle" alt="Example of how to open and save the cholera template">
+![Example of how to open and save the cholera template](images/opening_template.gif)
 
 To access the templates:
 
@@ -126,7 +125,7 @@ If you are not seeing these, then please take a look at this [GitHub post](https
 
 ### Folder structure 
 
-It is *strongly* advised that you save your RMarkdown template and any related data within the same folder - specifically with a *R Project*.
+It is *strongly* advised that you save your RMarkdown template and any related data within the same folder - specifically within a *R Project*.
 Read more about working within R Projects in the R Basics section of the Training Materials pages.
 
 
