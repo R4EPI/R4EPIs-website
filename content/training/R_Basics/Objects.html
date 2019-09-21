@@ -24,9 +24,7 @@ weight: 7
 
 reporting_week                 # prints the current value of reporting_week</code></pre>
 <pre><code>## [1] &quot;2018-W10&quot;</code></pre>
-<p>{{% notice info %}}
-<strong>IMPORTANT: An object’s value can be over-written</strong> at any time by running an assignment command to re-define its value. Thus, the <strong>order of the commands run is very important</strong>.
-{{% /notice %}}</p>
+<p>{{% notice info %}} <strong>IMPORTANT: An object’s value can be over-written</strong> at any time by running an assignment command to re-define its value. Thus, the <strong>order of the commands run is very important</strong>. {{% /notice %}}</p>
 <pre class="r"><code>reporting_week &lt;- &quot;2018-W51&quot;   # assigns a NEW value to the object reporting_week
 
 reporting_week                 # prints the current value of reporting_week</code></pre>
@@ -58,7 +56,10 @@ linelist_cleaned &lt;- mutate(linelist_cleaned,
 <div id="objects-can-have-structure" class="section level3">
 <h3>Objects can have Structure</h3>
 <p>Objects can be a single piece of data (e.g. <code>my_number &lt;- 24</code>), or they can consist of structured data. The graphic below, sourced from <a href="http://venus.ifca.unican.es/Rintro/dataStruct.html">this online R tutorial</a> shows some common data structures and their names. Not included in this image is spatial data, which is discussed in another page.</p>
-<p><img src="/images/r_data_structures.png" /></p>
+<div class="figure">
+<img src="/images/r_data_structures.png" />
+
+</div>
 <p>Using the templates, you will <em>most commonly</em> encounter data frames and vectors:</p>
 <table>
 <colgroup>
@@ -96,7 +97,10 @@ linelist_cleaned &lt;- mutate(linelist_cleaned,
 length(linelist_cleaned$age_years)  </code></pre>
 <pre><code>## [1] 300</code></pre>
 <p>By typing the name of the data frame followed by <code>$</code> you will also see a list of all variables in the data frame. You can scroll through them using arrow key, select one with your Enter key, and avoid spelling mistakes!</p>
-<p><img src="/images/Calling_Names.gif" /></p>
+<div class="figure">
+<img src="/images/Calling_Names.gif" />
+
+</div>
 </div>
 </div>
 <div id="objects-have-classes" class="section level3">
@@ -104,8 +108,8 @@ length(linelist_cleaned$age_years)  </code></pre>
 <p>All the objects stored in R have a <em>class</em> which tells R how to handle the object. There are many possible classes, but common ones include:</p>
 <table>
 <colgroup>
-<col width="7%" />
-<col width="54%" />
+<col width="8%" />
+<col width="53%" />
 <col width="37%" />
 </colgroup>
 <thead>
@@ -161,8 +165,8 @@ length(linelist_cleaned$age_years)  </code></pre>
 <p>The templates sometimes contain code converting objects between classes.</p>
 <table>
 <colgroup>
-<col width="21%" />
-<col width="78%" />
+<col width="22%" />
+<col width="77%" />
 </colgroup>
 <thead>
 <tr class="header">

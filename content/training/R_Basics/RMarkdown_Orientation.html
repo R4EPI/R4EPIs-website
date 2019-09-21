@@ -22,7 +22,10 @@ weight: 6
 <h2>What is a RMarkdown Script?</h2>
 <p>RMarkdown scripts can contain commands such as for data import, cleaning, etc. <strong>and are themselves the outline of an automatically-generated document</strong> containing text, tables, and plots produced by your code.</p>
 <p>You can learn more about RMarkdowns <a href="https://rmarkdown.rstudio.com/lesson-1.html">here</a> and reference this <a href="https://www.rstudio.com/wp-content/uploads/2016/03/rmarkdown-cheatsheet-2.0.pdf">cheatsheet</a></p>
-<p><img src="/images/RMarkdown_transformation.png" /></p>
+<div class="figure">
+<img src="/images/RMarkdown_transformation.png" />
+
+</div>
 <p><em>In the above RMarkdown template script, the white and gray code chunks produce text and R-generated graphics, respectively, in the Word document output.</em></p>
 <div id="understand-a-rmarkdown" class="section level3">
 <h3>Understand a RMarkdown</h3>
@@ -44,7 +47,10 @@ A comment with a title with slashes indicates a name of a code chunk.
 <div id="navigating-the-rmarkdown" class="section level4">
 <h4>Navigating the RMarkdown</h4>
 <p>Use the Table of Contents menu in the bottom-left of the script to easily navigate between code chunks and sections of the script. The line numbers on the left side can be helpful to reference specific commands when asking for assistance.</p>
-<p><img src="/images/Table_of_Contents.gif" /></p>
+<div class="figure">
+<img src="/images/Table_of_Contents.gif" />
+
+</div>
 </div>
 <div id="running-code-chunks" class="section level4">
 <h4>Running code chunks</h4>
@@ -57,7 +63,10 @@ A comment with a title with slashes indicates a name of a code chunk.
 <li>Run all R code chunks above or below the selected chunk</li>
 </ul>
 <p>Progress bars and previews of chunk output/error messages help with revisions and trouble-shooting.</p>
-<p><img src="/images/Running_Chunks.gif" /></p>
+<div class="figure">
+<img src="/images/Running_Chunks.gif" />
+
+</div>
 </div>
 <div id="commented-code" class="section level4">
 <h4>Commented code</h4>
@@ -80,10 +89,11 @@ linelist_raw &lt;- gen_data(&quot;AJS&quot;) # generates a fake dataset for use 
 <ul>
 <li><strong>### As section titles.</strong> In the plain text sections of the RMarkdown script (not R code chunks), hash/comment symbols produce titles and section headers.</li>
 </ul>
-<p><img src="/images/Commented_Lines.png" /></p>
-<p>{{% notice tip %}}
-Multiple lines of R code can be commented/uncommented by highlighting the lines and pressing the keys Ctrl, Shift, and C at the same time (Ctrl+Shift+C).
-{{% /notice %}}</p>
+<div class="figure">
+<img src="/images/Commented_Lines.png" />
+
+</div>
+<p>{{% notice tip %}} Multiple lines of R code can be commented/uncommented by highlighting the lines and pressing the keys Ctrl, Shift, and C at the same time (Ctrl+Shift+C). {{% /notice %}}</p>
 <ul>
 <li></li>
 </ul>
@@ -92,7 +102,10 @@ Multiple lines of R code can be commented/uncommented by highlighting the lines 
 <div id="code-assists" class="section level3">
 <h3>Code assists</h3>
 <p>Any script (RMarkdown or otherwise) will give clues when you have made a mistake. For example, if you forgot to write a comma where it is needed, or to close a parentheses, RStudio will raise a flag on that line, on the right side of the script, to warn you.</p>
-<p><img src="/images/Warnings_and_Errors.png" /></p>
+<div class="figure">
+<img src="/images/Warnings_and_Errors.png" />
+
+</div>
 </div>
 <div id="producingknitting-the-rmarkdown-document" class="section level3">
 <h3>Producing/“Knitting” the RMarkdown document</h3>
@@ -101,9 +114,7 @@ Multiple lines of R code can be commented/uncommented by highlighting the lines 
 <li><p>You can use the arrow next to the word “Knit” to select the type of document you want to produce: Microsoft Word, PDF, or HTML (HTML opens the file in an offline web browser). Note that to knit to a PDF <em>directly</em>, additional packages may have to be installed.</p></li>
 <li><p>The default document type is specified in the header of the RMarkdown script, and for the templates it is Microsoft Word.</p></li>
 </ul>
-<p>{{% notice tip %}}
-If you receive an error when knitting such as “openBinaryFile does not exist … Error: pandoc document conversion failed with error 1”, your R project file may be saved in a location with restricted permissions such as a network drive. The RMarkdown is likely not permitted to write the new Microsoft Word file to that location. Try saving your R project to a more local location on your computer.</p>
-<p>If you are on an MSF computer, try writing saving the R project on the C drive where you have read/write rights - in general this is the c:temp folder.
-{{% /notice %}}</p>
+<p>{{% notice tip %}} If you receive an error when knitting such as “openBinaryFile does not exist … Error: pandoc document conversion failed with error 1”, your R project file may be saved in a location with restricted permissions such as a network drive. The RMarkdown is likely not permitted to write the new Microsoft Word file to that location. Try saving your R project to a more local location on your computer.</p>
+<p>If you are on an MSF computer, try writing saving the R project on the C drive where you have read/write rights - in general this is the c:temp folder. {{% /notice %}}</p>
 </div>
 </div>

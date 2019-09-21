@@ -12,13 +12,16 @@ weight: 8
 <p><strong>Functions typically operate upon some object placed within the function’s parentheses</strong>. For example, when the function <code>summary()</code> is used on a variable of class numeric, the output is a summary of the variable’s numeric and missing values.</p>
 <pre class="r"><code>summary(linelist_raw$age_years)</code></pre>
 <pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA&#39;s 
-##    3.00   25.00   54.00   55.97   85.00  120.00       2</code></pre>
+##    3.00   30.00   62.50   62.23   94.75  120.00       6</code></pre>
 <p>On installation, R contains “base” functions that perform common tasks. Specialized functions have been created by R users, verified by the R community, and can be downloaded within “packages” to your RStudio for use. One of the more challenging aspects of R is that there are often many functions to choose from to complete a given task.</p>
 </div>
 <div id="functions-with-multiple-arguments" class="section level3">
 <h3>Functions with Multiple Arguments</h3>
 <p>Functions often ask for several inputs. <strong>Each piece of information needed is called an argument</strong>. Some arguments are required for the function to work correctly, some are optional. Arguments can take character, numeric, logical (TRUE/FALSE), and other inputs. Optional arguments have default settings if they are not specified. <strong>Arguments are located within the parentheses of the function, usually separated by commas</strong>.</p>
-<p><img src="/images/Function_Bread_Example.png" /></p>
+<div class="figure">
+<img src="/images/Function_Bread_Example.png" />
+
+</div>
 <blockquote>
 <p><strong>For example</strong>, this <code>plot_age_pyramid()</code> command in the templates produces an age pyramid graphic based on defined age groups and a binary split variable, such as <code>sex</code>. The function is given three arguments within the parentheses, separated by commas. The values supplied to the arguments establish <code>linelist_cleaned</code> as the data frame to use, <code>age_group</code> as the variable to count, and <code>sex</code> as the binary variable to use for splitting the pyramid.</p>
 </blockquote>
@@ -36,18 +39,14 @@ plot_age_pyramid(linelist_cleaned, &quot;age_group&quot;, &quot;sex&quot;)</code
 </li>
 <li>Specify the two colors to use (<code>pal =</code> is short for “palette” and is supplied with a vector of two color names. See the Objects page for how the function <code>c()</code> makes a vector)</li>
 </ul>
-<p>{{% notice tip %}}
-For arguments specified with an equals symbol (e.g. <code>coltotals = ...</code>), their order among the arguments is not important (must still be within the parentheses and separated by commas).
-{{% /notice %}}</p>
+<p>{{% notice tip %}} For arguments specified with an equals symbol (e.g. <code>coltotals = ...</code>), their order among the arguments is not important (must still be within the parentheses and separated by commas). {{% /notice %}}</p>
 <pre class="r"><code>plot_age_pyramid(linelist_cleaned, &quot;age_group&quot;, &quot;sex&quot;, proportional = TRUE, pal = c(&quot;orange&quot;, &quot;purple&quot;))</code></pre>
 <p><img src="/training/R_Basics/Functions_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
 </div>
 <div id="using-additional-functions" class="section level3">
 <h3>Using Additional Functions</h3>
 <p>R comes with “base” functions, but the R community has created and verified many other specialized functions that are available to you. These <em>functions</em> are contained within <strong>packages</strong> that can be downloaded to your computer. Once downloaded, you access the functions within a package by calling the package with the <code>library()</code> command at the beginning of each R session.</p>
-<p>{{% notice tip %}}
-<strong>While you only have to install packages once, you must load them at the beginning of every R session using <code>library()</code>.</strong> There is a code chunk at the beginning of each template that loads the necessary packages.
-{{% /notice %}}</p>
+<p>{{% notice tip %}} <strong>While you only have to install packages once, you must load them at the beginning of every R session using <code>library()</code>.</strong> There is a code chunk at the beginning of each template that loads the necessary packages. {{% /notice %}}</p>
 <p>Think of R as your personal library: When you download a package your library gains a book of functions, but each time you want to use a function in that book, you must borrow that book from your library.</p>
 <p>For clarity in the templates, functions are often preceeded by the name of their package using the <code>::</code> symbol in the following way:</p>
 <p><code>package_name::function_name()</code></p>
@@ -64,12 +63,14 @@ linelist_raw &lt;- rio::import(&quot;linelist.xlsx&quot;, which = &quot;Sheet1&q
 <pre class="r"><code># only keep variables with a case ID and a date of consultation
 linelist_cleaned &lt;- linelist_cleaned %&gt;% 
   filter(!is.na(case_number) &amp; !is.na(date_of_admission))</code></pre>
-<p>{{% notice tip %}}
-<strong>Remember that even when using piping to link functions, if the assignment operator (<code>&lt;-</code>) is present, the object to the left will still be over-written (re-defined) by the right side.</strong> In the code above, linelist_cleaned will be replaced by the new <code>linelist_cleaned</code> which likely has fewer observations.<br />
+<p>{{% notice tip %}} <strong>Remember that even when using piping to link functions, if the assignment operator (<code>&lt;-</code>) is present, the object to the left will still be over-written (re-defined) by the right side.</strong> In the code above, linelist_cleaned will be replaced by the new <code>linelist_cleaned</code> which likely has fewer observations.<br />
 {{% /notice %}}</p>
 </div>
 <div id="help-with-functions" class="section level3">
 <h3>Help with functions</h3>
 <p>To read more about a function, you can try searching online for resources OR use the Help tab in the lower-right R pane.</p>
-<p><img src="/images/Function_Help.gif" /></p>
+<div class="figure">
+<img src="/images/Function_Help.gif" />
+
+</div>
 </div>
