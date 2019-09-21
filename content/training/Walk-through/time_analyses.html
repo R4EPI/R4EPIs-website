@@ -13,9 +13,7 @@ weight: 13
 <p><strong>First</strong>, the function <code>incidence()</code> <strong>counts the number of cases</strong> for each week, by <code>date_of_onset</code>. It stores this information in the object <code>inc_week_7</code>. Read more about <code>incidence()</code> in the Help pane.</p>
 <p><strong>Second</strong>, the <strong>theme elements</strong> are set that <code>ggplot()</code> will use when plotting the epidemic curves (you can read more about <code>ggplot()</code> and theme elements in the Advanced R Basics page). This includes the angle and placement of x-axis label text, having no title in the legend, and setting colors and type for x and y gridlines.</p>
 <p><strong>Third</strong>, the <strong>text labels</strong> for the x and y axes, title, and subtitle (subtitle automatically using the <code>reporting_week</code> defined at the top of the template). These are stored in the object <code>epicurve_labels</code>.</p>
-<p>{{% notice tip %}}
-It is necessary to use the “full name” of variables for this to work correctly - this means date_of_onset should be listed in incidence() as <code>linelist_cleaned$date_of_onset</code>.
-{{% /notice %}}</p>
+<p>{{% notice tip %}} It is necessary to use the “full name” of variables for this to work correctly - this means date_of_onset should be listed in incidence() as <code>linelist_cleaned$date_of_onset</code>. {{% /notice %}}</p>
 <pre class="r"><code># This code creates case counts for each week of your outbreak, overall
 # As with aweek, you can change the start of your week to e.g. &quot;Sunday week&quot;
 inc_week_7 &lt;- incidence(linelist_cleaned$date_of_onset, interval = &quot;Monday week&quot;)
@@ -35,13 +33,9 @@ epicurve_labels &lt;- labs(x = &quot;Calendar week&quot;,
                         subtitle = sprintf(&quot;Source: MSF data from %s&quot;, reporting_week)
                        ) </code></pre>
 <p><strong>In this next part of the chunk, the plot of the epidemic curve is finalized and displayed.</strong></p>
-<p>{{% notice tip %}}
-The <code>plot()</code> function used here is from the package <strong>incidence</strong>, not the base R <code>plot()</code> function. This one uses <code>ggplot()</code> and so has different syntax and structure. As with <code>ggplot()</code>, layers of the graphic are added sequentially using the <code>+</code> symbol at the end of each sub-command.
-{{% /notice %}}</p>
+<p>{{% notice tip %}} The <code>plot()</code> function used here is from the package <strong>incidence</strong>, not the base R <code>plot()</code> function. This one uses <code>ggplot()</code> and so has different syntax and structure. As with <code>ggplot()</code>, layers of the graphic are added sequentially using the <code>+</code> symbol at the end of each sub-command. {{% /notice %}}</p>
 <p>In the example below, the weekly count data from <code>inc_week_7</code> are plotted first, then miscellaneous settings are specified: the y-axis origin is set, the labels, and finally the theme parameters. All of these elements are stored in the object <code>basic_curve</code>, which is finally run to display the plot.</p>
-<p>{{% notice tip %}}
-For some functions, it is necessary to use the “full name” of variables - for example when using <code>incidence()</code>, <code>date_of_onset</code> should be listed as <code>linelist_cleaned$date_of_onset</code>. Otherwise you may get an error such as “object ‘date_of_onset’ not found”.
-{{% /notice %}}</p>
+<p>{{% notice tip %}} For some functions, it is necessary to use the “full name” of variables - for example when using <code>incidence()</code>, <code>date_of_onset</code> should be listed as <code>linelist_cleaned$date_of_onset</code>. Otherwise you may get an error such as “object ‘date_of_onset’ not found”. {{% /notice %}}</p>
 <pre class="r"><code># plot your epicurve as a ggplot (incidence::plot is different to base::plot)
 basic_curve &lt;- plot(inc_week_7, show_cases = TRUE, border = &quot;black&quot;, n_breaks = nrow(inc_week_7)) + 
   scale_y_continuous(expand = c(0, 0)) +  # set origin for axes
@@ -53,16 +47,12 @@ basic_curve &lt;- plot(inc_week_7, show_cases = TRUE, border = &quot;black&quot;
 basic_curve</code></pre>
 <p><img src="/training/Walk-through/time_analyses_files/figure-html/epicurve-1.png" width="720" /></p>
 <p>This x-axis is difficult to read with every week displayed. To increase readability we can uncomment and use the helper code at the bottom of that code chunk. This modifies the already-defined <code>basic_curve</code> object (with a <code>+</code>) to specify that the x-axis shows only a specified number of breaks/dates (in this case 6). Note: A warning that a scale for x is being replaced is okay.</p>
-<p>{{% notice tip %}}
-The data are still shown by week - it is only the labels on the scale that have changed.
-{{% /notice %}}</p>
+<p>{{% notice tip %}} The data are still shown by week - it is only the labels on the scale that have changed. {{% /notice %}}</p>
 <pre class="r"><code># Modifies basic_curve to show only 6 breaks in the x-axis 
 basic_curve + scale_x_incidence(inc_week_7, n_breaks = 6)</code></pre>
 <p><img src="/training/Walk-through/time_analyses_files/figure-html/unnamed-chunk-1-1.png" width="720" /></p>
 <p><strong>To change the intervals used for the data aggregation themselves</strong>, use the <code>interval =</code> argument in the original <code>incidence()</code> command. There are the options to do this biweekly, by month, quarter or year (search the Help pane for the <code>incidence()</code> function in the <strong>incidence</strong> package). <strong>Below is a biweekly example</strong> (the axes labels have been returned to default - showing each two-week increment).</p>
-<p>{{% notice tip %}}
-In the code below, the plot is not saved to an object and simply prints when the <code>plot()</code> command and it’s various added (<code>+</code>) elements such as scale, labels, and theme are run.
-{{% /notice %}}</p>
+<p>{{% notice tip %}} In the code below, the plot is not saved to an object and simply prints when the <code>plot()</code> command and it’s various added (<code>+</code>) elements such as scale, labels, and theme are run. {{% /notice %}}</p>
 <pre class="r"><code># interval is set to &quot;2 Monday weeks&quot; for biweekly case aggregation
 inc_week_14 &lt;- incidence(linelist_cleaned$date_of_onset, interval = &quot;2 Monday weeks&quot;)
 
@@ -75,9 +65,7 @@ plot(inc_week_14, show_cases = TRUE, border = &quot;black&quot;, n_breaks = nrow
   epicurve_theme</code></pre>
 <p><img src="/training/Walk-through/time_analyses_files/figure-html/biweekly_epicurve-1.png" width="720" /></p>
 <p>To <strong>stratify the epidemic curve</strong> by a categorical variable (such as gender), the <code>groups =</code> argument is added to the <code>incidence()</code> function. Additionally, the <code>show_cases =</code> argument of <code>plot()</code> can be set to <code>FALSE</code> to improve aesthetics.</p>
-<p>{{% notice tip %}}
-Remember that if listing a variable, the <code>incidence()</code> function expects its “full name”, such as <code>linelist_cleaned$sex</code>**. Otherwise you may get an error such as “object ‘sex’ not found”.
-{{% /notice %}}</p>
+<p>{{% notice tip %}} Remember that if listing a variable, the <code>incidence()</code> function expects its “full name”, such as <code>linelist_cleaned$sex</code>**. Otherwise you may get an error such as “object ‘sex’ not found”. {{% /notice %}}</p>
 <pre class="r"><code># get counts by gender
 inc_week_7_gender &lt;- incidence(linelist_cleaned$date_of_onset, 
                                interval = &quot;2 Monday weeks&quot;, 
@@ -1191,9 +1179,7 @@ cfr %&gt;%
 <h4>Plotting AR, CFR, and Epidemic Curve together</h4>
 <p>These code chunks produce plots of the AR (in the population), CFR (among inpatients only), and the AF and CFR as line graphs together with the Epidemic Curve.</p>
 <p><strong>The first chunk, <code>ar_line_graph</code>, prepares a plot of attack rate by epiweek, but does not yet print it.</strong> You can print it alone by running a command of its name <code>ar_plot</code>.</p>
-<p>{{% notice tip %}}
-This <code>ar_plot</code> depends on you having already run the <code>attack_rate_per_week</code> chunk. If you have not, you may see “Error: epiweek not found”
-{{% /notice %}}</p>
+<p>{{% notice tip %}} This <code>ar_plot</code> depends on you having already run the <code>attack_rate_per_week</code> chunk. If you have not, you may see “Error: epiweek not found” {{% /notice %}}</p>
 <pre class="r"><code>ar_plot &lt;- ggplot(ar, aes(x = week2date(epiweek) + (7 * 0.5), group = 1)) +
   geom_ribbon(aes(ymin = lower, ymax = upper), 
               color = &quot;blue&quot;, fill = &quot;blue&quot;, linetype = 2, alpha = 0.2, show.legend = FALSE) +
@@ -1206,9 +1192,7 @@ This <code>ar_plot</code> depends on you having already run the <code>attack_rat
   # change visuals of dates and remove legend title
   epicurve_theme</code></pre>
 <p><strong>The second code chunk, <code>cfr_line_graph</code> prepares a plot of CFR by epiweek, but also does not yet print it.</strong> You can print it alone by running a command with its name <code>cfr_plot</code>.</p>
-<p>{{% notice tip %}}
-This cfr_plot depends on you having already run the cfr_per_week chunk. If you have not, you may see “Error: epiweek not found”.
-{{% /notice %}}</p>
+<p>{{% notice tip %}} This cfr_plot depends on you having already run the cfr_per_week chunk. If you have not, you may see “Error: epiweek not found”. {{% /notice %}}</p>
 <pre class="r"><code>cfr_plot &lt;- ggplot(cfr, aes(x = week2date(epiweek) + (7 * 0.5), group = 1)) +
   geom_ribbon(aes(ymin = lower, ymax = upper), 
               color = &quot;red&quot;, fill = &quot;red&quot;, linetype = 2, alpha = 0.2, show.legend = FALSE) +
