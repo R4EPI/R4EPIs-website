@@ -24,10 +24,9 @@ If you are more familiar with Stata, a script is equivalent to a Do File.
 
 RMarkdown scripts can contain commands such as for data import, cleaning, etc. **and are themselves the outline of an automatically-generated document** containing text, tables, and plots produced by your code.
 
-You can learn more about RMarkdowns [here](https://rmarkdown.rstudio.com/lesson-1.html) and reference this [cheatsheet](https://www.rstudio.com/wp-content/uploads/2016/03/rmarkdown-cheatsheet-2.0.pdf)  
+You can learn more about RMarkdowns [here](https://rmarkdown.rstudio.com/lesson-1.html) and reference this [cheatsheet](/images/rmarkdown_cheatsheet_2.0.pdf)  
 
 ![](/images/RMarkdown_transformation.png)
-
 *In the above RMarkdown template script, the white and gray code chunks produce text and R-generated graphics, respectively, in the Word document output.*  
 
 ### Understand a RMarkdown  
@@ -36,11 +35,13 @@ You can learn more about RMarkdowns [here](https://rmarkdown.rstudio.com/lesson-
 
 While the RMarkdown may at first look like a wall of code, notice how "chunks" of code are differentiated by their color:  
 
-* **In chunks with WHITE background, code text will appear as text in the document.** These lines can have *italics*, **bold**, or other formating, and can display parameters derived from your data (such as epi week of outbreak peak, as in the example above).  
+* **In WHITE background areas, any text will appear as regular text in the final report.**  
+     + Can have formatting such as headings, *italics*, **bold**, numbers, and bullets. See the second page of this [RMarkdown cheatsheet](/images/rmarkdown_cheatsheet_2.0.pdf) for more detail.  
+     + Can display parameters derived from your data via **in-line code** (such as epi week of the outbreak peak, as in the example above).  
 
-* **In chunks with GRAY background, RMarkdown is running R commands.** The commands perform data processing and cleaning steps, or could produce visual outputs in the document.  
+* **In GRAY background "code chunks", RMarkdown is running R commands.** These commands perform data processing and cleaning steps, or could produce visual outputs in the document.  
 
-* **Text that appears GREEN in the RMarkdown will not appear in the final report**. These sections, placed between special arrows (known as html comment tags, `<!-- -->`), serve as instructions for you.  
+* **GREEN text in the RMarkdown will not appear in the final report**. These sections, placed between special characters (known as html comment tags, `<!-- -->`), serve as instructions for you.  
 
 
 ```
@@ -52,6 +53,7 @@ A comment with a title with slashes indicates a name of a code chunk.
      
 ```
 
+   
 #### Navigating the RMarkdown  
 
 Use the Table of Contents menu in the bottom-left of the script to easily navigate between code chunks and sections of the script. The line numbers on the left side can be helpful to reference specific commands when asking for assistance.  

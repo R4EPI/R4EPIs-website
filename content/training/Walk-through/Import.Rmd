@@ -55,13 +55,13 @@ aweek::set_week_start("Monday")
 ```
 
 
-**In this template section you choose the appropriate code chunk to import your linelist dataset.** The linelist Excel file can be downloaded from the case study overview page.  
+**In this template section you choose the appropriate code chunk to import your linelist dataset.** The linelist Excel file can be downloaded from the [case study overview](https://r4epis.netlify.com/training/walk-through/case_study_overview/) page.  
 
 For this exercise our linelist dataset is a **non-DHIS file**, so to import we use the `read_nonDHIS_data` code chunk.  
 
 **Comment out (using #) or delete the `read_fake_data`, `read_DHIS_data`, and `prep_DHIS_data` chunks**, as they are not necessary and will cause errors.
 
-![Data import options](/images/AJS_Data_Import.png) 
+![](/images/AJS_Data_Import.png) 
 
 **Importing the dataset into R**  
 
@@ -80,7 +80,7 @@ linelist_raw <- rio::import(here::here("AJS_AmTiman.xlsx"), which = "linelist")
 
 A successfull import should result in a dataframe object named `linelist_raw` in your RStudio Environment pane, consisting of 1447 observations and 122 variables.  
 
-![Environment pane showing `linelist_raw`](/images/linelist_raw_imported.PNG?width=50pc)
+![](/images/linelist_raw_imported.PNG?width=50pc)
 
 
 ```{r include=FALSE, results='hide', message=FALSE, warning=FALSE}

@@ -68,7 +68,7 @@ linelist_cleaned <- readRDS("data/linelist_aligned.rds")
 
 
 
-This code chunk can be used to explore your data, but remember to eventually comment these code lines if you do not want these outputs in your final report.
+This code chunk can be used to explore your data, but **remember to eventually comment out (#) these code lines if you do not want these outputs in your final report**.
 
 
 

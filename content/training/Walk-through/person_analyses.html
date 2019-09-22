@@ -10,7 +10,7 @@ weight: 12
 <p>This first section produces descriptive analyses about the patients demographics and attack rates.</p>
 <div id="demographic-tables" class="section level3">
 <h3>Demographic Tables:</h3>
-<p>The first demographic table presents patients by their age group (the table’s rows) and their relationship with the case definition (the table’s columns). This chunk uses piping (%&gt;%, see the Advanced R Basics page) to link six different functions and produce a table:</p>
+<p>The first demographic table presents patients by their age group (the table’s rows) and their relationship with the case definition (the table’s columns). This chunk uses piping to link six different functions and produce a table (<code>%&gt;%</code> is the pipe operator - see the R Basics <a href="https://r4epis.netlify.com/training/r_basics/advanced_functions/">Advanced and Miscellaneous</a> page):</p>
 <ul>
 <li>The <code>tab_linelist()</code> function creates a frequency and percent table of <code>age_group</code>, with columns differentiating by <code>case_def</code> value<br />
 </li>
@@ -33,8 +33,6 @@ tab_linelist(linelist_cleaned,
   rename_redundant(&quot;%&quot; = proportion) %&gt;%
   augment_redundant(&quot; cases (n)&quot; = &quot; n$&quot;) %&gt;%
   kable(digits = 1)</code></pre>
-<pre><code>## Warning in descriptive(x, counter = !!i, grouper = !!stra, proptotal =
-## prop_total, : Removing 8 missing values</code></pre>
 <table>
 <thead>
 <tr class="header">
@@ -54,55 +52,55 @@ tab_linelist(linelist_cleaned,
 <tr class="odd">
 <td align="left">0-2</td>
 <td align="right">4</td>
-<td align="right">4.1</td>
+<td align="right">4.0</td>
 <td align="right">0</td>
 <td align="right">0.0</td>
-<td align="right">39</td>
-<td align="right">5.6</td>
+<td align="right">40</td>
+<td align="right">5.8</td>
 <td align="right">23</td>
-<td align="right">3.6</td>
-<td align="right">66</td>
+<td align="right">3.7</td>
+<td align="right">67</td>
 </tr>
 <tr class="even">
 <td align="left">3-14</td>
 <td align="right">30</td>
-<td align="right">30.6</td>
+<td align="right">30.3</td>
 <td align="right">1</td>
 <td align="right">16.7</td>
-<td align="right">285</td>
-<td align="right">41.1</td>
-<td align="right">321</td>
+<td align="right">284</td>
+<td align="right">40.9</td>
+<td align="right">320</td>
 <td align="right">50.9</td>
-<td align="right">637</td>
+<td align="right">635</td>
 </tr>
 <tr class="odd">
 <td align="left">15-29</td>
 <td align="right">46</td>
-<td align="right">46.9</td>
+<td align="right">46.5</td>
 <td align="right">2</td>
 <td align="right">33.3</td>
-<td align="right">245</td>
+<td align="right">246</td>
 <td align="right">35.4</td>
-<td align="right">181</td>
-<td align="right">28.7</td>
+<td align="right">180</td>
+<td align="right">28.6</td>
 <td align="right">474</td>
 </tr>
 <tr class="even">
 <td align="left">30-44</td>
-<td align="right">14</td>
-<td align="right">14.3</td>
+<td align="right">15</td>
+<td align="right">15.2</td>
 <td align="right">2</td>
 <td align="right">33.3</td>
 <td align="right">95</td>
 <td align="right">13.7</td>
 <td align="right">76</td>
-<td align="right">12.0</td>
-<td align="right">187</td>
+<td align="right">12.1</td>
+<td align="right">188</td>
 </tr>
 <tr class="odd">
 <td align="left">45+</td>
 <td align="right">4</td>
-<td align="right">4.1</td>
+<td align="right">4.0</td>
 <td align="right">1</td>
 <td align="right">16.7</td>
 <td align="right">29</td>
@@ -113,13 +111,13 @@ tab_linelist(linelist_cleaned,
 </tr>
 <tr class="even">
 <td align="left">Total</td>
-<td align="right">98</td>
+<td align="right">99</td>
 <td align="right">100.0</td>
 <td align="right">6</td>
 <td align="right">100.0</td>
-<td align="right">693</td>
+<td align="right">694</td>
 <td align="right">100.0</td>
-<td align="right">631</td>
+<td align="right">629</td>
 <td align="right">100.0</td>
 <td align="right">1428</td>
 </tr>
@@ -134,8 +132,6 @@ tab_linelist(linelist_cleaned,
 #  rename_redundant(&quot;%&quot; = proportion) %&gt;%
   augment_redundant(&quot; cases (n)&quot; = &quot; n$&quot;) %&gt;%
   kable(digits = 1)</code></pre>
-<pre><code>## Warning in descriptive(x, counter = !!i, grouper = !!stra, proptotal =
-## prop_total, : Removing 8 missing values</code></pre>
 <table>
 <thead>
 <tr class="header">
@@ -152,23 +148,23 @@ tab_linelist(linelist_cleaned,
 <td align="left">0-2</td>
 <td align="right">26</td>
 <td align="right">1.8</td>
-<td align="right">40</td>
-<td align="right">2.8</td>
-<td align="right">66</td>
+<td align="right">41</td>
+<td align="right">2.9</td>
+<td align="right">67</td>
 </tr>
 <tr class="even">
 <td align="left">3-14</td>
 <td align="right">222</td>
 <td align="right">15.5</td>
-<td align="right">415</td>
-<td align="right">29.1</td>
-<td align="right">637</td>
+<td align="right">413</td>
+<td align="right">28.9</td>
+<td align="right">635</td>
 </tr>
 <tr class="odd">
 <td align="left">15-29</td>
-<td align="right">315</td>
+<td align="right">316</td>
 <td align="right">22.1</td>
-<td align="right">159</td>
+<td align="right">158</td>
 <td align="right">11.1</td>
 <td align="right">474</td>
 </tr>
@@ -176,9 +172,9 @@ tab_linelist(linelist_cleaned,
 <td align="left">30-44</td>
 <td align="right">118</td>
 <td align="right">8.3</td>
-<td align="right">69</td>
-<td align="right">4.8</td>
-<td align="right">187</td>
+<td align="right">70</td>
+<td align="right">4.9</td>
+<td align="right">188</td>
 </tr>
 <tr class="odd">
 <td align="left">45+</td>
@@ -190,10 +186,10 @@ tab_linelist(linelist_cleaned,
 </tr>
 <tr class="even">
 <td align="left">Total</td>
-<td align="right">713</td>
-<td align="right">49.9</td>
-<td align="right">715</td>
-<td align="right">50.1</td>
+<td align="right">714</td>
+<td align="right">50.0</td>
+<td align="right">714</td>
+<td align="right">50.0</td>
 <td align="right">1428</td>
 </tr>
 </tbody>
@@ -225,7 +221,7 @@ plot_age_pyramid(linelist_cleaned,
         text = element_text(size = 18)  # change text size
        )</code></pre>
 <p><img src="/training/Walk-through/person_analyses_files/figure-html/age_pyramid-1.png" width="720" /></p>
-<p><strong>To have an age pyramid of patients under 2 by month age groups</strong>, it is best to add a <code>filter()</code> step to the beginning of the code chunk, as below. This step selects for <code>linelist_cleaned</code> observations that meet the specified critera and passes that reduced dataset through the “pipes” to the next function: (<code>plot_age_pyramid()</code>). If this <code>filter()</code> step is not added, you will see that the largest pyramid bars are of “missing”. These are the patients old enough to not have a months age group.</p>
+<p><strong>To have an age pyramid of patients under 2 by month age groups, it is best to add a <code>filter()</code> step to the beginning of the code chunk, as below</strong>. This selects for <code>linelist_cleaned</code> observations that meet the specified critera and passes that reduced dataset through the “pipes” to the next function: (<code>plot_age_pyramid()</code>). If this <code>filter()</code> step is not added, you will see that the largest pyramid bars are of “missing”. These are the patients old enough to not have a months age group.</p>
 <p>Note that the filter step does not drop any observations from the <code>linelist_cleaned</code> object itself. Because the filter is <strong>not</strong> being assigned (<code>&lt;-</code>) to over-write <code>linelist_cleaned</code>, this filter is only temporarily applied for the purpose of producing the age pyramid.</p>
 <pre class="r"><code># plot age pyramid by month groups, for observations under 2 years
 filter(linelist_cleaned, age_years &lt;= 2) %&gt;%
@@ -272,38 +268,38 @@ tab_linelist(linelist_cleaned, SYMPTOMS, keep = &quot;Oui&quot;) %&gt;%
 <tbody>
 <tr class="odd">
 <td align="left">Generalized itch</td>
-<td align="right">518</td>
-<td align="right">65.4</td>
+<td align="right">512</td>
+<td align="right">64.6</td>
 </tr>
 <tr class="even">
 <td align="left">Fever</td>
-<td align="right">670</td>
-<td align="right">84.3</td>
+<td align="right">668</td>
+<td align="right">84.0</td>
 </tr>
 <tr class="odd">
 <td align="left">Joint pains</td>
 <td align="right">240</td>
-<td align="right">30.4</td>
+<td align="right">30.5</td>
 </tr>
 <tr class="even">
 <td align="left">Epigastric pain heartburn</td>
-<td align="right">471</td>
-<td align="right">59.5</td>
+<td align="right">469</td>
+<td align="right">59.2</td>
 </tr>
 <tr class="odd">
 <td align="left">Nausea anorexia</td>
-<td align="right">426</td>
-<td align="right">53.7</td>
+<td align="right">425</td>
+<td align="right">53.5</td>
 </tr>
 <tr class="even">
 <td align="left">Vomiting</td>
-<td align="right">460</td>
-<td align="right">57.9</td>
+<td align="right">457</td>
+<td align="right">57.6</td>
 </tr>
 <tr class="odd">
 <td align="left">Diarrhoea</td>
-<td align="right">113</td>
-<td align="right">14.3</td>
+<td align="right">112</td>
+<td align="right">14.2</td>
 </tr>
 <tr class="even">
 <td align="left">Bleeding</td>
@@ -312,8 +308,8 @@ tab_linelist(linelist_cleaned, SYMPTOMS, keep = &quot;Oui&quot;) %&gt;%
 </tr>
 <tr class="odd">
 <td align="left">Headache</td>
-<td align="right">632</td>
-<td align="right">79.9</td>
+<td align="right">633</td>
+<td align="right">80.0</td>
 </tr>
 </tbody>
 </table>
@@ -342,6 +338,12 @@ tab_linelist(linelist_cleaned, LABS,
 <th align="right">%</th>
 <th align="right">IgG-/IgM- (n)</th>
 <th align="right">%</th>
+<th align="right">IgG-/IgM+ (n)</th>
+<th align="right">%</th>
+<th align="right">IgG+/IgM- (n)</th>
+<th align="right">%</th>
+<th align="right">IgG+/IgM+ (n)</th>
+<th align="right">%</th>
 <th align="right">IgG±/IgM- (n)</th>
 <th align="right">%</th>
 </tr>
@@ -349,10 +351,16 @@ tab_linelist(linelist_cleaned, LABS,
 <tbody>
 <tr class="odd">
 <td align="left">Hep b rdt</td>
-<td align="right">221</td>
-<td align="right">91.3</td>
-<td align="right">21</td>
-<td align="right">8.7</td>
+<td align="right">222</td>
+<td align="right">91.7</td>
+<td align="right">20</td>
+<td align="right">8.3</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">-</td>
 <td align="right">-</td>
 <td align="right">-</td>
 <td align="right">-</td>
@@ -368,13 +376,25 @@ tab_linelist(linelist_cleaned, LABS,
 <td align="right">-</td>
 <td align="right">-</td>
 <td align="right">-</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">-</td>
 </tr>
 <tr class="odd">
 <td align="left">Hep e rdt</td>
-<td align="right">150</td>
-<td align="right">60.2</td>
-<td align="right">99</td>
-<td align="right">39.8</td>
+<td align="right">149</td>
+<td align="right">59.8</td>
+<td align="right">100</td>
+<td align="right">40.2</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">-</td>
 <td align="right">-</td>
 <td align="right">-</td>
 <td align="right">-</td>
@@ -384,6 +404,12 @@ tab_linelist(linelist_cleaned, LABS,
 <td align="left">Test hepatitis a</td>
 <td align="right">23</td>
 <td align="right">100.0</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">-</td>
 <td align="right">-</td>
 <td align="right">-</td>
 <td align="right">-</td>
@@ -401,11 +427,23 @@ tab_linelist(linelist_cleaned, LABS,
 <td align="right">-</td>
 <td align="right">-</td>
 <td align="right">-</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">-</td>
 </tr>
 <tr class="even">
 <td align="left">Test hepatitis c</td>
 <td align="right">23</td>
 <td align="right">100.0</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">-</td>
 <td align="right">-</td>
 <td align="right">-</td>
 <td align="right">-</td>
@@ -423,6 +461,12 @@ tab_linelist(linelist_cleaned, LABS,
 <td align="right">-</td>
 <td align="right">-</td>
 <td align="right">-</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">-</td>
 </tr>
 <tr class="even">
 <td align="left">Test hepatitis e genotype</td>
@@ -430,6 +474,12 @@ tab_linelist(linelist_cleaned, LABS,
 <td align="right">-</td>
 <td align="right">2</td>
 <td align="right">100.0</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">-</td>
 <td align="right">-</td>
 <td align="right">-</td>
 <td align="right">-</td>
@@ -443,15 +493,27 @@ tab_linelist(linelist_cleaned, LABS,
 <td align="right">1.6</td>
 <td align="right">9</td>
 <td align="right">14.5</td>
+<td align="right">14</td>
+<td align="right">22.6</td>
+<td align="right">5</td>
+<td align="right">8.1</td>
+<td align="right">26</td>
+<td align="right">41.9</td>
 <td align="right">-</td>
 <td align="right">-</td>
 </tr>
 <tr class="even">
 <td align="left">Malaria rdt at admission</td>
-<td align="right">158</td>
-<td align="right">63.2</td>
+<td align="right">160</td>
+<td align="right">63.5</td>
 <td align="right">92</td>
-<td align="right">36.8</td>
+<td align="right">36.5</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">-</td>
 <td align="right">-</td>
 <td align="right">-</td>
 <td align="right">-</td>
@@ -464,9 +526,15 @@ tab_linelist(linelist_cleaned, LABS,
 <td align="right">-</td>
 <td align="right">-</td>
 <td align="right">12</td>
-<td align="right">50.0</td>
+<td align="right">52.2</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">10</td>
+<td align="right">43.5</td>
+<td align="right">-</td>
+<td align="right">-</td>
 <td align="right">1</td>
-<td align="right">4.2</td>
+<td align="right">4.3</td>
 </tr>
 <tr class="even">
 <td align="left">Yellow fever</td>
@@ -474,8 +542,14 @@ tab_linelist(linelist_cleaned, LABS,
 <td align="right">-</td>
 <td align="right">-</td>
 <td align="right">-</td>
-<td align="right">19</td>
-<td align="right">79.2</td>
+<td align="right">18</td>
+<td align="right">78.3</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">5</td>
+<td align="right">21.7</td>
+<td align="right">-</td>
+<td align="right">-</td>
 <td align="right">-</td>
 <td align="right">-</td>
 </tr>
@@ -485,15 +559,27 @@ tab_linelist(linelist_cleaned, LABS,
 <td align="right">-</td>
 <td align="right">-</td>
 <td align="right">-</td>
-<td align="right">21</td>
-<td align="right">87.5</td>
+<td align="right">20</td>
+<td align="right">87.0</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">3</td>
+<td align="right">13.0</td>
+<td align="right">-</td>
+<td align="right">-</td>
 <td align="right">-</td>
 <td align="right">-</td>
 </tr>
 <tr class="even">
 <td align="left">Other arthropod transmitted virus</td>
-<td align="right">24</td>
+<td align="right">23</td>
 <td align="right">100.0</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">-</td>
+<td align="right">-</td>
 <td align="right">-</td>
 <td align="right">-</td>
 <td align="right">-</td>
@@ -537,9 +623,9 @@ overall_cfr &lt;- linelist_cleaned %&gt;%
 <tbody>
 <tr class="odd">
 <td align="right">13</td>
-<td align="right">85</td>
-<td align="right">15.3</td>
-<td align="left">(9.16–24.43)</td>
+<td align="right">86</td>
+<td align="right">15.1</td>
+<td align="left">(9.05–24.16)</td>
 </tr>
 </tbody>
 </table>
@@ -575,16 +661,16 @@ overall_cfr &lt;- linelist_cleaned %&gt;%
 <tr class="even">
 <td align="left">M</td>
 <td align="right">2</td>
-<td align="right">30</td>
-<td align="right">6.7</td>
-<td align="left">(1.85–21.32)</td>
+<td align="right">31</td>
+<td align="right">6.5</td>
+<td align="left">(1.79–20.72)</td>
 </tr>
 <tr class="odd">
 <td align="left">Total</td>
 <td align="right">13</td>
-<td align="right">85</td>
-<td align="right">15.3</td>
-<td align="left">(9.16–24.43)</td>
+<td align="right">86</td>
+<td align="right">15.1</td>
+<td align="left">(9.05–24.16)</td>
 </tr>
 </tbody>
 </table>
@@ -638,9 +724,9 @@ overall_cfr &lt;- linelist_cleaned %&gt;%
 <tr class="even">
 <td align="left">30-44</td>
 <td align="right">2</td>
-<td align="right">16</td>
-<td align="right">12.5</td>
-<td align="left">(3.50–36.02)</td>
+<td align="right">17</td>
+<td align="right">11.8</td>
+<td align="left">(3.29–34.34)</td>
 </tr>
 <tr class="odd">
 <td align="left">45+</td>
@@ -659,9 +745,9 @@ overall_cfr &lt;- linelist_cleaned %&gt;%
 <tr class="odd">
 <td align="left">Total</td>
 <td align="right">13</td>
-<td align="right">85</td>
-<td align="right">15.3</td>
-<td align="left">(9.16–24.43)</td>
+<td align="right">86</td>
+<td align="right">15.1</td>
+<td align="left">(9.05–24.16)</td>
 </tr>
 </tbody>
 </table>
@@ -691,9 +777,9 @@ overall_cfr &lt;- linelist_cleaned %&gt;%
 <tr class="odd">
 <td align="left">Confirmed</td>
 <td align="right">8</td>
-<td align="right">43</td>
-<td align="right">18.6</td>
-<td align="left">(9.74–32.62)</td>
+<td align="right">44</td>
+<td align="right">18.2</td>
+<td align="left">(9.51–31.96)</td>
 </tr>
 <tr class="even">
 <td align="left">Suspected</td>
@@ -705,9 +791,9 @@ overall_cfr &lt;- linelist_cleaned %&gt;%
 <tr class="odd">
 <td align="left">Total</td>
 <td align="right">13</td>
-<td align="right">85</td>
-<td align="right">15.3</td>
-<td align="left">(9.16–24.43)</td>
+<td align="right">86</td>
+<td align="right">15.1</td>
+<td align="left">(9.05–24.16)</td>
 </tr>
 </tbody>
 </table>

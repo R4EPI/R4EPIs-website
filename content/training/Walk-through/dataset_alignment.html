@@ -7,7 +7,8 @@ weight: 8
 
 
 
-<p>When using a non-standardized dataset, the variable names and values must be aligned with the data dictionary. This is because later parts of the template expect certain variable names and values. <strong>This process can take some time</strong> and requires looking back-and-forth between your dataset, RStudio, and the MSF data dictionary. In this example, here are the steps taken:</p>
+<p>If using a dataset that is not aligned with the MSF data dictionary, the variable names and values must be standardised. This is because later parts of the template expect certain variable names and values.</p>
+<p><strong>This process can take some time</strong> and requires looking back-and-forth between your dataset, RStudio, and the MSF data dictionary. In this example, here are the steps taken:</p>
 <div id="review-the-msf-data-dictionary" class="section level3">
 <h3>Review the MSF data dictionary</h3>
 <p>Uncomment and run this command, found in the <code>prep_nonDHIS_data</code> chunk, to view the MSF data dictionary for the disease (“AJS” in this example).</p>
@@ -36,17 +37,23 @@ colnames(linelist_cleaned) &lt;- cleaned_colnames</code></pre>
 </div>
 <div id="match-variables-to-align-with-data-dictionary" class="section level3">
 <h3>Match variables to align with data dictionary</h3>
-<p>Standardized variable names are required for this template to work smoothly, and the variable names in our Am Timan dataset do not align with the names this template expects. The template offers code that you can uncomment if you only have to change a few variable names (see below). <strong>However, in this example we need to change many variable names. For this scenario, MSF developed a special function to help map our variables to the expected variable names.</strong></p>
-<ul>
-<li><strong>Paste the disease-specific rename helper into the script.</strong> This command is found in the template near the end of the <code>prep_nonDHIS_data</code> chunk. For our example we run the command <code>msf_dict_rename_helper(&quot;AJS&quot;)</code> and a block of code text is copied to our clipboard. Return to the template script and <em>paste</em> from the clipboard into the template. For the AJS template, the code that is pasted will look like the code below. This code uses the function <code>rename()</code> to change variable names.</li>
-</ul>
-<p>{{% notice tip %}} Be sure to paste the AJS rename helper code into an existing R code chunk (e.g. <code>prep_nonDHIS_data</code>), not into the white space of the RMarkdown script. {{% /notice %}}</p>
+<p>Standardized variable names are required for this template to work smoothly, and the variable names in our Am Timan dataset do not align with the names this template expects.</p>
+<p><strong>We need to change many variable names, and R4Epis developed a special function to help map variables to the expected variable names.</strong> The template also offers code that you can uncomment if there are only a few variable names to change.</p>
+<ol style="list-style-type: decimal">
+<li><strong>Paste the disease-specific rename helper into the script.</strong> This is done by uncommenting and running a command found in the <code>match_column_names</code> section - near the end of the chunk <code>prep_nonDHIS_data</code>. We run the command <code>msf_dict_rename_helper()</code> with “AJS” to get the correct helper for this case study.</li>
+</ol>
+<pre class="r"><code>msf_dict_rename_helper(&quot;AJS&quot;)</code></pre>
+<p>Running this command copies a block of code text to our clipboard. Now, <em>paste</em> from your clipboard into the template in the bottom of the code chunk. For the AJS template, the code that is pasted will look like the code below. This code uses the function <code>rename()</code> to change variable names.</p>
+<p>{{% notice tip %}} Be sure to paste the AJS rename helper code into an existing R code chunk (e.g. the bottom of <code>prep_nonDHIS_data</code>), not into the white space of the RMarkdown script. {{% /notice %}}</p>
 <div class="figure">
 <img src="/images/Variable_Helper_Paste_Revised.gif" />
 
 </div>
+<ol start="2" style="list-style-type: decimal">
+<li><strong>Complete the mapping of variable names.</strong> To the right of each equals sign, and before each comma, type the <em>exact</em> names of the variables from your dataset that correspond to the expected MSF data dictionary variables on the left. The last un-commented line should not have a comma at the end.</li>
+</ol>
 <ul>
-<li><strong>Complete the mapping of variable names.</strong> To the right of the equals sign, and before the comma, type the <em>exact</em> names of the variables from your dataset that correspond to the expected MSF data dictionary variables on the left. <em>If there is a data dictionary variable that is not present in your dataset, be sure to comment (#) out that line.</em></li>
+<li><strong>Be sure to comment (#) out the lines of each data dictionary variable in the helper that is not present in your dataset!</strong> *</li>
 </ul>
 <div class="figure">
 <img src="/images/AJS_Variable_Names.gif" />
@@ -60,7 +67,7 @@ then you likely forgot to comment (#) the line for a variable you did not use. {
 <img src="/images/AJS_Rename_Variables_Proof.png" />
 
 </div>
-<p>Below is the code for the variable assignments used in this example. You can use or reference this when building your template for this case study. <strong>You can copy this entire code chunk using the copy icon that appears in the top-right corner.</strong></p>
+<p>Below is the code for the variable assignments used in this case study walk-through. You can use or reference this when building your template for this case study. <strong>You can copy this entire code chunk using the copy icon that appears in the top-right corner.</strong></p>
 <pre class="r"><code>## Below are the column assignments used in this case study example
 
 linelist_cleaned &lt;- rename(linelist_cleaned,

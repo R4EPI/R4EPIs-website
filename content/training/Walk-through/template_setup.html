@@ -45,6 +45,10 @@ weight: 6
 </div>
 <p>Remember that the green text below the header, located between these special characters (<code>&lt;!--</code> and <code>--&gt;</code>), is for your information only. This text will not appear in the final Word document report (see the R Basics page <a href="https://r4epis.netlify.com/training/r_basics/rmarkdown_orientation/">Reading a RMarkdown</a> for more information).</p>
 </div>
+<div id="introduction-to-the-template" class="section level2">
+<h2>Introduction to the template</h2>
+<p>This text just below the header is for your reference only. If left alone it will appear at the beginning of your report, so you should replace it with a more relevant introduction. Any text you write here can be formatted with <em>italics</em>, <strong>bold</strong>, bullets, numbers, tables, and in-line code. See this <a href="/images/rmarkdown_cheatsheet_2.0.pdf">RMarkdown cheatsheet</a> for tips on formatting.</p>
+</div>
 <div id="installing-and-loading-packages" class="section level2">
 <h2>Installing and loading packages</h2>
 <p><strong>The first code chunk, <code>setup</code>, is very important and must be kept.</strong> When the final report is knit, this chunk will run without producing any output, but it is required for the template to work correctly.</p>
@@ -73,10 +77,11 @@ weight: 6
 </li>
 <li><strong>stringr</strong> used to clean text/characters<br />
 </li>
-<li><p><strong>rio</strong> used to read in data</p></li>
+<li><strong>rio</strong> used to read in data<br />
+</li>
 <li><strong>ggplot2</strong> used to visualise your data using different plotting methods<br />
 </li>
-<li><p><strong>here</strong> used to locate files</p></li>
+<li><strong>here</strong> used to locate files</li>
 </ul>
 </div>
 <div id="more-epidemiology-specific-packages" class="section level4">

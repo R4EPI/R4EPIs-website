@@ -21,21 +21,22 @@ weight: 6
 <div id="what-is-a-rmarkdown-script" class="section level2">
 <h2>What is a RMarkdown Script?</h2>
 <p>RMarkdown scripts can contain commands such as for data import, cleaning, etc. <strong>and are themselves the outline of an automatically-generated document</strong> containing text, tables, and plots produced by your code.</p>
-<p>You can learn more about RMarkdowns <a href="https://rmarkdown.rstudio.com/lesson-1.html">here</a> and reference this <a href="https://www.rstudio.com/wp-content/uploads/2016/03/rmarkdown-cheatsheet-2.0.pdf">cheatsheet</a></p>
-<div class="figure">
-<img src="/images/RMarkdown_transformation.png" />
-
-</div>
-<p><em>In the above RMarkdown template script, the white and gray code chunks produce text and R-generated graphics, respectively, in the Word document output.</em></p>
+<p>You can learn more about RMarkdowns <a href="https://rmarkdown.rstudio.com/lesson-1.html">here</a> and reference this <a href="/images/rmarkdown_cheatsheet_2.0.pdf">cheatsheet</a></p>
+<p><img src="/images/RMarkdown_transformation.png" /> <em>In the above RMarkdown template script, the white and gray code chunks produce text and R-generated graphics, respectively, in the Word document output.</em></p>
 <div id="understand-a-rmarkdown" class="section level3">
 <h3>Understand a RMarkdown</h3>
 <div id="code-chunks" class="section level4">
 <h4>Code chunks</h4>
 <p>While the RMarkdown may at first look like a wall of code, notice how “chunks” of code are differentiated by their color:</p>
 <ul>
-<li><p><strong>In chunks with WHITE background, code text will appear as text in the document.</strong> These lines can have <em>italics</em>, <strong>bold</strong>, or other formating, and can display parameters derived from your data (such as epi week of outbreak peak, as in the example above).</p></li>
-<li><p><strong>In chunks with GRAY background, RMarkdown is running R commands.</strong> The commands perform data processing and cleaning steps, or could produce visual outputs in the document.</p></li>
-<li><p><strong>Text that appears GREEN in the RMarkdown will not appear in the final report</strong>. These sections, placed between special arrows (known as html comment tags, <code>&lt;!-- --&gt;</code>), serve as instructions for you.</p></li>
+<li><strong>In WHITE background areas, any text will appear as regular text in the final report.</strong>
+<ul>
+<li>Can have formatting such as headings, <em>italics</em>, <strong>bold</strong>, numbers, and bullets. See the second page of this <a href="/images/rmarkdown_cheatsheet_2.0.pdf">RMarkdown cheatsheet</a> for more detail.<br />
+</li>
+<li>Can display parameters derived from your data via <strong>in-line code</strong> (such as epi week of the outbreak peak, as in the example above).</li>
+</ul></li>
+<li><p><strong>In GRAY background “code chunks”, RMarkdown is running R commands.</strong> These commands perform data processing and cleaning steps, or could produce visual outputs in the document.</p></li>
+<li><p><strong>GREEN text in the RMarkdown will not appear in the final report</strong>. These sections, placed between special characters (known as html comment tags, <code>&lt;!-- --&gt;</code>), serve as instructions for you.</p></li>
 </ul>
 <pre><code>
 &lt;!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

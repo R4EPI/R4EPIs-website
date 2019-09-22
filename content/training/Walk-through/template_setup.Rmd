@@ -97,6 +97,12 @@ The very top of the template consists of a header surrounded by `---` lines. Her
 Remember that the green text below the header, located between these special characters (`<!--` and `-->`), is for your information only. This text will not appear in the final Word document report (see the R Basics page [Reading a RMarkdown](https://r4epis.netlify.com/training/r_basics/rmarkdown_orientation/) for more information).  
 
 
+## Introduction to the template  
+
+This text just below the header is for your reference only. If left alone it will appear at the beginning of your report, so you should replace it with a more relevant introduction. Any text you write here can be formatted with *italics*, **bold**, bullets, numbers, tables, and in-line code. See this [RMarkdown cheatsheet](/images/rmarkdown_cheatsheet_2.0.pdf) for tips on formatting.  
+
+
+
 ## Installing and loading packages
 
 **The first code chunk, `setup`, is very important and must be kept.** When the final report is knit, this chunk will run without producing any output, but it is required for the template to work correctly.  
@@ -126,7 +132,6 @@ This `setup` code chunk does the following:
 * **forcats** used to clean and shape the data  
 * **stringr** used to clean text/characters  
 * **rio** used to read in data  
- 
 * **ggplot2** used to visualise your data using different plotting methods  
 * **here** used to locate files
 
