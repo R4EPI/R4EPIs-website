@@ -30,15 +30,17 @@ Some recent examples of such outbreak responses and the data analysis done durin
 
 ## Getting started
 
-The outbreak and survey report templates are special R scripts called "R-Markdowns", and are included with **sitrep** package installation. 
+**The outbreak and survey report templates are special R scripts called "R-Markdowns"**, and are included with **sitrep** package installation. 
 RMarkdown scripts execute data cleaning and analytical R commands AND are themselves the outline of an automatically-produced report.
 
-**For assistance using the outbreak templates** 
+**Assistance using the outbreak templates** 
+
 Read more about RMarkdown scripts and how to modify the templates in the [Training Materials](https://r4epis.netlify.com/training/) pages of this website. 
 
-The [case study walk-though](https://r4epis.netlify.com/training/walk-through/) offers you a step-by-step guide on how to use the outbreak templates to fit your data and run the analysis. 
-At the start of the walk-through you can download the case study's data files and final template to follow along. 
-In the walk-through, you will learn lessons for modifying the templates to fit your needs.
+See the page on [Reading a RMarkdown](https://r4epis.netlify.com/training/r_basics/rmarkdown_orientation/) to understand more about these special types of R scripts.  
+
+Read the [case study walk-though](https://r4epis.netlify.com/training/walk-through/), which offers a step-by-step example of using an outbreak template.
+In the walk-through, you can download the data files and final template to follow along, learning to modify the templates to fit your needs. 
 
 
 **To access the outbreak templates:**

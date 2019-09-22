@@ -21,7 +21,8 @@ A step-by-step walk-through of an outbreak template case study is available in t
 
 ### RStudio Desktop
 
-**[RStudio](https://www.rstudio.com) is an interface (Integrated Development Environment) for easier use of R**, and enables production of automated reports. For RStudio to function you must also have R installed on the computer.
+**[RStudio](https://www.rstudio.com) is an interface for easier use of R**, and enables production of automated reports. RStudio must be downloaded separately 
+and in order for it to function **you must also have R installed on the computer**.
 
 Please have RStudio [version 1.1.463 or greater installed](https://www.rstudio.com/products/rstudio/download/#download).
 
