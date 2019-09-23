@@ -29,7 +29,15 @@ You can add text to the report by typing into the write space of the template sc
 To write in-line code, write your sentence in the script's white space like normal text, but in place of the number put a one-line R command within backticks (` `). Ensure the R command returns the desired number. 
 
 ![](/images/AJS_in-line_code.png)
+### Tables  
+
+Table outputs can require post-Knitting adjustment to suitably appear in the final Word Document report. Reducing the number of digits used in the `kable()` commands that produce the table can help save width.  
 
 
+### Dealing with warnings  
+
+After knitting, you may see warning text in your final report. Typically, it is recommended that you attempt to fix the code that produced the error (see the R Basics - [Errors and Warnings](https://r4epis.netlify.com/training/r_basics/errors_and_warnings/) page. However, sometimes you may want to ignore the warning and have it not appear in the report.  
+
+One option is to add `warning = FALSE, message = FALSE` to the top of the R code chunk that produced the warning. This code goes within the opening brackets that create the code chunk. They should be preceeded by a comma.  
 
 

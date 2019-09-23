@@ -9,10 +9,7 @@ output:
 
 This is the final template used in the **sitrep** case study.  
 
-Here we would give an executive summary of the report findings and recommentations, such as these bullet points: (insert two spaces at the end of this line before starting bullets)  
-* Bullet point 1
-     + sub-point 1  
-     + sub-point 2  
+Here we would give an executive summary of the report findings and recommentations. 
      
 
 
@@ -654,7 +651,7 @@ You must adapt this section according to your data!
 
 This chunk will help you set up and clean your date variables.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-```{r standardise_dates}
+```{r standardise_dates, warning = FALSE, message=FALSE}
 ## DHIS2 standard data ---------------------------------------------------------
 ## If you got your data from DHIS2, use this portion of the code.
 ## If not, comment this section out and use the below.
@@ -813,7 +810,7 @@ linelist_cleaned$age_group <- age_categories(linelist_cleaned$age_years,
 This chunk will help you construct new variables from other variables. It
 includes numeric, factor, and character vectors.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-```{r create_vars}
+```{r create_vars, warning=FALSE, message=FALSE}
 
 ## Numeric variables -----------------------------------------------------------
 ## This step creates a variable for number of days under observation.
@@ -1088,8 +1085,8 @@ There is code to include:
 
 From the start of the outbreak up until `r reporting_week` there were a 
 total of `r nrow(linelist_cleaned)` cases. There were
-`r fmt_count(linelist_cleaned, sex == "Female")` females and
-`r fmt_count(linelist_cleaned, sex == "Male")` males. 
+`r fmt_count(linelist_cleaned, sex == "F")` females and
+`r fmt_count(linelist_cleaned, sex == "M")` males. 
 
 The most affected age group was `r tab_linelist(linelist_cleaned, age_group) %>% slice(which.max(n)) %>% pull(value)` years. 
 
@@ -1106,7 +1103,7 @@ This chunk will create a table of cases by age group and case definition.
 You can only use this chunk if you have lab results and have defined a case
 definition variable.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-```{r describe_by_age_group_and_def}
+```{r describe_by_age_group_and_def, warning=FALSE, message=FALSE}
 
 tab_linelist(linelist_cleaned, 
              # rows as age groups, with case_def as strata (columns)
@@ -1139,7 +1136,7 @@ tab_linelist(linelist_cleaned,
 You can also show cases by proportion of the total population by sex and age.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 Cases by age group and sex 
-```{r total_props_agegroup_sex}
+```{r total_props_agegroup_sex, warning=FALSE, message=FALSE}
 tab_linelist(linelist_cleaned, 
              age_group, strata = sex,
              col_total = TRUE, row_total = TRUE, prop_total = TRUE) %>% 
@@ -1163,7 +1160,7 @@ There were `r fmt_count(linelist_cleaned, is.na(sex)| sex == "Unknown/unspecifie
 
 This chunk creates an age/sex pyramid of your cases.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-```{r age_pyramid, warning=FALSE}
+```{r age_pyramid, warning=FALSE, message=FALSE}
  plot_age_pyramid(linelist_cleaned,
                   age_group = "age_group", 
                   split_by = "sex") + 
@@ -1180,10 +1177,9 @@ Of the patients, `r fmt_count(linelist_cleaned, patient_facility_type == "Outpat
 
 Age pyramid for under 2  
 
-```{r age_pyramid, warning=FALSE}
+```{r age_pyramid_under2, warning=FALSE, message=FALSE}
 filter(linelist_cleaned, age_years <= 2) %>%
- plot_age_pyramid(linelist_cleaned,
-                  age_group = "age_group_mon", 
+ plot_age_pyramid(age_group = "age_group_mon", 
                   split_by = "sex") + 
   labs(y = "Cases (n)", x = "Age group") + # change axis  labels
   theme(legend.position = "bottom",     # move legend to bottom
@@ -1201,7 +1197,7 @@ Cases by symptoms
 
 This chunk gives the counts and proportions for all of the variables in SYMPTOMS
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-```{r describe_by_symptoms}
+```{r describe_by_symptoms, warning=FALSE, message=FALSE}
 
 tab_linelist(linelist_cleaned, SYMPTOMS, keep = "Oui") %>% 
   select(-value) %>%
@@ -1226,7 +1222,7 @@ Cases by lab results
 This chunk gives the counts and proportions for all of the variables in LABS.
 If you do not have lab results, comment out this chunk.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-```{r describe_by_labs}
+```{r describe_by_labs, warning=FALSE, message=FALSE}
 
 tab_linelist(linelist_cleaned, LABS, 
              transpose = "value") %>% 
@@ -1378,7 +1374,7 @@ The attack rate per 10,000 population is below (based on available population da
 
 This defines your population by summing up the population by age group.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-```{r collect_variables}
+```{r collect_variables, warning=FALSE, message=FALSE}
 # define population 
 population <- sum(population_data_region$population)
 ```
@@ -1394,7 +1390,7 @@ Below gives the attack rate per 10,000 population (N = `r format(population, big
 This chunk calculates the attack rate and then shows you the confidence
 intervals.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-```{r attack_rate}
+```{r attack_rate, warning=FALSE, message=FALSE}
 ar <- attack_rate(nrow(linelist_cleaned), population, multiplier = 10000)
 
 ar %>%
@@ -1417,7 +1413,7 @@ Here, we can see that the attack rate for a population of `r format(population, 
 This chunk calculates the attack rate by age group and then gives a table of
 attack rate by group.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-```{r attack_rate_by_agegroup, warning = FALSE}
+```{r attack_rate_by_agegroup, warning=FALSE, message=FALSE}
 
 # cases <- count(linelist_cleaned, age_group) %>%    # cases for each age_group
 #   left_join(population_data_age, by = "age_group") # merge population data 
@@ -1462,7 +1458,7 @@ catchment population (twice) and based on hospital population.
 
 This chunk calculates key variables to do mortality rate.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-```{r collect_variables_rates}
+```{r collect_variables_rates, warning=FALSE, message=FALSE}
 # 
 # # count number of deaths 
 # deaths <- sum(linelist_cleaned$DIED)
@@ -1489,7 +1485,7 @@ your population.
 Mortality rate attributable to AJS per 10,000 population
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
-```{r mortality_rate}
+```{r mortality_rate, warning=FALSE, message=FALSE}
 # 
 # mortality_rate(deaths, population, multiplier = 10000, mergeCI = TRUE) %>%
 #   rename("Deaths" = deaths, 
@@ -1519,7 +1515,7 @@ Crude mortality rate attributable to AJS per 10,000 population per day
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
 
-```{r mortality_rate_CMR}
+```{r mortality_rate_CMR, warning=FALSE, message=FALSE}
 # 
 # mortality_rate(deaths, population*obs_time, multiplier = 10000, mergeCI = TRUE) %>%
 #   rename("Deaths" = deaths, 
@@ -1542,7 +1538,7 @@ However, this will give you an unreasonably high mortality rate, as
 those in hospital will only be the most severely affected. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 Mortality rate attributable to AJS per 10,000 patients per day
 
-```{r mortality_rate_patients}
+```{r mortality_rate_patients, warning=FALSE, message=FALSE}
 # mortality_rate(deaths, pat_obs_time, multiplier = 10000, mergeCI = TRUE) %>%
 #   rename("Deaths" = deaths, 
 #          "Person-days" = population, 
@@ -1573,7 +1569,7 @@ There were `r fmt_count(linelist_cleaned, is.na(date_of_onset))` cases missing d
 
 # This chunk will calculate weekly incidence and plot your epicurve.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-```{r epicurve, message = FALSE}
+```{r epicurve, warning=FALSE, message=FALSE}
 
 # count cases for each week of outbreak
 # you can change the start of your week (eg "Sunday week", "Saturday week")
@@ -1589,7 +1585,7 @@ basic_curve <- plot(inc_week_7, show_cases = TRUE, border = "black", n_breaks = 
   epicurve_theme
 
 # show your plot (stored for later use) 
-basic_curve
+basic_curve + scale_x_incidence(inc_week_7, n_breaks = 6)
 
 ## if the outbreak has been going on for a while, your x-axis might look messy.
 ## to reduce the number of labels, uncomment the below.
@@ -1614,7 +1610,7 @@ If needed, you can plot a biweekly epicurve. You can also do this by month,
 quarter, or year. You can change the start of your week as needed.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
-```{r biweekly_epicurve, message = FALSE}
+```{r biweekly_epicurve, warning=FALSE, message=FALSE}
 
 # create case counts for two week groups of your outbreak overall
 inc_week_14 <- incidence(linelist_cleaned$date_of_onset, interval = "2 Monday weeks")
@@ -1639,7 +1635,7 @@ plot(inc_week_14, show_cases = TRUE, border = "black", n_breaks = nrow(inc_week_
 You can plot weekly incidence by gender using this chunk.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
-```{r incidence_by_gender, message = FALSE}
+```{r incidence_by_gender, warning=FALSE, message=FALSE}
 
 # get counts by gender
 inc_week_7_gender <- incidence(linelist_cleaned$date_of_onset, 
@@ -1652,7 +1648,7 @@ plot(inc_week_7_gender,
      n_breaks = nrow(inc_week_7_gender)) + 
   scale_y_continuous(expand = c(0,0)) +  # set origin for axes
   epicurve_labels +
-  epicurve_theme
+  epicurve_theme + scale_x_incidence(inc_week_7, n_breaks = 6)
 
 ```
 
@@ -1665,7 +1661,7 @@ plot(inc_week_7_gender,
 This chunk shows the weekly incidence by case definition. You must have a
 defined case definition variable.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-```{r incidence_by_case_def, message = FALSE}
+```{r incidence_by_case_def, warning=FALSE, message=FALSE}
 inc_week_7_casedef <- incidence(linelist_cleaned$date_of_onset, 
                                 interval = "Monday week", 
                                 groups = linelist_cleaned$case_def)
@@ -1674,7 +1670,7 @@ plot(inc_week_7_casedef, show_cases = TRUE, border = "black", n_breaks = nrow(in
   # add labels to axes and below chart
   epicurve_labels +
   # change visuals of dates, remove legend title and move legend to bottom
-  epicurve_theme
+  epicurve_theme + scale_x_incidence(inc_week_7, n_breaks = 6)
 ```
 
 
@@ -1687,17 +1683,17 @@ You can similarly stratify your incidence by water source (or any other
 categorical variable!).
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
-```{r incidence_by_water_source, message = FALSE}
-inc_week_7_water <- incidence(linelist_cleaned$date_of_onset, 
-                              interval = "Monday week", 
-                              groups = linelist_cleaned$water_source)
+```{r incidence_by_water_source, warning=FALSE, message=FALSE}
+#inc_week_7_water <- incidence(linelist_cleaned$date_of_onset, 
+#                              interval = "Monday week", 
+#                              groups = linelist_cleaned$water_source)
 
 
-plot(inc_week_7_water, show_cases = TRUE, border = "black", 
-     n_breaks = nrow(inc_week_7_water)) + 
-  scale_y_continuous(expand = c(0,0)) +  # set origin for axes
-  epicurve_labels +
-  epicurve_theme
+#plot(inc_week_7_water, show_cases = TRUE, border = "black", 
+#     n_breaks = nrow(inc_week_7_water)) + 
+#  scale_y_continuous(expand = c(0,0)) +  # set origin for axes
+#  epicurve_labels +
+#  epicurve_theme + scale_x_incidence(inc_week_7, n_breaks = 6)
 ```
 
 
@@ -1710,7 +1706,7 @@ This chunk limits the data to only inpatients, then stratifies by sex.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 Cases by week of onset among inpatients by sex 
 
-```{r incidence_by_sex_facility, message = FALSE}
+```{r incidence_by_sex_facility, warning=FALSE, message=FALSE}
 inc_week_7_sex_fac <- linelist_cleaned %>%
   filter(patient_facility_type == "Inpatient") %>%
   with(incidence(date_of_onset, interval = "Monday week", groups = sex))
@@ -1720,7 +1716,7 @@ inc_week_7_sex_fac <- linelist_cleaned %>%
 plot(inc_week_7_sex_fac, show_cases = TRUE, border = "black", n_breaks = nrow(inc_week_7_sex_fac)) + 
   scale_y_continuous(expand = c(0, 0)) +  # set origin for axes
   epicurve_labels +
-  epicurve_theme
+  epicurve_theme + scale_x_incidence(inc_week_7, n_breaks = 6)
 
 ```
 
@@ -1768,7 +1764,7 @@ This chunk calculates the cumulative attack rate per week.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 Cumulative attack rate per 10,000 population per week
 
-```{r cumulative_attack_rate_per_week}
+```{r cumulative_attack_rate_per_week, warning=FALSE, message=FALSE}
 
 attack_rate(cases$cumulative, population, multiplier = 10000) %>% 
   bind_cols(select(cases, epiweek), .) %>% # add the epiweek column to table
@@ -1828,7 +1824,7 @@ We will do this in three steps:
 
 This chunk sets up the AR graph. (It does not print the graph automatically.)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-```{r ar_line_graph}
+```{r ar_line_graph, warning=FALSE, message=FALSE}
 
 ar_plot <- ggplot(ar, aes(x = week2date(epiweek) + (7 * 0.5), group = 1)) +
   # add confidence intervals as a ribbon
@@ -1858,7 +1854,7 @@ ar_plot <- ggplot(ar, aes(x = week2date(epiweek) + (7 * 0.5), group = 1)) +
 This chunk sets up the CFR graph. (It does not print the graph automatically.)
 If you do not have any deaths in your data set, this will not show anything.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-```{r cfr_line_graph}
+```{r cfr_line_graph, warning=FALSE, message=FALSE}
 
 cfr_plot <- ggplot(cfr, aes(x = week2date(epiweek) + (7 * 0.5), group = 1)) +
   # add confidence intervals as a ribbon
@@ -1914,7 +1910,7 @@ and epiweek.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 Inpatient admissions by case definition and week  
 
-```{r describe_admissions_by_epiweek, warning = FALSE}
+```{r describe_admissions_by_epiweek, warning=FALSE, message=FALSE}
 
 linelist_cleaned %>% 
   filter(patient_facility_type == "Inpatient") %>%
@@ -1937,7 +1933,7 @@ This chunk creates a table showing inpatient exits by type per epiweek.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 Inpatient discharges by reason for exit and week 
 
-```{r describe_exits_by_epiweek, warning = FALSE}
+```{r describe_exits_by_epiweek, warning=FALSE, message=FALSE}
 
 linelist_cleaned %>% 
   filter(patient_facility_type == "Inpatient") %>%
@@ -1978,7 +1974,7 @@ and by facility. If you only have one facility, you can remove the strata.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 Cases by region and facility type
 
-```{r describe_by_region_facility}
+```{r describe_by_region_facility, warning=FALSE, message=FALSE}
 
 tab_linelist(linelist_cleaned, patient_origin, 
              strata = patient_facility_type,
@@ -2063,6 +2059,8 @@ will show regions in descending order by AR.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 ```{r bar_attack_rate_by_region, warning = FALSE}
 
+ar_region <- filter(ar_region, !is.na(`AR (per 10,000)`))
+
 ggplot(ar_region, aes(x = reorder(Region, `AR (per 10,000)`),
                y = `AR (per 10,000)`)) +
   # plot as bars (identity = as is)
@@ -2091,7 +2089,7 @@ Mortality rate per 10,000 population by region
 ```{r mortality_rate_region, warning = FALSE}
 
 deaths <- group_by(linelist_cleaned, patient_origin) %>%
-  filter(str_detect(exit_status, "Dead")) %>% 
+  filter(str_detect(exit_status2, "Dead")) %>% 
   summarise(deaths = n()) %>% # count deaths by region
   left_join(population_data_region, by = "patient_origin") # merge population data 
 
@@ -2126,17 +2124,18 @@ Your coordinate reference system needs to be WGS84.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 ```{r read_shapefiles, message=FALSE}
 ## fake map data - DELETE if you are using real data
-map <- gen_polygon(regions = unique(linelist_cleaned$patient_origin))
+#map <- gen_polygon(regions = unique(linelist_cleaned$patient_origin))
 
 
 ## read in shapefile
 # map <- read_sf(here::here("mapfolder", "region.shp"))
+map <- read_sf(here("content", "training", "Walk-through", "mapfolder", "Quartiersshape.shp"))
 
 ## check the coordinate reference system (CRS)
-# st_crs(map)
+st_crs(map)
 
 ## if CRS not WGS84, reset it
-# map <- st_set_crs(map, value = 4326) # Sets to WGS84
+map <- st_set_crs(map, value = 4326) # Sets to WGS84
 
 ```
 
@@ -2201,7 +2200,7 @@ ar_map <- mutate(ar_region,
 
 
 ## Join table to shapefile -----------------------------------------------------
-mapsub <- left_join(map, ar_map, by = c("name" = "Region"))
+mapsub <- left_join(map, ar_map, by = c("Name" = "Region"))
 
 
 
@@ -2220,7 +2219,7 @@ ggplot() +
   # name allows you to change the legend title 
   scale_fill_brewer(drop = FALSE, palette = "OrRd", name = "AR (per 10,000)") + 
   # label polygons
-  geom_sf_text(data = mapsub, aes(label = name), colour = "grey50") + 
+  geom_sf_text(data = mapsub, aes(label = Name), colour = "grey50") + 
   # remove coordinates and axes
   theme_void() 
 
@@ -2293,7 +2292,7 @@ for (i in unique(cases$epiweek)) {
   this_ar <- filter(ar, epiweek == i)
   
   # map 
-  mapsub <- left_join(map, this_ar, by = c("name" = "Region"))
+  mapsub <- left_join(map, this_ar, by = c("Name" = "Region"))
   
   # choropleth 
   map_plot <- ggplot() +
@@ -2313,6 +2312,9 @@ for (i in unique(cases$epiweek)) {
   
   # plot with the region on the x axis sorted by increasing ar
   # ar value on the y axis 
+  
+  this_ar <- filter(this_ar, !is.na(`AR (per 10,000)`))
+
   barplot <- ggplot(this_ar, aes(x = reorder(Region, `AR (per 10,000)`),
                                  y = `AR (per 10,000)`)) + 
     # plot as bars (identity = as is)

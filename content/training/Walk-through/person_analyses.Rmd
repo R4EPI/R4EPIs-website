@@ -84,6 +84,8 @@ This first section produces descriptive analyses about the patients demographics
 
 ### Demographic Tables:
 
+The person analysis section begins with a couple sentences that contain **in-line code** - code embedded in normal RMarkdown text (not within an R code chunk). The second sentence **in-line code** inserts the number of males and females by counting the observations with "Male" and "Female" in the variable `sex`. **Because our dataset's variable `sex` contains `M` and `F` instead, we must modify this in-line code (or modify our variable) so the `fmt_count()` function is searching for the correct terms.**  
+
 The first demographic table presents patients by their age group (the table's rows) and their relationship with the case definition (the table's columns). This chunk uses piping to link six different functions and produce a table (`%>%` is the pipe operator - see the R Basics [Advanced and Miscellaneous](https://r4epis.netlify.com/training/r_basics/advanced_functions/) page):  
 
 * The `tab_linelist()` function creates a frequency and percent table of `age_group`, with columns differentiating by `case_def` value  
@@ -148,6 +150,8 @@ plot_age_pyramid(linelist_cleaned,
 ```
 
 **To have an age pyramid of patients under 2 by month age groups, it is best to add a `filter()` step to the beginning of the code chunk, as below**. This selects for `linelist_cleaned` observations that meet the specified critera and passes that reduced dataset through the "pipes" to the next function:  (`plot_age_pyramid()`). If this `filter()` step is not added, you will see that the largest pyramid bars are of "missing". These are the patients old enough to not have a months age group.  
+
+If you add this filtering step, **you must also modify `plot_age_pyramid()` by removing its first argument `linelist_cleaned,`**. The dataset is already given to the command in the `filter()` and is passed to `plot_age_pyramid()` via piping.  
 
 Note that the filter step does not drop any observations from the `linelist_cleaned` object itself. Because the filter is **not** being assigned (`<-`) to over-write `linelist_cleaned`, this filter is only temporarily applied for the purpose of producing the age pyramid.
 

@@ -84,10 +84,6 @@ The AJS RMarkdown template will open in your RStudio Viewer pane.
 **Now, follow along with this walk-through and make edits to your AJS template, saving it regularly.**
 
 
-## Template overview  
-
-**TODO: Graphic/video showing a big-picture overview of template parts - wait until final arrangement of chunks in template**
-
 ## Header
 
 The very top of the template consists of a header surrounded by `---` lines. Here you may want to edit the title of your document. The other settings in the header define the default document type produced (Microsoft Word) when the RMarkdown is "knit".  

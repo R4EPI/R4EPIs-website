@@ -20,8 +20,11 @@ weight: 15
 <p>You can add text to the report by typing into the write space of the template script (non-R chunks). You may want to write a more substantial introductory or summary paragraph at the beginning of the document.</p>
 <p><strong>It is also possible to write in-line code</strong> - this is where in the script text you put a placeholder for a number or output that is calculated from your data. This way, the number adapts to your data and does updates automatically. Examples of this are found throughout the template.</p>
 <p>To write in-line code, write your sentence in the script’s white space like normal text, but in place of the number put a one-line R command within backticks (` `). Ensure the R command returns the desired number.</p>
-<div class="figure">
-<img src="/images/AJS_in-line_code.png" />
-
+<p><img src="/images/AJS_in-line_code.png" /> ### Tables</p>
+<p>Table outputs can require post-Knitting adjustment to suitably appear in the final Word Document report. Reducing the number of digits used in the <code>kable()</code> commands that produce the table can help save width.</p>
 </div>
+<div id="dealing-with-warnings" class="section level3">
+<h3>Dealing with warnings</h3>
+<p>After knitting, you may see warning text in your final report. Typically, it is recommended that you attempt to fix the code that produced the error (see the R Basics - <a href="https://r4epis.netlify.com/training/r_basics/errors_and_warnings/">Errors and Warnings</a> page. However, sometimes you may want to ignore the warning and have it not appear in the report.</p>
+<p>One option is to add <code>warning = FALSE, message = FALSE</code> to the top of the R code chunk that produced the warning. This code goes within the opening brackets that create the code chunk. They should be preceeded by a comma.</p>
 </div>

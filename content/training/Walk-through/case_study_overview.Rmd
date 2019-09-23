@@ -76,7 +76,8 @@ Please review the [getting started page](https://r4epis.netlify.com/welcome/001-
 
 
 **Access the final version of the RMarkdown script used in this walk-through**  
-[TODO: link to download Chad AJS RMarkdown here]
+[Download the final RMarkdown template](/public_data/Final_casestudy_AJS_template.Rmd) used in this walk-through, to follow-along step-by-step  
+
 
 **RMarkdown resources**  
 Review the R Basics page "Reading a RMarkdown Script", or reference these resources: [Rmarkdown introduction](https://rmarkdown.rstudio.com/articles_intro.html) and [Rmarkdown authoring basics](https://rmarkdown.rstudio.com/authoring_basics.html).  

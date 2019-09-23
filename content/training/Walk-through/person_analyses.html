@@ -10,6 +10,7 @@ weight: 12
 <p>This first section produces descriptive analyses about the patients demographics and attack rates.</p>
 <div id="demographic-tables" class="section level3">
 <h3>Demographic Tables:</h3>
+<p>The person analysis section begins with a couple sentences that contain <strong>in-line code</strong> - code embedded in normal RMarkdown text (not within an R code chunk). The second sentence <strong>in-line code</strong> inserts the number of males and females by counting the observations with “Male” and “Female” in the variable <code>sex</code>. <strong>Because our dataset’s variable <code>sex</code> contains <code>M</code> and <code>F</code> instead, we must modify this in-line code (or modify our variable) so the <code>fmt_count()</code> function is searching for the correct terms.</strong></p>
 <p>The first demographic table presents patients by their age group (the table’s rows) and their relationship with the case definition (the table’s columns). This chunk uses piping to link six different functions and produce a table (<code>%&gt;%</code> is the pipe operator - see the R Basics <a href="https://r4epis.netlify.com/training/r_basics/advanced_functions/">Advanced and Miscellaneous</a> page):</p>
 <ul>
 <li>The <code>tab_linelist()</code> function creates a frequency and percent table of <code>age_group</code>, with columns differentiating by <code>case_def</code> value<br />
@@ -222,6 +223,7 @@ plot_age_pyramid(linelist_cleaned,
        )</code></pre>
 <p><img src="/training/Walk-through/person_analyses_files/figure-html/age_pyramid-1.png" width="720" /></p>
 <p><strong>To have an age pyramid of patients under 2 by month age groups, it is best to add a <code>filter()</code> step to the beginning of the code chunk, as below</strong>. This selects for <code>linelist_cleaned</code> observations that meet the specified critera and passes that reduced dataset through the “pipes” to the next function: (<code>plot_age_pyramid()</code>). If this <code>filter()</code> step is not added, you will see that the largest pyramid bars are of “missing”. These are the patients old enough to not have a months age group.</p>
+<p>If you add this filtering step, <strong>you must also modify <code>plot_age_pyramid()</code> by removing its first argument <code>linelist_cleaned,</code></strong>. The dataset is already given to the command in the <code>filter()</code> and is passed to <code>plot_age_pyramid()</code> via piping.</p>
 <p>Note that the filter step does not drop any observations from the <code>linelist_cleaned</code> object itself. Because the filter is <strong>not</strong> being assigned (<code>&lt;-</code>) to over-write <code>linelist_cleaned</code>, this filter is only temporarily applied for the purpose of producing the age pyramid.</p>
 <pre class="r"><code># plot age pyramid by month groups, for observations under 2 years
 filter(linelist_cleaned, age_years &lt;= 2) %&gt;%
