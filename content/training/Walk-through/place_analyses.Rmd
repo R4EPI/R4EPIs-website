@@ -268,9 +268,14 @@ Below we explain each step within the this code chunk, plotting a map based on t
 ```{r warning=FALSE, message=FALSE}
 ## create a categorical variable for plotting 
 max_ar    <- max(ar_region$`Upper 95%CI`, na.rm = TRUE) # define your highest AR
-breakers <- as.integer(c(0, # include zero as a standalone group
-             find_breaks(max_ar, breaks = 4, by = 100) # four breaks rounded to the nearest 100
+
+breakers <- as.integer(c(
+                         # include zero as a standalone group
+                         0, 
+                         # 1 to 4 divisions, snapping the boundaries to the nearest 100
+                         find_breaks(n = max_ar, breaks = 4, snap = 100)
              ))
+
 ## add a categorical variable using the age_categories function 
 ## nb in this case we arent using ages - but it functions the same way!
 ar_map <- mutate(ar_region, 
@@ -406,8 +411,11 @@ max_cases <- max(cases$n, na.rm = TRUE) # define the maximum number of cases for
 max_ar    <- max(ar$`Upper 95%CI`, na.rm = TRUE)
 
 ## define breaks for standardising color palette
-breakers <- as.integer(c(0, # include zero as a standalone group
-             find_breaks(max_ar, breaks = 4, snap = 100) # four breaks rounded to nearest 100
+breakers <- as.integer(c(
+                         # include zero as a standalone group
+                         0, 
+                         # 1 to 4 divisions, snapping the boundaries to the nearest 100
+                         find_breaks(n = max_ar, breaks = 4, snap = 100)
              ))
 
 ## add a categorical variable using the age_categories function 

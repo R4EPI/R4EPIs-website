@@ -2405,24 +2405,26 @@ map &lt;- st_set_crs(map, value = 4326) # Sets to WGS84</code></pre>
 </ol>
 <pre class="r"><code>## create a categorical variable for plotting 
 max_ar    &lt;- max(ar_region$`Upper 95%CI`, na.rm = TRUE) # define your highest AR
-breakers &lt;- as.integer(c(0, # include zero as a standalone group
-             find_breaks(max_ar, breaks = 4, by = 100) # four breaks rounded to the nearest 100
-             ))</code></pre>
-<pre><code>## Error in find_breaks(max_ar, breaks = 4, by = 100): unused argument (by = 100)</code></pre>
-<pre class="r"><code>## add a categorical variable using the age_categories function 
+
+breakers &lt;- as.integer(c(
+                         # include zero as a standalone group
+                         0, 
+                         # 1 to 4 divisions, snapping the boundaries to the nearest 100
+                         find_breaks(n = max_ar, breaks = 4, snap = 100)
+             ))
+
+## add a categorical variable using the age_categories function 
 ## nb in this case we arent using ages - but it functions the same way!
 ar_map &lt;- mutate(ar_region, 
              categories = age_categories(`AR (per 10,000)`, 
                                          breakers = breakers)
              )</code></pre>
-<pre><code>## Error in age_categories(`AR (per 10,000)`, breakers = breakers): object &#39;breakers&#39; not found</code></pre>
 <p><strong>Join the object <code>map</code> (shapefile) to <code>ar_map</code> (a data frame)</strong>. The spatial object <code>map</code> is joined to the data frame <code>ar_map</code> with a <strong>left join</strong> (see the Advanced R Basics page to learn more about joins). Both of these objects contain tables (you can click them in the Environment pane to see this). In the command, they are linked by the <code>Name</code> variable in <code>ar</code> and the <code>Region</code> variable in <code>map</code>.</p>
 <p><strong>You may need to modify your code so that the join occurs on <code>Name</code> in the object <code>map</code>, and not <code>name</code>.</strong></p>
 <p>{{% notice tip %}} Make sure you modify your <code>left_join</code> code to use “Name” with a capital N, as that is how the variable is spelled in the object ‘map’. In your other data these variable names may be completely different and must be changed {{% /notice %}}</p>
 <p>The resulting object <code>mapsub</code> is a product of this <strong>left join</strong>. A left join will include all values from the Left-hand Side (LHS) and only inlcude values from the Right-hand Side (RHS) if they match to LHS values. Now, the attack rates are joined to the region names and to their GIS geometries. You can verify this by Viewing the object <code>mapsub</code> (click on it in the Environment pane).</p>
 <pre class="r"><code>## join your ar or case counts based on matching shapefile names with regions in your ar table
 mapsub &lt;- left_join(map, ar_map, by = c(&quot;Name&quot; = &quot;Region&quot;))</code></pre>
-<pre><code>## Error in check_join(x, y): object &#39;ar_map&#39; not found</code></pre>
 <p><strong>Now, <code>ggplot()</code> is used to create the map.</strong> Remember that <code>ggplot()</code> subcommands must be connected by plus symbols at the end of each line (<code>+</code>) (except the last line). Read more about ggplot2 and <code>ggplot()</code> in the Advanced R Basics page.</p>
 <p><strong><code>geom_sf()</code></strong> identifies <code>mapsub</code> as providing the data for the map, and filling the polygons by values in the variable <code>categories</code>.</p>
 <p><strong><code>coord_sf()</code></strong> set to <code>NA</code> prevents gridlines from being drawn on the map.</p>
@@ -2442,7 +2444,7 @@ ggplot() +
   scale_fill_brewer(drop = FALSE, palette = &quot;OrRd&quot;, name = &quot;AR (per 10,000)&quot;) + 
   geom_sf_text(data = mapsub, aes(label = Name), colour = &quot;grey50&quot;) + # label polygons
   theme_void() # remove coordinates and axes</code></pre>
-<pre><code>## Error in fortify(data): object &#39;mapsub&#39; not found</code></pre>
+<p><img src="/training/Walk-through/place_analyses_files/figure-html/unnamed-chunk-6-1.png" width="720" /></p>
 <p><strong>You can use this alternative to make the labels not overlap.</strong></p>
 <p><strong><code>ggrepel()</code></strong> arranges point/polygon labels so they do not overlap and are easier to read. You can see more examples of <code>ggrepel()</code> <a href="https://mran.microsoft.com/snapshot/2017-08-20/web/packages/ggrepel/vignettes/ggrepel.html">in this vignette</a></p>
 <p>{{% notice tip %}} The <code>geom_sf_text()</code> line has been replaced by ggrepel. {{% /notice %}}</p>
@@ -2460,7 +2462,7 @@ ggplot() +
                             min.segment.length = 0) +
 
   theme_void()  # remove coordinates and axes</code></pre>
-<pre><code>## Error in fortify(data): object &#39;mapsub&#39; not found</code></pre>
+<p><img src="/training/Walk-through/place_analyses_files/figure-html/unnamed-chunk-7-1.png" width="720" /></p>
 <p>Lastly, <strong>there is an efficient way to create attack rate maps and bar plots of incidence for each epiweek</strong>. Use a <strong>“for loop”</strong> to run the same code for every epi week.</p>
 <p><strong>A “for loop”&quot; is used to iterate over (perform the same actions to) every value in a vector.</strong> In this case, we want to make the map and bar chart for each region. You can read more about for loops in the R Basics - Advanced and Miscellaneous](<a href="https://r4epis.netlify.com/training/r_basics/advanced_functions/" class="uri">https://r4epis.netlify.com/training/r_basics/advanced_functions/</a>) page, or <a href="https://www.datamentor.io/r-programming/for-loop/">this tutorial</a>.</p>
 <p>A few things to note about this chunk:</p>
@@ -2505,8 +2507,11 @@ max_cases &lt;- max(cases$n, na.rm = TRUE) # define the maximum number of cases 
 max_ar    &lt;- max(ar$`Upper 95%CI`, na.rm = TRUE)
 
 ## define breaks for standardising color palette
-breakers &lt;- as.integer(c(0, # include zero as a standalone group
-             find_breaks(max_ar, breaks = 4, snap = 100) # four breaks rounded to nearest 100
+breakers &lt;- as.integer(c(
+                         # include zero as a standalone group
+                         0, 
+                         # 1 to 4 divisions, snapping the boundaries to the nearest 100
+                         find_breaks(n = max_ar, breaks = 4, snap = 100)
              ))
 
 ## add a categorical variable using the age_categories function 
