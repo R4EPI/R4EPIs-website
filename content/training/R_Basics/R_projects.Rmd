@@ -27,6 +27,11 @@ Note:
 Navigate and open project files, such as scripts, using the Files tab of the lower-right RStudio pane.  
 
 
+{{% notice tip %}}
+For an RMarkdown to produce the final report correctly, you must have read/write permissions for the location of the R project folder. On an MSF computer this is generally the c:/temp folder. 
+{{% /notice %}}  
+
+
 ## Sending an R project  
 
 One significant benefit of working within an R project is that all associated files (datasets, etc.) are located within the same folder. Thus, to send the project to someone else, **simply zip the folder and send**. All files referenced in the scripts are included and no file pathways in the script are unique to your computer.  

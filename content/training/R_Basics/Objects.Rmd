@@ -98,7 +98,7 @@ Note that to create a vector that "stands alone", or is not part of a data frame
 
 #### Using `$` to access/call variables  
 
-**Vectors within a data frame (variables in a dataset) can be called or referenced using the $ symbol.** The `$` symbol connects the name of the column to the name of its dataset. The $ symbol must be used, otherwise R will not know where to look for or create the column.  
+**Vectors within a data frame (variables in a dataset) can be called or referenced using the `$` symbol.** The `$` symbol connects the name of the column to the name of its dataset. The `$` symbol must be used, otherwise R will not know where to look for or create the column.  
 
 ```{r}
 # Retrieve the length of the vector age_years

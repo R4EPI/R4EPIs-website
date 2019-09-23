@@ -16,7 +16,7 @@ This might be because you have an unstable internet connection.
 Either try again when there are less people using the internet connection, use a different connection, 
 or contact one of the maintainers for alternative offline options. 
 
-# I get errors when installing sitrep or other packages  
+## I get errors when installing sitrep or other packages  
 
 Restart your R session by clicking "Session" from the top menu and choosing "Restart R",
 or by using the keyboard shortcut CTRL+SHIFT+F10. This is sometimes necessary when updating or installing new packages.
@@ -51,7 +51,7 @@ See this [picture](https://revolution-computing.typepad.com/.a/6a010534b1db25970
 
 ## Basic introductory course 
 
-http://swcarpentry.github.io/r-novice-gapminder/
+See the R Basics Resources page for a list of introductory online courses.
 
 ## I have a date column and a time column, how do I combine the two?
 

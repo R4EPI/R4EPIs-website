@@ -33,9 +33,9 @@ fct_count(linelist_cleaned$sex)</code></pre>
 <pre><code>## # A tibble: 3 x 2
 ##   f         n
 ##   &lt;fct&gt; &lt;int&gt;
-## 1 M       100
-## 2 F       103
-## 3 U        97</code></pre>
+## 1 M        91
+## 2 F       100
+## 3 U       109</code></pre>
 <p>Now we re-label the values using <code>fct_recode()</code>, also from the package <strong>forcats</strong>.</p>
 <pre class="r"><code># Re-define the labels for the factor variable (pay attention to spelling!)
 linelist_cleaned$sex &lt;- fct_recode(linelist_cleaned$sex, 
@@ -48,9 +48,9 @@ fct_count(linelist_cleaned$sex)</code></pre>
 <pre><code>## # A tibble: 3 x 2
 ##   f           n
 ##   &lt;fct&gt;   &lt;int&gt;
-## 1 Male      100
-## 2 Female    103
-## 3 Unknown    97</code></pre>
+## 1 Male       91
+## 2 Female    100
+## 3 Unknown   109</code></pre>
 <p><strong>To change the <em>arrangement</em> of the levels, use <code>fct_relevel()</code></strong>.</p>
 <p>This will impact the <em>arrangement</em> of the levels as displayed in graphs and tables. Give the name of the factor followed by the new arrangement (pay attention to spelling!).</p>
 <pre class="r"><code># Provide new arrangement of levels
@@ -74,10 +74,10 @@ fct_count(linelist_cleaned$sex)</code></pre>
 <pre><code>## # A tibble: 4 x 2
 ##   f           n
 ##   &lt;fct&gt;   &lt;int&gt;
-## 1 Female    103
-## 2 Male      100
+## 1 Female    100
+## 2 Male       91
 ## 3 Unknown     0
-## 4 &lt;NA&gt;       97</code></pre>
+## 4 &lt;NA&gt;      109</code></pre>
 <blockquote>
 <p>We can see that the value “Unknown” now has a count of zero, but it is still present as a level of the factor variable and will appear in tables and graphs. To remove this level entirely we use <code>fct_drop()</code>, which drops unused levels from a factor.</p>
 </blockquote>
@@ -89,9 +89,9 @@ fct_count(linelist_cleaned$sex)</code></pre>
 <pre><code>## # A tibble: 3 x 2
 ##   f          n
 ##   &lt;fct&gt;  &lt;int&gt;
-## 1 Female   103
-## 2 Male     100
-## 3 &lt;NA&gt;      97</code></pre>
+## 1 Female   100
+## 2 Male      91
+## 3 &lt;NA&gt;     109</code></pre>
 <p>{{% notice tip %}} Use the argument <code>only =</code> to drop specific levels: <code>fct_drop(linelist_cleaned$sex, only = &quot;Unknown&quot;)</code> {{% /notice %}}</p>
 </div>
 </div>
@@ -176,9 +176,12 @@ linelist_cleaned$DIED &lt;- linelist_cleaned$exit_status %in% c(&quot;DD&quot;, 
 </li>
 <li><strong>aesthetics</strong> - linking attributes such as color and size of geoms to variables in the data set</li>
 </ul>
-<p>The first command <code>ggplot()</code> creates an empty coordinate system to which layers of visualization and nuance are added.<br />
-* Its first argument specifies the data set to use.<br />
-* Its <code>aes()</code> argument establishes the variables to be mapped to the x and y axes.</p>
+<p>The first command <code>ggplot()</code> creates an empty coordinate system to which layers of visualization and nuance are added.</p>
+<ul>
+<li>Its first argument specifies the data set to use.<br />
+</li>
+<li>Its <code>aes()</code> argument establishes the variables to be mapped to the x and y axes.</li>
+</ul>
 <p>Secondly, the geom is specified, indicating whether the data should be displayed as points, lines, bars, a map, etc. Without a geom, the data will not be visualized and the coordinate plane will be empty.</p>
 <p>Other optional sub-commands can address the scales (e.g <code>scale_fill_brewer()</code> chooses a scale for the <code>fill</code> aesthetic based on the <a href="http://colorbrewer2.org/">Color Brewer 2 color scales</a>), labels (e.g. <code>labs(title = &quot;Attack Rate by Region&quot;)</code> to define a specific title for the plot), themes (e.g. <code>theme(text = element_text(size = 18))</code> makes all the text in the plot be a minimum size of 18 points), etc.</p>
 <p><img src="/images/ggplot.png" /> {{% notice tip %}} A command beginning with <code>ggplot()</code> will print the visualization but not save it. Using the assignment operator <code>&lt;-</code> in the first line will assign the visualization to an R object and save it for later use. Print it by running a command of just the object name. {{% /notice %}}</p>

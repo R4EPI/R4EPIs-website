@@ -213,6 +213,7 @@ A `ggplot()` command is typically built using sub-commands linked by `+` symbols
 * **aesthetics** - linking attributes such as color and size of geoms to variables in the data set  
 
 The first command `ggplot()` creates an empty coordinate system to which layers of visualization and nuance are added.  
+
 * Its first argument specifies the data set to use.  
 * Its `aes()` argument establishes the variables to be mapped to the x and y axes.  
 
