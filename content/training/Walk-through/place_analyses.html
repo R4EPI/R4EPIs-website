@@ -2464,12 +2464,12 @@ ggplot() +
   theme_void()  # remove coordinates and axes</code></pre>
 <p><img src="/training/Walk-through/place_analyses_files/figure-html/unnamed-chunk-7-1.png" width="720" /></p>
 <p>Lastly, <strong>there is an efficient way to create attack rate maps and bar plots of incidence for each epiweek</strong>. Use a <strong>“for loop”</strong> to run the same code for every epi week.</p>
-<p><strong>A “for loop”&quot; is used to iterate over (perform the same actions to) every value in a vector.</strong> In this case, we want to make the map and bar chart for each region. You can read more about for loops in the R Basics - Advanced and Miscellaneous](<a href="https://r4epis.netlify.com/training/r_basics/advanced_functions/" class="uri">https://r4epis.netlify.com/training/r_basics/advanced_functions/</a>) page, or <a href="https://www.datamentor.io/r-programming/for-loop/">this tutorial</a>.</p>
+<p><strong>A “for loop”&quot; is used to iterate over (perform the same actions to) every value in a vector.</strong> In this case, we want to make the map and bar chart for each region. You can read more about for loops in the R Basics - <a href="https://r4epis.netlify.com/training/r_basics/advanced_functions/">Advanced and Miscellaneous</a> page, or <a href="https://www.datamentor.io/r-programming/for-loop/">this tutorial</a>.</p>
 <p>A few things to note about this chunk:</p>
 <ul>
 <li>The first half is very similar to the set-up of the previous map.<br />
 </li>
-<li>You must also modify the <code>left_join</code> command to list the correct variable names (e.g. **modify to join on <code>Name</code> instead of <code>name</code>)</li>
+<li>You must also modify the <code>left_join</code> command to list the correct variable names (e.g. <strong>modify to join on <code>Name</code> instead of <code>name</code></strong>)</li>
 <li>These maps are not labeled with region names.<br />
 </li>
 <li>The creation of the barplots depends on the object <code>epicurve_theme</code>, which was defined in the Time section of the template. If that section is not created, then this object will be missing and cause errors.</li>
