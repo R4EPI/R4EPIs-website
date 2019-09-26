@@ -147,7 +147,7 @@ The code above successfully converted many of our date variables (remember you c
 class(linelist_cleaned$dtdeath)
 
 # Individually convert variable using the guess_dates() function from the linelist package
-linelist_cleaned$dtdeath <- linelist::guess_dates(linelist_cleaned$dtdeath)
+linelist_cleaned$dtdeath <- linelist::guess_dates(linelist_cleaned$dtdeath, error_tolerance = 0.5)
 
 #Re-check class of variable
 class(linelist_cleaned$dtdeath)
