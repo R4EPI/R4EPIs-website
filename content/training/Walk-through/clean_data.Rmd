@@ -153,7 +153,7 @@ linelist_cleaned$dtdeath <- linelist::guess_dates(linelist_cleaned$dtdeath, erro
 class(linelist_cleaned$dtdeath)
 
 # Repeat for variable "dtdeath"
-linelist_cleaned$dthospitalisation <- linelist::guess_dates(linelist_cleaned$dthospitalisation)
+linelist_cleaned$dthospitalisation <- linelist::guess_dates(linelist_cleaned$dthospitalisation, error_tolerance = 0.5)
 ```
 
 Next we uncomment and **modify code to correct unrealistic dates**. We have browsed our data and know that there are observations with `date_of_onset` outside the reasonable range:
