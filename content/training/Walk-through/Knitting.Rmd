@@ -39,7 +39,7 @@ Table outputs can require post-Knitting adjustment to suitably appear in the fin
 
 ### Dealing with warnings  
 
-After knitting, you may see warning text in your final report. Typically, it is recommended that you attempt to fix the code that produced the error (see the R Basics - [Errors and Warnings](https://r4epis.netlify.com/training/r_basics/errors_and_warnings/) page. However, sometimes you may want to ignore the warning and have it not appear in the report.  
+After knitting, you may see warning text in your final report. Sometimes these warnings are innocuous (e.g. you tried to filter out a factor level that doesn't exist), but sometimes they are more serious. Typically, it is recommended to read through the warnings and fix them if necessary (see the R Basics - [Errors and Warnings](https://r4epis.netlify.com/training/r_basics/errors_and_warnings/) page.  
 
 One option is to add `warning = FALSE, message = FALSE` to the top of the R code chunk that produced the warning. This code goes within the opening brackets that create the code chunk. They should be preceeded by a comma.  
 

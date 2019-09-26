@@ -80,7 +80,6 @@ Situation reports for outbreaks typically focus on describing the data in terms 
 
 * **Person**
 * **Time**
-* **Place** 
 
 The template contains sections for each of these core characteristics.
 
