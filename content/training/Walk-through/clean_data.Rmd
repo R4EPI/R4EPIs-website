@@ -140,7 +140,7 @@ You can read more about the `guess_dates()` function from the package **linelist
            error_tolerance = 0.5)
 ```
 
-The commant above successfully converted many of our date variables (remember you can check a variable's class like `class(linelist$date_of_onset`). However, this command did not detect the date variables named with "dt", such as `dtdeath` and `dthospitalization`. We must **add code to convert those variables manually**:  
+The code above successfully converted many of our date variables (remember you can check a variable's class like `class(linelist$date_of_onset`). However, this command did not detect the date variables named with "dt", such as `dtdeath` and `dthospitalization`. We must **add code to convert those variables manually**:  
 
 ```{r}
 # Check class of variable 
