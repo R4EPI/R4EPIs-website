@@ -28,8 +28,8 @@ You can add text to the report by typing into the write space of the template sc
 
 To write in-line code, write your sentence in the script's white space like normal text, but in place of the number put a one-line R command within backticks (` `). Ensure the R command returns the desired number. 
 
-![](/images/AJS_in-line_code.png)
-### Tables  
+![](/images/AJS_in-line_code.png)  
+
 
 
 ### Tables  
