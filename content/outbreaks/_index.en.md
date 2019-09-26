@@ -51,7 +51,7 @@ In the walk-through, you can download the data files and final template to follo
 * and select "From template"; 
 you should be able to see all the options of templates that are available. For example "Outbreak Report". 
 
-![example of opening and saving cholera template](images/opening_template.gif?width=30pc)
+![example of opening and saving cholera template](images/opening_template.gif)
 
 ## Overview of template parts
 

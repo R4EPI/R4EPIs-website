@@ -38,7 +38,7 @@ It's important to start R every time with a clean working session. To do this, y
 
 Your Global Options window should look like this:
 
-![RStudio global options window showing a setting optimal for reproducibility](images/RStudio_global_options.jfif?width=30pc)
+![RStudio global options window showing a setting optimal for reproducibility](images/RStudio_global_options.jpg?width=30pc)
 
 When writing RMarkdown and code, it's common to wrap your text at 80 characters. You can add a reference line for this in RStudio:
 
