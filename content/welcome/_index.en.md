@@ -16,7 +16,9 @@ A step-by-step walk-through of an outbreak template case study is available in t
 
 **R is a free software for statistical computing and graphics.** The templates need at least R version 3.3. We recommend [downloading R directly from CRAN](https://cran.r-project.org), a central repository of R code, packages, and documentation. If desired, [the MRAN version of R](https://mran.microsoft.com/) will work as well.
 
-> **Caveat if using MRAN**: MRAN is a version of R that has modifications that are outside the scope of this project, however, it should be noted that it also locks the version of all packages to a specific date, so care is needed to specify repositories when installing R packages. If you are unsure whether you have MRAN or CRAN R installed then see this [FAQ](<https://github.com/R4EPI/sitrep/wiki/4). 
+{{% notice info %}}
+**Caveat if using MRAN**: MRAN is a version of R that has modifications that are outside the scope of this project, however, it should be noted that it also locks the version of all packages to a specific date, so care is needed to specify repositories when installing R packages. If you are unsure whether you have MRAN or CRAN R installed then see this [FAQ](https://r4epis.netlify.com/faq/#i-am-unsure-if-i-have-the-mran-or-cran-version-of-r-installed). 
+{{% /notice %}}
 
 
 ### RStudio Desktop
@@ -47,7 +49,7 @@ When writing RMarkdown and code, it's common to wrap your text at 80 characters.
 ### Setting the default R repository if using MRAN
 
 If you are using Microsoft's version of R (MRAN), the packages are all locked to one specific date (as of this writing, it's 2018-08-07). 
-If you are unsure whether you have MRAN or CRAN R installed then see the [FAQ](<https://github.com/R4EPI/sitrep/wiki/4). 
+If you are unsure whether you have MRAN or CRAN R installed then see this [FAQ](https://r4epis.netlify.com/faq/#i-am-unsure-if-i-have-the-mran-or-cran-version-of-r-installed).
 
 To install packages that were either created or updated after this date, you should use the RStudio cloud repository. The following code will update a file called `.Rprofile` that lives in your home directory (on Windows, this directory is usually "C:\Users\\\<username>").
 
