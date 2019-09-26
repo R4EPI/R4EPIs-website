@@ -78,7 +78,6 @@ Cleaning will be the most straight-forward for datasets produced with DHIS2 soft
 
 Situation reports for outbreaks typically focus on describing the data in terms of:
 
-* **Person**
 * **Time**
 
 The template contains sections for each of these core characteristics.
