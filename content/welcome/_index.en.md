@@ -8,7 +8,7 @@ weight: 1
 
 This page describes important first steps for getting started with R, RStudio, and the templates!
 
-A step-by-step walk-through of an outbreak template case study is available in the Training Materials pages of this website.
+A step-by-step [walk-through of an outbreak template case study](https://r4epis.netlify.com/training/walk-through/case_study_overview/) is available in the Training Materials pages of this website.
 
 ## NECESSARY COMPONENTS
 
@@ -110,7 +110,7 @@ If you are getting errors, check the [FAQ section](<https://github.com/R4EPI/sit
 ### Opening the templates
 
 **The outbreak and survey report templates are special scripts called "R-Markdowns"**, and are included with **sitrep** package installation. You can open and modify them to create customized automated reports. 
-Read more about RMarkdown scripts and how to modify the templates in Training Materials pages of this website. 
+Read more about RMarkdown scripts and how to modify the templates in [Training Materials](https://r4epis.netlify.com/training/) pages of this website. 
 
 ![Example of how to open and save the cholera template](images/opening_template.gif)
 

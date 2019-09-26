@@ -31,6 +31,9 @@ To write in-line code, write your sentence in the script's white space like norm
 ![](/images/AJS_in-line_code.png)
 ### Tables  
 
+
+### Tables  
+
 Table outputs can require post-Knitting adjustment to suitably appear in the final Word Document report. Reducing the number of digits used in the `kable()` commands that produce the table can help save width.  
 
 

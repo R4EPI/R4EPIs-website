@@ -106,6 +106,6 @@ For the duration of the outbreak we detected 1193 suspected cases, 100 confirmed
 
 [Link to Spina and Lenglet *et al.* 2017](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0188240)  
 
-![Spina and Lenglet et al. 2017](/images/AJS_Article.PNG?pc=40)
+![](/images/AJS_Article.PNG?pc=40)
 
 
