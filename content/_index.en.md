@@ -33,7 +33,7 @@ The templates address all aspects of:
 * Analysis of data to report in terms of time, place, and person
 * Analysis of survey data
 
-**All coding is open source and freely available and can be used by anyone.** For suggestions 
+**All of the code is open source and freely available and can be used by anyone.** For suggestions 
 on what to add or change, please link to our [Github site](https://github.com/R4EPI) 
 or contact one of [our contributors](https://r4epis.netlify.com/credits/).
 
