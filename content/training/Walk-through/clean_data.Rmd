@@ -511,12 +511,12 @@ The command `export()` is also from the package **rio**.
 
 First, the object that you want to export is named (`linelist_cleaned`).  
 
-Then, the function `paste0()` creates the name for the new file by combining "AmTiman_linelist_cleaned_" with the current date and finally the extention ".xlsx". Don't be confused - this is equivalen of writing `rio::export(linelist_cleaned, "AmTiman_linelist_cleaned_2019-08-24.xlsx")`, but using `paste0()` and `Sys.Date()` means the current date will always be used automatically.
+Then, the function `str_glue()` creates the name for the new file by combining "AmTiman_linelist_cleaned_" with the current date and finally the extention ".xlsx". Don't be confused - this is equivalen of writing `rio::export(linelist_cleaned, "AmTiman_linelist_cleaned_2019-08-24.xlsx")`, but using `str_glue()` and `Sys.Date()` means the current date will always be used automatically.
 
 ```{r save_cleaned_data, eval = FALSE}
 ## OPTIONAL: save your cleaned dataset! 
 ## put the current date in the name so you know!
-rio::export(linelist_cleaned, paste0("AmTiman_linelist_cleaned_", Sys.Date(), ".xlsx"))
+rio::export(linelist_cleaned, str_glue("AmTiman_linelist_cleaned_{Sys.Date()}.xlsx"))
 ```
 
 

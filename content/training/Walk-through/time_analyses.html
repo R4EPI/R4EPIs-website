@@ -32,7 +32,7 @@ epicurve_theme &lt;- theme(
 epicurve_labels &lt;- labs(x = &quot;Calendar week&quot;, 
                         y = &quot;Cases (n)&quot;, 
                         title = &quot;Cases by week of onset&quot;,
-                        subtitle = sprintf(&quot;Source: MSF data from %s&quot;, reporting_week)
+                        subtitle = str_glue(&quot;Source: MSF data from {reporting_week}&quot;)
                        ) </code></pre>
 <p><strong>In this next part of the chunk, the plot of the epidemic curve is finalized and displayed.</strong></p>
 <p>{{% notice tip %}}

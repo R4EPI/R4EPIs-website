@@ -2239,7 +2239,7 @@ ggplot(ar_region, aes(x = reorder(Region, `AR (per 10,000)`),
   scale_y_continuous(expand = c(0,0)) +  # set origin for axes
   # add labels to axes and below chart
   labs(x = &quot;Region&quot;, y = &quot;AR (per 10,000)&quot;, 
-       captions = paste0(&quot;Source: MSF data from &quot;, reporting_week)) + 
+       captions = str_glue(&quot;Source: MSF data from {reporting_week}&quot;)) + 
   epicurve_theme</code></pre>
 <p><img src="/training/Walk-through/place_analyses_files/figure-html/bar_attack_rate_by_region-1.png" width="720" /></p>
 <p>You could also <strong>table mortality rate by region</strong>. A few things to note:</p>
@@ -2564,14 +2564,14 @@ for (i in unique(cases$epiweek)) {
     scale_y_continuous(expand = c(0, 0), limits = c(0, max_ar)) +  # set origin for axes
     # add labels to axes and below chart
     labs(x = &quot;Region&quot;, y = &quot;AR (per 10,000)&quot;, 
-         captions = paste0(&quot;Source: MSF data from &quot;, reporting_week)) + 
+         captions = (&quot;Source: MSF data from {reporting_week}&quot;)) + 
     epicurve_theme
   
   
   # combine the barplot and map plot into one for epiweek &quot;i&quot;
   print(
     cowplot::plot_grid(
-      barplot + labs(title = paste0(&quot;Epiweek: &quot;, i)),
+      barplot + labs(title = str_glue(&quot;Epiweek: {i}&quot;)),
       map_plot,
       nrow = 1,
       align = &quot;h&quot;,
