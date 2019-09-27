@@ -57,9 +57,11 @@ aweek::set_week_start("Monday")
 
 ## Opening a new R project  
 
-Please review the instructions in the R Basics page on Working within R projects. In brief:  
+Please review the instructions in the R Basics page on [Working within R projects](https://r4epis.netlify.com/training/r_basics/r_projects/). In brief:  
 
-Open RStudio. Select *New Project* from the main *File* menu of RStudio. Select "New Directory" and "New Project", and a location to save the new R project (this creates a new folder). Save all relevant data files into this new R project folder.  
+Open RStudio. Select *New Project* from the main *File* menu of RStudio. Select *New Directory* and *New Project*, and a location to save the new R project (this creates a new folder).  
+
+Save all relevant data files into this new R project folder.  
 
 {{% notice tip %}}
 For the RMarkdown to produce the final report correctly, you must have read/write permissions for the location of the R project folder. On an MSF computer this is generally the c:/temp folder. 
@@ -67,42 +69,53 @@ For the RMarkdown to produce the final report correctly, you must have read/writ
 
 ## Opening an AJS template  
 
-Once the R project is established, select *New File* from the main *File* menu of RStudio, and select "R Markdown". In the pop-up window, change the highlight on the left to "From Template" and then select "AJS outbreak report" from the menu on the right. The AJS template will open in your RStudio Viewer pane.  
+Once the R project is established,  
+
+* Select *New File* from the main *File* menu of RStudio, and select "R Markdown"  
+* In the pop-up window, select *From Template* on the right side  
+* Then select **AJS outbreak report** from the menu on the right  
+
+The AJS RMarkdown template will open in your RStudio Viewer pane.  
+
+*Below is an example showing how to open and save an outbreak template. Be sure to open the AJS template for this exercise.*  
+
+![](/images/opening_template.gif)
 
 **Now, follow along with this walk-through and make edits to your AJS template, saving it regularly.**
 
 
-## Template overview  
-
-**TODO: Graphic/video showing a big-picture overview of template parts - wait until final arrangement of chunks in template**
-
-## Header and introduction
+## Header
 
 The very top of the template consists of a header surrounded by `---` lines. Here you may want to edit the title of your document. The other settings in the header define the default document type produced (Microsoft Word) when the RMarkdown is "knit".  
 
-![AJS Header and Introduction snippet](/images/AJS_Intro.PNG)
+![](/images/AJS_Intro.png)
 
-The "Introduction to this template" section is for your information only and this text should be deleted before knitting the document.  
+Remember that the green text below the header, located between these special characters (`<!--` and `-->`), is for your information only. This text will not appear in the final Word document report (see the R Basics page [Reading a RMarkdown](https://r4epis.netlify.com/training/r_basics/rmarkdown_orientation/) for more information).  
+
+
+## Introduction to the template  
+
+This text just below the header is for your reference only. If left alone it will appear at the beginning of your report, so you should replace it with a more relevant introduction. Any text you write here can be formatted with *italics*, **bold**, bullets, numbers, tables, and in-line code. See this [RMarkdown cheatsheet](/images/rmarkdown_cheatsheet_2.0.pdf) for tips on formatting.  
 
 
 
 ## Installing and loading packages
 
-**You must keep this "setup" code chunk!** When the final report is knit, this chunk will run without producing any output, but it is required for the template to work correctly.  
+**The first code chunk, `setup`, is very important and must be kept.** When the final report is knit, this chunk will run without producing any output, but it is required for the template to work correctly.  
 
-This "setup" code chunk does the following:  
+This `setup` code chunk does the following:  
 
 * Set default settings for tables such as size, error handling, and display of missing values  
 
 * Create a vector of names of packages required for the template to run  
 
-* Execute a **for loop** to install each required package (if not already installed), and load each required package for use in the current R session (learn about **for loops** in the Advanced and Miscellaneous R Basics page)  
+* Execute a **for loop** to install each required package (if not already installed), and load each required package for use in the current R session (learn about **for loops** in the R Basics [Advanced and Miscellaneous](https://r4epis.netlify.com/training/r_basics/advanced_functions/) page.  
 
 * Set default text size in graphic plots  
 
-* Establish aesthetic settings for epidemic curve plots
+* Establish visual theme settings for epidemic curve plots
 
-![Package Installation Chunk](/images/Package_Installation.PNG)
+![](/images/Package_Installation.png)
 
 
 
@@ -113,9 +126,8 @@ This "setup" code chunk does the following:
 * **knitr** used to create the output document (pdf, doc, html)  
 * **dplyr** used to clean and shape the data  
 * **forcats** used to clean and shape the data  
-* **stringr** used to clean text/characters  
+* **stringr** used to clean and handle text/characters (known in computer science as "strings")
 * **rio** used to read in data  
-* **epitrix** used for data cleaning and variable standardisation  
 * **ggplot2** used to visualise your data using different plotting methods  
 * **here** used to locate files
 
@@ -159,15 +171,14 @@ reporting_week <- aweek::as.aweek("2017-W16") # Set reporting_week as last compl
 If you want to use the automatically-updated date from your computer, use `Sys.Date()` like this: `date2week(Sys.Date())`
 {{% /notice %}}
 
-**Lastly, the labels that will be used in epidemic curve plots are defined**. These should not need any adjustment. You may notice that the subtitle label uses the special term "%s" as a placeholder - the reporting_week defined in the previous chunk will show in its place.  
+**Lastly, the labels that will be used in epidemic curve plots are defined**. These should not need any adjustment. You may notice that the subtitle label uses `reporting_week` in curly braces---this means that the value of `reporting_week` defined in the previous chunk will show in its place.  
 
 ```{r}
 ## sets the labels in ggplot for the epicurves
 epicurve_labels <- labs(x = "Calendar week", 
                         y = "Cases (n)", 
                         title = "Cases by week of onset",
-                        subtitle = sprintf("Source: MSF data from %s", 
-                                           reporting_week)
+                        subtitle = str_glue("Source: MSF data from {reporting_week}")
                        ) 
 ```
 

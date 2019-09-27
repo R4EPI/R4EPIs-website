@@ -10,7 +10,7 @@ menuTitle: "Templates"
 
 # Template Structure
 
-## Where templates lives in *sitrep*
+## Where templates live in *sitrep*
 
 All the templates are written in [RMarkdown] according to the [template
 structure] section of the RMarkdown book. In the [sitrep] package, that contains

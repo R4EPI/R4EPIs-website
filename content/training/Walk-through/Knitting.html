@@ -24,3 +24,12 @@ If you receive an error when knitting such as “openBinaryFile does not exist �
 <p>To write in-line code, write your sentence in the script’s white space like normal text, but in place of the number put a one-line R command within backticks (<code></code>). Ensure the R command returns the desired number.</p>
 <p><img src="/images/AJS_in-line_code.png" /></p>
 </div>
+<div id="tables" class="section level3">
+<h3>Tables</h3>
+<p>Table outputs can require post-Knitting adjustment to suitably appear in the final Word Document report. Reducing the number of digits used in the <code>kable()</code> commands that produce the table can help save width.</p>
+</div>
+<div id="dealing-with-warnings" class="section level3">
+<h3>Dealing with warnings</h3>
+<p>After knitting, you may see warning text in your final report. Sometimes these warnings are innocuous (e.g. you tried to filter out a factor level that doesn’t exist), but sometimes they are more serious. Typically, it is recommended to read through the warnings and fix them if necessary (see the R Basics - <a href="https://r4epis.netlify.com/training/r_basics/errors_and_warnings/">Errors and Warnings</a> page.</p>
+<p>One option is to add <code>warning = FALSE, message = FALSE</code> to the top of the R code chunk that produced the warning. This code goes within the opening brackets that create the code chunk. They should be preceeded by a comma.</p>
+</div>

@@ -9,45 +9,50 @@ weight: 6
 
 <div id="opening-a-new-r-project" class="section level2">
 <h2>Opening a new R project</h2>
-<p>Please review the instructions in the R Basics page on Working within R projects. In brief:</p>
-<p>Open RStudio. Select <em>New Project</em> from the main <em>File</em> menu of RStudio. Select “New Directory” and “New Project”, and a location to save the new R project (this creates a new folder). Save all relevant data files into this new R project folder.</p>
+<p>Please review the instructions in the R Basics page on <a href="https://r4epis.netlify.com/training/r_basics/r_projects/">Working within R projects</a>. In brief:</p>
+<p>Open RStudio. Select <em>New Project</em> from the main <em>File</em> menu of RStudio. Select <em>New Directory</em> and <em>New Project</em>, and a location to save the new R project (this creates a new folder).</p>
+<p>Save all relevant data files into this new R project folder.</p>
 <p>{{% notice tip %}}
 For the RMarkdown to produce the final report correctly, you must have read/write permissions for the location of the R project folder. On an MSF computer this is generally the c:/temp folder.
 {{% /notice %}}</p>
 </div>
 <div id="opening-an-ajs-template" class="section level2">
 <h2>Opening an AJS template</h2>
-<p>Once the R project is established, select <em>New File</em> from the main <em>File</em> menu of RStudio, and select “R Markdown”. In the pop-up window, change the highlight on the left to “From Template” and then select “AJS outbreak report” from the menu on the right. The AJS template will open in your RStudio Viewer pane.</p>
+<p>Once the R project is established,</p>
+<ul>
+<li>Select <em>New File</em> from the main <em>File</em> menu of RStudio, and select “R Markdown”<br />
+</li>
+<li>In the pop-up window, select <em>From Template</em> on the right side<br />
+</li>
+<li>Then select <strong>AJS outbreak report</strong> from the menu on the right</li>
+</ul>
+<p>The AJS RMarkdown template will open in your RStudio Viewer pane.</p>
+<p><em>Below is an example showing how to open and save an outbreak template. Be sure to open the AJS template for this exercise.</em></p>
+<p><img src="/images/opening_template.gif" /></p>
 <p><strong>Now, follow along with this walk-through and make edits to your AJS template, saving it regularly.</strong></p>
 </div>
-<div id="template-overview" class="section level2">
-<h2>Template overview</h2>
-<p><strong>TODO: Graphic/video showing a big-picture overview of template parts - wait until final arrangement of chunks in template</strong></p>
-</div>
-<div id="header-and-introduction" class="section level2">
-<h2>Header and introduction</h2>
+<div id="header" class="section level2">
+<h2>Header</h2>
 <p>The very top of the template consists of a header surrounded by <code>---</code> lines. Here you may want to edit the title of your document. The other settings in the header define the default document type produced (Microsoft Word) when the RMarkdown is “knit”.</p>
-<div class="figure">
-<img src="/images/AJS_Intro.PNG" alt="AJS Header and Introduction snippet" />
-<p class="caption">AJS Header and Introduction snippet</p>
+<p><img src="/images/AJS_Intro.png" /></p>
+<p>Remember that the green text below the header, located between these special characters (<code>&lt;!--</code> and <code>--&gt;</code>), is for your information only. This text will not appear in the final Word document report (see the R Basics page <a href="https://r4epis.netlify.com/training/r_basics/rmarkdown_orientation/">Reading a RMarkdown</a> for more information).</p>
 </div>
-<p>The “Introduction to this template” section is for your information only and this text should be deleted before knitting the document.</p>
+<div id="introduction-to-the-template" class="section level2">
+<h2>Introduction to the template</h2>
+<p>This text just below the header is for your reference only. If left alone it will appear at the beginning of your report, so you should replace it with a more relevant introduction. Any text you write here can be formatted with <em>italics</em>, <strong>bold</strong>, bullets, numbers, tables, and in-line code. See this <a href="/images/rmarkdown_cheatsheet_2.0.pdf">RMarkdown cheatsheet</a> for tips on formatting.</p>
 </div>
 <div id="installing-and-loading-packages" class="section level2">
 <h2>Installing and loading packages</h2>
-<p><strong>You must keep this “setup” code chunk!</strong> When the final report is knit, this chunk will run without producing any output, but it is required for the template to work correctly.</p>
-<p>This “setup” code chunk does the following:</p>
+<p><strong>The first code chunk, <code>setup</code>, is very important and must be kept.</strong> When the final report is knit, this chunk will run without producing any output, but it is required for the template to work correctly.</p>
+<p>This <code>setup</code> code chunk does the following:</p>
 <ul>
 <li><p>Set default settings for tables such as size, error handling, and display of missing values</p></li>
 <li><p>Create a vector of names of packages required for the template to run</p></li>
-<li><p>Execute a <strong>for loop</strong> to install each required package (if not already installed), and load each required package for use in the current R session (learn about <strong>for loops</strong> in the Advanced and Miscellaneous R Basics page)</p></li>
+<li><p>Execute a <strong>for loop</strong> to install each required package (if not already installed), and load each required package for use in the current R session (learn about <strong>for loops</strong> in the R Basics <a href="https://r4epis.netlify.com/training/r_basics/advanced_functions/">Advanced and Miscellaneous</a> page.</p></li>
 <li><p>Set default text size in graphic plots</p></li>
-<li><p>Establish aesthetic settings for epidemic curve plots</p></li>
+<li><p>Establish visual theme settings for epidemic curve plots</p></li>
 </ul>
-<div class="figure">
-<img src="/images/Package_Installation.PNG" alt="Package Installation Chunk" />
-<p class="caption">Package Installation Chunk</p>
-</div>
+<p><img src="/images/Package_Installation.png" /></p>
 <div id="about-the-packages-used-in-this-template" class="section level3">
 <h3>About the packages used in this template</h3>
 <div id="generic-packages" class="section level4">
@@ -59,11 +64,8 @@ For the RMarkdown to produce the final report correctly, you must have read/writ
 </li>
 <li><strong>forcats</strong> used to clean and shape the data<br />
 </li>
-<li><strong>stringr</strong> used to clean text/characters<br />
-</li>
+<li><strong>stringr</strong> used to clean and handle text/characters (known in computer science as “strings”)</li>
 <li><strong>rio</strong> used to read in data<br />
-</li>
-<li><strong>epitrix</strong> used for data cleaning and variable standardisation<br />
 </li>
 <li><strong>ggplot2</strong> used to visualise your data using different plotting methods<br />
 </li>
@@ -108,12 +110,11 @@ For the RMarkdown to produce the final report correctly, you must have read/writ
 <p>{{% notice tip %}}
 If you want to use the automatically-updated date from your computer, use <code>Sys.Date()</code> like this: <code>date2week(Sys.Date())</code>
 {{% /notice %}}</p>
-<p><strong>Lastly, the labels that will be used in epidemic curve plots are defined</strong>. These should not need any adjustment. You may notice that the subtitle label uses the special term “%s” as a placeholder - the reporting_week defined in the previous chunk will show in its place.</p>
+<p><strong>Lastly, the labels that will be used in epidemic curve plots are defined</strong>. These should not need any adjustment. You may notice that the subtitle label uses <code>reporting_week</code> in curly braces—this means that the value of <code>reporting_week</code> defined in the previous chunk will show in its place.</p>
 <pre class="r"><code>## sets the labels in ggplot for the epicurves
 epicurve_labels &lt;- labs(x = &quot;Calendar week&quot;, 
                         y = &quot;Cases (n)&quot;, 
                         title = &quot;Cases by week of onset&quot;,
-                        subtitle = sprintf(&quot;Source: MSF data from %s&quot;, 
-                                           reporting_week)
+                        subtitle = str_glue(&quot;Source: MSF data from {reporting_week}&quot;)
                        ) </code></pre>
 </div>

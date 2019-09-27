@@ -6,9 +6,6 @@ tags: ["wiki"]
 weight: 30 
 ---
 
-# Contribute to the R4EPIs project!
-
-
 ## See an error in a template or code?  [Report a bug!](https://github.com/R4EPI/sitrep/issues/new)
 
 {{% children style="h2" description="true" %}}

@@ -118,7 +118,8 @@ tab_linelist(filter(linelist_cleaned,
 
 **First**, like when we calculated attack rate by epiweek in the `time_analysis` section, the cases are counted by `patient_origin`. This list of counts is then **joined** to the imported population data for each region **joined by `patient_origin` (the name of the region/quartier)**. These data are stored in the object `cases`.  
 
-*Recall that this **join** requires **exact matches** between `patient_origin` values in `linelist_cleaned$patient_origin` and `population_data_region$patient_origin` to match a region's cases to its population (read more about joins in the advanced R Basics page). In the data cleaning steps we converted the values in `linelist_cleaned` to all capital letters to match those in `population_data_region`.  
+*Recall that this **join** requires **exact matches* between `patient_origin` values in `linelist_cleaned$patient_origin` and `population_data_region$patient_origin` to match a region's cases to its population (read more about joins in the advanced R Basics page). In the data cleaning steps we converted the values in `linelist_cleaned` to all capital letters to match those in `population_data_region`.  
+
 The `ar` object saves the counts, population, and attack rate calculations along with modified column names.  
 
 Finally, the table is created with `kable()` and displayed.
@@ -151,7 +152,7 @@ You could then also plot this on a bar chart with confidence intervals.
 
 
 {{% notice tip %}}
-There are many quartiers without population denominators that will make the graph difficult to read. Thus, we first filter `ar_region` to remove these using the opposite (`!`) of the `is.na()` function (see Operators R Basics page). Now any quartiers with missing denominators will not appear in the graph.  
+There are many quartiers without population denominators that will make the graph difficult to read. Thus, **we modify the code by filtering `ar_region` to remove these** using the opposite (`!`) of the `is.na()` function (see Operators R Basics page). Now any quartiers with missing denominators will not appear in the graph.  
 {{% /notice %}}
 
 
@@ -267,9 +268,14 @@ Below we explain each step within the this code chunk, plotting a map based on t
 ```{r warning=FALSE, message=FALSE}
 ## create a categorical variable for plotting 
 max_ar    <- max(ar_region$`Upper 95%CI`, na.rm = TRUE) # define your highest AR
-breakers <- as.integer(c(0, # include zero as a standalone group
-             find_breaks(max_ar, breaks = 4, by = 100) # four breaks rounded to the nearest 100
+
+breakers <- as.integer(c(
+                         # include zero as a standalone group
+                         0, 
+                         # 1 to 4 divisions, snapping the boundaries to the nearest 100
+                         find_breaks(n = max_ar, breaks = 4, snap = 100)
              ))
+
 ## add a categorical variable using the age_categories function 
 ## nb in this case we arent using ages - but it functions the same way!
 ar_map <- mutate(ar_region, 
@@ -280,9 +286,11 @@ ar_map <- mutate(ar_region,
 
 **Join the object `map` (shapefile) to `ar_map` (a data frame)**. The spatial object `map` is joined to the data frame `ar_map` with a **left join** (see the Advanced R Basics page to learn more about joins). Both of these objects contain tables (you can click them in the Environment pane to see this). In the command, they are linked by the `Name` variable in `ar` and the `Region` variable in `map`.  
 
+**You may need to modify your code so that the join occurs on `Name` in the object `map`, and not `name`.**
+
 
 {{% notice tip %}}
-Make sure your `left_join` code uses "Name" with a capital N, as that is how the variable is spelled in the object 'map'. In your other data these variable names may be completely different and must be changed
+Make sure you modify your `left_join` code to use "Name" with a capital N, as that is how the variable is spelled in the object 'map'. In your other data these variable names may be completely different and must be changed
 {{% /notice %}}
 
 The resulting object `mapsub` is a product of this **left join**. A left join will include all values from the Left-hand Side (LHS) and only inlcude values from the Right-hand Side (RHS) if they match to LHS values. Now, the attack rates are joined to the region names and to their GIS geometries. You can verify this by Viewing the object `mapsub` (click on it in the Environment pane).
@@ -353,15 +361,24 @@ ggplot() +
 
 Lastly, **there is an efficient way to create attack rate maps and bar plots of incidence for each epiweek**. Use a **"for loop"** to run the same code for every epi week.  
 
-**A "for loop"" is used to iterate over (perform the same actions to) every value in a vector.** In this case, we want to make the map and bar chart for each region. You can read more about for loops in the Advanced and Miscellaneous R Basics page, or [this tutorial](https://www.datamentor.io/r-programming/for-loop/).  
+**A "for loop"" is used to iterate over (perform the same actions to) every value in a vector.** In this case, we want to make the map and bar chart for each region. You can read more about for loops in the R Basics - [Advanced and Miscellaneous](https://r4epis.netlify.com/training/r_basics/advanced_functions/) page, or [this tutorial](https://www.datamentor.io/r-programming/for-loop/).  
 
 A few things to note about this chunk:  
 
 * The first half is very similar to the set-up of the previous map.  
-* You must also modify the `left_join` command to list the correct variable names (e.g. `Name` instead of name)
+* You must also modify the `left_join` command to list the correct variable names (e.g. **modify to join on `Name` instead of `name`**)
 * These maps are not labeled with region names.  
 * The creation of the barplots depends on the object `epicurve_theme`, which was defined in the Time section of the template. If that section is not created, then this object will be missing and cause errors.  
 
+The barplots can be limited to quartiers with non-zero attack rates with the following code:
+
+```{r eval=FALSE}
+  # Filter values in this_ar to only show quartiers with attack rates > 0 in barplot
+  this_ar <- filter(this_ar, `AR (per 10,000)` > 0)
+```
+
+
+And here is the complete code:  
 
 
 ```{r map_for_loop_epiweek, message = FALSE, warning = FALSE, fig.width = 12}
@@ -394,8 +411,11 @@ max_cases <- max(cases$n, na.rm = TRUE) # define the maximum number of cases for
 max_ar    <- max(ar$`Upper 95%CI`, na.rm = TRUE)
 
 ## define breaks for standardising color palette
-breakers <- as.integer(c(0, # include zero as a standalone group
-             find_breaks(max_ar, breaks = 4, snap = 100) # four breaks rounded to nearest 100
+breakers <- as.integer(c(
+                         # include zero as a standalone group
+                         0, 
+                         # 1 to 4 divisions, snapping the boundaries to the nearest 100
+                         find_breaks(n = max_ar, breaks = 4, snap = 100)
              ))
 
 ## add a categorical variable using the age_categories function 
