@@ -107,7 +107,7 @@ This command below will install the **sitrep** package and also install any pack
 remotes::install_github("R4EPI/sitrep", repos = "https://cran.rstudio.com", update = "never")
 ```
  
-If you are getting errors, check the [FAQ section](<https://github.com/R4EPI/sitrep/wiki/4) of the **sitrep** wiki. 
+If you are getting errors, check the [frequently asked questions](https://r4epis.netlify.com/faq/).
 
 ### Opening the templates
 
