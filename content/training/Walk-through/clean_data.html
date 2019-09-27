@@ -299,9 +299,9 @@ linelist_cleaned &lt;- linelist_cleaned %&gt;%
 <p>And finally, if desired you can <strong>export the cleaned dataset</strong> for other purposes.</p>
 <p>The command <code>export()</code> is also from the package <strong>rio</strong>.</p>
 <p>First, the object that you want to export is named (<code>linelist_cleaned</code>).</p>
-<p>Then, the function <code>paste0()</code> creates the name for the new file by combining “AmTiman_linelist_cleaned_” with the current date and finally the extention “.xlsx”. Don’t be confused - this is equivalen of writing <code>rio::export(linelist_cleaned, &quot;AmTiman_linelist_cleaned_2019-08-24.xlsx&quot;)</code>, but using <code>paste0()</code> and <code>Sys.Date()</code> means the current date will always be used automatically.</p>
+<p>Then, the function <code>str_glue()</code> creates the name for the new file by combining “AmTiman_linelist_cleaned_” with the current date and finally the extention “.xlsx”. Don’t be confused - this is equivalen of writing <code>rio::export(linelist_cleaned, &quot;AmTiman_linelist_cleaned_2019-08-24.xlsx&quot;)</code>, but using <code>str_glue()</code> and <code>Sys.Date()</code> means the current date will always be used automatically.</p>
 <pre class="r"><code>## OPTIONAL: save your cleaned dataset! 
 ## put the current date in the name so you know!
-rio::export(linelist_cleaned, paste0(&quot;AmTiman_linelist_cleaned_&quot;, Sys.Date(), &quot;.xlsx&quot;))</code></pre>
+rio::export(linelist_cleaned, str_glue(&quot;AmTiman_linelist_cleaned_{Sys.Date()}.xlsx&quot;))</code></pre>
 </div>
 </div>
