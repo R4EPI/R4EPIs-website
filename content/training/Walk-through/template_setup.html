@@ -115,7 +115,6 @@ If you want to use the automatically-updated date from your computer, use <code>
 epicurve_labels &lt;- labs(x = &quot;Calendar week&quot;, 
                         y = &quot;Cases (n)&quot;, 
                         title = &quot;Cases by week of onset&quot;,
-                        subtitle = sprintf(&quot;Source: MSF data from %s&quot;, 
-                                           reporting_week)
+                        subtitle = str_glue(&quot;Source: MSF data from {reporting_week}&quot;)
                        ) </code></pre>
 </div>

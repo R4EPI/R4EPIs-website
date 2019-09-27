@@ -178,8 +178,7 @@ If you want to use the automatically-updated date from your computer, use `Sys.D
 epicurve_labels <- labs(x = "Calendar week", 
                         y = "Cases (n)", 
                         title = "Cases by week of onset",
-                        subtitle = sprintf("Source: MSF data from %s", 
-                                           reporting_week)
+                        subtitle = str_glue("Source: MSF data from {reporting_week}")
                        ) 
 ```
 
