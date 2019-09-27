@@ -17,15 +17,14 @@ weight: 9
 </li>
 <li>Use the function <code>gen_population()</code> to directly enter counts</li>
 </ol>
-<div class="figure">
-<img src="/images/AJS_Population_Counts.png" />
-
-</div>
+<p><img src="/images/AJS_Population_Counts.png" /></p>
 <p><strong>For this case study, we import an Excel spreadsheet containing population data by quartier (available for download in the <a href="https://r4epis.netlify.com/training/walk-through/case_study_overview/">case study overview</a> page).</strong></p>
 <p>See the <code>read_population_data</code> chunk and <strong>modify</strong> the first command to import the Excel spreadsheet. We will assign the imported Excel sheet to the object name <code>population_data_region</code> (<strong>note the change</strong> from <code>population_data</code>), because the data we are importing is for regions (quartiers).</p>
 <p>The command uses <code>import()</code> wrapped around <code>here()</code> to locate the file. The <code>which=</code> argument of <code>import()</code> specifies that the sheet “quartier” should be imported.</p>
 <p>Note that the variables names in the spreadsheet have already been edited to match the expected variable names (“patient_origin” and “population”).</p>
-<p>{{% notice tip %}} The <code>import()</code> function is wrapped around the <code>here()</code> function. The <code>here()</code> function makes it easy for R to locate files within a project. It is best to save the dataset within your R project, and to provide <code>here()</code> with any R project subfolder names. You can read more about the <code>here()</code> function in the R Basics - <a href="https://r4epis.netlify.com/training/r_basics/importing_data/">Importing Data</a> page. {{% /notice %}}</p>
+<p>{{% notice tip %}}
+The <code>import()</code> function is wrapped around the <code>here()</code> function. The <code>here()</code> function makes it easy for R to locate files within a project. It is best to save the dataset within your R project, and to provide <code>here()</code> with any R project subfolder names. You can read more about the <code>here()</code> function in the R Basics - <a href="https://r4epis.netlify.com/training/r_basics/importing_data/">Importing Data</a> page.
+{{% /notice %}}</p>
 <pre class="r"><code>population_data_region &lt;- rio::import(here(&quot;AJS_AmTiman_population_revised_for_template.xlsx&quot;), which=&quot;quartier&quot;)</code></pre>
 <p>Before moving on, delete or comment (#) all the code lines in the chunk that create fake data or proportions for <code>population_data_region</code>, <code>population_data_age</code>, and <code>population_data_age_months</code>.</p>
 <p><strong>If you choose not to complete the population estimates section at all, delete or comment (#) all code in this section, and expect that later sections on attack and mortality rates will not produce output.</strong></p>

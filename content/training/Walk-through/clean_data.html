@@ -32,7 +32,9 @@ nrow(linelist_cleaned %&gt;% filter(is.na(case_number))) </code></pre>
 <pre><code>## [1] 0</code></pre>
 <pre class="r"><code>nrow(linelist_cleaned %&gt;% filter(is.na(date_of_consultation_admission))) </code></pre>
 <pre><code>## [1] 616</code></pre>
-<p>{{% notice tip %}} Notice that the command above returns the number of rows missing <code>date_of_consultation_admission</code>, but does not overwrite <code>linelist_cleaned</code> with anything, as there is not an assignment operator <code>&lt;-</code>. {{% /notice %}}</p>
+<p>{{% notice tip %}}
+Notice that the command above returns the number of rows missing <code>date_of_consultation_admission</code>, but does not overwrite <code>linelist_cleaned</code> with anything, as there is not an assignment operator <code>&lt;-</code>.
+{{% /notice %}}</p>
 <p><strong>After viewing the above results, we must comment out (#) the two lines that <code>filter()</code> the <code>linelist_cleaned</code> dataset - we do <em>not</em> want to remove those 616 observations.</strong></p>
 <pre class="r"><code># linelist_cleaned &lt;- linelist_cleaned %&gt;% 
 #   filter(!is.na(case_number) &amp; !is.na(date_of_consultation_admission)) </code></pre>
@@ -49,25 +51,27 @@ nrow(linelist_cleaned %&gt;% filter(is.na(case_number))) </code></pre>
  linelist_cleaned &lt;- linelist_cleaned %&gt;%
    mutate_at(vars(matches(&quot;date|Date&quot;)), linelist::guess_dates,
            error_tolerance = 0.5)</code></pre>
-<p>The commant above successfully converted many of our date variables (remember you can check a variable’s class like <code>class(linelist$date_of_onset</code>). However, this command did not detect the date variables named with “dt”, such as <code>dtdeath</code> and <code>dthospitalization</code>. We must <strong>add code to convert those variables manually</strong>:</p>
+<p>The code above successfully converted many of our date variables (remember you can check a variable’s class like <code>class(linelist$date_of_onset</code>). However, this command did not detect the date variables named with “dt”, such as <code>dtdeath</code> and <code>dthospitalization</code>. We must <strong>add code to convert those variables manually</strong>:</p>
 <pre class="r"><code># Check class of variable 
 class(linelist_cleaned$dtdeath)</code></pre>
 <pre><code>## [1] &quot;character&quot;</code></pre>
 <pre class="r"><code># Individually convert variable using the guess_dates() function from the linelist package
-linelist_cleaned$dtdeath &lt;- linelist::guess_dates(linelist_cleaned$dtdeath)
+linelist_cleaned$dtdeath &lt;- linelist::guess_dates(linelist_cleaned$dtdeath, error_tolerance = 0.5)
 
 #Re-check class of variable
 class(linelist_cleaned$dtdeath)</code></pre>
 <pre><code>## [1] &quot;Date&quot;</code></pre>
 <pre class="r"><code># Repeat for variable &quot;dtdeath&quot;
-linelist_cleaned$dthospitalisation &lt;- linelist::guess_dates(linelist_cleaned$dthospitalisation)</code></pre>
+linelist_cleaned$dthospitalisation &lt;- linelist::guess_dates(linelist_cleaned$dthospitalisation, error_tolerance = 0.5)</code></pre>
 <p>Next we uncomment and <strong>modify code to correct unrealistic dates</strong>. We have browsed our data and know that there are observations with <code>date_of_onset</code> outside the reasonable range:</p>
 <pre class="r"><code># Check range of date_of_onset values, ignoring (removing) missing values
 range(linelist_cleaned$date_of_onset, na.rm = TRUE)</code></pre>
 <pre><code>## [1] &quot;2014-11-01&quot; &quot;2017-12-27&quot;</code></pre>
 <p>We convert dates outside the expected range (April 2016 to October 2017) to missing using <code>case_when()</code>. Note that when making the assignment on the right-hand side (RHS), wrap <code>NA</code> in <code>as.Date()</code>.</p>
 <p>As you modify this chunk for your own situation, remember that <strong>each left-hand side (LHS) of the <code>~</code> must be a logical statement</strong> (not just a value), and to include commas at the end of each <code>case_when()</code> line (except the last one). In addition, it is best to write <code>case_when()</code> lines from most specific at top to most general/catch-all at the bottom. You can read more about <code>case_when()</code> <a href="https://dplyr.tidyverse.org/reference/case_when.html">on this tidyverse site</a>.</p>
-<p>{{% notice tip %}} All the right-hand side (RHS) values must be the <em>same class</em> (either character, numeric, etc.). So, <em>if your other RHS values are character</em> and you want one RHS value to be missing, you cannot just write <code>NA</code> on the RHS. Instead you must use the special character version of <code>NA</code> : <code>NA_character_</code>. {{% /notice %}}</p>
+<p>{{% notice tip %}}
+All the right-hand side (RHS) values must be the <em>same class</em> (either character, numeric, etc.). So, <em>if your other RHS values are character</em> and you want one RHS value to be missing, you cannot just write <code>NA</code> on the RHS. Instead you must use the special character version of <code>NA</code> : <code>NA_character_</code>.
+{{% /notice %}}</p>
 <pre class="r"><code># Convert dates before April 2016 or after October 2017 to missing (NA)
 linelist_cleaned &lt;- mutate(linelist_cleaned,
                            date_of_onset = case_when(
@@ -80,8 +84,10 @@ linelist_cleaned &lt;- mutate(linelist_cleaned,
 linelist_cleaned$epiweek &lt;- aweek::date2week(linelist_cleaned$date_of_onset, 
                                              floor_day = TRUE, 
                                              factor = TRUE)</code></pre>
-<p>{{% notice tip %}} A note on the epiweek variable and factors:<br />
-Notice that we converted dates to <code>NA</code> that were clear errors (outside the expected date range) <strong>before</strong> creating the <code>epiweek</code> variable. This is because the <code>epiweek</code> variable is created as a <strong>factor</strong>, and once a factor is created it is more difficult to remove factor levels. You can read more about factors and dropping unused factor levels in the R Basics - <a href="https://r4epis.netlify.com/training/r_basics/advanced_functions/">Advanced and Miscellaneous</a> page. {{% /notice %}}</p>
+<p>{{% notice tip %}}
+A note on the epiweek variable and factors:<br />
+Notice that we converted dates to <code>NA</code> that were clear errors (outside the expected date range) <strong>before</strong> creating the <code>epiweek</code> variable. This is because the <code>epiweek</code> variable is created as a <strong>factor</strong>, and once a factor is created it is more difficult to remove factor levels. You can read more about factors and dropping unused factor levels in the R Basics - <a href="https://r4epis.netlify.com/training/r_basics/advanced_functions/">Advanced and Miscellaneous</a> page.
+{{% /notice %}}</p>
 </div>
 <div id="create-age-group" class="section level3">
 <h3>Create age group</h3>
@@ -123,7 +129,9 @@ linelist_cleaned$age_group &lt;- age_categories(linelist_cleaned$age_years,
 <p>While the template directs us to next create a <code>DIED</code> variable based on <code>exit_status</code> containing the characters “Dead”, we must first <strong>clean our <code>exit_status</code> variable, which is currrently in French</strong>.</p>
 <p><strong>Add code that uses <code>case_when()</code> to assign new values in a new exit_status2 variable</strong>, as in the code below. We do this by <strong>modifing code from just below in the template.</strong> The code uses the function <code>case_when()</code> to re-define <code>linelist_cleaned</code> as itself, but mutated to create the new variable <code>exit_status2</code>. The values in <code>exit_status2</code> are based on the values in <code>exit_status</code>, such that when <code>exist_status == &quot;Décédé&quot;</code>, the value in <code>exit_status2</code> is “Dead”, and so on.</p>
 <p>As you modify this chunk for your own situation, remember that <strong>each left-hand side (LHS) of the <code>~</code> must be a logical statement</strong> (not just a value), and to include commas at the end of each <code>case_when()</code> line (except the last one). It is best to write <code>case_when()</code> lines from most specific at top to most general/catch-all at bottom. You can read more about <code>case_when()</code> <a href="https://dplyr.tidyverse.org/reference/case_when.html">at this tidyverse site</a>.</p>
-<p>{{% notice tip %}} All the right-hand side (RHS) values must be the same class (either character, numeric, etc.). So, if your other RHS values are character and you want one RHS value to be missing, you cannot just write <code>NA</code> on the RHS. Instead you must use the special character version of <code>NA</code> : <code>NA_character_</code>. {{% /notice %}}</p>
+<p>{{% notice tip %}}
+All the right-hand side (RHS) values must be the same class (either character, numeric, etc.). So, if your other RHS values are character and you want one RHS value to be missing, you cannot just write <code>NA</code> on the RHS. Instead you must use the special character version of <code>NA</code> : <code>NA_character_</code>.
+{{% /notice %}}</p>
 <pre class="r"><code># Tabulate to see all possible values of exit_status
 table(linelist_cleaned$exit_status, useNA = &quot;always&quot;)</code></pre>
 <pre><code>## 

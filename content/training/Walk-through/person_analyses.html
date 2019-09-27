@@ -319,7 +319,9 @@ tab_linelist(linelist_cleaned, SYMPTOMS, keep = &quot;Oui&quot;) %&gt;%
 <ul>
 <li>In the initial <code>tab_linelist()</code> command, <code>transpose = &quot;value&quot;</code> is set because the values in the lab data are important in-and-of themselves (e.g. IgM+/IgG-, etc.) - i.e. the values should become column headers.</li>
 </ul>
-<p>{{% notice tip %}} This table may be large and unwieldy at first, until you clean your data. The step in data cleaning where we converted 0, 1, “yes”, “pos”, “neg”, etc. to standardized “Positive” and “Negative” was crucial towards making this table readable. Once kitted into a word document, you will likely need to adjust the font size, column widths, etc. {{% /notice %}}</p>
+<p>{{% notice tip %}}
+This table may be large and unwieldy at first, until you clean your data. The step in data cleaning where we converted 0, 1, “yes”, “pos”, “neg”, etc. to standardized “Positive” and “Negative” was crucial towards making this table readable. Once kitted into a word document, you will likely need to adjust the font size, column widths, etc.
+{{% /notice %}}</p>
 <pre class="r"><code># get counts and proportions for all variables named in LABS
 tab_linelist(linelist_cleaned, LABS, 
              transpose = &quot;value&quot;) %&gt;% 

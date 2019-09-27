@@ -11,7 +11,8 @@ weight: 13
 <div id="factors" class="section level4">
 <h4>Factors</h4>
 <p>Factors are a special variable class in which data are stored internally as integers, but each integer <em>level</em> has a corresponding character value <em>label</em> that is used when the data are displayed. This can be partularly helpful when running statistical models which expect numeric (e.g. 0/1) inputs.</p>
-<p>{{% notice tip %}} Factors are similar to labeled values of categorical variables in Stata.<br />
+<p>{{% notice tip %}}
+Factors are similar to labeled values of categorical variables in Stata.<br />
 {{% /notice %}}</p>
 <p>You can <a href="https://www.stat.berkeley.edu/~s133/factors.html">read more about factors here</a>.</p>
 <p>The package <strong>forcats</strong> provides useful tools for working with factor variables. You can <a href="https://forcats.tidyverse.org">read more about <strong>forcats</strong> here</a>.</p>
@@ -24,7 +25,9 @@ linelist_cleaned &lt;- gen_data(&quot;AJS&quot;)
 # the variable is a factor. 
 class(linelist_cleaned$sex)</code></pre>
 <pre><code>## [1] &quot;factor&quot;</code></pre>
-<p>{{% notice tip %}} To convert use <code>as.factor()</code> <code>linelist_cleaned$sex &lt;- as.factor(linelist_cleaned$sex)</code> {{% /notice %}}</p>
+<p>{{% notice tip %}}
+To convert use <code>as.factor()</code> <code>linelist_cleaned$sex &lt;- as.factor(linelist_cleaned$sex)</code>
+{{% /notice %}}</p>
 <p><strong>To change the labels for a variable, use the function <code>fct_recode()</code> from the package forcats.</strong></p>
 <p>After providing the name of the factor give the conversion statements, separated by commas, in the format <strong>NEW = “OLD”</strong>. Note that everything on the right-hand side (RHS) must be a character. So, if you want to give a new label to missing values, use the special term <code>NA_character_</code>.</p>
 <p>First we use <code>fct_count()</code> from the package <strong>forcats</strong> to see the values in the factor:</p>
@@ -33,9 +36,9 @@ fct_count(linelist_cleaned$sex)</code></pre>
 <pre><code>## # A tibble: 3 x 2
 ##   f         n
 ##   &lt;fct&gt; &lt;int&gt;
-## 1 M        91
-## 2 F       100
-## 3 U       109</code></pre>
+## 1 M       101
+## 2 F       107
+## 3 U        92</code></pre>
 <p>Now we re-label the values using <code>fct_recode()</code>, also from the package <strong>forcats</strong>.</p>
 <pre class="r"><code># Re-define the labels for the factor variable (pay attention to spelling!)
 linelist_cleaned$sex &lt;- fct_recode(linelist_cleaned$sex, 
@@ -48,9 +51,9 @@ fct_count(linelist_cleaned$sex)</code></pre>
 <pre><code>## # A tibble: 3 x 2
 ##   f           n
 ##   &lt;fct&gt;   &lt;int&gt;
-## 1 Male       91
-## 2 Female    100
-## 3 Unknown   109</code></pre>
+## 1 Male      101
+## 2 Female    107
+## 3 Unknown    92</code></pre>
 <p><strong>To change the <em>arrangement</em> of the levels, use <code>fct_relevel()</code></strong>.</p>
 <p>This will impact the <em>arrangement</em> of the levels as displayed in graphs and tables. Give the name of the factor followed by the new arrangement (pay attention to spelling!).</p>
 <pre class="r"><code># Provide new arrangement of levels
@@ -74,10 +77,10 @@ fct_count(linelist_cleaned$sex)</code></pre>
 <pre><code>## # A tibble: 4 x 2
 ##   f           n
 ##   &lt;fct&gt;   &lt;int&gt;
-## 1 Female    100
-## 2 Male       91
+## 1 Female    107
+## 2 Male      101
 ## 3 Unknown     0
-## 4 &lt;NA&gt;      109</code></pre>
+## 4 &lt;NA&gt;       92</code></pre>
 <blockquote>
 <p>We can see that the value “Unknown” now has a count of zero, but it is still present as a level of the factor variable and will appear in tables and graphs. To remove this level entirely we use <code>fct_drop()</code>, which drops unused levels from a factor.</p>
 </blockquote>
@@ -89,10 +92,12 @@ fct_count(linelist_cleaned$sex)</code></pre>
 <pre><code>## # A tibble: 3 x 2
 ##   f          n
 ##   &lt;fct&gt;  &lt;int&gt;
-## 1 Female   100
-## 2 Male      91
-## 3 &lt;NA&gt;     109</code></pre>
-<p>{{% notice tip %}} Use the argument <code>only =</code> to drop specific levels: <code>fct_drop(linelist_cleaned$sex, only = &quot;Unknown&quot;)</code> {{% /notice %}}</p>
+## 1 Female   107
+## 2 Male     101
+## 3 &lt;NA&gt;      92</code></pre>
+<p>{{% notice tip %}}
+Use the argument <code>only =</code> to drop specific levels: <code>fct_drop(linelist_cleaned$sex, only = &quot;Unknown&quot;)</code>
+{{% /notice %}}</p>
 </div>
 </div>
 <div id="the-in-operator" class="section level3">
@@ -120,17 +125,16 @@ linelist_cleaned$DIED &lt;- linelist_cleaned$exit_status %in% c(&quot;DD&quot;, 
 </div>
 <div id="joins" class="section level2">
 <h2>Joins</h2>
-<p>The package <strong>dplyr</strong> contains functions that are used in the templates for joining (“merging”) data frames. There are many ways to conduct a join, and it is important that you use the correct option - otherwise you risk unexpectedly losing data!</p>
+<p>The package <strong>dplyr</strong> contains functions that are used in the templates for joining (“merging”) data frames.
+There are many ways to conduct a join, and it is important that you use the correct option - otherwise you risk unexpectedly losing data!</p>
 <p>It is wise to verify any join by inspecting the joined data frames and the resulting data frame.</p>
-<p>There are more reference materials on dplyr join functions <a href="https://stat545.com/bit001_dplyr-cheatsheet.html">in the cheat sheet from UBC’s STAT545 course (by Jenny Bryan)</a> and <a href="https://rpubs.com/williamsurles/293454">course notes from William Srules</a>. The animations below were originally from <a href="https://github.com/gadenbuie/tidyexplain" class="uri">https://github.com/gadenbuie/tidyexplain</a>.</p>
+<p>There are more reference materials on dplyr join functions <a href="https://stat545.com/bit001_dplyr-cheatsheet.html">in the cheat sheet from UBC’s STAT545 course (by Jenny Bryan)</a> and <a href="https://rpubs.com/williamsurles/293454">course notes from William Srules</a>.
+The animations below were originally from <a href="https://github.com/gadenbuie/tidyexplain" class="uri">https://github.com/gadenbuie/tidyexplain</a>.</p>
 <div id="inner-join" class="section level3">
 <h3>Inner join</h3>
 <p>An inner join of data frames x and y (<code>inner_join(x, y)</code>) returns <strong>only</strong> the rows from x which have matching values in y, and includes all the columns from both x and y.</p>
 <p>The argument <code>by =</code> specifies the column name in both data frames to compare for the join (it must be spelled the same in both data frames).</p>
-<div class="figure">
-<img src="/images/inner-join.gif" />
-
-</div>
+<p><img src="/images/inner-join.gif" /></p>
 </div>
 <div id="left-join" class="section level3">
 <h3>Left join</h3>
@@ -139,26 +143,17 @@ linelist_cleaned$DIED &lt;- linelist_cleaned$exit_status %in% c(&quot;DD&quot;, 
 <p>For example, a left join occurs in the AJS template when calculating attack rate by region, where <code>cases</code> and <code>population_data</code> are joined by their variable <code>patient_origin</code>.</p>
 <pre class="r"><code>cases &lt;- count(linelist_cleaned, patient_origin) %&gt;%   # cases for each region
   left_join(population_data, by = &quot;patient_origin&quot;)    # merge population data </code></pre>
-<div class="figure">
-<img src="/images/left-join.gif" />
-
-</div>
+<p><img src="/images/left-join.gif" /></p>
 </div>
 <div id="full-join" class="section level3">
 <h3>Full join</h3>
 <p>A full join of data frames x and y (<code>full_join(x, y)</code>) returns all rows from x and y. If there are any rows in x not in y (or visa-versa), the missing values are <code>NA</code>.</p>
-<div class="figure">
-<img src="/images/full-join.gif" />
-
-</div>
+<p><img src="/images/full-join.gif" /></p>
 </div>
 <div id="anti-join" class="section level3">
 <h3>Anti join</h3>
 <p>This is often used to inspect which rows are unique to a data frame. An anti join of data frames x and y (<code>anti_join(x, y)</code>) returns the rows from data frame x that <em>do not</em> have matching values in data frame y. Only columns from x are returned.</p>
-<div class="figure">
-<img src="/images/anti-join.gif" />
-
-</div>
+<p><img src="/images/anti-join.gif" /></p>
 </div>
 </div>
 <div id="graphics-with-the-ggplot2-package" class="section level2">
@@ -184,11 +179,15 @@ linelist_cleaned$DIED &lt;- linelist_cleaned$exit_status %in% c(&quot;DD&quot;, 
 </ul>
 <p>Secondly, the geom is specified, indicating whether the data should be displayed as points, lines, bars, a map, etc. Without a geom, the data will not be visualized and the coordinate plane will be empty.</p>
 <p>Other optional sub-commands can address the scales (e.g <code>scale_fill_brewer()</code> chooses a scale for the <code>fill</code> aesthetic based on the <a href="http://colorbrewer2.org/">Color Brewer 2 color scales</a>), labels (e.g. <code>labs(title = &quot;Attack Rate by Region&quot;)</code> to define a specific title for the plot), themes (e.g. <code>theme(text = element_text(size = 18))</code> makes all the text in the plot be a minimum size of 18 points), etc.</p>
-<p><img src="/images/ggplot.png" /> {{% notice tip %}} A command beginning with <code>ggplot()</code> will print the visualization but not save it. Using the assignment operator <code>&lt;-</code> in the first line will assign the visualization to an R object and save it for later use. Print it by running a command of just the object name. {{% /notice %}}</p>
+<p><img src="/images/ggplot.png" />
+{{% notice tip %}}
+A command beginning with <code>ggplot()</code> will print the visualization but not save it. Using the assignment operator <code>&lt;-</code> in the first line will assign the visualization to an R object and save it for later use. Print it by running a command of just the object name.
+{{% /notice %}}</p>
 </div>
 <div id="geospatial-mapping" class="section level3">
 <h3>Geospatial mapping</h3>
-<p>In the “Place” section of the template, <code>ggplot()</code> is used to create geospatial maps of attack rates and other indicators. In these cases, the coordinate system reflects latitude/longitude, and <code>geom_sf()</code> displays the spatial tiles of the regions contained in the map.</p>
+<p>In the “Place” section of the template, <code>ggplot()</code> is used to create geospatial maps of attack rates and other indicators.
+In these cases, the coordinate system reflects latitude/longitude, and <code>geom_sf()</code> displays the spatial tiles of the regions contained in the map.</p>
 </div>
 <div id="aesthetic-themes-and-labels" class="section level3">
 <h3>Aesthetic themes and labels</h3>

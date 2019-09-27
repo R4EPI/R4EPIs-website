@@ -12,7 +12,9 @@ weight: 6
 <p>Please review the instructions in the R Basics page on <a href="https://r4epis.netlify.com/training/r_basics/r_projects/">Working within R projects</a>. In brief:</p>
 <p>Open RStudio. Select <em>New Project</em> from the main <em>File</em> menu of RStudio. Select <em>New Directory</em> and <em>New Project</em>, and a location to save the new R project (this creates a new folder).</p>
 <p>Save all relevant data files into this new R project folder.</p>
-<p>{{% notice tip %}} For the RMarkdown to produce the final report correctly, you must have read/write permissions for the location of the R project folder. On an MSF computer this is generally the c:/temp folder. {{% /notice %}}</p>
+<p>{{% notice tip %}}
+For the RMarkdown to produce the final report correctly, you must have read/write permissions for the location of the R project folder. On an MSF computer this is generally the c:/temp folder.
+{{% /notice %}}</p>
 </div>
 <div id="opening-an-ajs-template" class="section level2">
 <h2>Opening an AJS template</h2>
@@ -26,19 +28,13 @@ weight: 6
 </ul>
 <p>The AJS RMarkdown template will open in your RStudio Viewer pane.</p>
 <p><em>Below is an example showing how to open and save an outbreak template. Be sure to open the AJS template for this exercise.</em></p>
-<div class="figure">
-<img src="/images/opening_template.gif" />
-
-</div>
+<p><img src="/images/opening_template.gif" /></p>
 <p><strong>Now, follow along with this walk-through and make edits to your AJS template, saving it regularly.</strong></p>
 </div>
 <div id="header" class="section level2">
 <h2>Header</h2>
 <p>The very top of the template consists of a header surrounded by <code>---</code> lines. Here you may want to edit the title of your document. The other settings in the header define the default document type produced (Microsoft Word) when the RMarkdown is “knit”.</p>
-<div class="figure">
-<img src="/images/AJS_Intro.png" />
-
-</div>
+<p><img src="/images/AJS_Intro.png" /></p>
 <p>Remember that the green text below the header, located between these special characters (<code>&lt;!--</code> and <code>--&gt;</code>), is for your information only. This text will not appear in the final Word document report (see the R Basics page <a href="https://r4epis.netlify.com/training/r_basics/rmarkdown_orientation/">Reading a RMarkdown</a> for more information).</p>
 </div>
 <div id="introduction-to-the-template" class="section level2">
@@ -56,10 +52,7 @@ weight: 6
 <li><p>Set default text size in graphic plots</p></li>
 <li><p>Establish visual theme settings for epidemic curve plots</p></li>
 </ul>
-<div class="figure">
-<img src="/images/Package_Installation.png" />
-
-</div>
+<p><img src="/images/Package_Installation.png" /></p>
 <div id="about-the-packages-used-in-this-template" class="section level3">
 <h3>About the packages used in this template</h3>
 <div id="generic-packages" class="section level4">
@@ -71,8 +64,7 @@ weight: 6
 </li>
 <li><strong>forcats</strong> used to clean and shape the data<br />
 </li>
-<li><strong>stringr</strong> used to clean text/characters<br />
-</li>
+<li><strong>stringr</strong> used to clean and handle text/characters (known in computer science as “strings”)</li>
 <li><strong>rio</strong> used to read in data<br />
 </li>
 <li><strong>ggplot2</strong> used to visualise your data using different plotting methods<br />
@@ -115,8 +107,10 @@ weight: 6
 <pre><code>## &lt;aweek start: Monday&gt;
 ## [1] &quot;2017-W17-4&quot;</code></pre>
 <pre class="r"><code>reporting_week &lt;- aweek::as.aweek(&quot;2017-W16&quot;) # Set reporting_week as last complete epi week</code></pre>
-<p>{{% notice tip %}} If you want to use the automatically-updated date from your computer, use <code>Sys.Date()</code> like this: <code>date2week(Sys.Date())</code> {{% /notice %}}</p>
-<p><strong>Lastly, the labels that will be used in epidemic curve plots are defined</strong>. These should not need any adjustment. You may notice that the subtitle label uses the special term <code>%s</code> as a placeholder - the reporting_week defined in the previous chunk will show in its place.</p>
+<p>{{% notice tip %}}
+If you want to use the automatically-updated date from your computer, use <code>Sys.Date()</code> like this: <code>date2week(Sys.Date())</code>
+{{% /notice %}}</p>
+<p><strong>Lastly, the labels that will be used in epidemic curve plots are defined</strong>. These should not need any adjustment. You may notice that the subtitle label uses <code>reporting_week</code> in curly braces—this means that the value of <code>reporting_week</code> defined in the previous chunk will show in its place.</p>
 <pre class="r"><code>## sets the labels in ggplot for the epicurves
 epicurve_labels &lt;- labs(x = &quot;Calendar week&quot;, 
                         y = &quot;Cases (n)&quot;, 
