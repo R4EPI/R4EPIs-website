@@ -30,8 +30,8 @@ Some recent examples of such outbreak responses and the data analysis done durin
 
 ## Getting started
 
-**The outbreak and survey report templates are special R scripts called "R-Markdowns"**, and are included with **sitrep** package installation. 
-RMarkdown scripts execute data cleaning and analytical R commands AND are themselves the outline of an automatically-produced report.
+**The outbreak and survey report templates are special "RMarkdown" scripts**, and are included with **sitrep** package installation. 
+RMarkdown scripts give you a way of writing your analysis code and report in one document by allowing you to interleave chunks of code that the computer will run in between explanatory text meant for a person to read.
 
 **Assistance using the outbreak templates** 
 
@@ -76,10 +76,7 @@ Cleaning will be the most straight-forward for datasets produced with DHIS2 soft
 
 ### Analyses 
 
-Situation reports for outbreaks typically focus on describing the data in terms of:
-
-* **Time**
-
+Situation reports for outbreaks typically focus on describing the data in terms of **person**, **time**, and **place**.
 The template contains sections for each of these core characteristics.
 
 ## Person characteristics
@@ -101,7 +98,7 @@ The epidemic curve will give an understanding about the mode of transmission of 
 
 ![Number and weekly incidence rate of CSM cases treated by MSF in Kebbi and Sokoto states, February 10 – June 8, 2015](images/epicurvemeningitis.jpg?width=40pc)
 
-**Source**: [Chow J, et al. Invasive Meningococcal Meningitis Serogroup C Outbreak in Northwest Nigeria, 2015 – Third Consecutive Outbreak of a New Strain. PLOS Currents Outbreaks. 2016 Jul 7 . Edition 1.](10.1371/currents.outbreaks.06d10b6b4e690917d8b0a04268906143)
+**Source**: [Chow J, et al. Invasive Meningococcal Meningitis Serogroup C Outbreak in Northwest Nigeria, 2015 – Third Consecutive Outbreak of a New Strain. PLOS Currents Outbreaks. 2016 Jul 7 . Edition 1.](http://currents.plos.org/outbreaks/index.html%3Fp=66532.html)
 
 
 ## Place characteristics

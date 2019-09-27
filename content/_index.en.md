@@ -34,12 +34,12 @@ The templates address all aspects of:
 * Analysis of survey data
 
 **All of the code is open source and freely available and can be used by anyone.** For suggestions 
-on what to add or change, please link to our [Github site](https://github.com/R4EPI) 
+on what to add or change, please [open an issue on GitHub](https://github.com/R4EPI/sitrep/issues).
 or contact one of [our contributors](https://r4epis.netlify.com/credits/).
 
 
 *Below: The "sitrep" package developed by R4Epis includes templates of automated situation reports* 
-![Markdowns from R](images/SnipMarkdown.PNG?width=30pc)
+![Available situation report RMarkdown templates](images/SnipMarkdown.PNG?width=30pc)
 
 *Below: Report contents, including graphics and maps, can be modified with new data cleaning and analysis functions* 
 ![Data visualisation output](images/SnipDatavisualisation.PNG?width=30pc)
@@ -78,9 +78,9 @@ spatial epidemiology,
 health information systems 
 and public health.
 
-See [this page](https://r4epis.netlify.com/credits/) for a list of project contibutors. 
+Check out the [list of project contributors](https://r4epis.netlify.com/credits/). 
 
-See these MSF innovation blog posts describing [the origin](https://blogs.msf.org/bloggers/larissa/innovation-introducing-r4epis) 
+See these MSF innovation blog posts describing [the origin of the R4EPIs project](https://blogs.msf.org/bloggers/larissa/innovation-introducing-r4epis) 
 and some of the [development efforts](https://blogs.msf.org/bloggers/r4epis-team/r4epis-hackathon).
 
 

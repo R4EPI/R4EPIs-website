@@ -126,7 +126,7 @@ This `setup` code chunk does the following:
 * **knitr** used to create the output document (pdf, doc, html)  
 * **dplyr** used to clean and shape the data  
 * **forcats** used to clean and shape the data  
-* **stringr** used to clean text/characters  
+* **stringr** used to clean and handle text/characters (known in computer science as "strings")
 * **rio** used to read in data  
 * **ggplot2** used to visualise your data using different plotting methods  
 * **here** used to locate files
@@ -171,7 +171,7 @@ reporting_week <- aweek::as.aweek("2017-W16") # Set reporting_week as last compl
 If you want to use the automatically-updated date from your computer, use `Sys.Date()` like this: `date2week(Sys.Date())`
 {{% /notice %}}
 
-**Lastly, the labels that will be used in epidemic curve plots are defined**. These should not need any adjustment. You may notice that the subtitle label uses the special term `%s` as a placeholder - the reporting_week defined in the previous chunk will show in its place.  
+**Lastly, the labels that will be used in epidemic curve plots are defined**. These should not need any adjustment. You may notice that the subtitle label uses `reporting_week` in curly braces---this means that the value of `reporting_week` defined in the previous chunk will show in its place.  
 
 ```{r}
 ## sets the labels in ggplot for the epicurves

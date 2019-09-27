@@ -20,8 +20,8 @@ weight: 15
 
 ## Getting started
 
-The survey report templates are special R scripts called "R-Markdowns", and are included with **sitrep** package installation. 
-RMarkdown scripts execute data cleaning and analytical R commands AND are themselves the outline of an automatically-produced report.
+The survey report templates are special "RMarkdown" scripts, and are included with **sitrep** package installation. 
+RMarkdown scripts give you a way of writing your analysis code and report in one document by allowing you to interleave chunks of code that the computer will run in between explanatory text meant for a person to read.
 
 **For assistance using the survey templates** 
 
@@ -34,13 +34,14 @@ In the walk-through, you will learn lessons for modifying the templates to fit y
 
 **To access the survey templates:**
 
-* Open Rstudio
+* Open RStudio
 * Under the 'File' button (top left of your screen), click on the "+" 
 * Then click on "R markdown...", 
 * and select "From template"; 
 you should be able to see all the options of templates that are available. For example "Mortality Survey". 
 
 ![example of opening and saving cholera template](images/opening_template.gif)
+
 ## Basic concepts of survey data analysis
 
 **Further resources** 
