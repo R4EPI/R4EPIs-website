@@ -127,4 +127,4 @@ Code and **sitrep** functions included in the outbreak templates can also be use
 
 The data dictionaries may not be applicable to these other use-cases, but you should be able to similarly recode and rename variables, create graphs and tables of relevant variables and if necessary generate maps.
 
-There is also coding to be able to guide you on conducting simple statistical comparisons between groups (chi square, t-test etc.), as well as the calculation of Odds Ratios (ORs) and Risk Ratios (RR) and running regression models for multivariate analyses.
+There is also code to help you conduct simple statistical comparisons between groups (chi square, t-test etc.), as well as the calculation of Odds Ratios (ORs) and Risk Ratios (RR) and running regression models for multivariate analyses.
