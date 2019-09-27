@@ -24,7 +24,7 @@ If you are more familiar with Stata, a script is equivalent to a Do File.
 
 RMarkdown scripts can contain commands such as for data import, cleaning, etc. **and are themselves the outline of an automatically-generated document** containing text, tables, and plots produced by your code.
 
-You can learn more about RMarkdowns [here](https://rmarkdown.rstudio.com/lesson-1.html) and reference this [cheatsheet](/images/rmarkdown_cheatsheet_2.0.pdf)  
+You can [learn more about RMarkdown here](https://rmarkdown.rstudio.com/lesson-1.html) and reference this [cheatsheet](/images/rmarkdown_cheatsheet_2.0.pdf)  
 
 ![](/images/RMarkdown_transformation.png)
 *In the above RMarkdown template script, the white and gray code chunks produce text and R-generated graphics, respectively, in the Word document report. The green text does not appear in the final report.*  
