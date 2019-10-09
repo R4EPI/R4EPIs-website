@@ -80,15 +80,15 @@ For this we will use the following functions:
 * tab_linelist
 * tab_univariate
 
-### Create dataframe to be used for the analysis 
+### Create data frame to be used for the analysis 
 
-In the example of this AJS data, the current dataframe (dataset) you are using contains "Confirmed", "Suspected" and "Probable cases". 
+In the example of this AJS data, the current data frame (dataset) you are using contains "Confirmed", "Suspected" and "Probable cases". 
 
-We would like to compare the exposures between "Confirmed" and "Suspected" cases ONLY, so we need to create a dataframe that only includes those cases.
+We would like to compare the exposures between "Confirmed" and "Suspected" cases ONLY, so we need to create a data frame that only includes those cases.
 
-```{r dataframe_univariate, warning=FALSE, message=FALSE}
+```{r data frame_univariate, warning=FALSE, message=FALSE}
 
-# Creating a dataframe needed for the univariate analysis
+# Creating a data frame needed for the univariate analysis
 linelist_cc <- linelist_cleaned %>%
   filter(case_def == "Confirmed" | case_def == "Suspected")
 
@@ -96,30 +96,24 @@ linelist_cc <- linelist_cleaned %>%
 
 
 ### Create list of variables to change
-The tab_univariate function in R requires your exposure and outcomes variables to be TRUE/FALSE statements. 
 
-Thus you will need to change the way most of the variable you are using (in this example: case definition, vomit, jaundice and patient_facility_type) to be coded in this manner.
+The `tab_univariate()` function requires your exposure and outcomes variables to be TRUE/FALSE statements. 
 
-To do that quickly you need to create a dataframe that specifies the variables you want to change; and then recode them all at once to TRUE/FALSE.
+Thus, you will need to modify the variables you are using to be TRUE/FALSE (in this example: case definition, vomit, jaundice, and patient_facility_type).
+
+To do this, you can gather all of the binary variables into a single vector. With this, you can use `mutate_at()` to apply `str_detect()` from the **stringr** package to all of the binary variables to return TRUE if the elements match either Confirmed, Oui, or Inpatient.
 
 ```{r univariate_true_false_variables, warning=FALSE, message=FALSE}
 
-#Create dataframe that specifies the variables that you want to recode
-change_vars <- c("case_def", "ptvomit", "ptjaundice", "patient_facility_type")
+## Create vector that specifies the variables we want to convert
+binary_vars <- c("case_def", "ptvomit", "ptjaundice", "patient_facility_type")
 
-## using change_vars: standardize options to TRUE/FALSE
-  ## if NA leave as NA
-  ## if variable in any of confirmed, oui or inpatient - make it TRUE
-  ## otherwise leave as FALSE
+## Apply str_detect on each of the columns to return TRUE for each element that 
+## matches either Confirmed, Oui, or Inpatient
 linelist_cc <- linelist_cc %>%
-  mutate_at(vars(change_vars),
-            funs(case_when(
-              is.na(.) ~ NA,
-              . %in% c("Confirmed",
-                    "Oui",
-                    "Inpatient") ~ TRUE,
-              TRUE ~ FALSE)))
-
+  mutate_at(.vars = binary_vars, 
+            .funs = str_detect,
+            pattern = "Confirmed|Oui|Inpatient")
 ```
 
 ### Use Chi-square tests to check the difference in characteristics or exposures between confirmed and suspected cases for categorical variables
