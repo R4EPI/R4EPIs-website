@@ -1,6 +1,6 @@
 ---
 date: "2019-10-08T16:50:40+02:00"
-title: Univariate
+title: Univariate Analysis
 weight: 15
 ---
 
