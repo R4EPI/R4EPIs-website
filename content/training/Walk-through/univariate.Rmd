@@ -158,20 +158,18 @@ To compare the means of continuous variables between the confirmed and suspected
 
 ```{r univariate_ttest, warning=FALSE, message=FALSE}
 
-linelist_cc %>%
-  ## run ttest
-  summarise(test = list(broom::tidy(t.test(age_years ~ case_def, var.equal = TRUE)))) %>%
-  ## make results of test available
-  tidyr::unnest(cols = c(test)) %>%
-  ## create a column for variable name
-  mutate(Variable = "Age (years)") %>%
+## run ttest
+t.test(age_years ~ case_def, var.equal = TRUE, data = linelist_cc) %>%
+  ## convert to a data frame
+  broom::tidy() %>%
   ## select and rename columns
-  select(Variable,
-         "Suspected (mean)" = estimate1,
+  select("Suspected (mean)" = estimate1,
          "Confirmed (mean)" = estimate2,
          "p-value" = p.value) %>%
+  ## create a column for the variable name
+  tibble::add_column(Variable = "Age (years)", .before = 1) %>%
   knitr::kable(digits = 1)
-
+  
 ```
 
 ### Use Kruskal-wallis to check the difference in the characteristics or exposures for continuous variables between confirmed and suspected cases (for non-normally distributed data)
@@ -190,19 +188,13 @@ medians_tab <- linelist_cc %>%
             SD = sd(age_years, na.rm = TRUE)) %>%
   tidyr::pivot_wider(names_from = case_def, values_from = c("Median", "SD"))
 
+## perform the Kruskal-Wallace test and save the results
+kw <- kruskal.test(age_years ~ case_def, data = linelist_cc)
 
-krusk_tab <- linelist_cc %>%
-  ## run ttest
-  summarise(test = list(broom::tidy(kruskal.test(age_years ~ case_def)))) %>%
-  ## make results of test available
-  tidyr::unnest(cols = c(test)) %>%
-  ## select and rename columns
-  select(p.value)
-
-
-bind_cols(medians_tab, krusk_tab) %>%
-  ## create a column for variable name
-  mutate(Variable = "Age (years)") %>%
+medians_tab %>%
+  ## add the variable and p-value columns
+  tibble::add_column(Variable = "Age (years)", p.value = kw$p.value) %>%
+  ## select and rename the columns in the right order
   select(Variable,
          "Control (median)" = Median_FALSE,
          "SD" = SD_FALSE,
