@@ -1,7 +1,7 @@
 ---
 date: "2019-09-05T17:58:42+02:00"
 title: Knitting the report
-weight: 15
+weight: 16
 ---
 
 **Producing the final RMarksdown report is called "knitting"**. When you are editing the RMarkdown script, you will see a special option to "Knit"" at the top of the script, near the save shortcut button. Clicking "Knit" will begin the process of creating the final document. The option to "Knit" does not appear for normal R scripts, only RMarkdown scripts.  

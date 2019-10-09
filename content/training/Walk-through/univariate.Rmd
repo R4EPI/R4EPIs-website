@@ -1,0 +1,275 @@
+---
+date: "2019-10-08T16:50:40+02:00"
+title: Univariate
+weight: 15
+---
+
+```{r setup, include=FALSE, results='hide', message=FALSE, warning=FALSE}
+# hide all code chunks in the output, but show errors
+knitr::opts_chunk$set(echo = TRUE,       # hide all code chunks in output
+                      error = TRUE,       # show errors if they appear, but don't stop
+                      fig.width = 6*1.25, # Figure width
+                      fig.height = 6      # Figure height
+                     )
+# set default NA to - in output, define figure width/height
+options(knitr.kable.NA = "-")
+
+# Installing required packages for this template
+required_packages <- c("knitr",       # create output docs
+                       "dplyr",       # clean/shape data
+                       "forcats",     # clean/shape data
+                       "stringr",     # clean text
+                       "rio",         # read in data
+                       "ggplot2",     # create plots and charts
+                       "sitrep",      # MSF field epi functions
+                       "linelist",    # Functions for cleaning/standardising data
+                       "incidence",   # create epicurves
+                       "aweek",       # define epi weeks
+                       "epitools",    # 2x2 tables and other epi goodness
+                       "epitrix",     # epi helpers and tricks
+                       "sf",          # encode spatial vector data
+                       "ggspatial",
+                       "here")   # plot maps
+
+for (pkg in required_packages) {
+  # install packages if not already present
+  if (!pkg %in% rownames(installed.packages())) {
+    install.packages(pkg)
+  }
+  
+  # load packages to this current session 
+  library(pkg, character.only = TRUE)
+}
+
+
+# set default text size to 16 for plots
+# give classic black/white axes for plots
+ggplot2::theme_set(theme_classic(base_size = 18))
+
+# Set the day that defines the beginning of your epiweek.
+# you can start the week on any day of the week
+# (the ISO standard is to start on Monday) 
+aweek::set_week_start("Monday")
+
+
+
+date2week("2017-04-20")      #Sys.Date() uses the current date from your computer
+
+
+reporting_week <- readRDS("data/reporting_week.rds") # Set the reporting week
+
+# Read in the R objects that were defined in previous pages
+linelist_cleaned <- readRDS("data/linelist_time_cleaned.rds")
+
+population_data_region <- readRDS("data/population_data.rds")
+population <- readRDS("data/population.rds")
+
+epicurve_theme <- readRDS("data/epicurve_theme.rds")
+SYMPTOMS <- readRDS("data/SYMPTOMS.rds")
+LABS <- readRDS("data/LABS.rds")
+first_week <- readRDS("data/first_week.rds")
+obs_start <- readRDS("data/obs_start.rds")
+obs_end <- readRDS("data/obs_end.rds")
+
+```
+
+This section gives some extra coding options in R in order to be able to do some simple descriptive statistics on your data (chi-square, t-test, Kruskal-Wallis) and calculate Odds Ratios as if you were to conduct a case control analysis univariate analysis.
+
+For this we will use the following functions:
+
+* tab_linelist
+* tab_univariate
+
+### Create dataframe to be used for the analysis 
+
+In the example of this AJS data, the current dataframe (dataset) you are using contains "Confirmed", "Suspected" and "Probable cases". 
+
+We would like to compare the exposures between "Confirmed" and "Suspected" cases ONLY, so we need to create a dataframe that only includes those cases.
+
+```{r dataframe_univariate, warning=FALSE, message=FALSE}
+
+# Creating a dataframe needed for the univariate analysis
+linelist_cc <- linelist_cleaned %>%
+  filter(case_def == "Confirmed" | case_def == "Suspected")
+
+```
+
+
+### Create list of variables to change
+The tab_univariate function in R requires your exposure and outcomes variables to be TRUE/FALSE statements. 
+
+Thus you will need to change the way most of the variable you are using (in this example: case definition, vomit, jaundice and patient_facility_type) to be coded in this manner.
+
+To do that quickly you need to create a dataframe that specifies the variables you want to change; and then recode them all at once to TRUE/FALSE.
+
+```{r univariate_true_false_variables, warning=FALSE, message=FALSE}
+
+#Create dataframe that specifies the variables that you want to recode
+change_vars <- c("case_def", "ptvomit", "ptjaundice", "patient_facility_type")
+
+## using change_vars: standardize options to TRUE/FALSE
+  ## if NA leave as NA
+  ## if variable in any of confirmed, oui or inpatient - make it TRUE
+  ## otherwise leave as FALSE
+linelist_cc <- linelist_cc %>%
+  mutate_at(vars(change_vars),
+            funs(case_when(
+              is.na(.) ~ NA,
+              . %in% c("Confirmed",
+                    "Oui",
+                    "Inpatient") ~ TRUE,
+              TRUE ~ FALSE)))
+
+```
+
+### Use Chi-square tests to check the difference in characteristics or exposures between confirmed and suspected cases for categorical variables
+
+To compare the proportion of confirmed and suspected cases exposed to certain categorical variables, we will want to compare them using the chi-square test.
+
+```{r univariate_chisquare, warning=FALSE, message=FALSE}
+
+linelist_cc %>%
+tab_linelist(age_group, sex, strata = case_def, na.rm = FALSE) %>%
+  ## call variables something more accessible for the table output
+  rename(suspected_n = "FALSE n",
+         confirmed_n = "TRUE n") %>%
+  ## group by variable for the chisq test
+  group_by(variable) %>%
+  ## run chi-sq test
+  mutate(binom = list(broom::tidy(chisq.test(suspected_n, confirmed_n)))) %>%
+  ## make results of chisq test available
+  tidyr::unnest() %>%
+  ## ungroup to be able to change the names
+  ungroup() %>%
+  ## get rid of duplicate var names and pvals
+  mutate(variable = replace(variable, duplicated(variable), NA),
+         p.value = replace(p.value, duplicated(p.value), NA)) %>%
+  ## select and rename columns
+  select(
+    variable,
+    "Value" = value,
+    "Suspected (n)" = suspected_n,
+    "%" = "FALSE proportion",
+    "Confirmed (n)" = confirmed_n,
+    "%" = "TRUE proportion",
+    "P-value" = p.value
+  )
+
+```
+
+### Use T-test to check the difference in the characteristics or exposures for continuous variables between confirmed and suspected cases (for normally distributed data)
+
+To compare the means of continuous variables between the confirmed and suspected cases, we will use the t-test.
+
+```{r univariate_ttest, warning=FALSE, message=FALSE}
+
+linelist_cc %>%
+  ## run ttest
+  summarise(test = list(broom::tidy(t.test(age_years ~ case_def, var.equal = TRUE)))) %>%
+  ## make results of test available
+  tidyr::unnest() %>%
+  ## create a column for variable name
+  mutate(Variable = "Age (years)") %>%
+  ## select and rename columns
+  select(Variable,
+         "Suspected (mean)" = estimate1,
+         "Confirmed (mean)" = estimate2,
+         "p-value" = p.value)
+
+```
+
+### Use Kruskal-wallis to check the difference in the characteristics or exposures for continuous variables between confirmed and suspected cases (for non-normally distributed data)
+
+As most of the time, your contiuous variables will not be normally distributed, instead of calculating the difference between your cases and controls (confirmed and suspected cases in this example) with the t-test, we use the Kruskal-Wallis test.
+
+```{r univariate_kruskalwillis, warning=FALSE, message=FALSE}
+
+## first create a table with medians and standard deviation
+## then a table with the kruskal value
+## then bind together
+
+medians_tab <- linelist_cc %>%
+  group_by(case_def) %>%
+  summarise(Median = median(age_years, na.rm = TRUE),
+            SD = sd(age_years, na.rm = TRUE)) %>%
+  tidyr::pivot_wider(names_from = case_def, values_from = c("Median", "SD"))
+
+
+krusk_tab <- linelist_cc %>%
+  ## run ttest
+  summarise(test = list(broom::tidy(kruskal.test(age_years ~ case_def)))) %>%
+  ## make results of test available
+  tidyr::unnest() %>%
+  ## select and rename columns
+  select(p.value)
+
+
+bind_cols(medians_tab, krusk_tab) %>%
+  ## create a column for variable name
+  mutate(Variable = "Age (years)") %>%
+  select(Variable,
+         "Control (median)" = Median_FALSE,
+         "SD" = SD_FALSE,
+         "Case (median)" = Median_TRUE,
+         "SD" = SD_TRUE,
+         "p-value" = p.value)
+
+```
+
+### Calculating odds ratios for a univariate case control analysis
+
+Now you have a good sense of the variables that you might want to include in your univariate case control analysis.
+
+Please note that the coding now switches to the use of "cases" and "controls" to highlight the type of analysis you are conducting. You need to be clear for yourself how you have defined your cases (in this example, "confirmed cases") and your controls (in this example, "suspected cases").
+
+```{r univariate_ors, warning=FALSE, message=FALSE}
+
+## Odds ratios
+## other values are already set at the correct defaults for CC
+linelist_cc %>%
+  tab_univariate(case_def,                                    # select outcome variable
+                 ptvomit, ptjaundice, patient_facility_type,  # select exposure variables
+                 measure = "OR",                              # calculate odds ratios
+                 mergeCI = TRUE,                              # paste lower and upper together
+                 digits = 1)   %>%                            # limit decimal places to 1
+  select("Exposure" = variable,                               # select and rename columns
+         "Exposed cases" = exp_cases,
+         "Unexposed cases" = unexp_cases,
+         "Exposed controls" = exp_controls,
+         "Unexposed controls" = unexp_controls,
+         "OR (95%CI)" = est_ci)
+
+```
+
+### Calculating stratified odds ratios for a univariate case control analysis
+
+As you will want to double check on particular confounding (before you do a multivariable analysis), you might want to check whether odds ratios change if you conduct the same analysis in a stratified manner.
+
+In this case, we give an example of calculating Odds Ratios for confirmed cases and suspected cases in the stratum 'patient_facility_type'. This allows us to compare whether the ORs change when comparing groups that are admitted to hospital and those that are not admitted t hospital.
+
+Note: in the current example dataset, this analysis doesnt provide much more insight. But you should as standard practice check for confounding in your outbreak data analysis.
+
+```{r univariate_stratified_ors, warning=FALSE, message=FALSE}
+
+## stratified odds ratios
+linelist_cc %>%
+  tab_univariate(confcase,                          # select outcome variable
+                 ptvomit, ptjaundice,               # select exposure variables
+                 strata = patient_facility_type,    # select stratifying variable
+                 measure = "OR",                    # calculate odds ratios
+                 mergeCI = TRUE,                    # paste lower and upper together
+                 digits = 1,                        # limit decimal places to 1
+                 woolf_test = TRUE) %>%             # calculate p val between strata
+  # get rid of duplicate var names
+  mutate(variable = replace(variable, duplicated(variable), NA)) %>%
+  select("Exposure" = variable,                     # select and rename columns
+         "Measure"  = est_type,
+         "Exposed cases" = exp_cases,
+         "Unexposed cases" = unexp_cases,
+         "Exposed controls" = exp_controls,
+         "Unexposed controls" = unexp_controls,
+         "OR (95%CI)" = est_ci,
+         "p-value" = p.value)
+
+```
+
