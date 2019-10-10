@@ -5,7 +5,8 @@ defaultContentLanguage = "en"
 title = "Training Material for the R4EPIs proejct"
 theme = "hugo-theme-learn"
 metaDataFormat = "yaml"
-defaultContentLanguageInSubdir= true
+defaultContentLanguageInSubdir = true
+googleAnalytics = "UA-149766533-1"
 
 [params]
   editURL = "https://github.com/R4EPI/r4epis-website/edit/master/content/"
