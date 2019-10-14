@@ -38,21 +38,26 @@ colnames(linelist_cleaned) &lt;- cleaned_colnames</code></pre>
 <h3>Match variables to align with data dictionary</h3>
 <p>Standardized variable names are required for this template to work smoothly, and the variable names in our Am Timan dataset do not align with the names this template expects.</p>
 <p><strong>We need to change many variable names, and R4Epis developed a special function to help map variables to the expected variable names.</strong> The template also offers code that you can uncomment if there are only a few variable names to change.</p>
-<ol style="list-style-type: decimal">
-<li><strong>Paste the disease-specific rename helper into the script.</strong> This is done by uncommenting and running a command found in the <code>match_column_names</code> section - near the end of the chunk <code>prep_nonDHIS_data</code>. We run the command <code>msf_dict_rename_helper()</code> with “AJS” to get the correct helper for this case study.</li>
-</ol>
+<div id="paste-the-disease-specific-rename-helper-into-the-script" class="section level4">
+<h4>Paste the disease-specific rename helper into the script</h4>
+<p>This is done by uncommenting and running a command found in the <code>match_column_names</code> section—near the end of the chunk <code>prep_nonDHIS_data</code>. We run the command <code>msf_dict_rename_helper()</code> with “AJS” to get the correct helper for this case study.</p>
 <pre class="r"><code>msf_dict_rename_helper(&quot;AJS&quot;)</code></pre>
 <p>Running this command copies a block of code text to our clipboard. Now, <em>paste</em> from your clipboard into the template in the bottom of the code chunk. For the AJS template, the code that is pasted will look like the code below. This code uses the function <code>rename()</code> to change variable names.</p>
 <p>{{% notice tip %}}
 Be sure to paste the AJS rename helper code into an existing R code chunk (e.g. the bottom of <code>prep_nonDHIS_data</code>), not into the white space of the RMarkdown script.
 {{% /notice %}}</p>
 <p><img src="/images/Variable_Helper_Paste_Revised.gif" /></p>
-<ol start="2" style="list-style-type: decimal">
-<li><strong>Complete the mapping of variable names.</strong> To the right of each equals sign, and before each comma, type the <em>exact</em> names of the variables from your dataset that correspond to the expected MSF data dictionary variables on the left. The last un-commented line should not have a comma at the end.</li>
-</ol>
-<ul>
-<li><strong>Be sure to comment (#) out the lines of each data dictionary variable in the helper that is not present in your dataset!</strong> *</li>
-</ul>
+</div>
+<div id="complete-the-mapping-of-variable-names" class="section level4">
+<h4>Complete the mapping of variable names</h4>
+<p>The variables will be in alphabetical order, sorted by if the appear in the template (REQUIRED) or not (optional).</p>
+<p>{{% notice tip %}}
+Some variables—such as lab results or symptoms—are listed as REQUIRED, but are not absolutely necessary for the template to run. If you do not have a variable and are unsure if it’s necessary, do a search in the template to see if it’s marked as OPTIONAL in the code chunk.
+{{% /notice %}}</p>
+<p>To the right of each equals sign, and before each comma, type the <em>exact</em> names of the variables from your dataset that correspond to the expected MSF data dictionary variables on the left. The last un-commented line should not have a comma at the end.</p>
+<p>{{% notice info %}}
+Be sure to comment (#, ctrl + shift + c) out the lines of each data dictionary variable in the helper that is not present in your dataset!
+{{% /notice %}}</p>
 <p><img src="/images/AJS_Variable_Names.gif" /></p>
 <p>{{% notice tip %}}
 If you see this error:<br />
@@ -65,73 +70,74 @@ then you likely forgot to comment (#) the line for a variable you did not use.
 <pre class="r"><code>## Below are the column assignments used in this case study example
 
 linelist_cleaned &lt;- rename(linelist_cleaned,
-#  event_file_type                   =   , # TEXT                # (Not in dataset)
-  case_number                       =   hevid, # TEXT
-  date_of_consultation_admission    =   dtmedical, # DATE
-  detected_by                       =   referredby, # TEXT
-  patient_facility_type             =   hospitalised, # TEXT
-#  msf_involvement                   =   , # TEXT                # (Not in dataset)
-  age_years                         =   age, # INTEGER_POSITIVE
-#  age_months                        =   , # INTEGER_POSITIVE   # (Dataset only has years)
-#  age_days                          =   , # INTEGER_POSITIVE   # (Dataset only has years)
-  sex                               =   sex, # TEXT
-  patient_origin                    =   quartier, # ORG UNIT
-#  residential_status_brief          =   , # TEXT               # (Not in dataset)
-#  arrival_date_in_area_if_3m        =   , # DATE               # (Not in dataset)
-#  ever_received_hepatitis_e_vaccine =   , # TEXT               # (Not in dataset)
-#  date_of_last_vaccination          =   , # DATE               # (Not in dataset)
-  date_of_onset                     =   dtjaundice, # DATE
-#  history_of_fever                  =   , # BOOLEAN            # (Not in dataset)
-  fever                             =   medfever, # BOOLEAN
-  nausea_anorexia                   =   mednausea, # BOOLEAN
-  vomiting                          =   medvomit, # BOOLEAN
-  epigastric_pain_heartburn         =   medepigastric, # BOOLEAN
-  generalized_itch                  =   meditching, # BOOLEAN
-  headache                          =   medheadache, # BOOLEAN
-  joint_pains                       =   medarthralgia, # BOOLEAN
-  diarrhoea                         =   meddiar, # BOOLEAN
-  bleeding                          =   medbleeding, # BOOLEAN
-#  convulsions                       =   , # BOOLEAN            # (Not in dataset)
-  mental_state                      =   medmental, # BOOLEAN    # !(Needs value cleaning)
-  other_symptoms                    =   medother, # BOOLEAN
-  other_cases_in_hh                 =   medothhhajs, # BOOLEAN
-#  traditional_medicines             =   , # BOOLEAN            # (Not in dataset)
-#  traditional_medicine_details      =   , # TEXT               # (Not in dataset)
-#  recent_travel                     =   , # BOOLEAN            # (Not in dataset)
-#  water_source                      =   , # TEXT               # !(Split across many variables)
-  malaria_rdt_at_admission          =   medmalrdt, # TEXT
-  hep_b_rdt                         =   medhepb, # TEXT
-  hep_c_rdt                         =   medhepc, # TEXT
-  hep_e_rdt                         =   medhevrdt, # TEXT
-#  dengue_rdt                        =   , # TEXT               # (Not in dataset)
-  date_lab_sample_taken             =   medblooddt, # DATE
-  test_hepatitis_a                  =   medhavelisa, # TEXT
-  test_hepatitis_b                  =   medhbvelisa, # TEXT
-  test_hepatitis_c                  =   medhcvelisa, # TEXT
-  test_hepatitis_e_virus            =   medhevelisa, # TEXT
-  test_hepatitis_e_igm              =   hevrecent, # TEXT
-#  test_hepatitis_e_igg              =   , # TEXT               # (In same variable as elisa result)
-  test_hepatitis_e_genotype         =   hevgenotype, # TEXT
-#  malaria_blood_film                =   , # TEXT               # (Not in dataset)
-  dengue                            =   dengue, # TEXT
-  yellow_fever                      =   yf, # TEXT
-#  lassa_fever                       =   , # TEXT               # (Not in dataset)
-#  typhoid                           =   , # TEXT               # (Not in dataset)
-  chikungunya_onyongnyong           =   chik, # TEXT
-#  ebola_marburg                     =   , # TEXT               # (Not in dataset)
-  other_arthropod_transmitted_virus =   arbovpcr, # TEXT
-#  other_pathogen                    =   , # TEXT               # (Not in dataset)
-#  lab_comments                      =   , # TEXT               # (Not in dataset)
-  pregnant                          =   medpreg, # TEXT
-  trimester                         =   medpregtri, # TEXT
-#  foetus_alive_at_admission         =   , # TEXT               # (Not in dataset)
-#  delivery_event                    =   , # TRUE_ONLY          # (Not in dataset)
-  pregnancy_outcome_at_exit         =   medppoutcome, # TEXT
-  exit_status                       =   outcomehp, # TEXT
-#  date_of_exit                      =   , # DATE               # (Not in dataset)
-#  time_to_death                     =   , # TEXT               # (Not in dataset)
-  treatment_facility_site           =   hpid, # TEXT
-#  treatment_location                =   , # ORGANISATION_UNIT  # (Not in dataset)
-  patient_origin_free_text          =   block # TEXT
+  # age_days                          =   , # INTEGER_POSITIVE  (Dataset only has years)
+  # age_months                        =   , # INTEGER_POSITIVE  (Dataset only has years)
+  age_years                         = age, # INTEGER_POSITIVE  (REQUIRED)
+  bleeding                          = medbleeding, # BOOLEAN           (REQUIRED)
+  case_number                       = hevid, # TEXT              (REQUIRED)
+  chikungunya_onyongnyong           = chik, # TEXT              (REQUIRED)
+  # convulsions                       =   , # BOOLEAN           (Not in dataset)
+  date_of_consultation_admission    = dtmedical, # DATE              (REQUIRED)
+  # date_of_exit                      =   , # DATE              (Not in dataset)
+  date_of_onset                     = dtjaundice, # DATE              (REQUIRED)
+  dengue                            = dengue, # TEXT              (REQUIRED)
+  # dengue_rdt                        =   , # TEXT              (Not in dataset)
+  diarrhoea                         = meddiar, # BOOLEAN           (REQUIRED)
+  # ebola_marburg                     =   , # TEXT              (Not in dataset)
+  epigastric_pain_heartburn         = medepigastric, # BOOLEAN           (REQUIRED)
+  exit_status                       = outcomehp, # TEXT              (REQUIRED)
+  fever                             = medfever, # BOOLEAN           (REQUIRED)
+  generalized_itch                  = meditching, # BOOLEAN           (REQUIRED)
+  headache                          = medheadache, # BOOLEAN           (REQUIRED)
+  hep_b_rdt                         = medhepb, # TEXT              (REQUIRED)
+  hep_c_rdt                         = medhepc, # TEXT              (REQUIRED)
+  hep_e_rdt                         = medhevrdt, # TEXT              (REQUIRED)
+  # history_of_fever                  =   , # BOOLEAN           (Not in dataset)
+  joint_pains                       = medarthralgia, # BOOLEAN           (REQUIRED)
+  # lassa_fever                       =   , # TEXT              (Not in dataset)
+  # malaria_blood_film                =   , # TEXT              (Not in dataset)
+  malaria_rdt_at_admission          = medmalrdt, # TEXT              (REQUIRED)
+  mental_state                      = medmental, # BOOLEAN           (REQUIRED)
+  nausea_anorexia                   = mednausea, # BOOLEAN           (REQUIRED)
+  other_arthropod_transmitted_virus = arbovpcr, # TEXT              (REQUIRED)
+  other_cases_in_hh                 = medothhhajs, # BOOLEAN           (REQUIRED)
+  # other_pathogen                    =   , # TEXT              (Not in dataset)
+  other_symptoms                    = medother, # BOOLEAN           (REQUIRED)
+  patient_facility_type             = hospitalised, # TEXT              (REQUIRED)
+  patient_origin                    = quartier, # ORG UNIT          (REQUIRED)
+  sex                               = sex, # TEXT              (REQUIRED)
+  test_hepatitis_a                  = medhavelisa, # TEXT          (REQUIRED)
+  test_hepatitis_b                  = medhbvelisa, # TEXT          (REQUIRED)
+  test_hepatitis_c                  = medhcvelisa, # TEXT          (REQUIRED)
+  test_hepatitis_e_genotype         = hevgenotype, # TEXT          (REQUIRED)
+  # test_hepatitis_e_igg              =   , # TEXT              (In same variable as elisa result)
+  test_hepatitis_e_igm              = hevrecent, # TEXT          (REQUIRED)
+  test_hepatitis_e_virus            = medhevelisa, # TEXT          (REQUIRED)
+  # time_to_death                     =   , # TEXT              (Not in dataset)
+  # typhoid                           =   , # TEXT              (Not in dataset)
+  vomiting                          = medvomit, # BOOLEAN           (REQUIRED)
+  # water_source                      =   , # TEXT              !(Split across many variables)
+  yellow_fever                      = yf, # TEXT              (REQUIRED)
+  # arrival_date_in_area_if_3m        =   , # DATE              (optional)
+  date_lab_sample_taken             = medblooddt, # DATE              (optional)
+  # date_of_last_vaccination          =   , # DATE              (optional)
+  # delivery_event                    =   , # TRUE_ONLY         (optional)
+  detected_by                       = referredby, # TEXT              (optional)
+  # event_file_type                   =   , # TEXT              (optional)
+  # ever_received_hepatitis_e_vaccine =   , # TEXT              (optional)
+  # foetus_alive_at_admission         =   , # TEXT              (optional)
+  # lab_comments                      =   , # TEXT              (optional)
+  # msf_involvement                   =   , # TEXT              (optional)
+  patient_origin_free_text          = block, # TEXT              (optional)
+  pregnancy_outcome_at_exit         = medppoutcome, # TEXT              (optional)
+  pregnant                          = medpreg, # TEXT              (optional)
+  # recent_travel                     =   , # BOOLEAN           (optional)
+  # residential_status_brief          =   , # TEXT              (optional)
+  # traditional_medicine_details      =   , # TEXT              (optional)
+  # traditional_medicines             =   , # BOOLEAN           (optional)
+  treatment_facility_site           = hpid, # TEXT              (optional)
+  # treatment_location                =   , # ORGANISATION_UNIT (optional)
+  trimester                         = medpregtri # TEXT              (optional)
 )</code></pre>
+</div>
 </div>
