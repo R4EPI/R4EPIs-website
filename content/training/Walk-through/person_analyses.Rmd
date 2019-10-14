@@ -185,7 +185,7 @@ This next code also uses the `tab_linelist()` function to **create descriptive t
 tab_linelist(linelist_cleaned, SYMPTOMS, keep = "Oui") %>% 
   select(-value) %>%
   # fix the way symptom names are displayed
-  mutate(variable = str_to_sentence(gsub("_", " ", variable))) %>%
+  mutate(variable = str_to_sentence(str_replace_all(variable, "_", " "))) %>%
   # rename accordingly
   rename_redundant("%" = proportion) %>%
   augment_redundant(" (n)" = " n$") %>%
@@ -198,7 +198,7 @@ The code for the lab table is very similar, but has this difference:
 
 
 {{% notice tip %}}
-This table may be large and unwieldy at first, until you clean your data. The step in data cleaning where we converted 0, 1, "yes", "pos", "neg", etc. to standardized "Positive" and "Negative" was crucial towards making this table readable. Once kitted into a word document, you will likely need to adjust the font size, column widths, etc.
+This table may be large and unwieldy at first, until you clean your data. The step in data cleaning where we converted 0, 1, "yes", "pos", "neg", etc. to standardized "Positive" and "Negative" was crucial towards making this table readable. Once knitted into a word document, you will likely need to adjust the font size, column widths, etc.
 {{% /notice %}}
 
 
@@ -207,7 +207,7 @@ This table may be large and unwieldy at first, until you clean your data. The st
 tab_linelist(linelist_cleaned, LABS, 
              transpose = "value") %>% 
   # fix the way lab test names are displayed
-  mutate(variable = str_to_sentence(gsub("_", " ", variable))) %>%
+  mutate(variable = str_to_sentence(str_replace_all(variable, "_", " "))) %>%
   # rename accordingly
   rename("Lab test" = variable) %>%
   rename_redundant("%" = proportion) %>%
