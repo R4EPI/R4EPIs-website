@@ -108,9 +108,11 @@ linelist_cleaned$age_years &lt;- as.numeric(linelist_cleaned$age_years)</code></
 </ul>
 <pre class="r"><code># For patients under 5 years, the new variable age_months is based on age_years * 12 
 linelist_cleaned &lt;- mutate(linelist_cleaned,
-                            age_months = case_when(
-                              age_years &lt; 5 ~ age_years * 12
-                              )) </code></pre>
+                           age_months = if_else(age_years &lt; 5, 
+                                                true  = age_years * 12, 
+                                                false = as.numeric(NA)
+                                               )
+                          )</code></pre>
 <p><strong>Now we can create the variables <code>age_group</code> <code>age_group_mon</code>.</strong></p>
 <p>First we use the code to create an <code>age_group_mon</code> variable for children under 5 years based on <code>age_months</code>.</p>
 <pre class="r"><code>## create age group variable for under 5 years based on months

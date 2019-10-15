@@ -36,9 +36,9 @@ fct_count(linelist_cleaned$sex)</code></pre>
 <pre><code>## # A tibble: 3 x 2
 ##   f         n
 ##   &lt;fct&gt; &lt;int&gt;
-## 1 M        97
-## 2 F       107
-## 3 U        96</code></pre>
+## 1 M        98
+## 2 F       105
+## 3 U        97</code></pre>
 <p>Now we re-label the values using <code>fct_recode()</code>, also from the package <strong>forcats</strong>.</p>
 <pre class="r"><code># Re-define the labels for the factor variable (pay attention to spelling!)
 linelist_cleaned$sex &lt;- fct_recode(linelist_cleaned$sex, 
@@ -51,9 +51,9 @@ fct_count(linelist_cleaned$sex)</code></pre>
 <pre><code>## # A tibble: 3 x 2
 ##   f           n
 ##   &lt;fct&gt;   &lt;int&gt;
-## 1 Male       97
-## 2 Female    107
-## 3 Unknown    96</code></pre>
+## 1 Male       98
+## 2 Female    105
+## 3 Unknown    97</code></pre>
 <p><strong>To change the <em>arrangement</em> of the levels, use <code>fct_relevel()</code></strong>.</p>
 <p>This will impact the <em>arrangement</em> of the levels as displayed in graphs and tables. Give the name of the factor followed by the new arrangement (pay attention to spelling!).</p>
 <pre class="r"><code># Provide new arrangement of levels
@@ -77,10 +77,10 @@ fct_count(linelist_cleaned$sex)</code></pre>
 <pre><code>## # A tibble: 4 x 2
 ##   f           n
 ##   &lt;fct&gt;   &lt;int&gt;
-## 1 Female    107
-## 2 Male       97
+## 1 Female    105
+## 2 Male       98
 ## 3 Unknown     0
-## 4 &lt;NA&gt;       96</code></pre>
+## 4 &lt;NA&gt;       97</code></pre>
 <blockquote>
 <p>We can see that the value “Unknown” now has a count of zero, but it is still present as a level of the factor variable and will appear in tables and graphs. To remove this level entirely we use <code>fct_drop()</code>, which drops unused levels from a factor.</p>
 </blockquote>
@@ -92,9 +92,9 @@ fct_count(linelist_cleaned$sex)</code></pre>
 <pre><code>## # A tibble: 3 x 2
 ##   f          n
 ##   &lt;fct&gt;  &lt;int&gt;
-## 1 Female   107
-## 2 Male      97
-## 3 &lt;NA&gt;      96</code></pre>
+## 1 Female   105
+## 2 Male      98
+## 3 &lt;NA&gt;      97</code></pre>
 <p>{{% notice tip %}}
 Use the argument <code>only =</code> to drop specific levels: <code>fct_drop(linelist_cleaned$sex, only = &quot;Unknown&quot;)</code>
 {{% /notice %}}</p>

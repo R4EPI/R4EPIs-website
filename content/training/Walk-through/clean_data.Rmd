@@ -234,9 +234,11 @@ Then, the chunk contains three age-group commands marked "OPTIONAL":
 ```{r}
 # For patients under 5 years, the new variable age_months is based on age_years * 12 
 linelist_cleaned <- mutate(linelist_cleaned,
-                            age_months = case_when(
-                              age_years < 5 ~ age_years * 12
-                              )) 
+                           age_months = if_else(age_years < 5, 
+                                                true  = age_years * 12, 
+                                                false = as.numeric(NA)
+                                               )
+                          )
 ```
 
 

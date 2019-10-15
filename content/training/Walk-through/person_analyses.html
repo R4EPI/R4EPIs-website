@@ -254,7 +254,7 @@ filter(linelist_cleaned, age_years &lt;= 2) %&gt;%
 tab_linelist(linelist_cleaned, SYMPTOMS, keep = &quot;Oui&quot;) %&gt;% 
   select(-value) %&gt;%
   # fix the way symptom names are displayed
-  mutate(variable = str_to_sentence(gsub(&quot;_&quot;, &quot; &quot;, variable))) %&gt;%
+  mutate(variable = str_to_sentence(str_replace_all(variable, &quot;_&quot;, &quot; &quot;))) %&gt;%
   # rename accordingly
   rename_redundant(&quot;%&quot; = proportion) %&gt;%
   augment_redundant(&quot; (n)&quot; = &quot; n$&quot;) %&gt;%
@@ -320,13 +320,13 @@ tab_linelist(linelist_cleaned, SYMPTOMS, keep = &quot;Oui&quot;) %&gt;%
 <li>In the initial <code>tab_linelist()</code> command, <code>transpose = &quot;value&quot;</code> is set because the values in the lab data are important in-and-of themselves (e.g. IgM+/IgG-, etc.) - i.e. the values should become column headers.</li>
 </ul>
 <p>{{% notice tip %}}
-This table may be large and unwieldy at first, until you clean your data. The step in data cleaning where we converted 0, 1, “yes”, “pos”, “neg”, etc. to standardized “Positive” and “Negative” was crucial towards making this table readable. Once kitted into a word document, you will likely need to adjust the font size, column widths, etc.
+This table may be large and unwieldy at first, until you clean your data. The step in data cleaning where we converted 0, 1, “yes”, “pos”, “neg”, etc. to standardized “Positive” and “Negative” was crucial towards making this table readable. Once knitted into a word document, you will likely need to adjust the font size, column widths, etc.
 {{% /notice %}}</p>
 <pre class="r"><code># get counts and proportions for all variables named in LABS
 tab_linelist(linelist_cleaned, LABS, 
              transpose = &quot;value&quot;) %&gt;% 
   # fix the way lab test names are displayed
-  mutate(variable = str_to_sentence(gsub(&quot;_&quot;, &quot; &quot;, variable))) %&gt;%
+  mutate(variable = str_to_sentence(str_replace_all(variable, &quot;_&quot;, &quot; &quot;))) %&gt;%
   # rename accordingly
   rename(&quot;Lab test&quot; = variable) %&gt;%
   rename_redundant(&quot;%&quot; = proportion) %&gt;%
