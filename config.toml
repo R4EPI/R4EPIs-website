@@ -7,6 +7,7 @@ theme = "hugo-theme-learn"
 metaDataFormat = "yaml"
 defaultContentLanguageInSubdir = true
 googleAnalytics = "UA-149766533-1"
+ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
 
 [params]
   editURL = "https://github.com/R4EPI/r4epis-website/edit/master/content/"
@@ -24,7 +25,7 @@ home = [ "HTML", "RSS", "JSON"]
 [[menu.shortcuts]]
 name = "<i class='fab fa-fw fa-github'></i> sitrep R package"
 identifier = "ds"
-url = "https://github.com/R4EPI/sitrep"
+url = "https://r4epi.github.io/sitrep"
 weight = 10
 
 [[menu.shortcuts]]
@@ -37,7 +38,7 @@ weight = 30
 [[Languages.en.menu.shortcuts]]
 name = "<i class='fab fa-fw fa-github'></i> sitrep R package"
 identifier = "ds"
-url = "https://github.com/R4EPI"
+url = "https://r4epi.github.io/sitrep"
 weight = 10
 
 
