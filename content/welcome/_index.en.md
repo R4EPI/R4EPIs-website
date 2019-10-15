@@ -99,12 +99,12 @@ install.packages("remotes", repos = "https://cran.rstudio.com")
 ```
 
 Once **remotes** is installed, use its *install_github* function to install **sitrep** from the appropriate repository on GitHub. 
-This command below will install the **sitrep** package and also install any packages necessary for use of the templates that are not currently installed on your machine.
+This command below will install the [latest release of the **sitrep** package](https://github.com/R4EPI/sitrep/releases) and also install any packages necessary for use of the templates that are not currently installed on your machine.
 
 *It will not, however, update any packages already installed. If you want it to update packages, then you should change the last argument to `update = "ask"`.*
 
 ```r
-remotes::install_github("R4EPI/sitrep", repos = "https://cran.rstudio.com", update = "never")
+remotes::install_github("R4EPI/sitrep@*release", repos = "https://cran.rstudio.com", update = "never")
 ```
  
 If you are getting errors, check the [frequently asked questions](https://r4epis.netlify.com/faq/).
