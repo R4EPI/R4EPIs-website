@@ -67,6 +67,7 @@ An editor window will open up and instructions will be printed to your R console
 local({
   r <- getOption("repos")
   r["CRAN"] <- "https://cran.rstudio.com/"
+  r <- r[names(r) != "CRANextra"] # avoid a common error with MRAN installations
   options(repos = r)
 })
 ```
