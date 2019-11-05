@@ -46,7 +46,7 @@ tab_linelist(age_group, sex, strata = case_def, na.rm = FALSE) %&gt;%
   ## group by variable for the chisq test
   group_by(variable) %&gt;%
   ## run chi-sq test
-  mutate(binom = list(broom::tidy(chisq.test(suspected_n, confirmed_n)))) %&gt;%
+  mutate(binom = list(broom::tidy(chisq.test(cbind(suspected_n, confirmed_n))))) %&gt;%
   ## make results of chisq test available
   tidyr::unnest(cols = c(binom)) %&gt;%
   ## ungroup to be able to change the names
