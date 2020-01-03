@@ -16,10 +16,18 @@ This might be because you have an unstable internet connection.
 Either try again when there are less people using the internet connection, use a different connection, 
 or contact one of the maintainers for alternative offline options. 
 
+## I get the error: Error: Failed to installed 'sitrep' from Github: (converted from warning) cannot remove prior installation of package 'curl'
+
+1. Restart your R session by clicking "Session" from the top menu and choosing "Restart R",
+or by using the keyboard shortcut <kbd>CTRL</kbd>+<kbd>SHIFT</kbd>+<kbd>F10</kbd>. 
+<!-- ZNK: the <kbd> tag makes the font appear as a keyboard key-->
+2. Re-install the 'curl' package via `install.packages("curl")`]
+3. Try the installation again
+
 ## I get errors when installing sitrep or other packages  
 
 Restart your R session by clicking "Session" from the top menu and choosing "Restart R",
-or by using the keyboard shortcut CTRL+SHIFT+F10. This is sometimes necessary when updating or installing new packages.
+or by using the keyboard shortcut <kbd>CTRL</kbd>+<kbd>SHIFT</kbd>+<kbd>F10</kbd> and try installation again. This is sometimes necessary when updating or installing new packages.
 
 If you continue to encounter errors you may need to install the list of required packages one-by-one,
 using the command `install.packages()`, as below for the package dplyr (note the name of the package is in quotes):
@@ -33,7 +41,7 @@ install.packages("dplyr")
 
 You will need to restart your R session. 
 You can do this by clicking on "Session" in the menu up top and then choosing 
-"Restart R". Alternatively, you can use a keyboard shortcut: CTRL+SHIFT+F10
+"Restart R". Alternatively, you can use a keyboard shortcut: <kbd>CTRL</kbd>+<kbd>SHIFT</kbd>+<kbd>F10</kbd>
 
 If this does not work, try restarting your computer and opening R-Studio again. 
 
