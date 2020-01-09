@@ -91,21 +91,20 @@ installr::updateR() # updating R.
 
 ### Installing the **sitrep** package 
 
-The **sitrep** package, developed by MSF and partners, is stored on the website GitHub. Therefore, the procedure to install is different than for most packages you will work with. 
+The **sitrep** package, developed by MSF and partners, is stored on the website GitHub. Therefore, the procedure to install these packages have one extra step required. 
 
-To install **sitrep** from GitHub you must first install the **remotes** package. 
+To install **sitrep** from GitHub you must first install the **drat** package.
 
 ``` r
-install.packages("remotes", repos = "https://cran.rstudio.com")
+install.packages("drat", repos = "https://cran.rstudio.com")
 ```
 
-Once **remotes** is installed, use its *install_github* function to install **sitrep** from the appropriate repository on GitHub. 
+Once **drat** is installed, use its `addRepo()` function to add the "R4EPI" project to the list of valid repositories.
 This command below will install the [latest release of the **sitrep** package](https://github.com/R4EPI/sitrep/releases) and also install any packages necessary for use of the templates that are not currently installed on your machine.
 
-*It will not, however, update any packages already installed. If you want it to update packages, then you should change the last argument to `update = "ask"`.*
-
 ```r
-remotes::install_github("R4EPI/sitrep@*release", repos = "https://cran.rstudio.com", update = "never")
+drat::addRepo("R4EPI")
+install.packages("sitrep")
 ```
  
 If you are getting errors, check the [frequently asked questions](https://r4epis.netlify.com/faq/).
