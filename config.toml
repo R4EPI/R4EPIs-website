@@ -39,7 +39,7 @@ weight = 10
 
 [[Languages.en.menu.shortcuts]]
 name = "<i class='fab fa-fw fa-github'></i> apyramid R package"
-identifier = "matchmaker"
+identifier = "apyramid"
 url = "https://r4epi.github.io/apyramid"
 weight = 11
 
