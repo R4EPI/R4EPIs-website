@@ -28,40 +28,6 @@ identifier = "ds"
 url = "https://r4epi.github.io/sitrep"
 weight = 10
 
-[[menu.shortcuts]]
-name = "<i class='fab fa-fw fa-github'></i> apyramid R package"
-identifier = "ds"
-url = "https://r4epi.github.io/apyramid"
-weight = 11
-
-[[menu.shortcuts]]
-name = "<i class='fab fa-fw fa-github'></i> epibuffet R package"
-identifier = "ds"
-url = "https://r4epi.github.io/epibuffet"
-weight = 12
-
-[[menu.shortcuts]]
-name = "<i class='fab fa-fw fa-github'></i> epikit R package"
-identifier = "ds"
-url = "https://r4epi.github.io/epikit"
-weight = 13
-
-[[menu.shortcuts]]
-name = "<i class='fab fa-fw fa-github'></i> epidict R package"
-identifier = "ds"
-url = "https://r4epi.github.io/epidict"
-weight = 14
-
-[[menu.shortcuts]]
-name = "<i class='fab fa-fw fa-github'></i> matchmaker R package"
-identifier = "ds"
-url = "https://www.repidemicsconsortium.org/matchmaker"
-weight = 15
-
-[[menu.shortcuts]]
-name = "<i class='fas fa-fw fa-bullhorn'></i> People"
-url = "/credits"
-weight = 30
 
 # If we ever get translations on this site
 [Languages]
@@ -71,6 +37,35 @@ identifier = "ds"
 url = "https://r4epi.github.io/sitrep"
 weight = 10
 
+[[Languages.en.menu.shortcuts]]
+name = "<i class='fab fa-fw fa-github'></i> apyramid R package"
+identifier = "ds"
+url = "https://r4epi.github.io/apyramid"
+weight = 11
+
+[[Languages.en.menu.shortcuts]]
+name = "<i class='fab fa-fw fa-github'></i> epibuffet R package"
+identifier = "ds"
+url = "https://r4epi.github.io/epibuffet"
+weight = 12
+
+[[Languages.en.menu.shortcuts]]
+name = "<i class='fab fa-fw fa-github'></i> epikit R package"
+identifier = "ds"
+url = "https://r4epi.github.io/epikit"
+weight = 13
+
+[[Languages.en.menu.shortcuts]]
+name = "<i class='fab fa-fw fa-github'></i> epidict R package"
+identifier = "ds"
+url = "https://r4epi.github.io/epidict"
+weight = 14
+
+[[Languages.en.menu.shortcuts]]
+name = "<i class='fab fa-fw fa-github'></i> matchmaker R package"
+identifier = "ds"
+url = "https://www.repidemicsconsortium.org/matchmaker"
+weight = 15
 
 [[Languages.en.menu.shortcuts]]
 name = "<i class='fas fa-fw fa-bullhorn'></i> People"
