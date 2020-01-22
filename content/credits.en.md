@@ -17,7 +17,7 @@ The material on this website was created by:
 Code contributors on the R4EPIs *sitrep* package. You can see an up-to
 date list here: https://github.com/R4EPI/sitrep/graphs/contributors
 
- - Alex Spina ([@aspina7](https://github.com/aspina7))
+ - Alex Spina! ([@aspina7](https://github.com/aspina7))
  - Zhian N. Kamvar ([@zkamvar](https://github.com/zkamvar))
  - Kate Doyle ([@kdoyle514](https://github.com/kdoyle514))
  - Lukas Richter ([@lukric](https://github.com/lukric))
@@ -57,7 +57,7 @@ Pete Masters (4),
 Dirk Schumacher (1),
 Rosamund Southgate (4),
 Carolyn Tauro (4),
-Alex Spina (1, 8),
+Alex Spina! (1, 8),
 Maria Verdecchia (4),
 Larissa Vernier (7) 
 
