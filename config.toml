@@ -28,19 +28,44 @@ identifier = "ds"
 url = "https://r4epi.github.io/sitrep"
 weight = 10
 
-[[menu.shortcuts]]
-name = "<i class='fas fa-fw fa-bullhorn'></i> People"
-url = "/credits"
-weight = 30
 
 # If we ever get translations on this site
 [Languages]
 [[Languages.en.menu.shortcuts]]
 name = "<i class='fab fa-fw fa-github'></i> sitrep R package"
-identifier = "ds"
+identifier = "sitrep"
 url = "https://r4epi.github.io/sitrep"
 weight = 10
 
+[[Languages.en.menu.shortcuts]]
+name = "<i class='fab fa-fw fa-github'></i> apyramid R package"
+identifier = "apyramid"
+url = "https://r4epi.github.io/apyramid"
+weight = 11
+
+[[Languages.en.menu.shortcuts]]
+name = "<i class='fab fa-fw fa-github'></i> epibuffet R package"
+identifier = "epibuffet"
+url = "https://r4epi.github.io/epibuffet"
+weight = 12
+
+[[Languages.en.menu.shortcuts]]
+name = "<i class='fab fa-fw fa-github'></i> epikit R package"
+identifier = "epikit"
+url = "https://r4epi.github.io/epikit"
+weight = 13
+
+[[Languages.en.menu.shortcuts]]
+name = "<i class='fab fa-fw fa-github'></i> epidict R package"
+identifier = "epidict"
+url = "https://r4epi.github.io/epidict"
+weight = 14
+
+[[Languages.en.menu.shortcuts]]
+name = "<i class='fab fa-fw fa-github'></i> matchmaker R package"
+identifier = "matchmaker"
+url = "https://www.repidemicsconsortium.org/matchmaker"
+weight = 15
 
 [[Languages.en.menu.shortcuts]]
 name = "<i class='fas fa-fw fa-bullhorn'></i> People"
