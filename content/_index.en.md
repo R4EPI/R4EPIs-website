@@ -83,9 +83,3 @@ Check out the [list of project contributors](https://r4epis.netlify.com/credits/
 See these MSF innovation blog posts describing [the origin of the R4EPIs project](https://blogs.msf.org/bloggers/larissa/innovation-introducing-r4epis) 
 and some of the [development efforts](https://blogs.msf.org/bloggers/r4epis-team/r4epis-hackathon).
 
-
-## Do you have any feedback on R4epis?
-If you have used the R4epis website resources and materials, we are keen to hear your feedback on them.
-
-Please click on the link [here](https://forms.office.com/Pages/ResponsePage.aspx?id=r9GdTc6Dm06wkLBUPMwrMUCZY6E_p1hBkrktSlBwwjJUNElSNEJISzU5NDJNSVRUR0pTQzU3R1FYSC4u) and submit your feedback before the **15th of March 2020**
-
