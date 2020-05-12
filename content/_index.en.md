@@ -80,6 +80,4 @@ and public health.
 
 Check out the [list of project contributors](https://r4epis.netlify.com/credits/). 
 
-See these MSF innovation blog posts describing [the origin of the R4EPIs project](https://blogs.msf.org/bloggers/larissa/innovation-introducing-r4epis) 
-and some of the [development efforts](https://blogs.msf.org/bloggers/r4epis-team/r4epis-hackathon).
 
