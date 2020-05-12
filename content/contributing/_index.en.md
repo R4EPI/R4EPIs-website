@@ -1,6 +1,6 @@
 ---
 pre: <i class='fas fa-fw fa-handshake'></i>&nbsp;
-title: "Contributing to R4EPIs"
+title: "Contributing to R4epis"
 categories: ["contributing"]
 tags: ["wiki"]
 weight: 30 
