@@ -16,7 +16,7 @@ and some of the [development efforts](https://blogs.msf.org/bloggers/r4epis-team
 
 ### Reports
 In February 2020, we asked R4epis users for feedback on this website and the resources available. 
-Please read [here](https://my.pcloud.com/publink/show?code=XZ4VudkZB7iKRF8nBuSRSQmCLR0TtukCVOmk) a summary of their responses
+Please read [here](https://my.pcloud.com/publink/show?code=XZ4VudkZB7iKRF8nBuSRSQmCLR0TtukCVOmk) a summary of their responses.
 
 
 
