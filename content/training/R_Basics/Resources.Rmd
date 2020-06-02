@@ -12,7 +12,9 @@ Below are links to some of the many online tutorials for learning R.
 
 [R for Novices (written for journalists)](https://learn.r-journalism.com/en/introduction/)  
 
-[Clinical Epidemiology in R, from London School of Hygiene & Tropical Medicine](http://rpubs.com/michaelmarks/R-Clin-Epi)  
+[Data Science: R Basics, Harvard University EDX course](https://www.edx.org/course/data-science-r-basics)
+
+[Data Science: R Basics, Harvard University course book](https://rafalab.github.io/dsbook/)
 
 [Resources page of R for Epidemics Consortium (RECON) website](https://www.repidemicsconsortium.org/resources/)  
 
