@@ -33,7 +33,7 @@ There is an overview of RStudio, including comparisons to Stata, in the [Trainin
 
 ### Configuring RStudio
 
-It's important to start R every time with a clean working session. To do this, you must ensure that RStudio is set up correctly. Go to <kbd> Options > Global Options </kbd> and do the following:
+It's important to start R every time with a clean working session. To do this, you must ensure that RStudio is set up correctly. Go to <kbd> Tools > Global Options </kbd> and do the following:
 
 1. **de-select** "Restore .RData into workspace at startup". This ensures R never loads any previous workspaces
 2. **Select "Never"** from the dropdown menu for "Save workspace to .RData on exit". This ensures that R will never attempt to save your workspace when you close it.
