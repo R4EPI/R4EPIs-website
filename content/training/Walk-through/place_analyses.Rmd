@@ -1,6 +1,6 @@
 ---
-date: "2019-08-21T11:04:35+02:00"
-title: Place analyses
+title: "Place analyses"
+date: '2019-08-21T11:04:35+02:00'
 weight: 14
 ---
 
@@ -237,7 +237,7 @@ map <- read_sf(here("content", "training", "Walk-through", "mapfolder", "Quartie
 
 ```{r read_shapefiles_display, eval=FALSE}
 ## reading in a shapefile 
-map <- read_sf(here("Quartiersshape.shp"))
+map <- read_sf(here::here("Quartiersshape.shp"))
 ```
 
 The next code will check the coordinate reference system (CRS) of the shapefile, as it was read-in. In our exercise, we see an EPSG code of 4326, which is the correct code for WGS84 (you can also see below the EPSG code that the datum is WGS84).
