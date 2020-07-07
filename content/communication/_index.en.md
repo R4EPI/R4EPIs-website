@@ -11,7 +11,7 @@ You can find all blogs and reports on R4epis on this page.
 
 ### Blogs
 See these MSF innovation blog posts describing [the origin of the R4EPIs project](https://blogs.msf.org/bloggers/larissa/innovation-introducing-r4epis) 
-and some of the [development efforts](https://blogs.msf.org/bloggers/r4epis-team/r4epis-hackathon).
+, some of the [development efforts](https://blogs.msf.org/bloggers/r4epis-team/r4epis-hackathon) and a blog by a Chad field epidemiologist on her use of [R4epis templates for measles outbreak response and vaccination coverage surveys](https://blogs.msf.org/bloggers/julia/“all-data-has-story-and-it’s-epidemiologist’s-job-tell-it”)
 
 
 ### Reports
