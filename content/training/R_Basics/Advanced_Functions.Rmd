@@ -201,7 +201,7 @@ This is often used to inspect which rows are unique to a data frame. An anti joi
 
 R has the capability to make beautiful and versatile graphics using the package **ggplot2** and its function `ggplot()`. Below is a brief overview of the use of `ggplot()`. **There are too many aspects of `ggplot()` to cover here, so it is highly encouraged that you download and review [this ggplot cheatsheet](/public_data/ggplot2-cheatsheet.pdf). **  
 
-For further reading, see [this data visualization tutorial](https://r4ds.had.co.nz/data-visualisation.html) and [this gallery of visualizations and extensions](http://www.ggplot2-exts.org/gallery/) for inspiration.  
+For further reading, see [this data visualization tutorial](https://r4ds.had.co.nz/data-visualisation.html) and [this gallery of visualizations and extensions](https://exts.ggplot2.tidyverse.org/gallery/) for inspiration.  
 
 ### Core components  
 
