@@ -56,7 +56,8 @@ To install packages that were either created or updated after this date, you sho
 To create this file and set your default repository, open R and type:
 
 ```r
-## install.packages("usethis", repos = "https://cran.rstudio.com/")
+## Install the use.this package and once done, you can comment the install.packages line
+install.packages("usethis", repos = "https://cran.rstudio.com/")
 library("usethis")
 edit_r_profile()
 ```
