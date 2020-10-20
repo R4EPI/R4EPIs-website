@@ -56,7 +56,7 @@ To install packages that were either created or updated after this date, you sho
 To create this file and set your default repository, open R and type:
 
 ```r
-## Install the use.this package and once done, you can comment the install.packages line
+## Install the use.this package and once done, you can comment the install.packages line out
 install.packages("usethis", repos = "https://cran.rstudio.com/")
 library("usethis")
 edit_r_profile()
@@ -105,7 +105,7 @@ This command below will install the [latest release of the **sitrep** package](h
 
 ```r
 drat::addRepo("R4EPI")
-install.packages("sitrep")
+install.packages("sitrep", dep = TRUE)
 ```
  
 If you are getting errors, check the [frequently asked questions](https://r4epis.netlify.com/faq/).
